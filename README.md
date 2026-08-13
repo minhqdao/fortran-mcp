@@ -54,6 +54,9 @@ fortran-docs://sources/{source_id}
 fortran-docs://chunks/{chunk_id}
 ```
 
+See [Connect an MCP client](docs/clients.md) for Codex, Claude Desktop, and generic stdio
+configuration examples.
+
 ## Planned sources
 
 - ISO Fortran standards and corrigenda
