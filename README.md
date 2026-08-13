@@ -36,7 +36,9 @@ uv run pytest
 - C interoperability and OpenMP references
 - Dialect, compatibility, modernization, and migration guides
 
-Source licensing and redistribution terms will be recorded before documents enter the corpus.
+Source licensing and redistribution terms will be recorded before documents enter the library.
+The reviewed source inventory lives in [`docs/sources.toml`](docs/sources.toml); its policy is
+described in [`docs/README.md`](docs/README.md).
 
 ## License
 

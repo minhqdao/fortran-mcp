@@ -23,6 +23,7 @@ classifiers = [
 ]
 dependencies = [
   "mcp[cli]>=2.0,<3",
+  "pydantic>=2.13,<3",
 ]
 
 [project.scripts]
@@ -30,13 +31,16 @@ fortran-mcp = "fortran_mcp.server:main"
 
 [dependency-groups]
 dev = [
-  "mypy>=1.17,<2",
+  "mypy>=2.3,<3",
   "pytest>=8.4,<10",
   "ruff>=0.12,<1",
 ]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/fortran_mcp"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"docs/sources.toml" = "fortran_mcp/data/sources.toml"
 
 [tool.pytest.ini_options]
 addopts = ["--strict-config", "--strict-markers"]
@@ -53,4 +57,3 @@ select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
 python_version = "3.11"
 strict = true
 files = ["src", "tests"]
-

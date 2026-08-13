@@ -1,0 +1,19 @@
+schema_version = 1
+
+[[sources]]
+id = "fpm-0.13.0-docs"
+title = "Fortran Package Manager documentation"
+publisher = "Fortran-lang"
+document_type = "ecosystem-guide"
+fortran_versions = []
+compilers = []
+dialects = []
+version = "0.13.0"
+revision = "v0.13.0"
+source_url = "https://github.com/fortran-lang/fpm/tree/v0.13.0/docs"
+homepage_url = "https://fpm.fortran-lang.org/"
+license = "MIT"
+license_url = "https://github.com/fortran-lang/fpm/blob/v0.13.0/LICENSE"
+redistribution = "redistributable"
+status = "approved"
+notes = "Initial sample source; ingest only files covered by the repository license."
