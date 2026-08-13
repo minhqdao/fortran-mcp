@@ -9,6 +9,7 @@ import sqlite3
 import tempfile
 from array import array
 from collections.abc import Callable, Iterable, Iterator, Sequence
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Protocol, cast
 
@@ -17,6 +18,17 @@ from fortran_mcp.search import INDEX_FILENAME, SearchError, SearchProvider, Sear
 
 SEMANTIC_INDEX_FILENAME = "fortran-mcp-semantic.db"
 DEFAULT_MODEL = "BAAI/bge-small-en-v1.5"
+SEMANTIC_SCHEMA_VERSION = "2"
+
+
+@dataclass(frozen=True)
+class SemanticBuildResult:
+    """Summary of an incremental semantic-index build."""
+
+    total: int
+    embedded: int
+    reused: int
+    removed: int
 
 
 class EmbeddingModel(Protocol):
@@ -83,6 +95,50 @@ def _batches(values: Sequence[Any], size: int) -> Iterator[Sequence[Any]]:
         yield values[start : start + size]
 
 
+def _text_hash(text: str) -> str:
+    return hashlib.sha256(text.encode()).hexdigest()
+
+
+def _reusable_vectors(
+    destination: Path,
+    model_name: str,
+    lexical_index_sha256: str,
+) -> tuple[dict[str, tuple[str, bytes]], int | None]:
+    """Load compatible vectors keyed by chunk ID and embedded-text hash."""
+    if not destination.is_file():
+        return {}, None
+    try:
+        with sqlite3.connect(f"file:{destination}?mode=ro", uri=True) as database:
+            metadata = dict(database.execute("SELECT key, value FROM metadata").fetchall())
+            if metadata.get("model") != model_name:
+                return {}, None
+            if metadata.get("schema_version") == SEMANTIC_SCHEMA_VERSION:
+                rows = database.execute(
+                    "SELECT chunk_id, content_sha256, embedding FROM vectors"
+                ).fetchall()
+            elif (
+                metadata.get("schema_version") == "1"
+                and metadata.get("lexical_index_sha256") == lexical_index_sha256
+            ):
+                rows = [
+                    (chunk_id, "", embedding)
+                    for chunk_id, embedding in database.execute(
+                        "SELECT chunk_id, embedding FROM vectors"
+                    ).fetchall()
+                ]
+            else:
+                return {}, None
+            return (
+                {
+                    chunk_id: (content_sha256, embedding)
+                    for chunk_id, content_sha256, embedding in rows
+                },
+                int(metadata["dimensions"]),
+            )
+    except (KeyError, ValueError, sqlite3.Error):
+        return {}, None
+
+
 def build_semantic_index(
     model: EmbeddingModel,
     *,
@@ -90,8 +146,9 @@ def build_semantic_index(
     destination: Path | None = None,
     batch_size: int = 64,
     progress: Callable[[int, int], None] | None = None,
-) -> int:
-    """Build an atomic dense-vector index from the lexical index."""
+    incremental: bool = True,
+) -> SemanticBuildResult:
+    """Build an atomic dense-vector index, reusing unchanged compatible vectors."""
     lexical_index = lexical_index or data_directory() / INDEX_FILENAME
     destination = destination or data_directory() / SEMANTIC_INDEX_FILENAME
     if not lexical_index.is_file():
@@ -108,6 +165,23 @@ def build_semantic_index(
     if not rows:
         raise SearchError("lexical index contains no chunks")
 
+    lexical_index_sha256 = _sha256(lexical_index)
+    reusable, dimensions = (
+        _reusable_vectors(destination, model.name, lexical_index_sha256)
+        if incremental
+        else ({}, None)
+    )
+    prepared = [
+        (
+            chunk_id,
+            source_id,
+            heading.replace(" > ", "\n") + "\n\n" + text,
+        )
+        for chunk_id, source_id, heading, text in rows
+    ]
+    current_ids = {chunk_id for chunk_id, _, _ in prepared}
+    removed = len(reusable.keys() - current_ids)
+
     destination.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.NamedTemporaryFile(
         dir=destination.parent,
@@ -117,46 +191,71 @@ def build_semantic_index(
     ) as stream:
         temporary_path = Path(stream.name)
     try:
-        dimensions: int | None = None
+        reused = 0
+        embedded = 0
         with sqlite3.connect(temporary_path) as database:
             database.execute("CREATE TABLE metadata(key TEXT PRIMARY KEY, value TEXT NOT NULL)")
             database.execute(
                 "CREATE TABLE vectors("
-                "chunk_id TEXT PRIMARY KEY, source_id TEXT NOT NULL, embedding BLOB NOT NULL)"
+                "chunk_id TEXT PRIMARY KEY, source_id TEXT NOT NULL, "
+                "content_sha256 TEXT NOT NULL, embedding BLOB NOT NULL)"
             )
             database.execute("CREATE INDEX vectors_source ON vectors(source_id)")
             completed = 0
-            for batch in _batches(rows, batch_size):
-                texts = [
-                    heading.replace(" > ", "\n") + "\n\n" + text for _, _, heading, text in batch
-                ]
-                embeddings = list(model.embed_passages(texts))
+            pending: list[tuple[str, str, str, str]] = []
+            for chunk_id, source_id, text in prepared:
+                content_sha256 = _text_hash(text)
+                cached = reusable.get(chunk_id)
+                if cached is not None and cached[0] in {"", content_sha256}:
+                    database.execute(
+                        "INSERT INTO vectors VALUES (?, ?, ?, ?)",
+                        (chunk_id, source_id, content_sha256, cached[1]),
+                    )
+                    reused += 1
+                    completed += 1
+                    if progress is not None and (
+                        completed % batch_size == 0 or completed == len(rows)
+                    ):
+                        progress(completed, len(rows))
+                else:
+                    pending.append((chunk_id, source_id, text, content_sha256))
+
+            for batch in _batches(pending, batch_size):
+                embeddings = list(model.embed_passages([text for _, _, text, _ in batch]))
                 if len(embeddings) != len(batch):
                     raise SearchError("embedding model returned the wrong number of vectors")
-                for (chunk_id, source_id, _, _), values in zip(batch, embeddings, strict=True):
+                for (chunk_id, source_id, _, content_sha256), values in zip(
+                    batch, embeddings, strict=True
+                ):
                     vector = _normalized(values)
                     dimensions = dimensions or len(vector)
                     if len(vector) != dimensions:
                         raise SearchError("embedding model returned inconsistent dimensions")
                     database.execute(
-                        "INSERT INTO vectors VALUES (?, ?, ?)",
-                        (chunk_id, source_id, vector.tobytes()),
+                        "INSERT INTO vectors VALUES (?, ?, ?, ?)",
+                        (chunk_id, source_id, content_sha256, vector.tobytes()),
                     )
+                    embedded += 1
                 completed += len(batch)
                 if progress is not None:
                     progress(completed, len(rows))
             metadata = {
-                "schema_version": "1",
+                "schema_version": SEMANTIC_SCHEMA_VERSION,
                 "model": model.name,
                 "dimensions": str(dimensions),
-                "lexical_index_sha256": _sha256(lexical_index),
+                "lexical_index_sha256": lexical_index_sha256,
             }
             database.executemany("INSERT INTO metadata VALUES (?, ?)", metadata.items())
         temporary_path.replace(destination)
     except BaseException:
         temporary_path.unlink(missing_ok=True)
         raise
-    return len(rows)
+    return SemanticBuildResult(
+        total=len(rows),
+        embedded=embedded,
+        reused=reused,
+        removed=removed,
+    )
 
 
 class SemanticSearchProvider:
@@ -248,6 +347,7 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--index", type=Path)
     parser.add_argument("--model", default=DEFAULT_MODEL)
     parser.add_argument("--batch-size", type=int, default=64)
+    parser.add_argument("--rebuild", action="store_true", help="do not reuse existing embeddings")
     return parser
 
 
@@ -257,19 +357,23 @@ def main(argv: Sequence[str] | None = None) -> None:
     args = parser.parse_args(argv)
 
     def show_progress(completed: int, total: int) -> None:
-        print(f"\rEmbedding chunks: {completed}/{total}", end="", flush=True)
+        print(f"\rIndexing chunks: {completed}/{total}", end="", flush=True)
 
     try:
-        count = build_semantic_index(
+        result = build_semantic_index(
             FastEmbedModel(args.model),
             lexical_index=args.lexical_index,
             destination=args.index,
             batch_size=args.batch_size,
             progress=show_progress,
+            incremental=not args.rebuild,
         )
     except SearchError as error:
         parser.error(str(error))
-    print(f"\rEmbedded {count} chunks" + " " * 20)
+    print(
+        f"\rIndexed {result.total} chunks "
+        f"({result.embedded} embedded, {result.reused} reused, {result.removed} removed)" + " " * 10
+    )
 
 
 if __name__ == "__main__":

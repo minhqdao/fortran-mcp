@@ -14,11 +14,15 @@ from fortran_mcp.semantic import SemanticSearchProvider, build_semantic_index
 class FakeEmbeddingModel:
     name = "fake-embedding-model"
 
+    def __init__(self) -> None:
+        self.embedded: list[str] = []
+
     def _embed(self, text: str) -> tuple[float, float]:
         lowered = text.casefold()
         return (1.0, 0.0) if "openmp" in lowered else (0.0, 1.0)
 
     def embed_passages(self, texts: Sequence[str]) -> Iterable[Sequence[float]]:
+        self.embedded.extend(texts)
         return (self._embed(text) for text in texts)
 
     def embed_query(self, text: str) -> Sequence[float]:
@@ -53,15 +57,14 @@ def _indexes(tmp_path: Path) -> tuple[Path, Path]:
     lexical_index = tmp_path / "lexical.db"
     semantic_index = tmp_path / "semantic.db"
     build_index(tmp_path, lexical_index)
-    assert (
-        build_semantic_index(
-            FakeEmbeddingModel(),
-            lexical_index=lexical_index,
-            destination=semantic_index,
-            batch_size=1,
-        )
-        == 2
+    result = build_semantic_index(
+        FakeEmbeddingModel(),
+        lexical_index=lexical_index,
+        destination=semantic_index,
+        batch_size=1,
     )
+    assert result.total == result.embedded == 2
+    assert result.reused == result.removed == 0
     return lexical_index, semantic_index
 
 
@@ -106,3 +109,44 @@ def test_semantic_search_rejects_wrong_model(tmp_path: Path) -> None:
 
     with pytest.raises(SearchError, match="different embedding model"):
         provider.search("OpenMP")
+
+
+def test_incremental_build_reuses_unchanged_vectors(tmp_path: Path) -> None:
+    lexical_index, semantic_index = _indexes(tmp_path)
+    model = FakeEmbeddingModel()
+
+    result = build_semantic_index(
+        model,
+        lexical_index=lexical_index,
+        destination=semantic_index,
+    )
+
+    assert result.total == result.reused == 2
+    assert result.embedded == result.removed == 0
+    assert model.embedded == []
+
+
+def test_incremental_build_embeds_changes_and_removes_old_chunks(tmp_path: Path) -> None:
+    lexical_index, semantic_index = _indexes(tmp_path)
+    chunk_dir = tmp_path / "chunks"
+    changed = _chunk("1" * 32, "Dependencies", "Changed OpenMP guidance.")
+    replacement = _chunk("3" * 32, "Profiles", "Configure a build profile.")
+    (chunk_dir / "fpm.jsonl").write_text(
+        "".join(
+            json.dumps(chunk.model_dump(mode="json")) + "\n" for chunk in (changed, replacement)
+        ),
+        encoding="utf-8",
+    )
+    build_index(tmp_path, lexical_index)
+    model = FakeEmbeddingModel()
+
+    result = build_semantic_index(
+        model,
+        lexical_index=lexical_index,
+        destination=semantic_index,
+    )
+
+    assert result.total == result.embedded == 2
+    assert result.reused == 0
+    assert result.removed == 1
+    assert len(model.embedded) == 2
