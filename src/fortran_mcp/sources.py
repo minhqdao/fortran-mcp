@@ -62,6 +62,7 @@ class Source(StrictModel):
     include_paths: tuple[str, ...] = Field(min_length=1)
     document_paths: tuple[str, ...] = Field(min_length=1)
     homepage_url: HttpUrl
+    published_path_prefix: str
     license: str = Field(min_length=1)
     license_url: HttpUrl
     redistribution: RedistributionPolicy

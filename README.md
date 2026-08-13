@@ -40,7 +40,11 @@ Build citation-preserving document chunks after ingestion:
 
 ```bash
 uv run fortran-mcp-build fpm-0.13.0-docs
+uv run fortran-mcp-index
 ```
+
+The MCP server exposes `search_fortran_docs`, which returns ranked passages with the source,
+version, heading hierarchy, line range, and published documentation URL.
 
 ## Planned sources
 

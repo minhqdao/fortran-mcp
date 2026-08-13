@@ -21,6 +21,7 @@ document_paths = [
   "pages/**",
 ]
 homepage_url = "https://fpm.fortran-lang.org/"
+published_path_prefix = "pages"
 license = "MIT"
 license_url = "https://github.com/fortran-lang/fpm-docs/blob/5097350c24ea7b5ceec233714f5a2604f79d0c02/LICENSE"
 redistribution = "redistributable"

@@ -1,0 +1,243 @@
+"""Build and query the local SQLite full-text search index."""
+
+import argparse
+import re
+import sqlite3
+import tempfile
+from collections.abc import Sequence
+from pathlib import Path, PurePosixPath
+from typing import Any
+from urllib.parse import quote
+
+from pydantic import Field, HttpUrl
+
+from fortran_mcp.documents import DocumentChunk
+from fortran_mcp.ingest import DEFAULT_DATA_DIR
+from fortran_mcp.sources import Source, StrictModel, load_registry
+
+DEFAULT_INDEX_PATH = DEFAULT_DATA_DIR / "fortran-mcp.db"
+QUERY_TOKEN = re.compile(r"[\w.+-]+", re.UNICODE)
+STOP_WORDS = frozenset(
+    {
+        "a",
+        "an",
+        "as",
+        "do",
+        "for",
+        "how",
+        "i",
+        "in",
+        "is",
+        "it",
+        "of",
+        "on",
+        "the",
+        "to",
+    }
+)
+
+
+class SearchError(RuntimeError):
+    """Raised when the search index cannot be built or queried."""
+
+
+class SearchResult(StrictModel):
+    """A ranked documentation result with a complete citation."""
+
+    chunk_id: str
+    score: float
+    source_id: str
+    source_title: str
+    version: str
+    revision: str
+    path: str
+    headings: tuple[str, ...]
+    line_start: int = Field(ge=1)
+    line_end: int = Field(ge=1)
+    text: str
+    url: HttpUrl
+
+
+def _citation_url(source: Source, path: str) -> HttpUrl:
+    relative = PurePosixPath(path)
+    prefix = PurePosixPath(source.published_path_prefix)
+    try:
+        relative = relative.relative_to(prefix)
+    except ValueError as error:
+        raise SearchError(f"document path is outside its published prefix: {path}") from error
+
+    relative = relative.parent if relative.name == "index.md" else relative.with_suffix(".html")
+    encoded_path = "/".join(quote(part) for part in relative.parts)
+    base = str(source.homepage_url).rstrip("/")
+    return HttpUrl(f"{base}/{encoded_path}/" if not relative.suffix else f"{base}/{encoded_path}")
+
+
+def _read_chunks(path: Path) -> list[DocumentChunk]:
+    chunks: list[DocumentChunk] = []
+    try:
+        with path.open(encoding="utf-8") as stream:
+            for line in stream:
+                if line.strip():
+                    chunks.append(DocumentChunk.model_validate_json(line))
+    except (OSError, ValueError) as error:
+        raise SearchError(f"could not read chunks from {path}: {error}") from error
+    return chunks
+
+
+def build_index(data_dir: Path = DEFAULT_DATA_DIR, index_path: Path | None = None) -> int:
+    """Build a fresh, atomic FTS5 index from every generated chunk file."""
+    destination = index_path or data_dir / DEFAULT_INDEX_PATH.name
+    chunk_paths = sorted((data_dir / "chunks").glob("*.jsonl"))
+    if not chunk_paths:
+        raise SearchError("no generated chunk files found")
+    sources = {source.id: source for source in load_registry().sources}
+    destination.parent.mkdir(parents=True, exist_ok=True)
+
+    with tempfile.NamedTemporaryFile(
+        dir=destination.parent,
+        prefix=f".{destination.name}-",
+        suffix=".tmp",
+        delete=False,
+    ) as stream:
+        temporary_path = Path(stream.name)
+    try:
+        with sqlite3.connect(temporary_path) as database:
+            database.execute("PRAGMA journal_mode = DELETE")
+            database.execute(
+                """CREATE VIRTUAL TABLE chunks USING fts5(
+                    chunk_id UNINDEXED,
+                    source_id UNINDEXED,
+                    source_title UNINDEXED,
+                    version UNINDEXED,
+                    revision UNINDEXED,
+                    path UNINDEXED,
+                    headings,
+                    line_start UNINDEXED,
+                    line_end UNINDEXED,
+                    text,
+                    url UNINDEXED,
+                    tokenize = 'unicode61 remove_diacritics 2'
+                )"""
+            )
+            count = 0
+            seen_ids: set[str] = set()
+            for chunk_path in chunk_paths:
+                for chunk in _read_chunks(chunk_path):
+                    if chunk.id in seen_ids:
+                        raise SearchError(f"duplicate chunk ID: {chunk.id}")
+                    seen_ids.add(chunk.id)
+                    source = sources.get(chunk.source_id)
+                    if source is None:
+                        raise SearchError(f"chunk refers to unknown source: {chunk.source_id}")
+                    if chunk.revision != source.revision:
+                        raise SearchError(f"stale chunks for source: {chunk.source_id}")
+                    database.execute(
+                        "INSERT INTO chunks VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                        (
+                            chunk.id,
+                            chunk.source_id,
+                            source.title,
+                            source.version,
+                            chunk.revision,
+                            chunk.path,
+                            " > ".join(chunk.headings),
+                            chunk.line_start,
+                            chunk.line_end,
+                            chunk.text,
+                            str(_citation_url(source, chunk.path)),
+                        ),
+                    )
+                    count += 1
+            database.execute("INSERT INTO chunks(chunks) VALUES ('optimize')")
+        temporary_path.replace(destination)
+    except BaseException:
+        temporary_path.unlink(missing_ok=True)
+        raise
+    return count
+
+
+def _fts_queries(query: str) -> tuple[str, str]:
+    tokens = list(dict.fromkeys(QUERY_TOKEN.findall(query.casefold())))
+    meaningful_tokens = [token for token in tokens if token not in STOP_WORDS]
+    tokens = meaningful_tokens or tokens
+    if not tokens:
+        raise SearchError("query must contain searchable text")
+    escaped = [f'"{token.replace(chr(34), chr(34) * 2)}"' for token in tokens]
+    return " AND ".join(escaped), " OR ".join(escaped)
+
+
+def search(
+    query: str,
+    *,
+    limit: int = 5,
+    source_id: str | None = None,
+    index_path: Path = DEFAULT_INDEX_PATH,
+) -> tuple[SearchResult, ...]:
+    """Search documentation chunks using FTS5 BM25 ranking."""
+    if not 1 <= limit <= 20:
+        raise SearchError("limit must be between 1 and 20")
+    if not index_path.is_file():
+        raise SearchError(f"search index not found: {index_path}")
+    strict_query, fallback_query = _fts_queries(query)
+    sql = """SELECT chunk_id,
+                    -bm25(chunks, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 3.0, 1.0, 1.0, 1.0, 1.0) AS score,
+                    source_id, source_title, version, revision, path, headings,
+                    line_start, line_end, text, url
+             FROM chunks WHERE chunks MATCH ?"""
+    try:
+        with sqlite3.connect(f"file:{index_path}?mode=ro", uri=True) as database:
+
+            def execute(match_query: str) -> list[tuple[Any, ...]]:
+                filtered_sql = sql
+                parameters: list[str | int] = [match_query]
+                if source_id is not None:
+                    filtered_sql += " AND source_id = ?"
+                    parameters.append(source_id)
+                filtered_sql += " ORDER BY score DESC, chunk_id LIMIT ?"
+                parameters.append(limit)
+                return database.execute(filtered_sql, parameters).fetchall()
+
+            rows = execute(strict_query)
+            if not rows and fallback_query != strict_query:
+                rows = execute(fallback_query)
+    except sqlite3.Error as error:
+        raise SearchError(f"could not query search index: {error}") from error
+    return tuple(
+        SearchResult(
+            chunk_id=row[0],
+            score=row[1],
+            source_id=row[2],
+            source_title=row[3],
+            version=row[4],
+            revision=row[5],
+            path=row[6],
+            headings=tuple(filter(None, row[7].split(" > "))),
+            line_start=row[8],
+            line_end=row[9],
+            text=row[10],
+            url=HttpUrl(row[11]),
+        )
+        for row in rows
+    )
+
+
+def _parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description="Build the local documentation search index")
+    parser.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR)
+    parser.add_argument("--index", type=Path)
+    return parser
+
+
+def main(argv: Sequence[str] | None = None) -> None:
+    """Run the index-building command."""
+    parser = _parser()
+    args = parser.parse_args(argv)
+    try:
+        count = build_index(args.data_dir, args.index)
+    except SearchError as error:
+        parser.error(str(error))
+    print(f"Indexed {count} chunks")
+
+
+if __name__ == "__main__":
+    main()
