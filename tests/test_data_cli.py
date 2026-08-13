@@ -4,8 +4,10 @@ import json
 import sqlite3
 from pathlib import Path
 
-from fortran_mcp.bundle import build_bundle, install_bundle
-from fortran_mcp.data_cli import data_status, inspect_role
+from pytest import CaptureFixture, MonkeyPatch
+
+from fortran_mcp.bundle import BundleError, build_bundle, install_bundle
+from fortran_mcp.data_cli import data_status, inspect_role, main, remove_data
 
 
 def _installed_core(tmp_path: Path) -> Path:
@@ -59,3 +61,42 @@ def test_installed_bundle_verification_detects_invalid_manifest(tmp_path: Path) 
 
     assert result.valid is False
     assert "does not match" in str(result.error)
+
+
+def test_remove_deletes_managed_bundle_data_and_preserves_other_files(
+    tmp_path: Path, capsys: CaptureFixture[str]
+) -> None:
+    installed = _installed_core(tmp_path)
+    unrelated = installed / "notes.txt"
+    unrelated.write_text("keep me")
+
+    main(["remove", "--data-dir", str(installed), "--yes"])
+
+    assert unrelated.read_text() == "keep me"
+    assert data_status(installed).bundles[0].installed is False
+    assert not (installed / "fortran-mcp.db").exists()
+    assert "Removed 3 managed files" in capsys.readouterr().out
+
+
+def test_remove_requires_confirmation(tmp_path: Path, monkeypatch: MonkeyPatch) -> None:
+    installed = _installed_core(tmp_path)
+    monkeypatch.setattr("builtins.input", lambda _prompt: "no")
+
+    main(["remove", "--data-dir", str(installed)])
+
+    assert (installed / "fortran-mcp.db").is_file()
+
+
+def test_remove_rejects_unsafe_manifest_path(tmp_path: Path) -> None:
+    installed = _installed_core(tmp_path)
+    manifest_path = installed / "manifests/core.json"
+    manifest = json.loads(manifest_path.read_text())
+    manifest["files"][0]["path"] = "../../outside.txt"
+    manifest_path.write_text(json.dumps(manifest))
+
+    try:
+        remove_data(installed)
+    except BundleError as error:
+        assert "unsafe path" in str(error)
+    else:
+        raise AssertionError("unsafe manifest path was accepted")

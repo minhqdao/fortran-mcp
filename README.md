@@ -133,10 +133,15 @@ Normal users use the unified command instead:
 fortran-mcp data install core --catalog dist/catalog.json
 fortran-mcp data status
 fortran-mcp data verify
+fortran-mcp data remove
 ```
 
 Running `fortran-mcp` without a subcommand still starts the stdio MCP server, so existing client
 configuration remains compatible. `data status --json` provides a machine-readable readiness report.
+`data remove` asks for confirmation, then removes installed bundle files while preserving unrelated
+files in the data directory; pass `--yes` for non-interactive use. It removes documentation data,
+not the Python package itself. If installed with `uv tool`, uninstall that separately with
+`uv tool uninstall fortran-mcp`.
 
 Bundles use a versioned manifest, deterministic ZIP metadata, stable file ordering, and SHA-256
 checksums for every payload. Installation accepts a local path or explicit HTTPS URL, verifies the

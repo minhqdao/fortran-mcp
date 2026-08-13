@@ -5,7 +5,8 @@ import hashlib
 import importlib.util
 import json
 from collections.abc import Sequence
-from pathlib import Path
+from contextlib import suppress
+from pathlib import Path, PurePosixPath
 from typing import Literal
 
 from pydantic import Field
@@ -117,6 +118,44 @@ def data_status(data_dir: Path | None = None) -> DataStatus:
     )
 
 
+def _managed_files(data_dir: Path) -> tuple[Path, ...]:
+    files: set[Path] = set()
+    for role in ("core", "semantic"):
+        manifest_path = data_dir / "manifests" / f"{role}.json"
+        if not manifest_path.is_file():
+            continue
+        try:
+            manifest = BundleManifest.model_validate_json(manifest_path.read_bytes())
+        except (OSError, ValueError) as error:
+            raise BundleError(f"installed {role} manifest is invalid") from error
+        if manifest.role != role:
+            raise BundleError(f"installed {role} manifest has the wrong role")
+        for record in manifest.files:
+            relative = PurePosixPath(record.path)
+            if (
+                relative.is_absolute()
+                or ".." in relative.parts
+                or len(relative.parts) < 2
+                or relative.parts[0] not in {"indexes", "licenses"}
+            ):
+                raise BundleError(f"installed manifest contains an unsafe path: {record.path}")
+            files.add(_installed_path(data_dir, record.path))
+        files.add(manifest_path)
+    return tuple(sorted(files))
+
+
+def remove_data(data_dir: Path | None = None) -> int:
+    """Remove files tracked by installed bundle manifests and preserve unrelated files."""
+    data_dir = data_dir or data_directory()
+    files = _managed_files(data_dir)
+    for path in files:
+        path.unlink(missing_ok=True)
+    for directory in (data_dir / "licenses", data_dir / "manifests", data_dir):
+        with suppress(OSError):
+            directory.rmdir()
+    return len(files)
+
+
 def _print_status(status: DataStatus) -> None:
     print(f"Data directory: {status.data_directory}")
     for bundle in status.bundles:
@@ -148,6 +187,9 @@ def _parser() -> argparse.ArgumentParser:
     status.add_argument("--json", action="store_true")
     verify = subparsers.add_parser("verify")
     verify.add_argument("--data-dir", type=Path, default=data_directory())
+    remove = subparsers.add_parser("remove")
+    remove.add_argument("--data-dir", type=Path, default=data_directory())
+    remove.add_argument("--yes", action="store_true", help="remove without confirmation")
     return parser
 
 
@@ -166,6 +208,23 @@ def main(argv: Sequence[str] | None = None) -> None:
                 print(json.dumps(status.model_dump(mode="json"), indent=2))
             else:
                 _print_status(status)
+            return
+        if args.command == "remove":
+            managed = _managed_files(args.data_dir)
+            if not managed:
+                print("No installed data bundles found")
+                return
+            if not args.yes:
+                try:
+                    prompt = f"Remove installed Fortran MCP data from {args.data_dir}? [y/N] "
+                    answer = input(prompt)
+                except EOFError:
+                    answer = ""
+                if answer.casefold() not in {"y", "yes"}:
+                    print("Removal cancelled")
+                    return
+            removed = remove_data(args.data_dir)
+            print(f"Removed {removed} managed files from {args.data_dir}")
             return
         invalid = [
             bundle.role for bundle in status.bundles if bundle.installed and not bundle.valid
