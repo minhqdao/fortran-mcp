@@ -186,7 +186,7 @@ def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Benchmark documentation retrieval")
     parser.add_argument("--suite", type=Path, default=DEFAULT_BENCHMARK_PATH)
     parser.add_argument("--index", type=Path)
-    parser.add_argument("--provider", choices=("lexical", "semantic"), default="lexical")
+    parser.add_argument("--provider", choices=("lexical", "semantic", "hybrid"), default="lexical")
     parser.add_argument("--semantic-index", type=Path)
     parser.add_argument("--model")
     parser.add_argument("--output", type=Path)
@@ -196,16 +196,24 @@ def _parser() -> argparse.ArgumentParser:
 def main(argv: Sequence[str] | None = None) -> None:
     """Run the lexical retrieval benchmark."""
     args = _parser().parse_args(argv)
-    if args.provider == "semantic":
+    provider: SearchProvider
+    if args.provider in {"semantic", "hybrid"}:
         from fortran_mcp.semantic import DEFAULT_MODEL, FastEmbedModel, SemanticSearchProvider
 
         model = FastEmbedModel(args.model or DEFAULT_MODEL)
-        provider: SearchProvider = SemanticSearchProvider(
+        semantic: SearchProvider = SemanticSearchProvider(
             model,
             semantic_index=args.semantic_index,
             lexical_index=args.index,
         )
-        provider_name = f"semantic:{model.name}"
+        if args.provider == "hybrid":
+            from fortran_mcp.hybrid import HybridSearchProvider
+
+            provider = HybridSearchProvider(SQLiteSearchProvider(args.index), semantic)
+            provider_name = f"hybrid:sqlite-fts5+{model.name}"
+        else:
+            provider = semantic
+            provider_name = f"semantic:{model.name}"
     else:
         provider = SQLiteSearchProvider(args.index)
         provider_name = "sqlite-fts5"

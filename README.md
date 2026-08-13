@@ -75,11 +75,17 @@ uv sync --extra semantic
 uv run fortran-mcp-semantic-index
 uv run fortran-mcp-benchmark --provider semantic \
   --output benchmarks/results/semantic-bge-small-en-v1.5.json
+uv run fortran-mcp-benchmark --provider hybrid \
+  --output benchmarks/results/hybrid-bge-small-en-v1.5.json
 ```
 
 The semantic-index command downloads the configured embedding model on its first run. The generated
 vector index stays in the data directory and records both the model name and the lexical-index
 checksum, so a stale or incompatible index is rejected.
+
+Lexical search remains the server default. After building the semantic index, select another local
+provider with `FORTRAN_MCP_SEARCH_PROVIDER=semantic` or
+`FORTRAN_MCP_SEARCH_PROVIDER=hybrid`.
 
 See [Connect an MCP client](docs/clients.md) for Codex, Claude Desktop, and generic stdio
 configuration examples.
@@ -88,7 +94,8 @@ configuration examples.
 
 - ISO Fortran standards and corrigenda
 - Vendor compiler documentation and language extensions
-- Fortran Package Manager and Fortran Standard Library documentation
+- Build-system documentation for fpm, CMake, and Make
+- Fortran Standard Library documentation
 - C interoperability and OpenMP references
 - Dialect, compatibility, modernization, and migration guides
 

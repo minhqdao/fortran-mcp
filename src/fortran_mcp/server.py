@@ -1,9 +1,11 @@
 """MCP server entry point."""
 
 import json
+from functools import cache
 
 from mcp.server import MCPServer
 
+from fortran_mcp.config import search_provider_name
 from fortran_mcp.search import SearchProvider, SearchResult, SQLiteSearchProvider
 from fortran_mcp.sources import load_registry
 
@@ -13,9 +15,23 @@ mcp = MCPServer(
 )
 
 
+@cache
 def search_provider() -> SearchProvider:
     """Create the configured search backend."""
-    return SQLiteSearchProvider()
+    provider_name = search_provider_name()
+    lexical = SQLiteSearchProvider()
+    if provider_name == "lexical":
+        return lexical
+
+    from fortran_mcp.semantic import SemanticSearchProvider
+
+    semantic = SemanticSearchProvider()
+    if provider_name == "semantic":
+        return semantic
+
+    from fortran_mcp.hybrid import HybridSearchProvider
+
+    return HybridSearchProvider(lexical, semantic)
 
 
 @mcp.tool()

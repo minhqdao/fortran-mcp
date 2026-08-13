@@ -1,0 +1,417 @@
+{
+  "provider": "hybrid:sqlite-fts5+BAAI/bge-small-en-v1.5",
+  "cases": 18,
+  "hit_at_1": 0.6875,
+  "hit_at_3": 0.6875,
+  "hit_at_5": 0.6875,
+  "hit_at_10": 0.6875,
+  "mean_reciprocal_rank": 0.6875,
+  "negative_accuracy": 0.0,
+  "mean_latency_ms": 105.87072222222223,
+  "categories": {
+    "exact": {
+      "cases": 4,
+      "passed": 4,
+      "pass_rate": 1.0,
+      "mrr": 1.0
+    },
+    "filter": {
+      "cases": 2,
+      "passed": 1,
+      "pass_rate": 0.5,
+      "mrr": 0.5
+    },
+    "negative": {
+      "cases": 2,
+      "passed": 0,
+      "pass_rate": 0.0,
+      "mrr": 0.0
+    },
+    "paraphrase": {
+      "cases": 10,
+      "passed": 6,
+      "pass_rate": 0.6,
+      "mrr": 0.6
+    }
+  },
+  "results": [
+    {
+      "id": "fpm-compile-commands",
+      "category": "exact",
+      "query": "compile_commands.json",
+      "passed": true,
+      "rank": 1,
+      "latency_ms": 128.302,
+      "returned": 10,
+      "top_chunk_ids": [
+        "f1e9125f1d304ca33fef5f8b8407c669",
+        "13a42d4630243c3417d6a973b73b7556",
+        "c66e964e77d1f77ca4ee61ecce6fbd13",
+        "a0c7053b108fedb2483aa55860249ec8",
+        "185cd7ddc22a7707a32748eb75fefb27",
+        "88305060b5f1aa666fadb3406be98cc9",
+        "c9eb8043f9110b202e012afed2338a42",
+        "937e6dd4cd4aff9007e658b83ace4e5b",
+        "b82f65455e677ac87b01971c05ad2383",
+        "f9f08659d615b91ac80faf4cb7cebf55"
+      ]
+    },
+    {
+      "id": "fpm-openmp-dependency",
+      "category": "paraphrase",
+      "query": "How do I add OpenMP to an fpm project?",
+      "passed": true,
+      "rank": 1,
+      "latency_ms": 119.547,
+      "returned": 10,
+      "top_chunk_ids": [
+        "5528717ebe43fe1249b42ba87733815c",
+        "53ab5105ba955f2715e903b5097dcecb",
+        "8eeb6541eaf4bc98e54e201a11541466",
+        "c23d1f3e92e05dfa984d7ac30d4110f9",
+        "ae93c650d6417fa88b72f7093cc0375e",
+        "e2fa7532fa63d6cae597fed74e2785db",
+        "59e107c4789336cb3193880fae25b5ed",
+        "8a73cbc00b51a9e9eb5e2b1fca556908",
+        "a6424656413dfaab43a825aab7ffe15a",
+        "8e1f33401e611364007a01137dea567e"
+      ]
+    },
+    {
+      "id": "fpm-create-project",
+      "category": "paraphrase",
+      "query": "How do I create a new fpm project?",
+      "passed": true,
+      "rank": 1,
+      "latency_ms": 138.089,
+      "returned": 10,
+      "top_chunk_ids": [
+        "743f6bcf70c1457ce30ef01af9b56f9e",
+        "c2a670e5185fd27f61f93af528a83172",
+        "dfccac53687000dace16880d9034b27c",
+        "476bdb3e651f811f53cdeb838ce5cd57",
+        "89435da60bf2c2ca0e2bee9aa4fd225f",
+        "e85b6a178ae9ceaf7fc433161be0decb",
+        "76f73606857676cde9f7fd3444532c74",
+        "e2fa7532fa63d6cae597fed74e2785db",
+        "59e107c4789336cb3193880fae25b5ed",
+        "8c8078b2170f7543d0650fda4064c766"
+      ]
+    },
+    {
+      "id": "fpm-clean-output",
+      "category": "paraphrase",
+      "query": "How do I clean build output?",
+      "passed": true,
+      "rank": 1,
+      "latency_ms": 100.327,
+      "returned": 10,
+      "top_chunk_ids": [
+        "ac97c2bdca6e18907fadcc821f5832ea",
+        "c3049b0c236dede34590c9d042682df9",
+        "6630b78ffb39816163eefdf045616ba9",
+        "476bdb3e651f811f53cdeb838ce5cd57",
+        "76f73606857676cde9f7fd3444532c74",
+        "8586ddf31286ab36a387222e53b06e28",
+        "4ee9c824427698ca03a22e27e4401883",
+        "1f97362eb09ae0c400ec5f9e82411103",
+        "73a1ea51ba5cf6905f67fb4a8b01aef4",
+        "c85a2025d860e8243564f42fb1322093"
+      ]
+    },
+    {
+      "id": "fpm-git-dependency",
+      "category": "paraphrase",
+      "query": "How do I add a git dependency to fpm?",
+      "passed": false,
+      "rank": null,
+      "latency_ms": 100.381,
+      "returned": 10,
+      "top_chunk_ids": [
+        "7aceb93f6db420ac62ea217240007966",
+        "743f6bcf70c1457ce30ef01af9b56f9e",
+        "ba5157c2bae06a49484b29457a7058df",
+        "35781f4531e49d2e26cdef21cb4fc518",
+        "83665baecaf4dd58a3d3def92e3d8235",
+        "19987aeaa00d1aa32de9bfc304219308",
+        "dfccac53687000dace16880d9034b27c",
+        "4e835c4be8027e4df46bae6a1a3c28ee",
+        "f6c5d770d7f2d4475e321df2775513a8",
+        "ac97c2bdca6e18907fadcc821f5832ea"
+      ]
+    },
+    {
+      "id": "fpm-features-profiles",
+      "category": "exact",
+      "query": "features profiles",
+      "passed": true,
+      "rank": 1,
+      "latency_ms": 96.278,
+      "returned": 10,
+      "top_chunk_ids": [
+        "3d3c9c81573ad7b5bd7f3b38729f36fd",
+        "e9f5e0a18b886873939b546f34b94c0e",
+        "3ea62df35eb74b38b92ef7f98419d3e6",
+        "ed28747713fa56b15bafcc1879a793ca",
+        "73b8e6f3e79395f4d51ae25cad127fec",
+        "80ae938671940f1b637163b686484d9b",
+        "50729287489c15f48226800024f7fa5b",
+        "32385b96d7cbc2e208ffd0cc803099bf",
+        "89c27f2205e33048d721f76b1422273c",
+        "ce0715814f7573e3afb5180b52bc782b"
+      ]
+    },
+    {
+      "id": "stdlib-string-type",
+      "category": "exact",
+      "query": "stdlib_string_type",
+      "passed": true,
+      "rank": 1,
+      "latency_ms": 110.955,
+      "returned": 10,
+      "top_chunk_ids": [
+        "10c7f96bec2d5ff04f75a50796089e48",
+        "38bedc726e8fd53f8680d0deb28f8840",
+        "415b63a25a76772467055d4f55d304f1",
+        "09c8ac521773bdb0a9687486d522cd4e",
+        "db349b25f0949e2874afcb7b4c37039c",
+        "159772f7c2ec71c62647eac8e668210f",
+        "2827a15584dc5269d35f1360fbf0cfeb",
+        "a0c63ecd30f0558e9f48990b0d5db75f",
+        "dbcc998bf09c1d456c3848421ab5b738",
+        "06393851c9850891f1f7911fee0a124e"
+      ]
+    },
+    {
+      "id": "stdlib-dynamic-text",
+      "category": "paraphrase",
+      "query": "How can I represent dynamically sized text?",
+      "passed": false,
+      "rank": null,
+      "latency_ms": 112.846,
+      "returned": 10,
+      "top_chunk_ids": [
+        "d4c02eadf3281ac51d9092c108edcddc",
+        "f103bc682058e65d48114a677a5caad5",
+        "8f3ff37ef30cde2d2fa8c162a3f2747a",
+        "f31c727c8c10f9fda9861792134d57ee",
+        "032653d506e5179eed10fe73ecbbcf0c",
+        "17cb0f38d358d0cbaf8bfcf91da2590f",
+        "49b50cb0ec4a3469ce49ad7ceb8f95c3",
+        "ad87a2623db53659d6b2c5452dcbf933",
+        "4dfefa7b2c13105f775ba69eb52a26f7",
+        "f014bec5c12699b491abea5d467a2ea9"
+      ]
+    },
+    {
+      "id": "stdlib-sort-array",
+      "category": "paraphrase",
+      "query": "How can I order array values from smallest to largest?",
+      "passed": false,
+      "rank": null,
+      "latency_ms": 112.457,
+      "returned": 10,
+      "top_chunk_ids": [
+        "2d8062fd51c3668c1709ac8b5dbc4dc2",
+        "59d2864675cab445b6903e6d09dddcca",
+        "d71f34993a722dc16ecb3c004cef9829",
+        "7e3b73fbbfdd3e9872e01af45092de42",
+        "2afc3ec81ad5a3c0d05c69a01592d6fb",
+        "2efde47a86e2ee38f3bf76a3a2c00d4c",
+        "74809041337abd01f16ba99b8d1d7cbd",
+        "b7db9a783b5b75eac820c595c56325fe",
+        "78d93c1505ef4815544127d32c592129",
+        "3a050e04280a123b00000f45822f0be7"
+      ]
+    },
+    {
+      "id": "stdlib-quadrature",
+      "category": "paraphrase",
+      "query": "How do I integrate a function numerically?",
+      "passed": true,
+      "rank": 1,
+      "latency_ms": 115.868,
+      "returned": 10,
+      "top_chunk_ids": [
+        "fe829a97c5141d8f9fa42b1f44841be9",
+        "e55e9f660eadef5d162317e082a3ead4",
+        "97bd29fedd54c73a2085e2f506367a14",
+        "eec7c686c3c7ce9aff6384ac8e247d69",
+        "0d582e4f8cc8274734ea152a7dc346e5",
+        "75b8554ecd154772e277bd77002fb934",
+        "2edb7609ecd693d58eba44a8e88aa885",
+        "ab80af64fc8719ac4548b602d89f5c50",
+        "e5082750679375cadcb914482ed8d997",
+        "531a0c4b2ad0550fe3de5606e418fefa"
+      ]
+    },
+    {
+      "id": "stdlib-normal-random",
+      "category": "paraphrase",
+      "query": "How do I generate normally distributed random numbers?",
+      "passed": false,
+      "rank": null,
+      "latency_ms": 134.878,
+      "returned": 10,
+      "top_chunk_ids": [
+        "3f100149122b7c383ebba31a8b9013bc",
+        "516a76b649ff7202ee7f3574ec5a0b1d",
+        "d0b7ac2e914b872c31185d5b2464f0d9",
+        "f17a798b30c6c4cbe90233f76507411e",
+        "d8243f407348717f907d79dbf58765a3",
+        "ddf188cbf93e9d22c3cc33ad341aa3dc",
+        "3211eadec8283ce80a7e02e98c6afbe1",
+        "de98a4a6c2dee9881126a44fae39ac81",
+        "53f6f98698f28f762c92fe36da1b9d79",
+        "edb972fa3427742392fbb5d05810ee55"
+      ]
+    },
+    {
+      "id": "stdlib-string-number",
+      "category": "paraphrase",
+      "query": "How do I convert a string to a number?",
+      "passed": true,
+      "rank": 1,
+      "latency_ms": 104.042,
+      "returned": 10,
+      "top_chunk_ids": [
+        "6bce3ef4bfbf45b68782fe6ce1695cb5",
+        "9932702dd1d0dff950c5dd11f9b83ded",
+        "6eb14a8c9b4664bf0303f3d32faac559",
+        "720e51822afc06cafb98fcf68283f047",
+        "716b0748150768b5ab8c77689b973db8",
+        "69dc4b52d81d65d7ee8fd1a07b42d4f1",
+        "7580df498a964c2a85399b4150e15435",
+        "130f4e2c4a32b4e459289b585a983bdf",
+        "cccab0ea6f799328027e78da45eba40a",
+        "0e2a923ccef460576ba94c08a22281a9"
+      ]
+    },
+    {
+      "id": "stdlib-linear-system",
+      "category": "paraphrase",
+      "query": "How can I solve a linear system?",
+      "passed": true,
+      "rank": 1,
+      "latency_ms": 99.76,
+      "returned": 10,
+      "top_chunk_ids": [
+        "f25c3f3ef25c033c9e274600e5bb9ed6",
+        "f79ac3ecad4738cdafba809ebc38aaa1",
+        "71dd42a5caa96d6ae917cc4ab0865b14",
+        "db7528d2d989cf0401e2be49bd0a11f9",
+        "122c2f79b3fb7087d3eee75a16529ef7",
+        "ad289e9fdc274e492ca269562344a4f1",
+        "df6b17781477642a5f47062d7f785fa7",
+        "d928acb7e5ea26ae564f49c8f77a47b7",
+        "d8d0acf6f40f3c694cba12e3a72eb6cc",
+        "490800985ebabc274a3d87927370bdd9"
+      ]
+    },
+    {
+      "id": "stdlib-hashmap",
+      "category": "exact",
+      "query": "chaining_hashmap_type",
+      "passed": true,
+      "rank": 1,
+      "latency_ms": 99.975,
+      "returned": 10,
+      "top_chunk_ids": [
+        "1234435bdf286c637913d02ad1602e21",
+        "f791e8c5a444f192a9c53af84d0603a9",
+        "29e7dd0021ac74b094c4b409cda08038",
+        "63ba1cbe9d0e403c3c105208afeaa4c7",
+        "5aa426dd0fa433a2f083c229636ed808",
+        "0e1c45c67166f74dc2b886d2497de04f",
+        "6c6f5435e223cb75759d08c6f734d69a",
+        "b7ea7589adb8b35d1b2d0a6b35e1a237",
+        "c4bff70442e479f0ed46a9fa1042f298",
+        "988d8b65cead2d02b355246f4e57765a"
+      ]
+    },
+    {
+      "id": "stdlib-source-filter",
+      "category": "filter",
+      "query": "sort array",
+      "passed": true,
+      "rank": 1,
+      "latency_ms": 94.711,
+      "returned": 10,
+      "top_chunk_ids": [
+        "80dce1c71de9fd5f7f6853039339f126",
+        "a239292a051011556b02198112ee5433",
+        "5c24a6257c3c7bc51980fcd952af8651",
+        "81259779e63889823d730c9f03700d9d",
+        "060c0d11691f78f1b3fe96cb9ab632e3",
+        "fb07d5328e5add6bfbd0f93234637af7",
+        "e8e296a868c8c5389e1f5b6e786ff8f3",
+        "57dbb1fbc913e9935eea81f98f8c3de8",
+        "8fc8a2bf2284b0e558253560f0494a78",
+        "dd8a6634c9f2ee285cb8d802f19bf5d1"
+      ]
+    },
+    {
+      "id": "fpm-source-filter",
+      "category": "filter",
+      "query": "dependency",
+      "passed": false,
+      "rank": null,
+      "latency_ms": 42.53,
+      "returned": 10,
+      "top_chunk_ids": [
+        "cdbb904073e834b2b7bc6e074d37faf5",
+        "73b8e6f3e79395f4d51ae25cad127fec",
+        "e64f16f517fedf5ead3d2c58010f4db1",
+        "ce0715814f7573e3afb5180b52bc782b",
+        "a8e75f99418f3855a13c1609573ca97d",
+        "ae93c650d6417fa88b72f7093cc0375e",
+        "05770a1f83173579f891296faee0e8b2",
+        "d1779e1ccc2c356654ffd8e56a91d4de",
+        "bffca174d0ab709c386266865060c552",
+        "116785895d1e90783959037051b8c17a"
+      ]
+    },
+    {
+      "id": "negative-cuda-memory",
+      "category": "negative",
+      "query": "CUDA Fortran unified memory",
+      "passed": false,
+      "rank": null,
+      "latency_ms": 97.662,
+      "returned": 10,
+      "top_chunk_ids": [
+        "0e484c99f973646793f2fb1defea5e11",
+        "59b60bfb59f8173ef7fde62dfe03aec6",
+        "226a5d26763e125e693032f626604662",
+        "c654c9457ddea091edd387797ae7ca6f",
+        "5c082c84da92cdfde05bf9f4056e27b0",
+        "cda504b92b780d9602e63d6683736790",
+        "1b36d856d76c87dff8f19c9a27549d40",
+        "59f68625583f7bd1602c2ba335178305",
+        "067db1c0e042dfd82883188ec0ad7bd0",
+        "0a4347e742271857bca7724c6753a7a0"
+      ]
+    },
+    {
+      "id": "negative-coarray-events",
+      "category": "negative",
+      "query": "coarray event post event wait",
+      "passed": false,
+      "rank": null,
+      "latency_ms": 97.065,
+      "returned": 10,
+      "top_chunk_ids": [
+        "9247cbc28d65f89823a95b592c3523bc",
+        "42f5acf623bfa0b786e6d90b5f3e4e49",
+        "0345e39ab02bc458154721e0cc273427",
+        "34945f1d3c4c9701ae73a93abe894fbc",
+        "ec6767d68d43b160e9b041fd866df763",
+        "21ee195e76b349d316d607cbba304543",
+        "11429b8227b4f7a9906e97b805713aaa",
+        "c943bf072348a6c33ef5c5758f02511f",
+        "cee3ff0bc105904b8dfaf666bfcbf53c",
+        "f94521841bf6f46e9672ac46ccb695b4"
+      ]
+    }
+  ]
+}
