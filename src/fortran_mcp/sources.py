@@ -5,6 +5,7 @@ from datetime import UTC, datetime
 from enum import StrEnum
 from importlib.resources import files
 from pathlib import Path
+from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, HttpUrl, model_validator
 
@@ -56,6 +57,9 @@ class Source(StrictModel):
     version: str = Field(min_length=1)
     revision: str = Field(min_length=1)
     source_url: HttpUrl
+    archive_url: HttpUrl
+    archive_root: str = Field(min_length=1)
+    include_paths: tuple[str, ...] = Field(min_length=1)
     homepage_url: HttpUrl
     license: str = Field(min_length=1)
     license_url: HttpUrl
@@ -121,6 +125,32 @@ class DocumentRecord(StrictModel):
     def retrieved_at_utc(self) -> datetime:
         """Return the retrieval time normalized to UTC."""
         return self.retrieved_at.astimezone(UTC)
+
+
+class FileRecord(StrictModel):
+    """Integrity metadata for one stored documentation file."""
+
+    path: str = Field(min_length=1)
+    size: int = Field(ge=0)
+    sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+
+
+class IngestionRecord(StrictModel):
+    """Provenance for one completed source ingestion."""
+
+    schema_version: Literal[1] = 1
+    source_id: str
+    revision: str
+    archive_url: HttpUrl
+    archive_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    retrieved_at: datetime
+    files: tuple[FileRecord, ...]
+
+    @model_validator(mode="after")
+    def retrieval_time_has_timezone(self) -> "IngestionRecord":
+        if self.retrieved_at.tzinfo is None or self.retrieved_at.utcoffset() is None:
+            raise ValueError("retrieved_at must include a timezone")
+        return self
 
 
 def load_registry(path: Path | None = None) -> SourceRegistry:

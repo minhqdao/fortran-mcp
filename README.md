@@ -25,6 +25,17 @@ uv run mypy
 uv run pytest
 ```
 
+## Ingestion
+
+Fetch an approved documentation source by its registry ID:
+
+```bash
+uv run fortran-mcp-ingest fpm-0.13.0-docs
+```
+
+The command writes immutable source files and a checksum record below the ignored `data/`
+directory. It refuses to overwrite an existing ingestion.
+
 ## Planned sources
 
 - ISO Fortran standards and corrigenda

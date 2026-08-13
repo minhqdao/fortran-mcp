@@ -9,3 +9,6 @@ indexed only when that use is allowed, and `review-required` sources must not be
 
 Checksums and retrieval timestamps belong to downloaded document records, which will be added
 with the ingestion pipeline.
+
+Run an approved ingestion with `uv run fortran-mcp-ingest SOURCE_ID`. Downloaded files and their
+provenance record are written below `data/`, which is intentionally excluded from version control.

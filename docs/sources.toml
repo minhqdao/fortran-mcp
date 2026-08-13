@@ -10,7 +10,17 @@ compilers = []
 dialects = []
 version = "0.13.0"
 revision = "v0.13.0"
-source_url = "https://github.com/fortran-lang/fpm/tree/v0.13.0/docs"
+source_url = "https://github.com/fortran-lang/fpm/tree/v0.13.0/doc"
+archive_url = "https://github.com/fortran-lang/fpm/archive/refs/tags/v0.13.0.tar.gz"
+archive_root = "fpm-0.13.0"
+include_paths = [
+  "doc/**",
+  "README.md",
+  "CONTRIBUTING.md",
+  "PACKAGING.md",
+  "ChangeLog.md",
+  "manifest-reference.md",
+]
 homepage_url = "https://fpm.fortran-lang.org/"
 license = "MIT"
 license_url = "https://github.com/fortran-lang/fpm/blob/v0.13.0/LICENSE"
