@@ -127,6 +127,17 @@ uv run fortran-mcp-catalog build --data-version 2026.08.1 \
 uv run fortran-mcp-catalog install core --catalog dist/catalog.json
 ```
 
+Normal users use the unified command instead:
+
+```bash
+fortran-mcp data install core --catalog dist/catalog.json
+fortran-mcp data status
+fortran-mcp data verify
+```
+
+Running `fortran-mcp` without a subcommand still starts the stdio MCP server, so existing client
+configuration remains compatible. `data status --json` provides a machine-readable readiness report.
+
 Bundles use a versioned manifest, deterministic ZIP metadata, stable file ordering, and SHA-256
 checksums for every payload. Installation accepts a local path or explicit HTTPS URL, verifies the
 complete archive before writing it, enforces server compatibility, and installs semantic data only
