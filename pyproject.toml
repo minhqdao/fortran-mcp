@@ -31,6 +31,7 @@ fortran-mcp = "fortran_mcp.server:main"
 fortran-mcp-ingest = "fortran_mcp.ingest:main"
 fortran-mcp-build = "fortran_mcp.documents:main"
 fortran-mcp-index = "fortran_mcp.search:main"
+fortran-mcp-benchmark = "fortran_mcp.benchmark:main"
 
 [dependency-groups]
 dev = [

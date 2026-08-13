@@ -59,6 +59,15 @@ fortran-docs://sources/{source_id}
 fortran-docs://chunks/{chunk_id}
 ```
 
+Run the reviewed retrieval benchmark against the local index with:
+
+```bash
+uv run fortran-mcp-benchmark --output benchmarks/results/sqlite-fts5.json
+```
+
+The report records ranking accuracy, negative-query accuracy, latency, and every individual query
+result. It is a baseline for comparing future lexical, semantic, or hybrid search providers.
+
 See [Connect an MCP client](docs/clients.md) for Codex, Claude Desktop, and generic stdio
 configuration examples.
 

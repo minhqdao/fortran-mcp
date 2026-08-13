@@ -1,0 +1,130 @@
+schema_version = 1
+
+[[cases]]
+id = "fpm-compile-commands"
+category = "exact"
+query = "compile_commands.json"
+expected_source = "fpm-0.13.0-docs"
+expected_path = "pages/spec/compile_commands.md"
+
+[[cases]]
+id = "fpm-openmp-dependency"
+category = "paraphrase"
+query = "How do I add OpenMP to an fpm project?"
+expected_source = "fpm-0.13.0-docs"
+expected_path = "pages/how-to/compute-pi-openmp.md"
+expected_heading = "Using OpenMP as a dependency"
+
+[[cases]]
+id = "fpm-create-project"
+category = "paraphrase"
+query = "How do I create a new fpm project?"
+expected_source = "fpm-0.13.0-docs"
+expected_path = "pages/tutorial/hello-fpm.md"
+
+[[cases]]
+id = "fpm-clean-output"
+category = "paraphrase"
+query = "How do I clean build output?"
+expected_source = "fpm-0.13.0-docs"
+expected_path = "pages/how-to/selective-cleaning.md"
+
+[[cases]]
+id = "fpm-git-dependency"
+category = "paraphrase"
+query = "How do I add a git dependency to fpm?"
+expected_source = "fpm-0.13.0-docs"
+expected_path = "pages/spec/manifest.md"
+expected_heading = "Dependencies from version control systems"
+
+[[cases]]
+id = "fpm-features-profiles"
+category = "exact"
+query = "features profiles"
+expected_source = "fpm-0.13.0-docs"
+expected_path = "pages/spec/features.md"
+
+[[cases]]
+id = "stdlib-string-type"
+category = "exact"
+query = "stdlib_string_type"
+expected_source = "stdlib-0.8.1-docs"
+expected_path = "doc/specs/stdlib_string_type.md"
+
+[[cases]]
+id = "stdlib-dynamic-text"
+category = "paraphrase"
+query = "How can I represent dynamically sized text?"
+expected_source = "stdlib-0.8.1-docs"
+expected_path = "doc/specs/stdlib_string_type.md"
+
+[[cases]]
+id = "stdlib-sort-array"
+category = "paraphrase"
+query = "How can I order array values from smallest to largest?"
+expected_source = "stdlib-0.8.1-docs"
+expected_path = "doc/specs/stdlib_sorting.md"
+expected_heading = "sorts an input array"
+
+[[cases]]
+id = "stdlib-quadrature"
+category = "paraphrase"
+query = "How do I integrate a function numerically?"
+expected_source = "stdlib-0.8.1-docs"
+expected_path = "doc/specs/stdlib_quadrature.md"
+
+[[cases]]
+id = "stdlib-normal-random"
+category = "paraphrase"
+query = "How do I generate normally distributed random numbers?"
+expected_source = "stdlib-0.8.1-docs"
+expected_path = "doc/specs/stdlib_stats_distribution_normal.md"
+
+[[cases]]
+id = "stdlib-string-number"
+category = "paraphrase"
+query = "How do I convert a string to a number?"
+expected_source = "stdlib-0.8.1-docs"
+expected_path = "doc/specs/stdlib_str2num.md"
+
+[[cases]]
+id = "stdlib-linear-system"
+category = "paraphrase"
+query = "How can I solve a linear system?"
+expected_source = "stdlib-0.8.1-docs"
+expected_path = "doc/specs/stdlib_linalg.md"
+
+[[cases]]
+id = "stdlib-hashmap"
+category = "exact"
+query = "chaining_hashmap_type"
+expected_source = "stdlib-0.8.1-docs"
+expected_path = "doc/specs/stdlib_hashmaps.md"
+
+[[cases]]
+id = "stdlib-source-filter"
+category = "filter"
+query = "sort array"
+source_filter = "stdlib-0.8.1-docs"
+expected_source = "stdlib-0.8.1-docs"
+expected_path = "doc/specs/stdlib_sorting.md"
+
+[[cases]]
+id = "fpm-source-filter"
+category = "filter"
+query = "dependency"
+source_filter = "fpm-0.13.0-docs"
+expected_source = "fpm-0.13.0-docs"
+expected_path = "pages/tutorial/dependencies.md"
+
+[[cases]]
+id = "negative-cuda-memory"
+category = "negative"
+query = "CUDA Fortran unified memory"
+expect_no_results = true
+
+[[cases]]
+id = "negative-coarray-events"
+category = "negative"
+query = "coarray event post event wait"
+expect_no_results = true
