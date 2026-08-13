@@ -121,13 +121,19 @@ FORTRAN_MCP_DATA_DIR=data uv run fortran-mcp-bundle build semantic \
   --output dist/fortran-mcp-semantic.zip
 uv run fortran-mcp-bundle verify dist/fortran-mcp-core.zip
 uv run fortran-mcp-bundle install dist/fortran-mcp-core.zip
+uv run fortran-mcp-catalog build --data-version 2026.08.1 \
+  --output dist/catalog.json \
+  dist/fortran-mcp-core.zip dist/fortran-mcp-semantic.zip
+uv run fortran-mcp-catalog install core --catalog dist/catalog.json
 ```
 
 Bundles use a versioned manifest, deterministic ZIP metadata, stable file ordering, and SHA-256
 checksums for every payload. Installation accepts a local path or explicit HTTPS URL, verifies the
 complete archive before writing it, enforces server compatibility, and installs semantic data only
 alongside the exact required core index. Automatic release discovery and publishing are intentionally
-not implemented yet. See [Data bundle format](docs/bundles.md) for the artifact contract.
+not implemented yet. A local catalog provides independent data versioning, whole-archive checksums,
+download sizes, and role-based installation without assuming a future release URL. See
+[Data bundle format](docs/bundles.md) for the artifact contract.
 
 See [Connect an MCP client](docs/clients.md) for Codex, Claude Desktop, and generic stdio
 configuration examples.

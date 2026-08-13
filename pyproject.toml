@@ -40,6 +40,7 @@ fortran-mcp-index = "fortran_mcp.search:main"
 fortran-mcp-semantic-index = "fortran_mcp.semantic:main"
 fortran-mcp-benchmark = "fortran_mcp.benchmark:main"
 fortran-mcp-bundle = "fortran_mcp.bundle:main"
+fortran-mcp-catalog = "fortran_mcp.catalog:main"
 
 [dependency-groups]
 dev = [

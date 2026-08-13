@@ -40,3 +40,15 @@ checks the manifest's server-version constraint, writes payloads through tempora
 the installed manifest last. Semantic installation additionally checks its required lexical-index
 checksum against the installed core manifest. The default destination is the platform's per-user
 application-data directory; `FORTRAN_MCP_DATA_DIR` overrides it.
+
+## Catalog format
+
+A catalog is a deterministic JSON discovery document for one data release. Its `data_version` uses
+`YYYY.MM.N`, independently of the Python server version. Each role appears at most once and records
+the relative bundle path, compressed byte size, whole-archive SHA-256 checksum, bundle ID, and bundle
+version.
+
+Catalog paths are relative to the catalog file and cannot escape its directory. Local catalog
+installation verifies the advertised archive size and checksum, then verifies that the bundle ID and
+version match the internal manifest before invoking normal installation. Remote catalog discovery is
+deferred until the project has a stable release location and authenticated catalog policy.
