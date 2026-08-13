@@ -6,7 +6,13 @@ from pathlib import Path
 
 import pytest
 
-from fortran_mcp.bundle import BUNDLE_ROOT, BundleError, build_bundle, verify_bundle
+from fortran_mcp.bundle import (
+    BUNDLE_ROOT,
+    BundleError,
+    build_bundle,
+    install_bundle,
+    verify_bundle,
+)
 
 
 def _bundle_inputs(tmp_path: Path) -> tuple[Path, Path]:
@@ -89,3 +95,54 @@ def test_core_bundle_requires_source_license_text(tmp_path: Path) -> None:
 
     with pytest.raises(BundleError, match="required bundle file"):
         build_bundle("core", tmp_path / "bundle.zip", data_dir=data_dir, license_dir=license_dir)
+
+
+def test_install_core_then_compatible_semantic_bundle(tmp_path: Path) -> None:
+    data_dir, license_dir = _bundle_inputs(tmp_path)
+    core = tmp_path / "core.zip"
+    build_bundle("core", core, data_dir=data_dir, license_dir=license_dir)
+    core_hash = verify_bundle(core).files[0].sha256
+    with sqlite3.connect(data_dir / "fortran-mcp-semantic.db") as database:
+        database.execute("CREATE TABLE vectors(source_id TEXT)")
+        database.execute("INSERT INTO vectors VALUES ('fpm-0.13.0-docs')")
+        database.execute("CREATE TABLE metadata(key TEXT, value TEXT)")
+        database.executemany(
+            "INSERT INTO metadata VALUES (?, ?)",
+            (
+                ("model", "test/model"),
+                ("dimensions", "384"),
+                ("lexical_index_sha256", core_hash),
+            ),
+        )
+    semantic = tmp_path / "semantic.zip"
+    build_bundle("semantic", semantic, data_dir=data_dir)
+    installed = tmp_path / "installed"
+
+    install_bundle(core, data_dir=installed)
+    install_bundle(semantic, data_dir=installed)
+
+    assert (installed / "fortran-mcp.db").is_file()
+    assert (installed / "fortran-mcp-semantic.db").is_file()
+    assert (installed / "manifests/core.json").is_file()
+    assert (installed / "manifests/semantic.json").is_file()
+
+
+def test_semantic_install_requires_core_bundle(tmp_path: Path) -> None:
+    data_dir, _ = _bundle_inputs(tmp_path)
+    with sqlite3.connect(data_dir / "fortran-mcp-semantic.db") as database:
+        database.execute("CREATE TABLE vectors(source_id TEXT)")
+        database.execute("INSERT INTO vectors VALUES ('fpm-0.13.0-docs')")
+        database.execute("CREATE TABLE metadata(key TEXT, value TEXT)")
+        database.executemany(
+            "INSERT INTO metadata VALUES (?, ?)",
+            (
+                ("model", "test/model"),
+                ("dimensions", "384"),
+                ("lexical_index_sha256", "a" * 64),
+            ),
+        )
+    semantic = tmp_path / "semantic.zip"
+    build_bundle("semantic", semantic, data_dir=data_dir)
+
+    with pytest.raises(BundleError, match="core bundle"):
+        install_bundle(semantic, data_dir=tmp_path / "installed")

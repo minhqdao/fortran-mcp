@@ -2,6 +2,7 @@
 
 import asyncio
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -38,6 +39,7 @@ async def _exercise_server(working_directory: Path) -> None:
         command=sys.executable,
         args=["-m", "fortran_mcp.server"],
         cwd=working_directory,
+        env={**os.environ, "FORTRAN_MCP_DATA_DIR": str(working_directory / "data")},
     )
     async with (
         stdio_client(parameters) as (read_stream, write_stream),

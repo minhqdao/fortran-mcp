@@ -10,14 +10,15 @@ from fortran_mcp.config import (
     SEARCH_PROVIDER_ENV,
     data_directory,
     search_provider_name,
+    user_data_directory,
 )
 from fortran_mcp.search import SQLiteSearchProvider
 
 
-def test_data_directory_defaults_to_project_data(monkeypatch: MonkeyPatch) -> None:
+def test_data_directory_defaults_to_user_data(monkeypatch: MonkeyPatch) -> None:
     monkeypatch.delenv(DATA_DIR_ENV, raising=False)
 
-    assert data_directory() == Path("data")
+    assert data_directory() == user_data_directory()
 
 
 def test_data_directory_and_provider_follow_environment(

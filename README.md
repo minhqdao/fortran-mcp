@@ -34,11 +34,12 @@ uv run fortran-mcp-ingest fpm-0.13.0-docs
 uv run fortran-mcp-ingest stdlib-0.8.1-docs
 ```
 
-The command writes immutable source files and a checksum record below the ignored `data/`
+The command writes immutable source files and a checksum record below the configured per-user data
 directory. It refuses to overwrite an existing ingestion.
 
-Set `FORTRAN_MCP_DATA_DIR` to keep generated documents and indexes elsewhere, for example on a
-larger disk. All ingestion, build, index, and server commands use that location.
+Set `FORTRAN_MCP_DATA_DIR` to keep generated documents and indexes elsewhere, such as the repository
+`data/` directory during maintainer work or a larger disk. All data commands and the server use that
+location.
 
 Build citation-preserving document chunks after ingestion:
 
@@ -105,14 +106,19 @@ model it requires.
 Build and verify local artifacts with:
 
 ```bash
-uv run fortran-mcp-bundle build core --output dist/fortran-mcp-core.zip
-uv run fortran-mcp-bundle build semantic --output dist/fortran-mcp-semantic.zip
+FORTRAN_MCP_DATA_DIR=data uv run fortran-mcp-bundle build core \
+  --output dist/fortran-mcp-core.zip
+FORTRAN_MCP_DATA_DIR=data uv run fortran-mcp-bundle build semantic \
+  --output dist/fortran-mcp-semantic.zip
 uv run fortran-mcp-bundle verify dist/fortran-mcp-core.zip
+uv run fortran-mcp-bundle install dist/fortran-mcp-core.zip
 ```
 
 Bundles use a versioned manifest, deterministic ZIP metadata, stable file ordering, and SHA-256
-checksums for every payload. Downloading, installation, and release publishing are intentionally not
-implemented yet. See [Data bundle format](docs/bundles.md) for the artifact contract.
+checksums for every payload. Installation accepts a local path or explicit HTTPS URL, verifies the
+complete archive before writing it, enforces server compatibility, and installs semantic data only
+alongside the exact required core index. Automatic release discovery and publishing are intentionally
+not implemented yet. See [Data bundle format](docs/bundles.md) for the artifact contract.
 
 See [Connect an MCP client](docs/clients.md) for Codex, Claude Desktop, and generic stdio
 configuration examples.

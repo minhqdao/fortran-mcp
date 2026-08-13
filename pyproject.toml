@@ -23,6 +23,7 @@ classifiers = [
 ]
 dependencies = [
   "mcp[cli]>=2.0,<3",
+  "packaging>=26.2,<27",
   "pydantic>=2.13,<3",
 ]
 

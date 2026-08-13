@@ -3,13 +3,19 @@
 import argparse
 import hashlib
 import json
+import shutil
 import sqlite3
+import tempfile
 import zipfile
 from collections.abc import Sequence
 from importlib.metadata import version as package_version
 from pathlib import Path, PurePosixPath
 from typing import Literal
+from urllib.parse import urlparse
+from urllib.request import Request, urlopen
 
+from packaging.specifiers import InvalidSpecifier, SpecifierSet
+from packaging.version import InvalidVersion, Version
 from pydantic import Field
 
 from fortran_mcp.config import data_directory
@@ -20,6 +26,8 @@ from fortran_mcp.sources import Source, StrictModel, load_registry
 BUNDLE_SCHEMA_VERSION: Literal[1] = 1
 BUNDLE_ROOT = "fortran-mcp-bundle"
 ZIP_TIMESTAMP = (1980, 1, 1, 0, 0, 0)
+DOWNLOAD_LIMIT = 2 * 1024 * 1024 * 1024
+MANIFEST_LIMIT = 1024 * 1024
 
 
 class BundleError(RuntimeError):
@@ -212,14 +220,22 @@ def verify_bundle(path: Path) -> BundleManifest:
                 if relative.is_absolute() or ".." in relative.parts:
                     raise BundleError(f"bundle contains an unsafe path: {name}")
             manifest_path = f"{BUNDLE_ROOT}/manifest.json"
+            manifest_info = archive.getinfo(manifest_path)
+            if manifest_info.file_size > MANIFEST_LIMIT:
+                raise BundleError("bundle manifest exceeds the size limit")
             manifest = BundleManifest.model_validate_json(archive.read(manifest_path))
             expected = {manifest_path} | {
                 f"{BUNDLE_ROOT}/{record.path}" for record in manifest.files
             }
             if set(names) != expected:
                 raise BundleError("bundle contents do not match its manifest")
+            if sum(record.size for record in manifest.files) > DOWNLOAD_LIMIT:
+                raise BundleError("bundle payload exceeds the size limit")
             for record in manifest.files:
-                content = archive.read(f"{BUNDLE_ROOT}/{record.path}")
+                member_path = f"{BUNDLE_ROOT}/{record.path}"
+                if archive.getinfo(member_path).file_size != record.size:
+                    raise BundleError(f"bundle file size is invalid: {record.path}")
+                content = archive.read(member_path)
                 if len(content) != record.size or _sha256_bytes(content) != record.sha256:
                     raise BundleError(f"bundle file failed verification: {record.path}")
             return manifest
@@ -227,6 +243,107 @@ def verify_bundle(path: Path) -> BundleManifest:
         if isinstance(error, BundleError):
             raise
         raise BundleError(f"invalid bundle: {error}") from error
+
+
+def _download_bundle(url: str, destination: Path) -> None:
+    parsed = urlparse(url)
+    if parsed.scheme != "https":
+        raise BundleError("remote bundle URL must use HTTPS")
+    request = Request(url, headers={"User-Agent": "fortran-mcp/0.1"})
+    try:
+        with urlopen(request, timeout=60) as response, destination.open("wb") as output:
+            declared = response.headers.get("Content-Length")
+            if declared is not None and int(declared) > DOWNLOAD_LIMIT:
+                raise BundleError("bundle download exceeds the size limit")
+            total = 0
+            while block := response.read(1024 * 1024):
+                total += len(block)
+                if total > DOWNLOAD_LIMIT:
+                    raise BundleError("bundle download exceeds the size limit")
+                output.write(block)
+    except OSError as error:
+        raise BundleError(f"could not download bundle: {error}") from error
+
+
+def _server_is_compatible(manifest: BundleManifest) -> None:
+    current = package_version("fortran-mcp")
+    try:
+        compatible = Version(current) in SpecifierSet(manifest.server_compatibility)
+    except (InvalidSpecifier, InvalidVersion) as error:
+        raise BundleError("bundle has invalid server compatibility metadata") from error
+    if not compatible:
+        raise BundleError(
+            f"bundle requires fortran-mcp {manifest.server_compatibility}; "
+            f"installed version is {current}"
+        )
+
+
+def _installed_manifest(data_dir: Path, role: str) -> BundleManifest | None:
+    path = data_dir / "manifests" / f"{role}.json"
+    if not path.is_file():
+        return None
+    try:
+        return BundleManifest.model_validate_json(path.read_bytes())
+    except (OSError, ValueError) as error:
+        raise BundleError(f"installed {role} manifest is invalid") from error
+
+
+def install_bundle(source: str | Path, *, data_dir: Path | None = None) -> BundleManifest:
+    """Verify and install a local or HTTPS bundle into the configured data directory."""
+    data_dir = data_dir or data_directory()
+    data_dir.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(prefix=".fortran-mcp-install-", dir=data_dir.parent) as temp:
+        temporary = Path(temp)
+        source_text = str(source)
+        if urlparse(source_text).scheme:
+            archive_path = temporary / "download.zip"
+            _download_bundle(source_text, archive_path)
+        else:
+            archive_path = Path(source).expanduser()
+        manifest = verify_bundle(archive_path)
+        _server_is_compatible(manifest)
+
+        if manifest.role == "semantic":
+            core = _installed_manifest(data_dir, "core")
+            if core is None:
+                raise BundleError("install a compatible core bundle before the semantic bundle")
+            core_index = next(
+                (record for record in core.files if record.path == f"indexes/{INDEX_FILENAME}"),
+                None,
+            )
+            required = manifest.requires[0] if manifest.requires else None
+            if (
+                core_index is None
+                or required is None
+                or core_index.sha256 != required.lexical_index_sha256
+            ):
+                raise BundleError("semantic bundle is incompatible with the installed core bundle")
+
+        staged: list[tuple[Path, Path]] = []
+        with zipfile.ZipFile(archive_path) as archive:
+            for record in manifest.files:
+                if record.path.startswith("indexes/"):
+                    relative = Path(Path(record.path).name)
+                else:
+                    relative = Path(record.path)
+                staged_path = temporary / "staged" / relative
+                staged_path.parent.mkdir(parents=True, exist_ok=True)
+                with (
+                    archive.open(f"{BUNDLE_ROOT}/{record.path}") as source_file,
+                    staged_path.open("wb") as destination_file,
+                ):
+                    shutil.copyfileobj(source_file, destination_file)
+                staged.append((staged_path, data_dir / relative))
+
+        for staged_path, installed_path in staged:
+            installed_path.parent.mkdir(parents=True, exist_ok=True)
+            staged_path.replace(installed_path)
+        manifest_path = data_dir / "manifests" / f"{manifest.role}.json"
+        manifest_path.parent.mkdir(parents=True, exist_ok=True)
+        temporary_manifest = temporary / f"{manifest.role}.json"
+        temporary_manifest.write_text(manifest.model_dump_json(indent=2) + "\n")
+        temporary_manifest.replace(manifest_path)
+        return manifest
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -240,6 +357,9 @@ def _parser() -> argparse.ArgumentParser:
     build.add_argument("--bundle-version")
     verify = subparsers.add_parser("verify")
     verify.add_argument("path", type=Path)
+    install = subparsers.add_parser("install")
+    install.add_argument("source", help="local bundle path or explicit HTTPS URL")
+    install.add_argument("--data-dir", type=Path, default=data_directory())
     return parser
 
 
@@ -257,9 +377,12 @@ def main(argv: Sequence[str] | None = None) -> None:
                 bundle_version=args.bundle_version,
             )
             print(f"Built {manifest.bundle_id}: {args.output}")
-        else:
+        elif args.command == "verify":
             manifest = verify_bundle(args.path)
             print(f"Verified {manifest.bundle_id}: {args.path}")
+        else:
+            manifest = install_bundle(args.source, data_dir=args.data_dir)
+            print(f"Installed {manifest.bundle_id} into {args.data_dir}")
     except BundleError as error:
         parser.error(str(error))
 

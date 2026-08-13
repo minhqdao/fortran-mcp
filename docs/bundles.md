@@ -34,3 +34,9 @@ Bundle verification rejects invalid manifests, unsafe or duplicate paths, undecl
 files, size mismatches, and checksum mismatches. Authenticating a remotely downloaded artifact will
 be defined with the download and release workflow; internal checksums alone do not establish who
 published an archive.
+
+Installation accepts local files and explicit HTTPS URLs. It verifies an archive before extraction,
+checks the manifest's server-version constraint, writes payloads through temporary files, and records
+the installed manifest last. Semantic installation additionally checks its required lexical-index
+checksum against the installed core manifest. The default destination is the platform's per-user
+application-data directory; `FORTRAN_MCP_DATA_DIR` overrides it.

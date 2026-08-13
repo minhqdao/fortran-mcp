@@ -11,4 +11,6 @@ Checksums and retrieval timestamps belong to downloaded document records, which 
 with the ingestion pipeline.
 
 Run an approved ingestion with `uv run fortran-mcp-ingest SOURCE_ID`. Downloaded files and their
-provenance record are written below `data/`, which is intentionally excluded from version control.
+provenance record are written below the configured data directory. Maintainers may set
+`FORTRAN_MCP_DATA_DIR=data` to use the repository-local directory, which is excluded from version
+control.
