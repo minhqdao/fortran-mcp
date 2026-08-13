@@ -4,13 +4,18 @@ import json
 
 from mcp.server import MCPServer
 
-from fortran_mcp.search import SearchResult, get_chunk, search
+from fortran_mcp.search import SearchProvider, SearchResult, SQLiteSearchProvider
 from fortran_mcp.sources import load_registry
 
 mcp = MCPServer(
     "Fortran MCP",
     instructions="Authoritative documentation for modern and legacy Fortran development.",
 )
+
+
+def search_provider() -> SearchProvider:
+    """Create the configured search backend."""
+    return SQLiteSearchProvider()
 
 
 @mcp.tool()
@@ -20,7 +25,7 @@ def search_fortran_docs(
     source_id: str | None = None,
 ) -> list[SearchResult]:
     """Search authoritative Fortran documentation and return cited passages."""
-    return list(search(query, limit=limit, source_id=source_id))
+    return list(search_provider().search(query, limit=limit, source_id=source_id))
 
 
 @mcp.resource(
@@ -56,7 +61,7 @@ def documentation_source(source_id: str) -> str:
 )
 def documentation_chunk(chunk_id: str) -> str:
     """Return one exact indexed passage by stable chunk ID."""
-    return get_chunk(chunk_id).model_dump_json(indent=2)
+    return search_provider().get_chunk(chunk_id).model_dump_json(indent=2)
 
 
 def main() -> None:

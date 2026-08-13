@@ -57,6 +57,9 @@ Add this entry to the client's MCP configuration:
 Completely restart the client after saving the configuration. The server communicates over
 standard input and output, so an idle process is normal while the client is connected.
 
+Set `FORTRAN_MCP_DATA_DIR` in the client's server environment when generated data is stored
+outside the repository's `data/` directory.
+
 ## Verify
 
 Ask the client:

@@ -14,6 +14,7 @@ from urllib.request import Request, urlopen
 
 from pydantic import HttpUrl
 
+from fortran_mcp.config import data_directory
 from fortran_mcp.sources import (
     FileRecord,
     IngestionRecord,
@@ -23,7 +24,6 @@ from fortran_mcp.sources import (
     load_registry,
 )
 
-DEFAULT_DATA_DIR = Path("data")
 DOWNLOAD_LIMIT = 50 * 1024 * 1024
 FILE_LIMIT = 5 * 1024 * 1024
 TOTAL_CONTENT_LIMIT = 100 * 1024 * 1024
@@ -112,7 +112,7 @@ def _extract_documents(archive: bytes, source: Source, destination: Path) -> tup
 
 def ingest_source(
     source: Source,
-    data_dir: Path = DEFAULT_DATA_DIR,
+    data_dir: Path | None = None,
     *,
     downloader: Downloader = download,
     retrieved_at: datetime | None = None,
@@ -123,6 +123,7 @@ def ingest_source(
     if source.redistribution is not RedistributionPolicy.REDISTRIBUTABLE:
         raise IngestionError(f"source is not redistributable: {source.id}")
 
+    data_dir = data_dir or data_directory()
     source_dir = data_dir / "raw" / source.id
     record_path = data_dir / "records" / f"{source.id}.json"
     if source_dir.exists() or record_path.exists():
@@ -162,7 +163,7 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--data-dir",
         type=Path,
-        default=DEFAULT_DATA_DIR,
+        default=data_directory(),
         help="storage directory (default: data)",
     )
     return parser

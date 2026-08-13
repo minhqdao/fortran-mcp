@@ -6,16 +6,17 @@ import sqlite3
 import tempfile
 from collections.abc import Sequence
 from pathlib import Path, PurePosixPath
-from typing import Any
+from typing import Any, Protocol
 from urllib.parse import quote
 
 from pydantic import Field, HttpUrl
 
+from fortran_mcp.config import data_directory
 from fortran_mcp.documents import DocumentChunk
-from fortran_mcp.ingest import DEFAULT_DATA_DIR
 from fortran_mcp.sources import Source, StrictModel, load_registry
 
-DEFAULT_INDEX_PATH = DEFAULT_DATA_DIR / "fortran-mcp.db"
+INDEX_FILENAME = "fortran-mcp.db"
+DEFAULT_INDEX_PATH = Path("data") / INDEX_FILENAME
 QUERY_TOKEN = re.compile(r"[\w.+-]+", re.UNICODE)
 STOP_WORDS = frozenset(
     {
@@ -56,6 +57,39 @@ class SearchResult(StrictModel):
     line_end: int = Field(ge=1)
     text: str
     url: HttpUrl
+
+
+class SearchProvider(Protocol):
+    """Backend-independent access to indexed documentation."""
+
+    def search(
+        self,
+        query: str,
+        *,
+        limit: int = 5,
+        source_id: str | None = None,
+    ) -> tuple[SearchResult, ...]: ...
+
+    def get_chunk(self, chunk_id: str) -> SearchResult: ...
+
+
+class SQLiteSearchProvider:
+    """Local lexical search backed by an SQLite FTS5 index."""
+
+    def __init__(self, index_path: Path | None = None) -> None:
+        self.index_path = index_path or data_directory() / INDEX_FILENAME
+
+    def search(
+        self,
+        query: str,
+        *,
+        limit: int = 5,
+        source_id: str | None = None,
+    ) -> tuple[SearchResult, ...]:
+        return search(query, limit=limit, source_id=source_id, index_path=self.index_path)
+
+    def get_chunk(self, chunk_id: str) -> SearchResult:
+        return get_chunk(chunk_id, index_path=self.index_path)
 
 
 def _result_from_row(row: tuple[Any, ...]) -> SearchResult:
@@ -103,9 +137,10 @@ def _read_chunks(path: Path) -> list[DocumentChunk]:
     return chunks
 
 
-def build_index(data_dir: Path = DEFAULT_DATA_DIR, index_path: Path | None = None) -> int:
+def build_index(data_dir: Path | None = None, index_path: Path | None = None) -> int:
     """Build a fresh, atomic FTS5 index from every generated chunk file."""
-    destination = index_path or data_dir / DEFAULT_INDEX_PATH.name
+    data_dir = data_dir or data_directory()
+    destination = index_path or data_dir / INDEX_FILENAME
     chunk_paths = sorted((data_dir / "chunks").glob("*.jsonl"))
     if not chunk_paths:
         raise SearchError("no generated chunk files found")
@@ -245,7 +280,7 @@ def get_chunk(chunk_id: str, index_path: Path = DEFAULT_INDEX_PATH) -> SearchRes
 
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Build the local documentation search index")
-    parser.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR)
+    parser.add_argument("--data-dir", type=Path, default=data_directory())
     parser.add_argument("--index", type=Path)
     return parser
 

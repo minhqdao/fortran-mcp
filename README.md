@@ -37,6 +37,9 @@ uv run fortran-mcp-ingest stdlib-0.8.1-docs
 The command writes immutable source files and a checksum record below the ignored `data/`
 directory. It refuses to overwrite an existing ingestion.
 
+Set `FORTRAN_MCP_DATA_DIR` to keep generated documents and indexes elsewhere, for example on a
+larger disk. All ingestion, build, index, and server commands use that location.
+
 Build citation-preserving document chunks after ingestion:
 
 ```bash

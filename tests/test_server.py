@@ -4,6 +4,10 @@ import asyncio
 from collections.abc import Iterable
 from typing import Any, cast
 
+from mcp.types import CallToolResult
+from pydantic import HttpUrl
+
+from fortran_mcp.search import SearchResult
 from fortran_mcp.server import mcp
 
 
@@ -33,3 +37,48 @@ def test_sources_resource_contains_registered_version() -> None:
     items = list(cast("Iterable[Any]", contents))
 
     assert '"version": "0.13.0"' in items[0].content
+
+
+def test_search_tool_uses_provider_contract(monkeypatch: Any) -> None:
+    expected = SearchResult(
+        chunk_id="a" * 32,
+        score=1.0,
+        source_id="test-source",
+        source_title="Test source",
+        version="1",
+        revision="v1",
+        path="guide.md",
+        headings=("Guide",),
+        line_start=1,
+        line_end=2,
+        text="Result",
+        url=HttpUrl("https://example.com/guide"),
+    )
+
+    class FakeProvider:
+        def search(
+            self,
+            query: str,
+            *,
+            limit: int = 5,
+            source_id: str | None = None,
+        ) -> tuple[SearchResult, ...]:
+            assert (query, limit, source_id) == ("query", 3, "test-source")
+            return (expected,)
+
+        def get_chunk(self, chunk_id: str) -> SearchResult:
+            assert chunk_id == expected.chunk_id
+            return expected
+
+    monkeypatch.setattr("fortran_mcp.server.search_provider", FakeProvider)
+    searched = asyncio.run(
+        mcp.call_tool(
+            "search_fortran_docs",
+            {"query": "query", "limit": 3, "source_id": "test-source"},
+        )
+    )
+    resource = asyncio.run(mcp.read_resource(f"fortran-docs://chunks/{expected.chunk_id}"))
+
+    tool_result = cast("CallToolResult", searched)
+    assert tool_result.structured_content == {"result": [expected.model_dump(mode="json")]}
+    assert expected.chunk_id in next(iter(cast("Iterable[Any]", resource))).content

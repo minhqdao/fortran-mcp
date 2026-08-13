@@ -12,7 +12,8 @@ from typing import Self
 
 from pydantic import Field, model_validator
 
-from fortran_mcp.ingest import DEFAULT_DATA_DIR, IngestionError
+from fortran_mcp.config import data_directory
+from fortran_mcp.ingest import IngestionError
 from fortran_mcp.sources import IngestionRecord, StrictModel
 
 MAX_CHUNK_CHARS = 4_000
@@ -186,8 +187,9 @@ def _chunks_for_file(
             )
 
 
-def build_documents(source_id: str, data_dir: Path = DEFAULT_DATA_DIR) -> tuple[DocumentChunk, ...]:
+def build_documents(source_id: str, data_dir: Path | None = None) -> tuple[DocumentChunk, ...]:
     """Verify raw files and build deterministic chunks for one source."""
+    data_dir = data_dir or data_directory()
     record_path = data_dir / "records" / f"{source_id}.json"
     if not record_path.is_file():
         raise DocumentBuildError(f"ingestion record not found: {source_id}")
@@ -248,7 +250,7 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--data-dir",
         type=Path,
-        default=DEFAULT_DATA_DIR,
+        default=data_directory(),
         help="storage directory (default: data)",
     )
     return parser
