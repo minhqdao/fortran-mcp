@@ -1,5 +1,7 @@
 """Build and query a local dense-vector documentation index."""
 
+from __future__ import annotations
+
 import argparse
 import hashlib
 import heapq
