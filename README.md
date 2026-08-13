@@ -16,7 +16,16 @@ uv run fortran-mcp
 ```
 
 `uv sync` creates `.venv` and installs the locked runtime and development dependencies. The
-server uses the standard input/output transport by default. Run the quality checks with:
+server uses the standard input/output transport by default. For local HTTP testing, run:
+
+```bash
+uv run fortran-mcp --transport streamable-http
+```
+
+The Streamable HTTP endpoint is then available at `http://127.0.0.1:1957/mcp`. Stdio remains the
+recommended local-client transport. HTTP hosting, TLS, authentication, and proxy configuration are
+deployment concerns and are intentionally not prescribed by this project yet. Run quality checks
+with:
 
 ```bash
 uv run ruff check .

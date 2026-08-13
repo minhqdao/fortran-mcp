@@ -1,9 +1,13 @@
 """MCP server entry point."""
 
+import argparse
 import json
+from collections.abc import Sequence
 from functools import cache
+from typing import Literal
 
 from mcp.server import MCPServer
+from mcp.server.transport_security import TransportSecuritySettings
 
 from fortran_mcp.config import search_provider_name
 from fortran_mcp.search import SearchProvider, SearchResult, SQLiteSearchProvider
@@ -95,9 +99,47 @@ def documentation_chunk(chunk_id: str) -> str:
     return search_provider().get_chunk(chunk_id).model_dump_json(indent=2)
 
 
-def main() -> None:
-    """Run the server over the standard input/output transport."""
-    mcp.run()
+def _parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description="Serve authoritative Fortran documentation")
+    parser.add_argument(
+        "--transport",
+        choices=("stdio", "streamable-http"),
+        default="stdio",
+    )
+    parser.add_argument("--host", default="127.0.0.1")
+    parser.add_argument("--port", type=int, default=1957)
+    parser.add_argument("--path", default="/mcp")
+    parser.add_argument(
+        "--allowed-host",
+        action="append",
+        default=[],
+        help="accepted HTTP Host header; repeat for multiple hosts",
+    )
+    return parser
+
+
+def main(argv: Sequence[str] | None = None) -> None:
+    """Run the server using stdio or Streamable HTTP."""
+    args = _parser().parse_args(argv)
+    transport: Literal["stdio", "streamable-http"] = args.transport
+    if transport == "stdio":
+        mcp.run()
+        return
+    if not 1 <= args.port <= 65535:
+        _parser().error("port must be between 1 and 65535")
+    if not args.path.startswith("/"):
+        _parser().error("HTTP path must start with /")
+    allowed_hosts = args.allowed_host or [f"{args.host}:{args.port}"]
+    mcp.run(
+        "streamable-http",
+        host=args.host,
+        port=args.port,
+        streamable_http_path=args.path,
+        transport_security=TransportSecuritySettings(
+            enable_dns_rebinding_protection=True,
+            allowed_hosts=allowed_hosts,
+        ),
+    )
 
 
 if __name__ == "__main__":

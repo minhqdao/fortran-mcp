@@ -8,7 +8,7 @@ from mcp.types import CallToolResult
 from pydantic import HttpUrl
 
 from fortran_mcp.search import SearchResult
-from fortran_mcp.server import mcp
+from fortran_mcp.server import main, mcp
 from fortran_mcp.sources import DocumentType, SourceAuthority
 
 
@@ -127,3 +127,40 @@ def test_search_tool_filters_source_applicability(monkeypatch: Any) -> None:
 
     tool_result = cast("CallToolResult", searched)
     assert tool_result.structured_content == {"result": [ecosystem.model_dump(mode="json")]}
+
+
+def test_server_defaults_to_stdio(monkeypatch: Any) -> None:
+    calls: list[tuple[tuple[Any, ...], dict[str, Any]]] = []
+    monkeypatch.setattr(mcp, "run", lambda *args, **kwargs: calls.append((args, kwargs)))
+
+    main([])
+
+    assert calls == [((), {})]
+
+
+def test_server_configures_streamable_http_security(monkeypatch: Any) -> None:
+    calls: list[tuple[tuple[Any, ...], dict[str, Any]]] = []
+    monkeypatch.setattr(mcp, "run", lambda *args, **kwargs: calls.append((args, kwargs)))
+
+    main(
+        [
+            "--transport",
+            "streamable-http",
+            "--host",
+            "0.0.0.0",
+            "--port",
+            "9000",
+            "--path",
+            "/fortran",
+            "--allowed-host",
+            "docs.example.com",
+        ]
+    )
+
+    args, kwargs = calls[0]
+    assert args == ("streamable-http",)
+    assert kwargs["host"] == "0.0.0.0"
+    assert kwargs["port"] == 9000
+    assert kwargs["streamable_http_path"] == "/fortran"
+    assert kwargs["transport_security"].enable_dns_rebinding_protection is True
+    assert kwargs["transport_security"].allowed_hosts == ["docs.example.com"]

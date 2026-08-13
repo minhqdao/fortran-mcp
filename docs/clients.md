@@ -60,6 +60,22 @@ standard input and output, so an idle process is normal while the client is conn
 Set `FORTRAN_MCP_DATA_DIR` in the client's server environment when generated data is stored
 outside the repository's `data/` directory.
 
+## Local Streamable HTTP
+
+For transport testing, start the same server over HTTP:
+
+```bash
+FORTRAN_MCP_DATA_DIR=/absolute/path/to/fortran-mcp/data \
+  uv --directory /absolute/path/to/fortran-mcp run fortran-mcp \
+  --transport streamable-http
+```
+
+Connect an HTTP-capable MCP client to `http://127.0.0.1:1957/mcp`. Use `--host`, `--port`, and
+`--path` to change the listener. DNS-rebinding protection is enabled; repeat `--allowed-host` to
+declare accepted Host headers when the externally visible host differs from the bind address.
+This development listener does not configure TLS or authentication and should not be exposed to an
+untrusted network directly.
+
 ## Verify
 
 Ask the client:
