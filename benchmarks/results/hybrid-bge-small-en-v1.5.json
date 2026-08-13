@@ -6,8 +6,8 @@
   "hit_at_5": 0.6875,
   "hit_at_10": 0.6875,
   "mean_reciprocal_rank": 0.6875,
-  "negative_accuracy": 0.0,
-  "mean_latency_ms": 105.87072222222223,
+  "negative_accuracy": 1.0,
+  "mean_latency_ms": 110.12677777777778,
   "categories": {
     "exact": {
       "cases": 4,
@@ -23,9 +23,9 @@
     },
     "negative": {
       "cases": 2,
-      "passed": 0,
-      "pass_rate": 0.0,
-      "mrr": 0.0
+      "passed": 2,
+      "pass_rate": 1.0,
+      "mrr": 1.0
     },
     "paraphrase": {
       "cases": 10,
@@ -41,7 +41,7 @@
       "query": "compile_commands.json",
       "passed": true,
       "rank": 1,
-      "latency_ms": 128.302,
+      "latency_ms": 111.096,
       "returned": 10,
       "top_chunk_ids": [
         "f1e9125f1d304ca33fef5f8b8407c669",
@@ -62,7 +62,7 @@
       "query": "How do I add OpenMP to an fpm project?",
       "passed": true,
       "rank": 1,
-      "latency_ms": 119.547,
+      "latency_ms": 124.412,
       "returned": 10,
       "top_chunk_ids": [
         "5528717ebe43fe1249b42ba87733815c",
@@ -83,7 +83,7 @@
       "query": "How do I create a new fpm project?",
       "passed": true,
       "rank": 1,
-      "latency_ms": 138.089,
+      "latency_ms": 127.259,
       "returned": 10,
       "top_chunk_ids": [
         "743f6bcf70c1457ce30ef01af9b56f9e",
@@ -104,7 +104,7 @@
       "query": "How do I clean build output?",
       "passed": true,
       "rank": 1,
-      "latency_ms": 100.327,
+      "latency_ms": 104.372,
       "returned": 10,
       "top_chunk_ids": [
         "ac97c2bdca6e18907fadcc821f5832ea",
@@ -125,7 +125,7 @@
       "query": "How do I add a git dependency to fpm?",
       "passed": false,
       "rank": null,
-      "latency_ms": 100.381,
+      "latency_ms": 103.762,
       "returned": 10,
       "top_chunk_ids": [
         "7aceb93f6db420ac62ea217240007966",
@@ -146,7 +146,7 @@
       "query": "features profiles",
       "passed": true,
       "rank": 1,
-      "latency_ms": 96.278,
+      "latency_ms": 101.698,
       "returned": 10,
       "top_chunk_ids": [
         "3d3c9c81573ad7b5bd7f3b38729f36fd",
@@ -167,7 +167,7 @@
       "query": "stdlib_string_type",
       "passed": true,
       "rank": 1,
-      "latency_ms": 110.955,
+      "latency_ms": 110.428,
       "returned": 10,
       "top_chunk_ids": [
         "10c7f96bec2d5ff04f75a50796089e48",
@@ -188,20 +188,9 @@
       "query": "How can I represent dynamically sized text?",
       "passed": false,
       "rank": null,
-      "latency_ms": 112.846,
-      "returned": 10,
-      "top_chunk_ids": [
-        "d4c02eadf3281ac51d9092c108edcddc",
-        "f103bc682058e65d48114a677a5caad5",
-        "8f3ff37ef30cde2d2fa8c162a3f2747a",
-        "f31c727c8c10f9fda9861792134d57ee",
-        "032653d506e5179eed10fe73ecbbcf0c",
-        "17cb0f38d358d0cbaf8bfcf91da2590f",
-        "49b50cb0ec4a3469ce49ad7ceb8f95c3",
-        "ad87a2623db53659d6b2c5452dcbf933",
-        "4dfefa7b2c13105f775ba69eb52a26f7",
-        "f014bec5c12699b491abea5d467a2ea9"
-      ]
+      "latency_ms": 110.81,
+      "returned": 0,
+      "top_chunk_ids": []
     },
     {
       "id": "stdlib-sort-array",
@@ -209,7 +198,7 @@
       "query": "How can I order array values from smallest to largest?",
       "passed": false,
       "rank": null,
-      "latency_ms": 112.457,
+      "latency_ms": 116.257,
       "returned": 10,
       "top_chunk_ids": [
         "2d8062fd51c3668c1709ac8b5dbc4dc2",
@@ -230,7 +219,7 @@
       "query": "How do I integrate a function numerically?",
       "passed": true,
       "rank": 1,
-      "latency_ms": 115.868,
+      "latency_ms": 116.78,
       "returned": 10,
       "top_chunk_ids": [
         "fe829a97c5141d8f9fa42b1f44841be9",
@@ -251,7 +240,7 @@
       "query": "How do I generate normally distributed random numbers?",
       "passed": false,
       "rank": null,
-      "latency_ms": 134.878,
+      "latency_ms": 147.634,
       "returned": 10,
       "top_chunk_ids": [
         "3f100149122b7c383ebba31a8b9013bc",
@@ -272,7 +261,7 @@
       "query": "How do I convert a string to a number?",
       "passed": true,
       "rank": 1,
-      "latency_ms": 104.042,
+      "latency_ms": 116.562,
       "returned": 10,
       "top_chunk_ids": [
         "6bce3ef4bfbf45b68782fe6ce1695cb5",
@@ -293,7 +282,7 @@
       "query": "How can I solve a linear system?",
       "passed": true,
       "rank": 1,
-      "latency_ms": 99.76,
+      "latency_ms": 112.49,
       "returned": 10,
       "top_chunk_ids": [
         "f25c3f3ef25c033c9e274600e5bb9ed6",
@@ -314,7 +303,7 @@
       "query": "chaining_hashmap_type",
       "passed": true,
       "rank": 1,
-      "latency_ms": 99.975,
+      "latency_ms": 112.997,
       "returned": 10,
       "top_chunk_ids": [
         "1234435bdf286c637913d02ad1602e21",
@@ -335,7 +324,7 @@
       "query": "sort array",
       "passed": true,
       "rank": 1,
-      "latency_ms": 94.711,
+      "latency_ms": 105.441,
       "returned": 10,
       "top_chunk_ids": [
         "80dce1c71de9fd5f7f6853039339f126",
@@ -356,7 +345,7 @@
       "query": "dependency",
       "passed": false,
       "rank": null,
-      "latency_ms": 42.53,
+      "latency_ms": 47.761,
       "returned": 10,
       "top_chunk_ids": [
         "cdbb904073e834b2b7bc6e074d37faf5",
@@ -375,43 +364,21 @@
       "id": "negative-cuda-memory",
       "category": "negative",
       "query": "CUDA Fortran unified memory",
-      "passed": false,
+      "passed": true,
       "rank": null,
-      "latency_ms": 97.662,
-      "returned": 10,
-      "top_chunk_ids": [
-        "0e484c99f973646793f2fb1defea5e11",
-        "59b60bfb59f8173ef7fde62dfe03aec6",
-        "226a5d26763e125e693032f626604662",
-        "c654c9457ddea091edd387797ae7ca6f",
-        "5c082c84da92cdfde05bf9f4056e27b0",
-        "cda504b92b780d9602e63d6683736790",
-        "1b36d856d76c87dff8f19c9a27549d40",
-        "59f68625583f7bd1602c2ba335178305",
-        "067db1c0e042dfd82883188ec0ad7bd0",
-        "0a4347e742271857bca7724c6753a7a0"
-      ]
+      "latency_ms": 106.163,
+      "returned": 0,
+      "top_chunk_ids": []
     },
     {
       "id": "negative-coarray-events",
       "category": "negative",
       "query": "coarray event post event wait",
-      "passed": false,
+      "passed": true,
       "rank": null,
-      "latency_ms": 97.065,
-      "returned": 10,
-      "top_chunk_ids": [
-        "9247cbc28d65f89823a95b592c3523bc",
-        "42f5acf623bfa0b786e6d90b5f3e4e49",
-        "0345e39ab02bc458154721e0cc273427",
-        "34945f1d3c4c9701ae73a93abe894fbc",
-        "ec6767d68d43b160e9b041fd866df763",
-        "21ee195e76b349d316d607cbba304543",
-        "11429b8227b4f7a9906e97b805713aaa",
-        "c943bf072348a6c33ef5c5758f02511f",
-        "cee3ff0bc105904b8dfaf666bfcbf53c",
-        "f94521841bf6f46e9672ac46ccb695b4"
-      ]
+      "latency_ms": 106.36,
+      "returned": 0,
+      "top_chunk_ids": []
     }
   ]
 }

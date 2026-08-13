@@ -49,7 +49,8 @@ uv run fortran-mcp-index
 ```
 
 The MCP server exposes `search_fortran_docs`, which returns ranked passages with the source,
-version, heading hierarchy, line range, and published documentation URL.
+version, authority, document type, topical facets, heading hierarchy, line range, and published
+documentation URL. Searches can be narrowed by source ID, document type, authority, or topic.
 
 It also exposes MCP resources for registered sources, source provenance, and exact chunks:
 
@@ -86,6 +87,11 @@ checksum, so a stale or incompatible index is rejected.
 Lexical search remains the server default. After building the semantic index, select another local
 provider with `FORTRAN_MCP_SEARCH_PROVIDER=semantic` or
 `FORTRAN_MCP_SEARCH_PROVIDER=hybrid`.
+
+Hybrid search conservatively returns no passages when its top semantic score is below the reviewed
+baseline threshold. An explicit source filter bypasses this automatic abstention because the caller
+has already stated which documentation applies. The threshold is provisional and will be
+recalibrated as the benchmark and source collection grow.
 
 See [Connect an MCP client](docs/clients.md) for Codex, Claude Desktop, and generic stdio
 configuration examples.

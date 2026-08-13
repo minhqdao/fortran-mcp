@@ -4,6 +4,7 @@ from pydantic import HttpUrl
 
 from fortran_mcp.hybrid import HybridSearchProvider
 from fortran_mcp.search import SearchResult
+from fortran_mcp.sources import DocumentType, SourceAuthority
 
 
 def _result(chunk_id: str) -> SearchResult:
@@ -12,6 +13,9 @@ def _result(chunk_id: str) -> SearchResult:
         score=1,
         source_id="source",
         source_title="Source",
+        document_type=DocumentType.ECOSYSTEM_GUIDE,
+        authority=SourceAuthority.OFFICIAL,
+        topics=("test",),
         version="1",
         revision="v1",
         path=f"{chunk_id}.md",
@@ -60,3 +64,11 @@ def test_hybrid_get_chunk_uses_lexical_source_of_truth() -> None:
     provider = HybridSearchProvider(FakeProvider((expected,)), FakeProvider(()))
 
     assert provider.get_chunk(expected.chunk_id) == expected
+
+
+def test_hybrid_abstains_below_threshold_unless_source_is_explicit() -> None:
+    result = _result("a").model_copy(update={"score": 0.7})
+    provider = HybridSearchProvider(FakeProvider((result,)), FakeProvider((result,)))
+
+    assert not provider.search("unsupported")
+    assert provider.search("question", source_id="source")

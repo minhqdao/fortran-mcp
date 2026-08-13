@@ -39,9 +39,24 @@ def search_fortran_docs(
     query: str,
     limit: int = 5,
     source_id: str | None = None,
+    document_type: str | None = None,
+    authority: str | None = None,
+    topic: str | None = None,
 ) -> list[SearchResult]:
     """Search authoritative Fortran documentation and return cited passages."""
-    return list(search_provider().search(query, limit=limit, source_id=source_id))
+    filtered = any(value is not None for value in (document_type, authority, topic))
+    results = search_provider().search(
+        query,
+        limit=20 if filtered else limit,
+        source_id=source_id,
+    )
+    return [
+        result
+        for result in results
+        if (document_type is None or result.document_type == document_type)
+        and (authority is None or result.authority == authority)
+        and (topic is None or topic in result.topics)
+    ][:limit]
 
 
 @mcp.resource(

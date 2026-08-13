@@ -13,7 +13,7 @@ from pydantic import Field, HttpUrl
 
 from fortran_mcp.config import data_directory
 from fortran_mcp.documents import DocumentChunk
-from fortran_mcp.sources import Source, StrictModel, load_registry
+from fortran_mcp.sources import DocumentType, Source, SourceAuthority, StrictModel, load_registry
 
 INDEX_FILENAME = "fortran-mcp.db"
 DEFAULT_INDEX_PATH = Path("data") / INDEX_FILENAME
@@ -49,6 +49,9 @@ class SearchResult(StrictModel):
     score: float
     source_id: str
     source_title: str
+    document_type: DocumentType
+    authority: SourceAuthority
+    topics: tuple[str, ...]
     version: str
     revision: str
     path: str
@@ -98,14 +101,17 @@ def _result_from_row(row: tuple[Any, ...]) -> SearchResult:
         score=row[1],
         source_id=row[2],
         source_title=row[3],
-        version=row[4],
-        revision=row[5],
-        path=row[6],
-        headings=tuple(filter(None, row[7].split(" > "))),
-        line_start=row[8],
-        line_end=row[9],
-        text=row[10],
-        url=HttpUrl(row[11]),
+        document_type=row[4],
+        authority=row[5],
+        topics=tuple(filter(None, row[6].split(","))),
+        version=row[7],
+        revision=row[8],
+        path=row[9],
+        headings=tuple(filter(None, row[10].split(" > "))),
+        line_start=row[11],
+        line_end=row[12],
+        text=row[13],
+        url=HttpUrl(row[14]),
     )
 
 
@@ -162,6 +168,9 @@ def build_index(data_dir: Path | None = None, index_path: Path | None = None) ->
                     chunk_id UNINDEXED,
                     source_id UNINDEXED,
                     source_title UNINDEXED,
+                    document_type UNINDEXED,
+                    authority UNINDEXED,
+                    topics UNINDEXED,
                     version UNINDEXED,
                     revision UNINDEXED,
                     path UNINDEXED,
@@ -186,11 +195,14 @@ def build_index(data_dir: Path | None = None, index_path: Path | None = None) ->
                     if chunk.revision != source.revision:
                         raise SearchError(f"stale chunks for source: {chunk.source_id}")
                     database.execute(
-                        "INSERT INTO chunks VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                        "INSERT INTO chunks VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                         (
                             chunk.id,
                             chunk.source_id,
                             source.title,
+                            source.document_type,
+                            source.authority,
+                            ",".join(source.topics),
                             source.version,
                             chunk.revision,
                             chunk.path,
@@ -234,8 +246,10 @@ def search(
         raise SearchError(f"search index not found: {index_path}")
     strict_query, fallback_query = _fts_queries(query)
     sql = """SELECT chunk_id,
-                    -bm25(chunks, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 3.0, 1.0, 1.0, 1.0, 1.0) AS score,
-                    source_id, source_title, version, revision, path, headings,
+                    -bm25(chunks, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+                                  1.0, 1.0, 3.0, 1.0, 1.0, 1.0, 1.0) AS score,
+                    source_id, source_title, document_type, authority, topics,
+                    version, revision, path, headings,
                     line_start, line_end, text, url
              FROM chunks WHERE chunks MATCH ?"""
     try:
@@ -265,7 +279,8 @@ def get_chunk(chunk_id: str, index_path: Path = DEFAULT_INDEX_PATH) -> SearchRes
         raise SearchError("chunk ID must be 32 lowercase hexadecimal characters")
     if not index_path.is_file():
         raise SearchError(f"search index not found: {index_path}")
-    sql = """SELECT chunk_id, 0.0, source_id, source_title, version, revision,
+    sql = """SELECT chunk_id, 0.0, source_id, source_title,
+                    document_type, authority, topics, version, revision,
                     path, headings, line_start, line_end, text, url
              FROM chunks WHERE chunk_id = ?"""
     try:

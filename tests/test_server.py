@@ -9,6 +9,7 @@ from pydantic import HttpUrl
 
 from fortran_mcp.search import SearchResult
 from fortran_mcp.server import mcp
+from fortran_mcp.sources import DocumentType, SourceAuthority
 
 
 def test_server_has_expected_name() -> None:
@@ -45,6 +46,9 @@ def test_search_tool_uses_provider_contract(monkeypatch: Any) -> None:
         score=1.0,
         source_id="test-source",
         source_title="Test source",
+        document_type=DocumentType.ECOSYSTEM_GUIDE,
+        authority=SourceAuthority.COMMUNITY,
+        topics=("test",),
         version="1",
         revision="v1",
         path="guide.md",
@@ -82,3 +86,44 @@ def test_search_tool_uses_provider_contract(monkeypatch: Any) -> None:
     tool_result = cast("CallToolResult", searched)
     assert tool_result.structured_content == {"result": [expected.model_dump(mode="json")]}
     assert expected.chunk_id in next(iter(cast("Iterable[Any]", resource))).content
+
+
+def test_search_tool_filters_source_applicability(monkeypatch: Any) -> None:
+    ecosystem = SearchResult(
+        chunk_id="b" * 32,
+        score=1,
+        source_id="fpm",
+        source_title="fpm",
+        document_type=DocumentType.ECOSYSTEM_GUIDE,
+        authority=SourceAuthority.OFFICIAL,
+        topics=("build-system",),
+        version="1",
+        revision="v1",
+        path="guide.md",
+        headings=("Guide",),
+        line_start=1,
+        line_end=1,
+        text="Build",
+        url=HttpUrl("https://example.com/build"),
+    )
+
+    class FakeProvider:
+        def search(
+            self, query: str, *, limit: int = 5, source_id: str | None = None
+        ) -> tuple[SearchResult, ...]:
+            assert limit == 20
+            return (ecosystem,)
+
+        def get_chunk(self, chunk_id: str) -> SearchResult:
+            return ecosystem
+
+    monkeypatch.setattr("fortran_mcp.server.search_provider", FakeProvider)
+    searched = asyncio.run(
+        mcp.call_tool(
+            "search_fortran_docs",
+            {"query": "build", "topic": "build-system"},
+        )
+    )
+
+    tool_result = cast("CallToolResult", searched)
+    assert tool_result.structured_content == {"result": [ecosystem.model_dump(mode="json")]}

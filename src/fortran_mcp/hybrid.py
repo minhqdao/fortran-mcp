@@ -3,6 +3,7 @@
 from fortran_mcp.search import SearchProvider, SearchResult
 
 RRF_CONSTANT = 60
+DEFAULT_SEMANTIC_THRESHOLD = 0.74
 
 
 class HybridSearchProvider:
@@ -15,6 +16,7 @@ class HybridSearchProvider:
         *,
         lexical_weight: float = 1.0,
         semantic_weight: float = 1.0,
+        semantic_threshold: float = DEFAULT_SEMANTIC_THRESHOLD,
     ) -> None:
         if lexical_weight <= 0 or semantic_weight <= 0:
             raise ValueError("hybrid provider weights must be positive")
@@ -22,6 +24,7 @@ class HybridSearchProvider:
         self.semantic = semantic
         self.lexical_weight = lexical_weight
         self.semantic_weight = semantic_weight
+        self.semantic_threshold = semantic_threshold
 
     def search(
         self,
@@ -31,13 +34,18 @@ class HybridSearchProvider:
         source_id: str | None = None,
     ) -> tuple[SearchResult, ...]:
         candidate_limit = min(20, max(10, limit * 2))
+        semantic_results = self.semantic.search(query, limit=candidate_limit, source_id=source_id)
+        if source_id is None and (
+            not semantic_results or semantic_results[0].score < self.semantic_threshold
+        ):
+            return ()
         rankings = (
             (
                 self.lexical.search(query, limit=candidate_limit, source_id=source_id),
                 self.lexical_weight,
             ),
             (
-                self.semantic.search(query, limit=candidate_limit, source_id=source_id),
+                semantic_results,
                 self.semantic_weight,
             ),
         )

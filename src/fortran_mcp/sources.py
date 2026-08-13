@@ -38,6 +38,14 @@ class SourceStatus(StrEnum):
     RETIRED = "retired"
 
 
+class SourceAuthority(StrEnum):
+    """Authority level of a documentation source."""
+
+    NORMATIVE = "normative"
+    OFFICIAL = "official"
+    COMMUNITY = "community"
+
+
 class StrictModel(BaseModel):
     """Base model that rejects unknown or mutated metadata."""
 
@@ -51,6 +59,8 @@ class Source(StrictModel):
     title: str = Field(min_length=1)
     publisher: str = Field(min_length=1)
     document_type: DocumentType
+    authority: SourceAuthority
+    topics: tuple[str, ...] = Field(min_length=1)
     fortran_versions: tuple[str, ...] = ()
     compilers: tuple[str, ...] = ()
     dialects: tuple[str, ...] = ()
