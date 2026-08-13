@@ -29,6 +29,7 @@ dependencies = [
 [project.scripts]
 fortran-mcp = "fortran_mcp.server:main"
 fortran-mcp-ingest = "fortran_mcp.ingest:main"
+fortran-mcp-build = "fortran_mcp.documents:main"
 
 [dependency-groups]
 dev = [

@@ -27,7 +27,7 @@ DEFAULT_DATA_DIR = Path("data")
 DOWNLOAD_LIMIT = 50 * 1024 * 1024
 FILE_LIMIT = 5 * 1024 * 1024
 TOTAL_CONTENT_LIMIT = 100 * 1024 * 1024
-ALLOWED_SUFFIXES = frozenset({".md", ".markdown", ".rst", ".txt"})
+ALLOWED_SUFFIXES = frozenset({".f90", ".md", ".markdown", ".rst", ".toml", ".txt"})
 Downloader = Callable[[str, int, int], bytes]
 
 
@@ -143,6 +143,7 @@ def ingest_source(
             archive_url=HttpUrl(str(source.archive_url)),
             archive_sha256=hashlib.sha256(archive).hexdigest(),
             retrieved_at=timestamp,
+            document_paths=source.document_paths,
             files=stored_files,
         )
         source_dir.parent.mkdir(parents=True, exist_ok=True)

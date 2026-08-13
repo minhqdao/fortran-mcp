@@ -60,6 +60,7 @@ class Source(StrictModel):
     archive_url: HttpUrl
     archive_root: str = Field(min_length=1)
     include_paths: tuple[str, ...] = Field(min_length=1)
+    document_paths: tuple[str, ...] = Field(min_length=1)
     homepage_url: HttpUrl
     license: str = Field(min_length=1)
     license_url: HttpUrl
@@ -144,6 +145,7 @@ class IngestionRecord(StrictModel):
     archive_url: HttpUrl
     archive_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     retrieved_at: datetime
+    document_paths: tuple[str, ...] = Field(min_length=1)
     files: tuple[FileRecord, ...]
 
     @model_validator(mode="after")

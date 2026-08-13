@@ -36,6 +36,12 @@ uv run fortran-mcp-ingest fpm-0.13.0-docs
 The command writes immutable source files and a checksum record below the ignored `data/`
 directory. It refuses to overwrite an existing ingestion.
 
+Build citation-preserving document chunks after ingestion:
+
+```bash
+uv run fortran-mcp-build fpm-0.13.0-docs
+```
+
 ## Planned sources
 
 - ISO Fortran standards and corrigenda

@@ -2,28 +2,27 @@ schema_version = 1
 
 [[sources]]
 id = "fpm-0.13.0-docs"
-title = "Fortran Package Manager documentation"
+title = "Fortran Package Manager documentation website"
 publisher = "Fortran-lang"
 document_type = "ecosystem-guide"
 fortran_versions = []
 compilers = []
 dialects = []
 version = "0.13.0"
-revision = "v0.13.0"
-source_url = "https://github.com/fortran-lang/fpm/tree/v0.13.0/doc"
-archive_url = "https://github.com/fortran-lang/fpm/archive/refs/tags/v0.13.0.tar.gz"
-archive_root = "fpm-0.13.0"
+revision = "5097350c24ea7b5ceec233714f5a2604f79d0c02"
+source_url = "https://github.com/fortran-lang/fpm-docs/tree/5097350c24ea7b5ceec233714f5a2604f79d0c02/pages"
+archive_url = "https://github.com/fortran-lang/fpm-docs/archive/5097350c24ea7b5ceec233714f5a2604f79d0c02.tar.gz"
+archive_root = "fpm-docs-5097350c24ea7b5ceec233714f5a2604f79d0c02"
 include_paths = [
-  "doc/**",
-  "README.md",
-  "CONTRIBUTING.md",
-  "PACKAGING.md",
-  "ChangeLog.md",
-  "manifest-reference.md",
+  "pages/**",
+  "src/**",
+]
+document_paths = [
+  "pages/**",
 ]
 homepage_url = "https://fpm.fortran-lang.org/"
 license = "MIT"
-license_url = "https://github.com/fortran-lang/fpm/blob/v0.13.0/LICENSE"
+license_url = "https://github.com/fortran-lang/fpm-docs/blob/5097350c24ea7b5ceec233714f5a2604f79d0c02/LICENSE"
 redistribution = "redistributable"
 status = "approved"
-notes = "Initial sample source; ingest only files covered by the repository license."
+notes = "English website sources pinned after the fpm 0.13.0 release; generated API docs are separate."
