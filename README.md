@@ -1,11 +1,8 @@
 # Fortran MCP
 
-Fortran MCP is a Model Context Protocol server for authoritative Fortran documentation. It
-will make language standards, compiler manuals, ecosystem documentation, interoperability
-guides, dialect references, and migration material searchable through MCP clients.
+Fortran MCP brings standard specifications, compiler manuals, ecosystem tooling, dialect variations, and refactoring guides directly to your AI tools.
 
-The project is in its initial development stage. Its first target is a reliable, cited
-documentation retrieval layer for both modern Fortran development and legacy-code migration.
+It gives LLM assistants a structured way to query everything from modern ISO standards to historical compiler documentation, helping you write modern Fortran or migrate legacy codebases with grounded context.
 
 ## Development
 
