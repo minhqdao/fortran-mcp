@@ -5,7 +5,9 @@ Build the local data before connecting a client:
 ```bash
 uv sync
 uv run fortran-mcp-ingest fpm-0.13.0-docs
+uv run fortran-mcp-ingest stdlib-0.8.1-docs
 uv run fortran-mcp-build fpm-0.13.0-docs
+uv run fortran-mcp-build stdlib-0.8.1-docs
 uv run fortran-mcp-index
 ```
 

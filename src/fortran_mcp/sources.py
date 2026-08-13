@@ -63,6 +63,8 @@ class Source(StrictModel):
     document_paths: tuple[str, ...] = Field(min_length=1)
     homepage_url: HttpUrl
     published_path_prefix: str
+    citation_base_url: HttpUrl
+    citation_format: Literal["published-html", "source"]
     license: str = Field(min_length=1)
     license_url: HttpUrl
     redistribution: RedistributionPolicy

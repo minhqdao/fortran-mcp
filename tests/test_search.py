@@ -15,11 +15,13 @@ def _chunk(
     headings: tuple[str, ...],
     text: str,
     path: str = "pages/spec/manifest.md",
+    source_id: str = "fpm-0.13.0-docs",
+    revision: str = "5097350c24ea7b5ceec233714f5a2604f79d0c02",
 ) -> DocumentChunk:
     return DocumentChunk(
         id=chunk_id,
-        source_id="fpm-0.13.0-docs",
-        revision="5097350c24ea7b5ceec233714f5a2604f79d0c02",
+        source_id=source_id,
+        revision=revision,
         path=path,
         headings=headings,
         line_start=10,
@@ -42,6 +44,14 @@ def _index(tmp_path: Path) -> Path:
             text="Install the Fortran Package Manager using pipx.",
             path="pages/install/index.md",
         ),
+        _chunk(
+            "3" * 32,
+            headings=("The `stdlib_sorting` module", "`sort`"),
+            text="Sort an input array using the stdlib sort procedure.",
+            path="doc/specs/stdlib_sorting.md",
+            source_id="stdlib-0.8.1-docs",
+            revision="v0.8.1",
+        ),
     ]
     chunk_dir = tmp_path / "chunks"
     chunk_dir.mkdir()
@@ -50,7 +60,7 @@ def _index(tmp_path: Path) -> Path:
         encoding="utf-8",
     )
     index_path = tmp_path / "search.db"
-    assert build_index(tmp_path, index_path) == 2
+    assert build_index(tmp_path, index_path) == 3
     return index_path
 
 
@@ -71,7 +81,14 @@ def test_natural_language_prefers_all_meaningful_terms(tmp_path: Path) -> None:
 
 
 def test_search_can_filter_by_source(tmp_path: Path) -> None:
-    assert not search("OpenMP", source_id="missing-source", index_path=_index(tmp_path))
+    index_path = _index(tmp_path)
+    assert not search("OpenMP", source_id="missing-source", index_path=index_path)
+
+    results = search("sort array", source_id="stdlib-0.8.1-docs", index_path=index_path)
+    assert [result.source_id for result in results] == ["stdlib-0.8.1-docs"]
+    assert str(results[0].url) == (
+        "https://github.com/fortran-lang/stdlib/blob/v0.8.1/doc/specs/stdlib_sorting.md"
+    )
 
 
 def test_get_chunk_returns_an_exact_passage(tmp_path: Path) -> None:

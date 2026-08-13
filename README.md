@@ -31,6 +31,7 @@ Fetch an approved documentation source by its registry ID:
 
 ```bash
 uv run fortran-mcp-ingest fpm-0.13.0-docs
+uv run fortran-mcp-ingest stdlib-0.8.1-docs
 ```
 
 The command writes immutable source files and a checksum record below the ignored `data/`
@@ -40,6 +41,7 @@ Build citation-preserving document chunks after ingestion:
 
 ```bash
 uv run fortran-mcp-build fpm-0.13.0-docs
+uv run fortran-mcp-build stdlib-0.8.1-docs
 uv run fortran-mcp-index
 ```
 

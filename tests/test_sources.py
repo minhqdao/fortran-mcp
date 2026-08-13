@@ -15,6 +15,7 @@ def test_project_registry_is_valid() -> None:
 
     assert registry.schema_version == 1
     assert registry.sources[0].id == "fpm-0.13.0-docs"
+    assert registry.sources[1].id == "stdlib-0.8.1-docs"
 
 
 def test_packaged_registry_is_available() -> None:

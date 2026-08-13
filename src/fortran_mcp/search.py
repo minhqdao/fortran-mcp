@@ -83,10 +83,12 @@ def _citation_url(source: Source, path: str) -> HttpUrl:
     except ValueError as error:
         raise SearchError(f"document path is outside its published prefix: {path}") from error
 
-    relative = relative.parent if relative.name == "index.md" else relative.with_suffix(".html")
+    if source.citation_format == "published-html":
+        relative = relative.parent if relative.name == "index.md" else relative.with_suffix(".html")
     encoded_path = "/".join(quote(part) for part in relative.parts)
-    base = str(source.homepage_url).rstrip("/")
-    return HttpUrl(f"{base}/{encoded_path}/" if not relative.suffix else f"{base}/{encoded_path}")
+    base = str(source.citation_base_url).rstrip("/")
+    trailing_slash = source.citation_format == "published-html" and not relative.suffix
+    return HttpUrl(f"{base}/{encoded_path}{'/' if trailing_slash else ''}")
 
 
 def _read_chunks(path: Path) -> list[DocumentChunk]:

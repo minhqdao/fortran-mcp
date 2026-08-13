@@ -22,8 +22,35 @@ document_paths = [
 ]
 homepage_url = "https://fpm.fortran-lang.org/"
 published_path_prefix = "pages"
+citation_base_url = "https://fpm.fortran-lang.org/"
+citation_format = "published-html"
 license = "MIT"
 license_url = "https://github.com/fortran-lang/fpm-docs/blob/5097350c24ea7b5ceec233714f5a2604f79d0c02/LICENSE"
 redistribution = "redistributable"
 status = "approved"
 notes = "English website sources pinned after the fpm 0.13.0 release; generated API docs are separate."
+
+[[sources]]
+id = "stdlib-0.8.1-docs"
+title = "Fortran Standard Library specifications and guides"
+publisher = "Fortran-lang"
+document_type = "ecosystem-guide"
+fortran_versions = []
+compilers = []
+dialects = []
+version = "0.8.1"
+revision = "v0.8.1"
+source_url = "https://github.com/fortran-lang/stdlib/tree/v0.8.1/doc"
+archive_url = "https://github.com/fortran-lang/stdlib/archive/refs/tags/v0.8.1.tar.gz"
+archive_root = "stdlib-0.8.1"
+include_paths = ["doc/**"]
+document_paths = ["doc/**"]
+homepage_url = "https://stdlib.fortran-lang.org/"
+published_path_prefix = "doc"
+citation_base_url = "https://github.com/fortran-lang/stdlib/blob/v0.8.1/doc/"
+citation_format = "source"
+license = "MIT"
+license_url = "https://github.com/fortran-lang/stdlib/blob/v0.8.1/LICENSE"
+redistribution = "redistributable"
+status = "approved"
+notes = "Complete hand-written v0.8.1 documentation; generated FORD API pages are a separate future source."
