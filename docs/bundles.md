@@ -1,0 +1,36 @@
+# Data bundle format
+
+Fortran MCP data bundles are deterministic ZIP archives rooted at `fortran-mcp-bundle/`.
+
+```text
+fortran-mcp-bundle/
+├── manifest.json
+├── indexes/
+│   └── fortran-mcp.db
+└── licenses/
+    └── <source-id>.txt
+```
+
+Semantic bundles contain `indexes/fortran-mcp-semantic.db` instead. They do not duplicate source
+licenses because they require a compatible core bundle.
+
+The versioned manifest records:
+
+- bundle identity, role, version, and compatible server versions;
+- source IDs, revisions, document types, authority, topics, and licenses;
+- every payload path, byte size, and SHA-256 checksum;
+- the embedding model and dimensions for semantic bundles; and
+- the exact lexical-index checksum required by a semantic bundle.
+
+Paths use POSIX separators and are relative to the bundle root. Entries are ordered by path, use a
+fixed ZIP timestamp and permissions, and contain no build timestamp or machine-specific metadata.
+Given identical input files and tool versions, bundle bytes are identical.
+
+`core` is the default distribution role. `semantic` is an optional companion and cannot be paired
+with a core bundle whose lexical-index checksum differs from its declared requirement. Future
+optional source bundles will use a later manifest schema once their composition rules are defined.
+
+Bundle verification rejects invalid manifests, unsafe or duplicate paths, undeclared files, missing
+files, size mismatches, and checksum mismatches. Authenticating a remotely downloaded artifact will
+be defined with the download and release workflow; internal checksums alone do not establish who
+published an archive.

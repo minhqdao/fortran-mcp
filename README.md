@@ -95,6 +95,25 @@ baseline threshold. An explicit source filter bypasses this automatic abstention
 has already stated which documentation applies. The threshold is provisional and will be
 recalibrated as the benchmark and source collection grow.
 
+## Data bundles
+
+Normal users will consume prebuilt data bundles rather than run ingestion or indexing locally. The
+current tooling defines two roles: `core` contains the lexical index and required source license
+notices; `semantic` contains document vectors and declares the exact core-index checksum and query
+model it requires.
+
+Build and verify local artifacts with:
+
+```bash
+uv run fortran-mcp-bundle build core --output dist/fortran-mcp-core.zip
+uv run fortran-mcp-bundle build semantic --output dist/fortran-mcp-semantic.zip
+uv run fortran-mcp-bundle verify dist/fortran-mcp-core.zip
+```
+
+Bundles use a versioned manifest, deterministic ZIP metadata, stable file ordering, and SHA-256
+checksums for every payload. Downloading, installation, and release publishing are intentionally not
+implemented yet. See [Data bundle format](docs/bundles.md) for the artifact contract.
+
 See [Connect an MCP client](docs/clients.md) for Codex, Claude Desktop, and generic stdio
 configuration examples.
 
