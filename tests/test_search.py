@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 
 from fortran_mcp.documents import DocumentChunk
-from fortran_mcp.search import SearchError, build_index, search
+from fortran_mcp.search import SearchError, build_index, get_chunk, search
 
 
 def _chunk(
@@ -72,6 +72,22 @@ def test_natural_language_prefers_all_meaningful_terms(tmp_path: Path) -> None:
 
 def test_search_can_filter_by_source(tmp_path: Path) -> None:
     assert not search("OpenMP", source_id="missing-source", index_path=_index(tmp_path))
+
+
+def test_get_chunk_returns_an_exact_passage(tmp_path: Path) -> None:
+    result = get_chunk("2" * 32, index_path=_index(tmp_path))
+
+    assert result.headings == ("Installation",)
+    assert str(result.url) == "https://fpm.fortran-lang.org/install/"
+
+
+def test_get_chunk_rejects_unknown_or_invalid_ids(tmp_path: Path) -> None:
+    index_path = _index(tmp_path)
+
+    with pytest.raises(SearchError, match="32 lowercase hexadecimal"):
+        get_chunk("invalid", index_path=index_path)
+    with pytest.raises(SearchError, match="chunk not found"):
+        get_chunk("f" * 32, index_path=index_path)
 
 
 @pytest.mark.parametrize(("query", "limit"), [("", 5), ("OpenMP", 0), ("OpenMP", 21)])

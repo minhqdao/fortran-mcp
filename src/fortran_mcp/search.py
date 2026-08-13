@@ -58,6 +58,23 @@ class SearchResult(StrictModel):
     url: HttpUrl
 
 
+def _result_from_row(row: tuple[Any, ...]) -> SearchResult:
+    return SearchResult(
+        chunk_id=row[0],
+        score=row[1],
+        source_id=row[2],
+        source_title=row[3],
+        version=row[4],
+        revision=row[5],
+        path=row[6],
+        headings=tuple(filter(None, row[7].split(" > "))),
+        line_start=row[8],
+        line_end=row[9],
+        text=row[10],
+        url=HttpUrl(row[11]),
+    )
+
+
 def _citation_url(source: Source, path: str) -> HttpUrl:
     relative = PurePosixPath(path)
     prefix = PurePosixPath(source.published_path_prefix)
@@ -202,23 +219,26 @@ def search(
                 rows = execute(fallback_query)
     except sqlite3.Error as error:
         raise SearchError(f"could not query search index: {error}") from error
-    return tuple(
-        SearchResult(
-            chunk_id=row[0],
-            score=row[1],
-            source_id=row[2],
-            source_title=row[3],
-            version=row[4],
-            revision=row[5],
-            path=row[6],
-            headings=tuple(filter(None, row[7].split(" > "))),
-            line_start=row[8],
-            line_end=row[9],
-            text=row[10],
-            url=HttpUrl(row[11]),
-        )
-        for row in rows
-    )
+    return tuple(_result_from_row(row) for row in rows)
+
+
+def get_chunk(chunk_id: str, index_path: Path = DEFAULT_INDEX_PATH) -> SearchResult:
+    """Retrieve one exact indexed chunk by its stable ID."""
+    if not re.fullmatch(r"[0-9a-f]{32}", chunk_id):
+        raise SearchError("chunk ID must be 32 lowercase hexadecimal characters")
+    if not index_path.is_file():
+        raise SearchError(f"search index not found: {index_path}")
+    sql = """SELECT chunk_id, 0.0, source_id, source_title, version, revision,
+                    path, headings, line_start, line_end, text, url
+             FROM chunks WHERE chunk_id = ?"""
+    try:
+        with sqlite3.connect(f"file:{index_path}?mode=ro", uri=True) as database:
+            row = database.execute(sql, (chunk_id,)).fetchone()
+    except sqlite3.Error as error:
+        raise SearchError(f"could not query search index: {error}") from error
+    if row is None:
+        raise SearchError(f"chunk not found: {chunk_id}")
+    return _result_from_row(row)
 
 
 def _parser() -> argparse.ArgumentParser:

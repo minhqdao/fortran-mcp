@@ -46,6 +46,14 @@ uv run fortran-mcp-index
 The MCP server exposes `search_fortran_docs`, which returns ranked passages with the source,
 version, heading hierarchy, line range, and published documentation URL.
 
+It also exposes MCP resources for registered sources, source provenance, and exact chunks:
+
+```text
+fortran-docs://sources
+fortran-docs://sources/{source_id}
+fortran-docs://chunks/{chunk_id}
+```
+
 ## Planned sources
 
 - ISO Fortran standards and corrigenda
