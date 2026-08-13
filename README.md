@@ -68,6 +68,19 @@ uv run fortran-mcp-benchmark --output benchmarks/results/sqlite-fts5.json
 The report records ranking accuracy, negative-query accuracy, latency, and every individual query
 result. It is a baseline for comparing future lexical, semantic, or hybrid search providers.
 
+To build and evaluate the optional local semantic index:
+
+```bash
+uv sync --extra semantic
+uv run fortran-mcp-semantic-index
+uv run fortran-mcp-benchmark --provider semantic \
+  --output benchmarks/results/semantic-bge-small-en-v1.5.json
+```
+
+The semantic-index command downloads the configured embedding model on its first run. The generated
+vector index stays in the data directory and records both the model name and the lexical-index
+checksum, so a stale or incompatible index is rejected.
+
 See [Connect an MCP client](docs/clients.md) for Codex, Claude Desktop, and generic stdio
 configuration examples.
 

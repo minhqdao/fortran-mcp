@@ -186,6 +186,9 @@ def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Benchmark documentation retrieval")
     parser.add_argument("--suite", type=Path, default=DEFAULT_BENCHMARK_PATH)
     parser.add_argument("--index", type=Path)
+    parser.add_argument("--provider", choices=("lexical", "semantic"), default="lexical")
+    parser.add_argument("--semantic-index", type=Path)
+    parser.add_argument("--model")
     parser.add_argument("--output", type=Path)
     return parser
 
@@ -193,7 +196,24 @@ def _parser() -> argparse.ArgumentParser:
 def main(argv: Sequence[str] | None = None) -> None:
     """Run the lexical retrieval benchmark."""
     args = _parser().parse_args(argv)
-    report = run_benchmark(load_suite(args.suite), SQLiteSearchProvider(args.index))
+    if args.provider == "semantic":
+        from fortran_mcp.semantic import DEFAULT_MODEL, FastEmbedModel, SemanticSearchProvider
+
+        model = FastEmbedModel(args.model or DEFAULT_MODEL)
+        provider: SearchProvider = SemanticSearchProvider(
+            model,
+            semantic_index=args.semantic_index,
+            lexical_index=args.index,
+        )
+        provider_name = f"semantic:{model.name}"
+    else:
+        provider = SQLiteSearchProvider(args.index)
+        provider_name = "sqlite-fts5"
+    report = run_benchmark(
+        load_suite(args.suite),
+        provider,
+        provider_name=provider_name,
+    )
     rendered = json.dumps(report.model_dump(mode="json"), indent=2) + "\n"
     if args.output is not None:
         args.output.parent.mkdir(parents=True, exist_ok=True)

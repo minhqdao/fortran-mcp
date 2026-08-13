@@ -26,11 +26,17 @@ dependencies = [
   "pydantic>=2.13,<3",
 ]
 
+[project.optional-dependencies]
+semantic = [
+  "fastembed>=0.8,<1",
+]
+
 [project.scripts]
 fortran-mcp = "fortran_mcp.server:main"
 fortran-mcp-ingest = "fortran_mcp.ingest:main"
 fortran-mcp-build = "fortran_mcp.documents:main"
 fortran-mcp-index = "fortran_mcp.search:main"
+fortran-mcp-semantic-index = "fortran_mcp.semantic:main"
 fortran-mcp-benchmark = "fortran_mcp.benchmark:main"
 
 [dependency-groups]
@@ -61,3 +67,8 @@ select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
 python_version = "3.11"
 strict = true
 files = ["src", "tests"]
+follow_imports_for_stubs = true
+
+[[tool.mypy.overrides]]
+module = ["numpy", "numpy.*"]
+follow_imports = "skip"
