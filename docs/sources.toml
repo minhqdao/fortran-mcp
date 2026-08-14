@@ -493,3 +493,44 @@ license_url = "https://www.gnu.org/software/make/manual/html_node/GNU-Free-Docum
 redistribution = "redistributable"
 status = "approved"
 notes = "Curated official reference sections that close measured gaps in the existing Fortran-lang Make guide. The modified title, authors, selection notice, full GFDL, and required front- and back-cover texts are preserved."
+
+[[sources]]
+id = "numpy-2.5.2-f2py-docs"
+title = "NumPy 2.5.2 F2PY user guide and reference"
+publisher = "NumPy Developers"
+document_type = "interoperability-guide"
+authority = "official"
+topics = [
+  "build-system",
+  "callbacks",
+  "f2py",
+  "fortran-python-interoperability",
+  "meson",
+  "numpy",
+  "python",
+  "signature-files",
+]
+fortran_versions = []
+compilers = []
+dialects = ["F2PY"]
+version = "2.5.2"
+revision = "48fecee5453aa1d31e6b79dcb3969dc1a6d1a891"
+source_url = "https://github.com/numpy/numpy/tree/v2.5.2/doc/source/f2py"
+archive_url = "https://github.com/numpy/numpy/archive/refs/tags/v2.5.2.tar.gz"
+archive_root = "numpy-2.5.2"
+include_paths = [
+  "doc/source/f2py/**",
+  "numpy/f2py/tests/util.py",
+]
+document_paths = ["manual/**"]
+expected_document_count = 20
+homepage_url = "https://numpy.org/doc/2.5/f2py/"
+published_path_prefix = "manual"
+citation_base_url = "https://numpy.org/doc/2.5/f2py/"
+citation_format = "published-html"
+converter = "numpy-f2py-rst"
+license = "BSD-3-Clause"
+license_url = "https://github.com/numpy/numpy/blob/v2.5.2/LICENSE.txt"
+redistribution = "redistributable"
+status = "approved"
+notes = "Complete substantive F2PY 2.5.2 documentation with referenced examples embedded. Two navigation-only RST stubs are excluded from generated documents."

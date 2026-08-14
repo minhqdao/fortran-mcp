@@ -44,6 +44,7 @@ uv run fortran-mcp-ingest stdlib-0.8.1-docs
 uv run fortran-mcp-ingest cmake-4.4.0-fortran-docs
 uv run fortran-mcp-ingest openmp-6.0.1-fortran-examples
 uv run fortran-mcp-ingest gnu-make-4.4.1-build-reference
+uv run fortran-mcp-ingest numpy-2.5.2-f2py-docs
 ```
 
 The core collection also includes separately identifiable Fortran-lang references for intrinsic

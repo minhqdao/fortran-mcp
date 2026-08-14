@@ -83,6 +83,7 @@ class Source(StrictModel):
         "fortran-lang-markdown",
         "openmp-examples",
         "gnu-make-texinfo",
+        "numpy-f2py-rst",
     ] = "none"
     converter_entrypoint: str | None = None
     license: str = Field(min_length=1)

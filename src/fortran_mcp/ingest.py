@@ -37,8 +37,14 @@ ALLOWED_SUFFIXES = frozenset(
         ".cmake",
         ".f",
         ".f90",
+        ".build",
+        ".dat",
+        ".fypp",
+        ".ini",
         ".md",
         ".markdown",
+        ".py",
+        ".pyf",
         ".rst",
         ".tex",
         ".texi",
@@ -278,12 +284,22 @@ def _expand_rst_includes(
 
 
 def _rst_to_markdown(content: str) -> str:
+    links = dict(re.findall(r"^\.\. _([^:]+):\s+(https?://\S+)\s*$", content, re.MULTILINE))
     substitutions = dict(
         re.findall(r"^\s*\.\. \|([^|]+)\| replace::\s*(.+)$", content, re.MULTILINE)
     )
     content = re.sub(r"^\s*\.\. \|[^|]+\| replace::.*(?:\n|$)", "", content, flags=re.MULTILINE)
     for name, replacement in substitutions.items():
         content = content.replace(f"|{name}|", replacement)
+    content = re.sub(
+        r"`([^`]+)`_{1,2}",
+        lambda match: (
+            f"[{match.group(1)}]({links[match.group(1)]})"
+            if match.group(1) in links
+            else match.group(1)
+        ),
+        content,
+    )
     content = re.sub(
         r":([a-z_]+):`([^`]+)`",
         lambda match: f":{match.group(1)}:`{' '.join(match.group(2).split())}`",
@@ -296,6 +312,42 @@ def _rst_to_markdown(content: str) -> str:
     index = 0
     while index < len(lines):
         line = lines[index]
+        if (
+            index + 2 < len(lines)
+            and re.fullmatch(r"([=\-^\"*~])\1{2,}", line.strip())
+            and lines[index + 1].strip()
+            and lines[index + 2].strip() == line.strip()
+        ):
+            adornment = line.strip()[0]
+            level = heading_levels.setdefault(adornment, len(heading_levels) + 1)
+            output.append(f"{'#' * min(level, 6)} {lines[index + 1].strip()}")
+            index += 3
+            continue
+        if line.rstrip().endswith("::") and not line.lstrip().startswith(".. "):
+            probe = index + 1
+            while probe < len(lines) and not lines[probe].strip():
+                probe += 1
+            base_indent = len(line) - len(line.lstrip())
+            if probe < len(lines) and len(lines[probe]) - len(lines[probe].lstrip()) > base_indent:
+                literal_block: list[str] = []
+                block_indent = len(lines[probe]) - len(lines[probe].lstrip())
+                while probe < len(lines):
+                    candidate = lines[probe]
+                    if (
+                        candidate.strip()
+                        and len(candidate) - len(candidate.lstrip()) < block_indent
+                    ):
+                        break
+                    literal_block.append(candidate)
+                    probe += 1
+                introduction = line.rstrip()[:-1]
+                if introduction.strip() != ":":
+                    output.append(introduction)
+                output.extend(
+                    ("```text", *textwrap.dedent("\n".join(literal_block)).splitlines(), "```")
+                )
+                index = probe
+                continue
         if (
             index + 1 < len(lines)
             and line.strip()
@@ -334,6 +386,14 @@ def _rst_to_markdown(content: str) -> str:
                     )
                 )
                 continue
+            if kind == "toctree":
+                index += 1
+                while index < len(lines) and (
+                    not lines[index].strip()
+                    or len(lines[index]) - len(lines[index].lstrip()) > len(indent)
+                ):
+                    index += 1
+                continue
             if kind in {"command", "variable"}:
                 output.append(f"{indent}### `{value}`")
             elif kind == "rubric":
@@ -344,7 +404,7 @@ def _rst_to_markdown(content: str) -> str:
                     "versionchanged": "Changed",
                     "deprecated": "Deprecated",
                 }
-                output.append(f"{indent}*{labels[kind]} in CMake {value}.*")
+                output.append(f"{indent}*{labels[kind]} in {value}.*")
             elif kind in {"note", "warning"}:
                 output.append(f"{indent}**{kind.title()}:** {value}".rstrip())
             index += 1
@@ -353,6 +413,9 @@ def _rst_to_markdown(content: str) -> str:
             index += 1
             continue
         if re.match(r"^\s*\.\. _.+:\s+\S+\s*$", line):
+            index += 1
+            continue
+        if re.match(r"^\s*\.\. [A-Za-z][^:]*:\s*", line):
             index += 1
             continue
 
@@ -400,6 +463,85 @@ def _convert_cmake_rst(source: Source, root: Path) -> tuple[tuple[FileRecord, ..
     if not records:
         raise IngestionError("CMake RST conversion produced no documentation pages")
     return tuple(sorted(records, key=lambda item: item.path)), "builtin cmake-rst 1"
+
+
+def _included_code_language(path: Path) -> str:
+    if path.suffix.lower() in {".f", ".f90", ".fypp", ".pyf"}:
+        return "fortran"
+    if path.suffix.lower() == ".py":
+        return "python"
+    if path.name.startswith("CMakeLists"):
+        return "cmake"
+    if path.suffix.lower() == ".build":
+        return "meson"
+    return path.suffix.lower().removeprefix(".") or "text"
+
+
+def _expand_f2py_includes(content: str, path: Path, root: Path) -> str:
+    lines = content.splitlines()
+    output: list[str] = []
+    index = 0
+    pattern = re.compile(
+        r"^(?P<indent>\s*)\.\. (?P<kind>literalinclude|include)::\s+(?P<target>\S+)"
+    )
+    while index < len(lines):
+        match = pattern.match(lines[index])
+        if match is None:
+            output.append(lines[index])
+            index += 1
+            continue
+        options: dict[str, str] = {}
+        index += 1
+        while index < len(lines):
+            option = re.match(r"^\s+:([\w-]+):\s*(.*)$", lines[index])
+            if option is None:
+                break
+            options[option.group(1)] = option.group(2)
+            index += 1
+        target = (path.parent / match.group("target")).resolve()
+        try:
+            target.relative_to(root.resolve())
+        except ValueError as error:
+            raise IngestionError(
+                f"F2PY include escapes the archive: {match.group('target')}"
+            ) from error
+        if not target.is_file():
+            raise IngestionError(f"F2PY include is unavailable: {target.relative_to(root)}")
+        included = target.read_text(encoding="utf-8")
+        if "lines" in options:
+            bounds = options["lines"].split("-", 1)
+            start = int(bounds[0]) if bounds[0] else 1
+            end = int(bounds[1]) if len(bounds) == 2 and bounds[1] else None
+            included = "\n".join(included.splitlines()[start - 1 : end])
+        language = options.get("language") or _included_code_language(target)
+        indent = match.group("indent")
+        output.extend(
+            (
+                f"{indent}```{language}",
+                *(f"{indent}{line}" for line in included.rstrip().splitlines()),
+                f"{indent}```",
+            )
+        )
+    return "\n".join(output) + "\n"
+
+
+def _convert_numpy_f2py_rst(source: Source, root: Path) -> tuple[tuple[FileRecord, ...], str]:
+    source_dir = root / "doc/source/f2py"
+    output_dir = root / "manual"
+    output_dir.mkdir()
+    records: list[FileRecord] = []
+    for path in sorted(source_dir.rglob("*.rst")):
+        if path.name in {"f2py-reference.rst", "f2py-user.rst"}:
+            continue
+        expanded = _expand_f2py_includes(path.read_text(encoding="utf-8"), path, root)
+        markdown = _rst_to_markdown(expanded)
+        output_path = (output_dir / path.relative_to(source_dir)).with_suffix(".md")
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(markdown, encoding="utf-8")
+        records.append(_record_file(output_path, root))
+    if not records:
+        raise IngestionError("NumPy F2PY conversion produced no documentation pages")
+    return tuple(records), "builtin numpy-f2py-rst 1"
 
 
 def _normalize_myst_markdown(content: str) -> str:
@@ -760,6 +902,10 @@ def ingest_source(
             schema_version = 2
         elif source.converter == "gnu-make-texinfo":
             generated, converter_version = _convert_gnu_make_texinfo(source, temporary_path)
+            stored_files = tuple(sorted((*stored_files, *generated), key=lambda item: item.path))
+            schema_version = 2
+        elif source.converter == "numpy-f2py-rst":
+            generated, converter_version = _convert_numpy_f2py_rst(source, temporary_path)
             stored_files = tuple(sorted((*stored_files, *generated), key=lambda item: item.path))
             schema_version = 2
         document_count = sum(_matches(file.path, source.document_paths) for file in stored_files)

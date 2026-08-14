@@ -407,3 +407,38 @@ category = "paraphrase"
 query = "Why does GNU Make report missing separator when a recipe is not indented with a tab?"
 expected_source = "gnu-make-4.4.1-build-reference"
 expected_path = "manual/Errors.md"
+
+[[cases]]
+id = "f2py-quick-wrap"
+category = "paraphrase"
+query = "How do I compile a Fortran subroutine into a Python extension with numpy f2py?"
+expected_source = "numpy-2.5.2-f2py-docs"
+expected_path = "manual/f2py.getting-started.md"
+
+[[cases]]
+id = "f2py-signature-intent"
+category = "paraphrase"
+query = "How do pyf signature files specify intent in intent out optional depend and hide arguments?"
+expected_source = "numpy-2.5.2-f2py-docs"
+expected_path = "manual/signature-file.md"
+
+[[cases]]
+id = "f2py-array-copy"
+category = "paraphrase"
+query = "Why did f2py copy my NumPy array instead of modifying it in place?"
+expected_source = "numpy-2.5.2-f2py-docs"
+expected_path = "manual/python-usage.md"
+
+[[cases]]
+id = "f2py-callback"
+category = "paraphrase"
+query = "How can a wrapped Fortran routine receive a Python callback argument in f2py?"
+expected_source = "numpy-2.5.2-f2py-docs"
+expected_path = "manual/python-usage.md"
+
+[[cases]]
+id = "f2py-meson-build"
+category = "paraphrase"
+query = "How do I build and install an f2py extension with Meson after distutils removal?"
+expected_source = "numpy-2.5.2-f2py-docs"
+expected_path = "manual/buildtools/meson.md"

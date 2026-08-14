@@ -30,6 +30,10 @@ def _source() -> Source:
     return load_registry(REGISTRY_PATH).sources[0]
 
 
+def _source_by_id(source_id: str) -> Source:
+    return next(source for source in load_registry(REGISTRY_PATH).sources if source.id == source_id)
+
+
 def test_ingestion_stores_text_documents_and_provenance(tmp_path: Path) -> None:
     source = _source()
     readme = b"# fpm\n"
@@ -213,9 +217,41 @@ def test_ingestion_rejects_unexpected_document_count(tmp_path: Path) -> None:
         ingest_source(source, tmp_path, downloader=lambda *_args: archive)
 
 
+def test_numpy_f2py_ingestion_embeds_literal_examples(tmp_path: Path) -> None:
+    source = _source_by_id("numpy-2.5.2-f2py-docs").model_copy(
+        update={"expected_document_count": 1}
+    )
+    archive = _archive(
+        {
+            f"{source.archive_root}/doc/source/f2py/f2py-examples.rst": b"""F2PY examples
+=============
+
+.. literalinclude:: ./code/add.f
+   :language: fortran
+""",
+            f"{source.archive_root}/doc/source/f2py/code/add.f": b"""      subroutine add(a, b, c)
+      c = a + b
+      end
+""",
+            f"{source.archive_root}/numpy/f2py/tests/util.py": b"# fixture\n",
+        }
+    )
+
+    record = ingest_source(source, tmp_path, downloader=lambda *_args: archive)
+
+    generated = tmp_path / f"raw/{source.id}/manual/f2py-examples.md"
+    markdown = generated.read_text()
+    assert record.converter == "numpy-f2py-rst"
+    assert record.converter_version == "builtin numpy-f2py-rst 1"
+    assert markdown.startswith("# F2PY examples")
+    assert "```fortran" in markdown
+    assert "subroutine add(a, b, c)" in markdown
+    assert "literalinclude" not in markdown
+
+
 def test_openmp_ingestion_keeps_explanations_and_fortran_examples(tmp_path: Path) -> None:
-    source = (
-        load_registry(REGISTRY_PATH).sources[-2].model_copy(update={"expected_document_count": 1})
+    source = _source_by_id("openmp-6.0.1-fortran-examples").model_copy(
+        update={"expected_document_count": 1}
     )
     archive = _archive(
         {
@@ -253,7 +289,7 @@ end program collapse
 def test_gnu_make_ingestion_selects_reviewed_manual_pages(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    source = load_registry(REGISTRY_PATH).sources[-1]
+    source = _source_by_id("gnu-make-4.4.1-build-reference")
     archive = _archive(
         {f"{source.archive_root}/{path}": b"@c fixture\n" for path in source.include_paths}
     )
