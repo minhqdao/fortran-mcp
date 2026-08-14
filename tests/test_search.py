@@ -52,6 +52,14 @@ def _index(tmp_path: Path) -> Path:
             source_id="stdlib-0.8.1-docs",
             revision="v0.8.1",
         ),
+        _chunk(
+            "4" * 32,
+            headings=("Options controlling Fortran dialect",),
+            text="Use -std=f2018 to request conformance warnings for Fortran 2018.",
+            path="manual/Fortran-Dialect-Options.md",
+            source_id="gfortran-16.2.0-manual",
+            revision="gcc-16.2.0",
+        ),
     ]
     chunk_dir = tmp_path / "chunks"
     chunk_dir.mkdir()
@@ -60,7 +68,7 @@ def _index(tmp_path: Path) -> Path:
         encoding="utf-8",
     )
     index_path = tmp_path / "search.db"
-    assert build_index(tmp_path, index_path) == 3
+    assert build_index(tmp_path, index_path) == 4
     return index_path
 
 
@@ -88,6 +96,15 @@ def test_search_can_filter_by_source(tmp_path: Path) -> None:
     assert [result.source_id for result in results] == ["stdlib-0.8.1-docs"]
     assert str(results[0].url) == (
         "https://github.com/fortran-lang/stdlib/blob/v0.8.1/doc/specs/stdlib_sorting.md"
+    )
+
+    compiler_results = search(
+        "f2018 conformance",
+        source_id="gfortran-16.2.0-manual",
+        index_path=index_path,
+    )
+    assert str(compiler_results[0].url) == (
+        "https://gcc.gnu.org/onlinedocs/gcc-16.2.0/gfortran/Fortran-Dialect-Options.html"
     )
 
 

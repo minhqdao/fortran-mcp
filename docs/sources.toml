@@ -58,3 +58,58 @@ license_url = "https://github.com/fortran-lang/stdlib/blob/v0.8.1/LICENSE"
 redistribution = "redistributable"
 status = "approved"
 notes = "Complete hand-written v0.8.1 documentation; generated FORD API pages are a separate future source."
+
+[[sources]]
+id = "gfortran-16.2.0-manual"
+title = "GNU Fortran Compiler manual"
+publisher = "Free Software Foundation"
+document_type = "compiler-manual"
+authority = "official"
+topics = [
+  "compiler-options",
+  "coarrays",
+  "intrinsics",
+  "language-extensions",
+  "legacy-code",
+  "mixed-language-programming",
+  "openacc",
+  "openmp",
+  "runtime",
+]
+fortran_versions = [
+  "Fortran 77",
+  "Fortran 90",
+  "Fortran 95",
+  "Fortran 2003",
+  "Fortran 2008",
+  "Fortran 2018",
+]
+compilers = ["gfortran"]
+dialects = ["GNU Fortran"]
+version = "16.2.0"
+revision = "gcc-16.2.0"
+source_url = "https://gcc.gnu.org/git/?p=gcc.git;a=tree;f=gcc/fortran;hb=releases/gcc-16.2.0"
+archive_url = "https://gcc.gnu.org/pub/gcc/releases/gcc-16.2.0/gcc-16.2.0.tar.xz"
+archive_root = "gcc-16.2.0"
+include_paths = [
+  "gcc/fortran/gfortran.texi",
+  "gcc/fortran/intrinsic.texi",
+  "gcc/fortran/invoke.texi",
+  "gcc/doc/include/fdl.texi",
+  "gcc/doc/include/funding.texi",
+  "gcc/doc/include/gcc-common.texi",
+  "gcc/doc/include/gpl_v3.texi",
+]
+document_paths = ["manual/**"]
+expected_document_count = 485
+homepage_url = "https://gcc.gnu.org/fortran/"
+published_path_prefix = "manual"
+citation_base_url = "https://gcc.gnu.org/onlinedocs/gcc-16.2.0/gfortran/"
+citation_format = "published-html"
+converter = "texinfo"
+converter_entrypoint = "gcc/fortran/gfortran.texi"
+license = "GFDL-1.3-or-later"
+license_url = "https://gcc.gnu.org/onlinedocs/gcc-16.2.0/gfortran/GNU-Free-Documentation-License.html"
+redistribution = "redistributable"
+status = "approved"
+notes = "Complete release manual generated from pinned Texinfo sources with GNU Texinfo 7.3. The manual has invariant-section and cover-text requirements recorded in its license notice."

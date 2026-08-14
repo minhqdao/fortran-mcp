@@ -28,6 +28,9 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+ingest = [
+  "html-to-markdown>=3.10.6,<4",
+]
 semantic = [
   "fastembed>=0.8,<1",
 ]

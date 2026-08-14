@@ -34,7 +34,7 @@ jobs:
           enable-cache: true
 
       - name: Install dependencies
-        run: uv sync --locked --all-groups
+        run: uv sync --locked --all-extras --all-groups
 
       - name: Check formatting
         run: uv run ruff format --check .

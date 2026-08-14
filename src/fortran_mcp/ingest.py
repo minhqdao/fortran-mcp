@@ -3,13 +3,16 @@
 import argparse
 import hashlib
 import json
+import os
+import shutil
+import subprocess
 import tarfile
 import tempfile
 from collections.abc import Callable, Sequence
 from datetime import UTC, datetime
 from io import BytesIO
 from pathlib import Path, PurePosixPath
-from typing import cast
+from typing import Literal, cast
 from urllib.request import Request, urlopen
 
 from pydantic import HttpUrl
@@ -24,10 +27,10 @@ from fortran_mcp.sources import (
     load_registry,
 )
 
-DOWNLOAD_LIMIT = 50 * 1024 * 1024
+DOWNLOAD_LIMIT = 128 * 1024 * 1024
 FILE_LIMIT = 5 * 1024 * 1024
 TOTAL_CONTENT_LIMIT = 100 * 1024 * 1024
-ALLOWED_SUFFIXES = frozenset({".f90", ".md", ".markdown", ".rst", ".toml", ".txt"})
+ALLOWED_SUFFIXES = frozenset({".f90", ".md", ".markdown", ".rst", ".texi", ".toml", ".txt"})
 Downloader = Callable[[str, int, int], bytes]
 
 
@@ -67,11 +70,21 @@ def _relative_document_path(member_name: str, source: Source) -> PurePosixPath |
     return relative
 
 
+def _matches(path: str, patterns: tuple[str, ...]) -> bool:
+    candidate = PurePosixPath(path)
+    return any(
+        candidate.is_relative_to(PurePosixPath(pattern.removesuffix("/**")))
+        if pattern.endswith("/**")
+        else candidate == PurePosixPath(pattern)
+        for pattern in patterns
+    )
+
+
 def _extract_documents(archive: bytes, source: Source, destination: Path) -> tuple[FileRecord, ...]:
     records: list[FileRecord] = []
     total_size = 0
     try:
-        with tarfile.open(fileobj=BytesIO(archive), mode="r:gz") as opened_archive:
+        with tarfile.open(fileobj=BytesIO(archive), mode="r:*") as opened_archive:
             for member in opened_archive:
                 relative = _relative_document_path(member.name, source)
                 if relative is None or not member.isfile():
@@ -103,11 +116,103 @@ def _extract_documents(archive: bytes, source: Source, destination: Path) -> tup
                     )
                 )
     except tarfile.TarError as error:
-        raise IngestionError("source is not a valid tar.gz archive") from error
+        raise IngestionError("source is not a supported tar archive") from error
 
     if not records:
         raise IngestionError("archive contained no supported documentation files")
     return tuple(sorted(records, key=lambda record: record.path))
+
+
+def _record_file(path: Path, root: Path) -> FileRecord:
+    content = path.read_bytes()
+    return FileRecord(
+        path=path.relative_to(root).as_posix(),
+        size=len(content),
+        sha256=hashlib.sha256(content).hexdigest(),
+    )
+
+
+def _convert_texinfo(source: Source, root: Path) -> tuple[tuple[FileRecord, ...], str]:
+    executable = shutil.which("makeinfo") or shutil.which("texi2any")
+    if executable is None:
+        raise IngestionError(
+            "Texinfo conversion requires makeinfo 7.3; install GNU Texinfo and add it to PATH"
+        )
+    try:
+        version_output = subprocess.run(
+            [executable, "--version"],
+            check=True,
+            capture_output=True,
+            text=True,
+            timeout=10,
+        ).stdout
+    except (OSError, subprocess.SubprocessError) as error:
+        raise IngestionError(f"could not run Texinfo converter: {error}") from error
+    first_line = version_output.splitlines()[0] if version_output else ""
+    version = first_line.rsplit(" ", 1)[-1]
+    if version != "7.3":
+        found = version or "unknown"
+        raise IngestionError(f"Texinfo conversion requires makeinfo 7.3; found {found}")
+
+    entrypoint = root / str(source.converter_entrypoint)
+    if not entrypoint.is_file():
+        raise IngestionError(f"Texinfo entrypoint is unavailable: {source.converter_entrypoint}")
+    include_dir = root / "gcc/doc/include"
+    version_file = include_dir / "gcc-vers.texi"
+    version_file.write_text(
+        f"@set version-GCC {source.version}\n@clear DEVELOPMENT\n@set srcdir .\n",
+        encoding="utf-8",
+    )
+    html_dir = root / ".generated-html"
+    output_dir = root / "manual"
+    environment = {**os.environ, "LC_ALL": "C.UTF-8"}
+    try:
+        subprocess.run(
+            [
+                executable,
+                "--html",
+                "-I",
+                str(include_dir),
+                f"--output={html_dir}",
+                str(entrypoint),
+            ],
+            check=True,
+            capture_output=True,
+            text=True,
+            timeout=120,
+            env=environment,
+        )
+    except (OSError, subprocess.SubprocessError) as error:
+        detail = getattr(error, "stderr", None) or str(error)
+        raise IngestionError(f"Texinfo conversion failed: {detail.strip()}") from error
+    finally:
+        version_file.unlink(missing_ok=True)
+
+    try:
+        from html_to_markdown import ConversionOptions, convert
+    except ImportError as error:
+        raise IngestionError(
+            "Texinfo conversion requires the 'ingest' extra: install fortran-mcp[ingest]"
+        ) from error
+
+    output_dir.mkdir()
+    records: list[FileRecord] = []
+    options = ConversionOptions(
+        extract_metadata=False,
+        exclude_selectors=[".nav-panel", ".copiable-link", "hr"],
+    )
+    for html_path in sorted(html_dir.glob("*.html")):
+        result = convert(html_path.read_text(encoding="utf-8"), options)
+        markdown = (result.content or "").strip()
+        if not markdown:
+            continue
+        output_path = output_dir / f"{html_path.stem}.md"
+        output_path.write_text(markdown + "\n", encoding="utf-8")
+        records.append(_record_file(output_path, root))
+    shutil.rmtree(html_dir)
+    if not records:
+        raise IngestionError("Texinfo conversion produced no documentation pages")
+    return tuple(records), first_line
 
 
 def ingest_source(
@@ -138,7 +243,22 @@ def ingest_source(
     with tempfile.TemporaryDirectory(prefix=f".{source.id}-", dir=data_dir) as temporary:
         temporary_path = Path(temporary)
         stored_files = _extract_documents(archive, source, temporary_path)
+        converter_version: str | None = None
+        schema_version: Literal[1, 2] = 1
+        if source.converter == "texinfo":
+            generated, converter_version = _convert_texinfo(source, temporary_path)
+            stored_files = tuple(sorted((*stored_files, *generated), key=lambda item: item.path))
+            schema_version = 2
+        document_count = sum(_matches(file.path, source.document_paths) for file in stored_files)
+        if (
+            source.expected_document_count is not None
+            and document_count != source.expected_document_count
+        ):
+            raise IngestionError(
+                f"expected {source.expected_document_count} document files; found {document_count}"
+            )
         record = IngestionRecord(
+            schema_version=schema_version,
             source_id=source.id,
             revision=source.revision,
             archive_url=HttpUrl(str(source.archive_url)),
@@ -146,6 +266,8 @@ def ingest_source(
             retrieved_at=timestamp,
             document_paths=source.document_paths,
             files=stored_files,
+            converter=None if source.converter == "none" else source.converter,
+            converter_version=converter_version,
         )
         source_dir.parent.mkdir(parents=True, exist_ok=True)
         temporary_path.replace(source_dir)

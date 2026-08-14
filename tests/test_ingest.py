@@ -1,10 +1,12 @@
 """Tests for safe documentation ingestion."""
 
 import hashlib
+import subprocess
 import tarfile
 from datetime import UTC, datetime
 from io import BytesIO
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -82,3 +84,44 @@ def test_ingestion_does_not_overwrite_existing_data(tmp_path: Path) -> None:
 
     with pytest.raises(IngestionError, match="already been ingested"):
         ingest_source(source, tmp_path, downloader=downloader)
+
+
+def test_texinfo_ingestion_records_generated_pages(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    source = (
+        load_registry(REGISTRY_PATH).sources[2].model_copy(update={"expected_document_count": 1})
+    )
+    archive = _archive(
+        {f"{source.archive_root}/{path}": b"@c fixture\n" for path in source.include_paths}
+    )
+    monkeypatch.setattr("fortran_mcp.ingest.shutil.which", lambda _name: "/usr/bin/makeinfo")
+
+    def fake_run(command: list[str], **_kwargs: Any) -> subprocess.CompletedProcess[str]:
+        if "--version" in command:
+            return subprocess.CompletedProcess(command, 0, "texi2any (GNU texinfo) 7.3\n", "")
+        output_argument = next(item for item in command if item.startswith("--output="))
+        html_dir = Path(output_argument.removeprefix("--output="))
+        html_dir.mkdir()
+        (html_dir / "index.html").write_text(
+            "<html><body><h1>GNU Fortran</h1><p>Compiler manual.</p></body></html>"
+        )
+        return subprocess.CompletedProcess(command, 0, "", "")
+
+    monkeypatch.setattr("fortran_mcp.ingest.subprocess.run", fake_run)
+
+    record = ingest_source(source, tmp_path, downloader=lambda *_args: archive)
+
+    generated = tmp_path / f"raw/{source.id}/manual/index.md"
+    assert record.schema_version == 2
+    assert record.converter == "texinfo"
+    assert record.converter_version == "texi2any (GNU texinfo) 7.3"
+    assert generated.read_text().startswith("# GNU Fortran")
+
+
+def test_ingestion_rejects_unexpected_document_count(tmp_path: Path) -> None:
+    source = _source().model_copy(update={"expected_document_count": 2})
+    archive = _archive({f"{source.archive_root}/pages/index.md": b"# fpm\n"})
+
+    with pytest.raises(IngestionError, match="expected 2 document files; found 1"):
+        ingest_source(source, tmp_path, downloader=lambda *_args: archive)

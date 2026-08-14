@@ -43,6 +43,19 @@ uv run fortran-mcp-ingest fpm-0.13.0-docs
 uv run fortran-mcp-ingest stdlib-0.8.1-docs
 ```
 
+The GNU Fortran manual is generated from its pinned Texinfo sources. Maintainers building that
+source need GNU Texinfo 7.3 and the optional conversion dependency:
+
+```bash
+uv sync --extra ingest
+uv run fortran-mcp-ingest gfortran-16.2.0-manual
+uv run fortran-mcp-build gfortran-16.2.0-manual
+```
+
+On macOS, install Texinfo with `brew install texinfo` and add its `bin` directory to `PATH` as
+instructed by Homebrew. Texinfo is build-time maintainer tooling; users of prebuilt data bundles do
+not need it.
+
 The command writes immutable source files and a checksum record below the configured per-user data
 directory. It refuses to overwrite an existing ingestion.
 

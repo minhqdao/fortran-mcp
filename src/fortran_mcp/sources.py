@@ -4,7 +4,7 @@ import tomllib
 from datetime import UTC, datetime
 from enum import StrEnum
 from importlib.resources import files
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, HttpUrl, model_validator
@@ -71,10 +71,13 @@ class Source(StrictModel):
     archive_root: str = Field(min_length=1)
     include_paths: tuple[str, ...] = Field(min_length=1)
     document_paths: tuple[str, ...] = Field(min_length=1)
+    expected_document_count: int | None = Field(default=None, ge=1)
     homepage_url: HttpUrl
     published_path_prefix: str
     citation_base_url: HttpUrl
     citation_format: Literal["published-html", "source"]
+    converter: Literal["none", "texinfo"] = "none"
+    converter_entrypoint: str | None = None
     license: str = Field(min_length=1)
     license_url: HttpUrl
     redistribution: RedistributionPolicy
@@ -89,6 +92,14 @@ class Source(StrictModel):
         ):
             msg = "approved sources must have a decided redistribution policy"
             raise ValueError(msg)
+        if self.converter == "texinfo" and not self.converter_entrypoint:
+            raise ValueError("Texinfo sources require a converter entrypoint")
+        if self.converter == "none" and self.converter_entrypoint is not None:
+            raise ValueError("native sources must not define a converter entrypoint")
+        if self.converter_entrypoint is not None:
+            entrypoint = PurePosixPath(self.converter_entrypoint)
+            if entrypoint.is_absolute() or ".." in entrypoint.parts:
+                raise ValueError("converter entrypoint must be a safe relative path")
         return self
 
 
@@ -152,7 +163,7 @@ class FileRecord(StrictModel):
 class IngestionRecord(StrictModel):
     """Provenance for one completed source ingestion."""
 
-    schema_version: Literal[1] = 1
+    schema_version: Literal[1, 2] = 1
     source_id: str
     revision: str
     archive_url: HttpUrl
@@ -160,6 +171,8 @@ class IngestionRecord(StrictModel):
     retrieved_at: datetime
     document_paths: tuple[str, ...] = Field(min_length=1)
     files: tuple[FileRecord, ...]
+    converter: str | None = None
+    converter_version: str | None = None
 
     @model_validator(mode="after")
     def retrieval_time_has_timezone(self) -> "IngestionRecord":
