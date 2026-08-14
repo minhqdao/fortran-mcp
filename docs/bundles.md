@@ -17,7 +17,8 @@ licenses because they require a compatible core bundle.
 The versioned manifest records:
 
 - bundle identity, role, version, and compatible server versions;
-- source IDs, revisions, document types, authority, topics, and licenses;
+- source IDs, revisions, document types, authority, topics, compiler and Fortran-version
+  applicability, and licenses;
 - every payload path, byte size, and SHA-256 checksum;
 - the embedding model and dimensions for semantic bundles; and
 - the exact lexical-index checksum required by a semantic bundle.

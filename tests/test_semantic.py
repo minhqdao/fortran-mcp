@@ -92,6 +92,8 @@ def test_semantic_search_filters_sources_and_rejects_stale_index(tmp_path: Path)
     )
 
     assert not provider.search("OpenMP", source_id="unknown")
+    assert provider.search("OpenMP", version="0.13.0")
+    assert not provider.search("OpenMP", version="99.0")
     lexical_index.write_bytes(lexical_index.read_bytes() + b"stale")
     with pytest.raises(SearchError, match="stale"):
         provider.search("OpenMP")

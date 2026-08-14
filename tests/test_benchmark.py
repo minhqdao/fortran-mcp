@@ -16,6 +16,9 @@ class FakeProvider:
         *,
         limit: int = 5,
         source_id: str | None = None,
+        compiler: str | None = None,
+        version: str | None = None,
+        fortran_version: str | None = None,
     ) -> tuple[SearchResult, ...]:
         return self.results.get(query, ())[:limit]
 

@@ -16,6 +16,8 @@ def _result(chunk_id: str) -> SearchResult:
         document_type=DocumentType.ECOSYSTEM_GUIDE,
         authority=SourceAuthority.OFFICIAL,
         topics=("test",),
+        compilers=("gfortran",),
+        fortran_versions=("Fortran 2018",),
         version="1",
         revision="v1",
         path=f"{chunk_id}.md",
@@ -30,7 +32,7 @@ def _result(chunk_id: str) -> SearchResult:
 class FakeProvider:
     def __init__(self, results: tuple[SearchResult, ...]) -> None:
         self.results = results
-        self.call: tuple[str, int, str | None] | None = None
+        self.call: tuple[str, int, str | None, str | None, str | None, str | None] | None = None
 
     def search(
         self,
@@ -38,8 +40,11 @@ class FakeProvider:
         *,
         limit: int = 5,
         source_id: str | None = None,
+        compiler: str | None = None,
+        version: str | None = None,
+        fortran_version: str | None = None,
     ) -> tuple[SearchResult, ...]:
-        self.call = (query, limit, source_id)
+        self.call = (query, limit, source_id, compiler, version, fortran_version)
         return self.results[:limit]
 
     def get_chunk(self, chunk_id: str) -> SearchResult:
@@ -52,11 +57,29 @@ def test_hybrid_fusion_rewards_results_found_by_both_providers() -> None:
     semantic = FakeProvider((_result("c"), shared))
     provider = HybridSearchProvider(lexical, semantic)
 
-    results = provider.search("question", limit=2, source_id="source")
+    results = provider.search(
+        "question",
+        limit=2,
+        source_id="source",
+        compiler="gfortran",
+        version="1",
+        fortran_version="Fortran 2018",
+    )
 
     assert [result.chunk_id for result in results] == [shared.chunk_id, _result("b").chunk_id]
     assert results[0].score > results[1].score
-    assert lexical.call == semantic.call == ("question", 10, "source")
+    assert (
+        lexical.call
+        == semantic.call
+        == (
+            "question",
+            10,
+            "source",
+            "gfortran",
+            "1",
+            "Fortran 2018",
+        )
+    )
 
 
 def test_hybrid_get_chunk_uses_lexical_source_of_truth() -> None:

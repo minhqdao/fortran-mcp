@@ -108,6 +108,24 @@ def test_search_can_filter_by_source(tmp_path: Path) -> None:
     )
 
 
+def test_search_filters_compiler_and_source_version(tmp_path: Path) -> None:
+    index_path = _index(tmp_path)
+
+    results = search(
+        "f2018 conformance",
+        compiler="GFORTRAN",
+        version="16.2.0",
+        index_path=index_path,
+    )
+
+    assert [result.source_id for result in results] == ["gfortran-16.2.0-manual"]
+    assert results[0].compilers == ("gfortran",)
+    assert results[0].fortran_versions == ()
+    assert not search("f2018", fortran_version="Fortran 2018", index_path=index_path)
+    assert not search("f2018", compiler="ifx", index_path=index_path)
+    assert not search("f2018", compiler="gfortran", version="15.2.0", index_path=index_path)
+
+
 def test_get_chunk_returns_an_exact_passage(tmp_path: Path) -> None:
     result = get_chunk("2" * 32, index_path=_index(tmp_path))
 

@@ -66,8 +66,18 @@ def test_search_tool_uses_provider_contract(monkeypatch: Any) -> None:
             *,
             limit: int = 5,
             source_id: str | None = None,
+            compiler: str | None = None,
+            version: str | None = None,
+            fortran_version: str | None = None,
         ) -> tuple[SearchResult, ...]:
-            assert (query, limit, source_id) == ("query", 3, "test-source")
+            assert (query, limit, source_id, compiler, version, fortran_version) == (
+                "query",
+                3,
+                "test-source",
+                None,
+                None,
+                None,
+            )
             return (expected,)
 
         def get_chunk(self, chunk_id: str) -> SearchResult:
@@ -97,6 +107,8 @@ def test_search_tool_filters_source_applicability(monkeypatch: Any) -> None:
         document_type=DocumentType.ECOSYSTEM_GUIDE,
         authority=SourceAuthority.OFFICIAL,
         topics=("build-system",),
+        compilers=("gfortran",),
+        fortran_versions=("Fortran 2018",),
         version="1",
         revision="v1",
         path="guide.md",
@@ -109,9 +121,21 @@ def test_search_tool_filters_source_applicability(monkeypatch: Any) -> None:
 
     class FakeProvider:
         def search(
-            self, query: str, *, limit: int = 5, source_id: str | None = None
+            self,
+            query: str,
+            *,
+            limit: int = 5,
+            source_id: str | None = None,
+            compiler: str | None = None,
+            version: str | None = None,
+            fortran_version: str | None = None,
         ) -> tuple[SearchResult, ...]:
             assert limit == 20
+            assert (compiler, version, fortran_version) == (
+                "gfortran",
+                "1",
+                "Fortran 2018",
+            )
             return (ecosystem,)
 
         def get_chunk(self, chunk_id: str) -> SearchResult:
@@ -121,7 +145,13 @@ def test_search_tool_filters_source_applicability(monkeypatch: Any) -> None:
     searched = asyncio.run(
         mcp.call_tool(
             "search_fortran_docs",
-            {"query": "build", "topic": "build-system"},
+            {
+                "query": "build",
+                "topic": "build-system",
+                "compiler": "gfortran",
+                "version": "1",
+                "fortran_version": "Fortran 2018",
+            },
         )
     )
 

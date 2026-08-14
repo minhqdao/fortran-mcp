@@ -46,13 +46,19 @@ def search_fortran_docs(
     document_type: str | None = None,
     authority: str | None = None,
     topic: str | None = None,
+    compiler: str | None = None,
+    version: str | None = None,
+    fortran_version: str | None = None,
 ) -> list[SearchResult]:
-    """Search authoritative Fortran documentation and return cited passages."""
+    """Search cited Fortran docs, optionally narrowed by source applicability."""
     filtered = any(value is not None for value in (document_type, authority, topic))
     results = search_provider().search(
         query,
         limit=20 if filtered else limit,
         source_id=source_id,
+        compiler=compiler,
+        version=version,
+        fortran_version=fortran_version,
     )
     return [
         result

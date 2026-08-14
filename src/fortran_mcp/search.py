@@ -52,6 +52,8 @@ class SearchResult(StrictModel):
     document_type: DocumentType
     authority: SourceAuthority
     topics: tuple[str, ...]
+    compilers: tuple[str, ...] = ()
+    fortran_versions: tuple[str, ...] = ()
     version: str
     revision: str
     path: str
@@ -71,6 +73,9 @@ class SearchProvider(Protocol):
         *,
         limit: int = 5,
         source_id: str | None = None,
+        compiler: str | None = None,
+        version: str | None = None,
+        fortran_version: str | None = None,
     ) -> tuple[SearchResult, ...]: ...
 
     def get_chunk(self, chunk_id: str) -> SearchResult: ...
@@ -88,8 +93,19 @@ class SQLiteSearchProvider:
         *,
         limit: int = 5,
         source_id: str | None = None,
+        compiler: str | None = None,
+        version: str | None = None,
+        fortran_version: str | None = None,
     ) -> tuple[SearchResult, ...]:
-        return search(query, limit=limit, source_id=source_id, index_path=self.index_path)
+        return search(
+            query,
+            limit=limit,
+            source_id=source_id,
+            compiler=compiler,
+            version=version,
+            fortran_version=fortran_version,
+            index_path=self.index_path,
+        )
 
     def get_chunk(self, chunk_id: str) -> SearchResult:
         return get_chunk(chunk_id, index_path=self.index_path)
@@ -104,14 +120,16 @@ def _result_from_row(row: tuple[Any, ...]) -> SearchResult:
         document_type=row[4],
         authority=row[5],
         topics=tuple(filter(None, row[6].split(","))),
-        version=row[7],
-        revision=row[8],
-        path=row[9],
-        headings=tuple(filter(None, row[10].split(" > "))),
-        line_start=row[11],
-        line_end=row[12],
-        text=row[13],
-        url=HttpUrl(row[14]),
+        compilers=tuple(filter(None, row[7].split(","))),
+        fortran_versions=tuple(filter(None, row[8].split(","))),
+        version=row[9],
+        revision=row[10],
+        path=row[11],
+        headings=tuple(filter(None, row[12].split(" > "))),
+        line_start=row[13],
+        line_end=row[14],
+        text=row[15],
+        url=HttpUrl(row[16]),
     )
 
 
@@ -171,6 +189,8 @@ def build_index(data_dir: Path | None = None, index_path: Path | None = None) ->
                     document_type UNINDEXED,
                     authority UNINDEXED,
                     topics UNINDEXED,
+                    compilers UNINDEXED,
+                    fortran_versions UNINDEXED,
                     version UNINDEXED,
                     revision UNINDEXED,
                     path UNINDEXED,
@@ -195,7 +215,8 @@ def build_index(data_dir: Path | None = None, index_path: Path | None = None) ->
                     if chunk.revision != source.revision:
                         raise SearchError(f"stale chunks for source: {chunk.source_id}")
                     database.execute(
-                        "INSERT INTO chunks VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                        "INSERT INTO chunks VALUES "
+                        "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                         (
                             chunk.id,
                             chunk.source_id,
@@ -203,6 +224,8 @@ def build_index(data_dir: Path | None = None, index_path: Path | None = None) ->
                             source.document_type,
                             source.authority,
                             ",".join(source.topics),
+                            ",".join(source.compilers),
+                            ",".join(source.fortran_versions),
                             source.version,
                             chunk.revision,
                             chunk.path,
@@ -232,11 +255,41 @@ def _fts_queries(query: str) -> tuple[str, str]:
     return " AND ".join(escaped), " OR ".join(escaped)
 
 
+def applicable_source_ids(
+    *,
+    source_id: str | None = None,
+    compiler: str | None = None,
+    version: str | None = None,
+    fortran_version: str | None = None,
+) -> tuple[str, ...] | None:
+    """Resolve explicit applicability filters to registered source IDs."""
+    if all(value is None for value in (source_id, compiler, version, fortran_version)):
+        return None
+
+    def matches(value: str, expected: str) -> bool:
+        return value.casefold() == expected.casefold()
+
+    return tuple(
+        source.id
+        for source in load_registry().sources
+        if (source_id is None or source.id == source_id)
+        and (compiler is None or any(matches(item, compiler) for item in source.compilers))
+        and (version is None or matches(source.version, version))
+        and (
+            fortran_version is None
+            or any(matches(item, fortran_version) for item in source.fortran_versions)
+        )
+    )
+
+
 def search(
     query: str,
     *,
     limit: int = 5,
     source_id: str | None = None,
+    compiler: str | None = None,
+    version: str | None = None,
+    fortran_version: str | None = None,
     index_path: Path = DEFAULT_INDEX_PATH,
 ) -> tuple[SearchResult, ...]:
     """Search documentation chunks using FTS5 BM25 ranking."""
@@ -244,12 +297,20 @@ def search(
         raise SearchError("limit must be between 1 and 20")
     if not index_path.is_file():
         raise SearchError(f"search index not found: {index_path}")
+    source_ids = applicable_source_ids(
+        source_id=source_id,
+        compiler=compiler,
+        version=version,
+        fortran_version=fortran_version,
+    )
+    if source_ids == ():
+        return ()
     strict_query, fallback_query = _fts_queries(query)
     sql = """SELECT chunk_id,
                     -bm25(chunks, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
-                                  1.0, 1.0, 3.0, 1.0, 1.0, 1.0, 1.0) AS score,
+                                  1.0, 1.0, 1.0, 1.0, 3.0, 1.0, 1.0, 1.0, 1.0) AS score,
                     source_id, source_title, document_type, authority, topics,
-                    version, revision, path, headings,
+                    compilers, fortran_versions, version, revision, path, headings,
                     line_start, line_end, text, url
              FROM chunks WHERE chunks MATCH ?"""
     try:
@@ -258,9 +319,10 @@ def search(
             def execute(match_query: str) -> list[tuple[Any, ...]]:
                 filtered_sql = sql
                 parameters: list[str | int] = [match_query]
-                if source_id is not None:
-                    filtered_sql += " AND source_id = ?"
-                    parameters.append(source_id)
+                if source_ids is not None:
+                    placeholders = ", ".join("?" for _ in source_ids)
+                    filtered_sql += f" AND source_id IN ({placeholders})"
+                    parameters.extend(source_ids)
                 filtered_sql += " ORDER BY score DESC, chunk_id LIMIT ?"
                 parameters.append(limit)
                 return database.execute(filtered_sql, parameters).fetchall()
@@ -280,7 +342,8 @@ def get_chunk(chunk_id: str, index_path: Path = DEFAULT_INDEX_PATH) -> SearchRes
     if not index_path.is_file():
         raise SearchError(f"search index not found: {index_path}")
     sql = """SELECT chunk_id, 0.0, source_id, source_title,
-                    document_type, authority, topics, version, revision,
+                    document_type, authority, topics, compilers, fortran_versions,
+                    version, revision,
                     path, headings, line_start, line_end, text, url
              FROM chunks WHERE chunk_id = ?"""
     try:

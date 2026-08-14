@@ -76,14 +76,7 @@ topics = [
   "openmp",
   "runtime",
 ]
-fortran_versions = [
-  "Fortran 77",
-  "Fortran 90",
-  "Fortran 95",
-  "Fortran 2003",
-  "Fortran 2008",
-  "Fortran 2018",
-]
+fortran_versions = []
 compilers = ["gfortran"]
 dialects = ["GNU Fortran"]
 version = "16.2.0"

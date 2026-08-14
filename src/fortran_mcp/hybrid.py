@@ -32,16 +32,25 @@ class HybridSearchProvider:
         *,
         limit: int = 5,
         source_id: str | None = None,
+        compiler: str | None = None,
+        version: str | None = None,
+        fortran_version: str | None = None,
     ) -> tuple[SearchResult, ...]:
         candidate_limit = min(20, max(10, limit * 2))
-        semantic_results = self.semantic.search(query, limit=candidate_limit, source_id=source_id)
-        if source_id is None and (
+        filters = {
+            "source_id": source_id,
+            "compiler": compiler,
+            "version": version,
+            "fortran_version": fortran_version,
+        }
+        semantic_results = self.semantic.search(query, limit=candidate_limit, **filters)
+        if not any(filters.values()) and (
             not semantic_results or semantic_results[0].score < self.semantic_threshold
         ):
             return ()
         rankings = (
             (
-                self.lexical.search(query, limit=candidate_limit, source_id=source_id),
+                self.lexical.search(query, limit=candidate_limit, **filters),
                 self.lexical_weight,
             ),
             (

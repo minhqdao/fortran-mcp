@@ -16,7 +16,13 @@ from pathlib import Path
 from typing import Any, Protocol, cast
 
 from fortran_mcp.config import data_directory
-from fortran_mcp.search import INDEX_FILENAME, SearchError, SearchProvider, SearchResult
+from fortran_mcp.search import (
+    INDEX_FILENAME,
+    SearchError,
+    SearchProvider,
+    SearchResult,
+    applicable_source_ids,
+)
 
 SEMANTIC_INDEX_FILENAME = "fortran-mcp-semantic.db"
 DEFAULT_MODEL = "BAAI/bge-small-en-v1.5"
@@ -292,6 +298,9 @@ class SemanticSearchProvider:
         *,
         limit: int = 5,
         source_id: str | None = None,
+        compiler: str | None = None,
+        version: str | None = None,
+        fortran_version: str | None = None,
     ) -> tuple[SearchResult, ...]:
         if not query.strip():
             raise SearchError("query must contain searchable text")
@@ -299,6 +308,14 @@ class SemanticSearchProvider:
             raise SearchError("limit must be between 1 and 20")
         if not self.semantic_index.is_file():
             raise SearchError(f"semantic index not found: {self.semantic_index}")
+        source_ids = applicable_source_ids(
+            source_id=source_id,
+            compiler=compiler,
+            version=version,
+            fortran_version=fortran_version,
+        )
+        if source_ids == ():
+            return ()
         query_vector = _normalized(self.model.embed_query(query))
         try:
             with sqlite3.connect(f"file:{self.semantic_index}?mode=ro", uri=True) as database:
@@ -313,9 +330,10 @@ class SemanticSearchProvider:
                     raise SearchError("query embedding dimensions do not match the semantic index")
                 sql = "SELECT chunk_id, embedding FROM vectors"
                 parameters: tuple[str, ...] = ()
-                if source_id is not None:
-                    sql += " WHERE source_id = ?"
-                    parameters = (source_id,)
+                if source_ids is not None:
+                    placeholders = ", ".join("?" for _ in source_ids)
+                    sql += f" WHERE source_id IN ({placeholders})"
+                    parameters = source_ids
                 rows = database.execute(sql, parameters)
                 scored = heapq.nlargest(
                     limit,

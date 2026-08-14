@@ -24,6 +24,9 @@ class BenchmarkCase(StrictModel):
     category: Literal["exact", "paraphrase", "filter", "negative"]
     query: str = Field(min_length=1)
     source_filter: str | None = None
+    compiler_filter: str | None = None
+    version_filter: str | None = None
+    fortran_version_filter: str | None = None
     expected_source: str | None = None
     expected_path: str | None = None
     expected_heading: str | None = None
@@ -130,6 +133,9 @@ def run_benchmark(
             case.query,
             limit=limit,
             source_id=case.source_filter,
+            compiler=case.compiler_filter,
+            version=case.version_filter,
+            fortran_version=case.fortran_version_filter,
         )
         latency_ms = (time.perf_counter() - started) * 1_000
         rank = _rank(case, results)

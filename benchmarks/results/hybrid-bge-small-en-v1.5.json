@@ -7,7 +7,7 @@
   "hit_at_10": 0.7727272727272727,
   "mean_reciprocal_rank": 0.7045454545454546,
   "negative_accuracy": 1.0,
-  "mean_latency_ms": 134.22373913043478,
+  "mean_latency_ms": 142.2946956521739,
   "categories": {
     "exact": {
       "cases": 6,
@@ -41,7 +41,7 @@
       "query": "compile_commands.json",
       "passed": true,
       "rank": 1,
-      "latency_ms": 140.627,
+      "latency_ms": 158.485,
       "returned": 10,
       "top_chunk_ids": [
         "f1e9125f1d304ca33fef5f8b8407c669",
@@ -62,7 +62,7 @@
       "query": "How do I add OpenMP to an fpm project?",
       "passed": true,
       "rank": 1,
-      "latency_ms": 139.016,
+      "latency_ms": 143.997,
       "returned": 10,
       "top_chunk_ids": [
         "5528717ebe43fe1249b42ba87733815c",
@@ -83,7 +83,7 @@
       "query": "How do I create a new fpm project?",
       "passed": true,
       "rank": 1,
-      "latency_ms": 138.282,
+      "latency_ms": 143.543,
       "returned": 10,
       "top_chunk_ids": [
         "743f6bcf70c1457ce30ef01af9b56f9e",
@@ -104,7 +104,7 @@
       "query": "How do I clean build output?",
       "passed": true,
       "rank": 1,
-      "latency_ms": 137.061,
+      "latency_ms": 137.554,
       "returned": 10,
       "top_chunk_ids": [
         "ac97c2bdca6e18907fadcc821f5832ea",
@@ -125,7 +125,7 @@
       "query": "How do I add a git dependency to fpm?",
       "passed": false,
       "rank": null,
-      "latency_ms": 138.57,
+      "latency_ms": 150.102,
       "returned": 10,
       "top_chunk_ids": [
         "7aceb93f6db420ac62ea217240007966",
@@ -146,7 +146,7 @@
       "query": "features profiles",
       "passed": true,
       "rank": 1,
-      "latency_ms": 155.387,
+      "latency_ms": 183.189,
       "returned": 10,
       "top_chunk_ids": [
         "3d3c9c81573ad7b5bd7f3b38729f36fd",
@@ -167,7 +167,7 @@
       "query": "stdlib_string_type",
       "passed": true,
       "rank": 1,
-      "latency_ms": 138.822,
+      "latency_ms": 138.236,
       "returned": 10,
       "top_chunk_ids": [
         "10c7f96bec2d5ff04f75a50796089e48",
@@ -188,7 +188,7 @@
       "query": "How can I represent dynamically sized text?",
       "passed": false,
       "rank": null,
-      "latency_ms": 137.486,
+      "latency_ms": 142.601,
       "returned": 0,
       "top_chunk_ids": []
     },
@@ -198,7 +198,7 @@
       "query": "How can I order array values from smallest to largest?",
       "passed": false,
       "rank": null,
-      "latency_ms": 140.307,
+      "latency_ms": 139.544,
       "returned": 10,
       "top_chunk_ids": [
         "2d8062fd51c3668c1709ac8b5dbc4dc2",
@@ -219,7 +219,7 @@
       "query": "How do I integrate a function numerically?",
       "passed": true,
       "rank": 1,
-      "latency_ms": 138.584,
+      "latency_ms": 145.306,
       "returned": 10,
       "top_chunk_ids": [
         "fe829a97c5141d8f9fa42b1f44841be9",
@@ -240,7 +240,7 @@
       "query": "How do I generate normally distributed random numbers?",
       "passed": false,
       "rank": null,
-      "latency_ms": 136.922,
+      "latency_ms": 141.169,
       "returned": 10,
       "top_chunk_ids": [
         "3f100149122b7c383ebba31a8b9013bc",
@@ -261,7 +261,7 @@
       "query": "How do I convert a string to a number?",
       "passed": true,
       "rank": 2,
-      "latency_ms": 136.987,
+      "latency_ms": 138.442,
       "returned": 10,
       "top_chunk_ids": [
         "3b7c2f45efad73ab08fe3b833bfe0a91",
@@ -282,7 +282,7 @@
       "query": "How can I solve a linear system?",
       "passed": true,
       "rank": 1,
-      "latency_ms": 138.143,
+      "latency_ms": 158.416,
       "returned": 10,
       "top_chunk_ids": [
         "f25c3f3ef25c033c9e274600e5bb9ed6",
@@ -303,7 +303,7 @@
       "query": "chaining_hashmap_type",
       "passed": true,
       "rank": 1,
-      "latency_ms": 158.267,
+      "latency_ms": 194.214,
       "returned": 10,
       "top_chunk_ids": [
         "1234435bdf286c637913d02ad1602e21",
@@ -324,7 +324,7 @@
       "query": "sort array",
       "passed": true,
       "rank": 1,
-      "latency_ms": 123.111,
+      "latency_ms": 135.026,
       "returned": 10,
       "top_chunk_ids": [
         "80dce1c71de9fd5f7f6853039339f126",
@@ -345,7 +345,7 @@
       "query": "dependency",
       "passed": false,
       "rank": null,
-      "latency_ms": 68.246,
+      "latency_ms": 68.231,
       "returned": 10,
       "top_chunk_ids": [
         "cdbb904073e834b2b7bc6e074d37faf5",
@@ -366,7 +366,7 @@
       "query": "CUDA Fortran unified memory",
       "passed": true,
       "rank": null,
-      "latency_ms": 137.051,
+      "latency_ms": 144.32,
       "returned": 0,
       "top_chunk_ids": []
     },
@@ -376,7 +376,7 @@
       "query": "coarray event post event wait",
       "passed": true,
       "rank": 2,
-      "latency_ms": 138.293,
+      "latency_ms": 138.912,
       "returned": 10,
       "top_chunk_ids": [
         "539bb1e895130c76f827811245b19a8a",
@@ -397,7 +397,7 @@
       "query": "-fallow-argument-mismatch",
       "passed": true,
       "rank": 2,
-      "latency_ms": 138.644,
+      "latency_ms": 147.198,
       "returned": 10,
       "top_chunk_ids": [
         "5c0819b4f24f6e42b64e1f2c4ce0e929",
@@ -418,7 +418,7 @@
       "query": "How can gfortran compile legacy DEC STRUCTURE and RECORD declarations?",
       "passed": true,
       "rank": 1,
-      "latency_ms": 142.768,
+      "latency_ms": 149.702,
       "returned": 10,
       "top_chunk_ids": [
         "b83e9fac76a8855139aea498acc5e8b8",
@@ -439,7 +439,7 @@
       "query": "How do I convert between a Fortran pointer and a C pointer?",
       "passed": true,
       "rank": 1,
-      "latency_ms": 139.726,
+      "latency_ms": 139.6,
       "returned": 10,
       "top_chunk_ids": [
         "b4007c5710c100ddc021bf14decd86f5",
@@ -460,7 +460,7 @@
       "query": "GFORTRAN_CONVERT_UNIT",
       "passed": true,
       "rank": 1,
-      "latency_ms": 152.728,
+      "latency_ms": 159.103,
       "returned": 10,
       "top_chunk_ids": [
         "ed4607e0faab8e96aac8a47888e163f6",
@@ -481,7 +481,7 @@
       "query": "unformatted sequential record markers",
       "passed": true,
       "rank": 1,
-      "latency_ms": 72.118,
+      "latency_ms": 75.888,
       "returned": 10,
       "top_chunk_ids": [
         "6baea58ca0fcd50bc80f51619578ef1f",

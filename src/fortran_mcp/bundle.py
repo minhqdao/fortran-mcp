@@ -51,6 +51,8 @@ class BundleSource(StrictModel):
     document_type: str
     authority: str
     topics: tuple[str, ...]
+    compilers: tuple[str, ...]
+    fortran_versions: tuple[str, ...]
     license: str
     license_url: str
 
@@ -110,6 +112,8 @@ def _manifest_source(source: Source) -> BundleSource:
         document_type=source.document_type,
         authority=source.authority,
         topics=source.topics,
+        compilers=source.compilers,
+        fortran_versions=source.fortran_versions,
         license=source.license,
         license_url=str(source.license_url),
     )

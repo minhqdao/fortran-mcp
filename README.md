@@ -73,7 +73,11 @@ uv run fortran-mcp-index
 
 The MCP server exposes `search_fortran_docs`, which returns ranked passages with the source,
 version, authority, document type, topical facets, heading hierarchy, line range, and published
-documentation URL. Searches can be narrowed by source ID, document type, authority, or topic.
+documentation URL. Searches can be narrowed by source ID, document type, authority, topic,
+compiler, source version, or Fortran language version. For example, clients can combine
+`compiler="gfortran"` and `version="16.2.0"`. A Fortran language-version filter is intended for
+edition-specific sources, rather than as a claim that a compiler completely implements an edition.
+Applicability filters are resolved before ranking for lexical, semantic, and hybrid retrieval.
 
 It also exposes MCP resources for registered sources, source provenance, and exact chunks:
 
