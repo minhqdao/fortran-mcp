@@ -372,3 +372,38 @@ category = "paraphrase"
 query = "Which OpenMP directive sentinels work in fixed form Fortran source?"
 expected_source = "openmp-6.0.1-fortran-examples"
 expected_path = "manual/directives/fixed_format_comments.tex"
+
+[[cases]]
+id = "gnu-make-fortran-implicit-rule"
+category = "paraphrase"
+query = "Which built-in GNU Make rules use FC and FFLAGS to compile Fortran .f and .F files?"
+expected_source = "gnu-make-4.4.1-build-reference"
+expected_path = "manual/Catalogue-of-Rules.md"
+
+[[cases]]
+id = "gnu-make-automatic-variables"
+category = "exact"
+query = "GNU Make automatic variables $@ $< $^"
+expected_source = "gnu-make-4.4.1-build-reference"
+expected_path = "manual/Automatic-Variables.md"
+
+[[cases]]
+id = "gnu-make-disable-parallel"
+category = "paraphrase"
+query = "How do I serialize unsafe prerequisites during a GNU Make parallel build with .NOTPARALLEL or .WAIT?"
+expected_source = "gnu-make-4.4.1-build-reference"
+expected_path = "manual/Parallel-Disable.md"
+
+[[cases]]
+id = "gnu-make-pattern-rule"
+category = "paraphrase"
+query = "How do I define a GNU Make pattern rule using a percent target and stem?"
+expected_source = "gnu-make-4.4.1-build-reference"
+expected_path = "manual/Pattern-Intro.md"
+
+[[cases]]
+id = "gnu-make-missing-separator"
+category = "paraphrase"
+query = "Why does GNU Make report missing separator when a recipe is not indented with a tab?"
+expected_source = "gnu-make-4.4.1-build-reference"
+expected_path = "manual/Errors.md"

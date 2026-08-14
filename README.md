@@ -43,6 +43,7 @@ uv run fortran-mcp-ingest fpm-0.13.0-docs
 uv run fortran-mcp-ingest stdlib-0.8.1-docs
 uv run fortran-mcp-ingest cmake-4.4.0-fortran-docs
 uv run fortran-mcp-ingest openmp-6.0.1-fortran-examples
+uv run fortran-mcp-ingest gnu-make-4.4.1-build-reference
 ```
 
 The core collection also includes separately identifiable Fortran-lang references for intrinsic
@@ -54,6 +55,11 @@ The OpenMP source contains the official 6.0.1 explanatory examples that have cor
 Fortran code. Its reviewed converter retains shared and Fortran-specific explanations, embeds the
 fixed- and free-form source examples, and excludes C/C++ listings. It is practical guidance rather
 than the normative OpenMP specification.
+
+The GNU Make source is a deliberately small set of official 4.4.1 manual sections covering rules,
+prerequisites, automatic variables, parallel and recursive builds, diagnostics, and the built-in
+Fortran compiler variables and rules. Its modified-title and attribution notice, required cover
+texts, and complete GFDL are retained.
 
 The GNU Fortran manual is generated from its pinned Texinfo sources. Maintainers building that
 source need GNU Texinfo 7.3 and the optional conversion dependency:
@@ -82,6 +88,7 @@ uv run fortran-mcp-build fpm-0.13.0-docs
 uv run fortran-mcp-build stdlib-0.8.1-docs
 uv run fortran-mcp-build cmake-4.4.0-fortran-docs
 uv run fortran-mcp-build openmp-6.0.1-fortran-examples
+uv run fortran-mcp-build gnu-make-4.4.1-build-reference
 uv run fortran-mcp-index
 ```
 
@@ -192,7 +199,7 @@ configuration examples.
 
 - ISO Fortran standards and corrigenda
 - Vendor compiler documentation and language extensions
-- Additional build-system documentation beyond the included Fortran-lang Make guide
+- Additional build-system documentation beyond the included fpm, CMake, Fortran-lang, and GNU Make material
 - Fortran Standard Library documentation
 - C interoperability and the normative OpenMP specification
 - Dialect, compatibility, modernization, and migration guides

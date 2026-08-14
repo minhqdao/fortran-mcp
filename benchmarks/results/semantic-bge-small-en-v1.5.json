@@ -1,19 +1,19 @@
 {
   "provider": "semantic:BAAI/bge-small-en-v1.5",
-  "cases": 52,
-  "hit_at_1": 0.6666666666666666,
-  "hit_at_3": 0.7857142857142857,
-  "hit_at_5": 0.8571428571428571,
-  "hit_at_10": 0.9285714285714286,
-  "mean_reciprocal_rank": 0.7432539682539682,
+  "cases": 57,
+  "hit_at_1": 0.6595744680851063,
+  "hit_at_3": 0.7659574468085106,
+  "hit_at_5": 0.8297872340425532,
+  "hit_at_10": 0.9148936170212766,
+  "mean_reciprocal_rank": 0.7315602836879432,
   "negative_accuracy": 0.0,
-  "mean_latency_ms": 140.02765384615384,
+  "mean_latency_ms": 129.85677192982456,
   "categories": {
     "exact": {
-      "cases": 9,
-      "passed": 9,
+      "cases": 10,
+      "passed": 10,
       "pass_rate": 1.0,
-      "mrr": 0.8194444444444444
+      "mrr": 0.8375
     },
     "filter": {
       "cases": 5,
@@ -28,10 +28,10 @@
       "mrr": 0.0
     },
     "paraphrase": {
-      "cases": 28,
-      "passed": 25,
-      "pass_rate": 0.8928571428571429,
-      "mrr": 0.6729166666666666
+      "cases": 32,
+      "passed": 28,
+      "pass_rate": 0.875,
+      "mrr": 0.6565104166666667
     }
   },
   "results": [
@@ -41,7 +41,7 @@
       "query": "compile_commands.json",
       "passed": true,
       "rank": 1,
-      "latency_ms": 147.99,
+      "latency_ms": 138.448,
       "returned": 10,
       "top_chunk_ids": [
         "f1e9125f1d304ca33fef5f8b8407c669",
@@ -62,7 +62,7 @@
       "query": "How do I add OpenMP to an fpm project?",
       "passed": true,
       "rank": 2,
-      "latency_ms": 149.173,
+      "latency_ms": 137.486,
       "returned": 10,
       "top_chunk_ids": [
         "53ab5105ba955f2715e903b5097dcecb",
@@ -83,7 +83,7 @@
       "query": "How do I create a new fpm project?",
       "passed": true,
       "rank": 1,
-      "latency_ms": 171.462,
+      "latency_ms": 136.707,
       "returned": 10,
       "top_chunk_ids": [
         "743f6bcf70c1457ce30ef01af9b56f9e",
@@ -104,7 +104,7 @@
       "query": "How do I clean build output?",
       "passed": true,
       "rank": 1,
-      "latency_ms": 146.844,
+      "latency_ms": 137.447,
       "returned": 10,
       "top_chunk_ids": [
         "ac97c2bdca6e18907fadcc821f5832ea",
@@ -125,7 +125,7 @@
       "query": "How do I add a git dependency to fpm?",
       "passed": false,
       "rank": null,
-      "latency_ms": 144.839,
+      "latency_ms": 137.159,
       "returned": 10,
       "top_chunk_ids": [
         "743f6bcf70c1457ce30ef01af9b56f9e",
@@ -146,7 +146,7 @@
       "query": "features profiles",
       "passed": true,
       "rank": 1,
-      "latency_ms": 149.915,
+      "latency_ms": 135.812,
       "returned": 10,
       "top_chunk_ids": [
         "3d3c9c81573ad7b5bd7f3b38729f36fd",
@@ -167,7 +167,7 @@
       "query": "stdlib_string_type",
       "passed": true,
       "rank": 1,
-      "latency_ms": 206.361,
+      "latency_ms": 136.933,
       "returned": 10,
       "top_chunk_ids": [
         "10c7f96bec2d5ff04f75a50796089e48",
@@ -188,7 +188,7 @@
       "query": "What string type can represent dynamically sized text?",
       "passed": true,
       "rank": 1,
-      "latency_ms": 175.829,
+      "latency_ms": 136.239,
       "returned": 10,
       "top_chunk_ids": [
         "a7481c8e8edea6a125c873d2fb025884",
@@ -209,7 +209,7 @@
       "query": "How can I order array values from smallest to largest?",
       "passed": true,
       "rank": 10,
-      "latency_ms": 203.084,
+      "latency_ms": 137.188,
       "returned": 10,
       "top_chunk_ids": [
         "2d8062fd51c3668c1709ac8b5dbc4dc2",
@@ -230,7 +230,7 @@
       "query": "How do I integrate a function numerically?",
       "passed": true,
       "rank": 1,
-      "latency_ms": 177.821,
+      "latency_ms": 143.078,
       "returned": 10,
       "top_chunk_ids": [
         "531a0c4b2ad0550fe3de5606e418fefa",
@@ -251,7 +251,7 @@
       "query": "How do I generate normally distributed random numbers?",
       "passed": false,
       "rank": null,
-      "latency_ms": 218.313,
+      "latency_ms": 147.361,
       "returned": 10,
       "top_chunk_ids": [
         "edb972fa3427742392fbb5d05810ee55",
@@ -272,7 +272,7 @@
       "query": "How do I convert a string to a number?",
       "passed": true,
       "rank": 1,
-      "latency_ms": 254.741,
+      "latency_ms": 145.822,
       "returned": 10,
       "top_chunk_ids": [
         "9932702dd1d0dff950c5dd11f9b83ded",
@@ -293,7 +293,7 @@
       "query": "How can I solve a linear system?",
       "passed": true,
       "rank": 1,
-      "latency_ms": 176.464,
+      "latency_ms": 154.495,
       "returned": 10,
       "top_chunk_ids": [
         "f79ac3ecad4738cdafba809ebc38aaa1",
@@ -314,7 +314,7 @@
       "query": "chaining_hashmap_type",
       "passed": true,
       "rank": 1,
-      "latency_ms": 147.763,
+      "latency_ms": 138.911,
       "returned": 10,
       "top_chunk_ids": [
         "1234435bdf286c637913d02ad1602e21",
@@ -335,7 +335,7 @@
       "query": "sort array",
       "passed": true,
       "rank": 1,
-      "latency_ms": 129.266,
+      "latency_ms": 118.695,
       "returned": 10,
       "top_chunk_ids": [
         "e8e296a868c8c5389e1f5b6e786ff8f3",
@@ -356,7 +356,7 @@
       "query": "dependency",
       "passed": true,
       "rank": 1,
-      "latency_ms": 77.225,
+      "latency_ms": 54.702,
       "returned": 10,
       "top_chunk_ids": [
         "cdbb904073e834b2b7bc6e074d37faf5",
@@ -377,7 +377,7 @@
       "query": "CUDA Fortran unified memory",
       "passed": false,
       "rank": null,
-      "latency_ms": 152.574,
+      "latency_ms": 140.735,
       "returned": 10,
       "top_chunk_ids": [
         "43d313f7b7dedd1d35bf4ae1c69127f8",
@@ -398,7 +398,7 @@
       "query": "PETSc DMPlex parallel mesh adaptation Fortran bindings",
       "passed": false,
       "rank": null,
-      "latency_ms": 146.235,
+      "latency_ms": 145.464,
       "returned": 10,
       "top_chunk_ids": [
         "43d313f7b7dedd1d35bf4ae1c69127f8",
@@ -419,7 +419,7 @@
       "query": "HDF5 collective parallel hyperslab I/O Fortran",
       "passed": false,
       "rank": null,
-      "latency_ms": 138.837,
+      "latency_ms": 143.394,
       "returned": 10,
       "top_chunk_ids": [
         "43d313f7b7dedd1d35bf4ae1c69127f8",
@@ -440,7 +440,7 @@
       "query": "NetCDF Fortran compression filters chunk cache",
       "passed": false,
       "rank": null,
-      "latency_ms": 139.493,
+      "latency_ms": 136.141,
       "returned": 10,
       "top_chunk_ids": [
         "12545d037109a03c714d2dc9ef640cee",
@@ -461,7 +461,7 @@
       "query": "OpenACC Fortran deep copy attach directive",
       "passed": false,
       "rank": null,
-      "latency_ms": 136.308,
+      "latency_ms": 141.086,
       "returned": 10,
       "top_chunk_ids": [
         "01c0a50349a7061080c0306f9b91c0df",
@@ -482,7 +482,7 @@
       "query": "NVIDIA nvfortran managed unified memory",
       "passed": false,
       "rank": null,
-      "latency_ms": 134.839,
+      "latency_ms": 139.73,
       "returned": 10,
       "top_chunk_ids": [
         "cc0ccd78fa9793fec45b5523fd1aa54f",
@@ -503,7 +503,7 @@
       "query": "Cray Fortran compiler optimization report flags",
       "passed": false,
       "rank": null,
-      "latency_ms": 137.262,
+      "latency_ms": 135.583,
       "returned": 10,
       "top_chunk_ids": [
         "4d9b3484ce31ce8fedabbc0b0b30dd94",
@@ -524,7 +524,7 @@
       "query": "Intel MKL ScaLAPACK BLACS process grid",
       "passed": false,
       "rank": null,
-      "latency_ms": 147.166,
+      "latency_ms": 134.888,
       "returned": 10,
       "top_chunk_ids": [
         "b95541cf1e65e5e28b16dddea52b9ee8",
@@ -545,7 +545,7 @@
       "query": "Fortran Qt GUI signal slot bindings",
       "passed": false,
       "rank": null,
-      "latency_ms": 149.696,
+      "latency_ms": 136.188,
       "returned": 10,
       "top_chunk_ids": [
         "56b921086ad20a11bb3084b880e8c986",
@@ -566,7 +566,7 @@
       "query": "AWS Lambda deployment with Fortran container",
       "passed": false,
       "rank": null,
-      "latency_ms": 161.751,
+      "latency_ms": 137.338,
       "returned": 10,
       "top_chunk_ids": [
         "238734e9ac321a9eb88468bcb1296a4b",
@@ -587,7 +587,7 @@
       "query": "coarray event post event wait",
       "passed": true,
       "rank": 3,
-      "latency_ms": 65.92,
+      "latency_ms": 67.593,
       "returned": 10,
       "top_chunk_ids": [
         "539bb1e895130c76f827811245b19a8a",
@@ -608,7 +608,7 @@
       "query": "-fallow-argument-mismatch",
       "passed": true,
       "rank": 8,
-      "latency_ms": 68.857,
+      "latency_ms": 64.122,
       "returned": 10,
       "top_chunk_ids": [
         "5c0819b4f24f6e42b64e1f2c4ce0e929",
@@ -629,7 +629,7 @@
       "query": "How can gfortran compile legacy DEC STRUCTURE and RECORD declarations?",
       "passed": false,
       "rank": null,
-      "latency_ms": 168.594,
+      "latency_ms": 162.169,
       "returned": 10,
       "top_chunk_ids": [
         "1a5384fe0b785c66f53c3132949a5a8b",
@@ -650,7 +650,7 @@
       "query": "How do I convert between a Fortran pointer and a C pointer?",
       "passed": true,
       "rank": 1,
-      "latency_ms": 139.97,
+      "latency_ms": 137.91,
       "returned": 10,
       "top_chunk_ids": [
         "b4007c5710c100ddc021bf14decd86f5",
@@ -671,7 +671,7 @@
       "query": "GFORTRAN_CONVERT_UNIT",
       "passed": true,
       "rank": 1,
-      "latency_ms": 143.757,
+      "latency_ms": 137.365,
       "returned": 10,
       "top_chunk_ids": [
         "ed4607e0faab8e96aac8a47888e163f6",
@@ -692,7 +692,7 @@
       "query": "unformatted sequential record markers",
       "passed": true,
       "rank": 1,
-      "latency_ms": 63.279,
+      "latency_ms": 65.576,
       "returned": 10,
       "top_chunk_ids": [
         "6baea58ca0fcd50bc80f51619578ef1f",
@@ -713,7 +713,7 @@
       "query": "Where does CMake write generated Fortran module files?",
       "passed": true,
       "rank": 1,
-      "latency_ms": 139.375,
+      "latency_ms": 144.743,
       "returned": 10,
       "top_chunk_ids": [
         "c758e7b5f6ab271110679c21bfe2d845",
@@ -734,7 +734,7 @@
       "query": "FortranCInterface_VERIFY",
       "passed": true,
       "rank": 1,
-      "latency_ms": 136.573,
+      "latency_ms": 136.852,
       "returned": 10,
       "top_chunk_ids": [
         "efe96c24aeeb0467191e293d428cf60d",
@@ -755,7 +755,7 @@
       "query": "How can CMake test whether a small Fortran program compiles?",
       "passed": true,
       "rank": 1,
-      "latency_ms": 139.25,
+      "latency_ms": 143.563,
       "returned": 10,
       "top_chunk_ids": [
         "2175eebeb7d26aa6bc36efc2014f0ba6",
@@ -776,7 +776,7 @@
       "query": "OpenMP::OpenMP_Fortran",
       "passed": true,
       "rank": 4,
-      "latency_ms": 141.891,
+      "latency_ms": 141.822,
       "returned": 10,
       "top_chunk_ids": [
         "765e06358edae85c8a650860d5354013",
@@ -797,7 +797,7 @@
       "query": "Fortran compiler environment variable",
       "passed": true,
       "rank": 1,
-      "latency_ms": 56.546,
+      "latency_ms": 52.988,
       "returned": 10,
       "top_chunk_ids": [
         "2592c331b1314dd905893d7dbb432992",
@@ -818,7 +818,7 @@
       "query": "move_alloc intrinsic",
       "passed": true,
       "rank": 1,
-      "latency_ms": 138.544,
+      "latency_ms": 148.31,
       "returned": 10,
       "top_chunk_ids": [
         "1899ca744d777def2064ec9667d30d98",
@@ -839,7 +839,7 @@
       "query": "Which intrinsic converts a C pointer into a Fortran pointer with an optional shape?",
       "passed": true,
       "rank": 1,
-      "latency_ms": 140.58,
+      "latency_ms": 142.625,
       "returned": 10,
       "top_chunk_ids": [
         "1709a3e891ab05e1ac7ddbe0c33d10f9",
@@ -860,7 +860,7 @@
       "query": "How do I write a parallelizable do concurrent loop?",
       "passed": true,
       "rank": 1,
-      "latency_ms": 135.709,
+      "latency_ms": 137.416,
       "returned": 10,
       "top_chunk_ids": [
         "99d3b73c53d59deb9dd9783e3820fc91",
@@ -881,7 +881,7 @@
       "query": "Why should modern Fortran prefer allocatable arrays over pointer arrays?",
       "passed": true,
       "rank": 1,
-      "latency_ms": 135.263,
+      "latency_ms": 136.77,
       "returned": 10,
       "top_chunk_ids": [
         "4a0c8033fcb957264fe27b5d0bea962a",
@@ -902,7 +902,7 @@
       "query": "Fortran single inheritance extension type parent type polymorphism",
       "passed": true,
       "rank": 2,
-      "latency_ms": 134.481,
+      "latency_ms": 135.387,
       "returned": 10,
       "top_chunk_ids": [
         "efe1b149b440eef85f2f7fa20134573f",
@@ -923,7 +923,7 @@
       "query": "How do I declare an assumed-shape array dummy argument?",
       "passed": true,
       "rank": 1,
-      "latency_ms": 136.682,
+      "latency_ms": 135.96,
       "returned": 10,
       "top_chunk_ids": [
         "b5eabb30933aa038dc98d58e0366770d",
@@ -944,7 +944,7 @@
       "query": "gfortran -c functions.f90 functions.o user_functions.mod",
       "passed": true,
       "rank": 4,
-      "latency_ms": 49.796,
+      "latency_ms": 50.969,
       "returned": 10,
       "top_chunk_ids": [
         "0c080719da95adcc2bfc3ddec663d5e3",
@@ -965,7 +965,7 @@
       "query": "How do NumPy and Fortran array indexing and memory order differ?",
       "passed": true,
       "rank": 1,
-      "latency_ms": 155.766,
+      "latency_ms": 155.089,
       "returned": 10,
       "top_chunk_ids": [
         "0adaf3a015fa79a2236621410753e9fb",
@@ -986,7 +986,7 @@
       "query": "How should I compare floating-point numbers using epsilon and a tolerance?",
       "passed": true,
       "rank": 1,
-      "latency_ms": 136.591,
+      "latency_ms": 136.053,
       "returned": 10,
       "top_chunk_ids": [
         "3492770e58c26b9aedf04020be6b1553",
@@ -1007,7 +1007,7 @@
       "query": "reshape array",
       "passed": true,
       "rank": 1,
-      "latency_ms": 54.5,
+      "latency_ms": 53.849,
       "returned": 10,
       "top_chunk_ids": [
         "c0d004ac4fa77560d13bd6a17a6e643d",
@@ -1028,7 +1028,7 @@
       "query": "How do I collapse nested Fortran loops into one OpenMP iteration space?",
       "passed": true,
       "rank": 1,
-      "latency_ms": 137.477,
+      "latency_ms": 139.857,
       "returned": 10,
       "top_chunk_ids": [
         "5a3b35e8d0286b871c35ba6d991323e9",
@@ -1049,7 +1049,7 @@
       "query": "How do I map Fortran arrays to and from an OpenMP target device?",
       "passed": true,
       "rank": 3,
-      "latency_ms": 136.16,
+      "latency_ms": 137.707,
       "returned": 10,
       "top_chunk_ids": [
         "765e06358edae85c8a650860d5354013",
@@ -1070,7 +1070,7 @@
       "query": "OpenMP atomic capture fetch and increment in Fortran",
       "passed": true,
       "rank": 8,
-      "latency_ms": 135.044,
+      "latency_ms": 137.722,
       "returned": 10,
       "top_chunk_ids": [
         "57c9b281a8d10a39bbf95c314bb054e0",
@@ -1091,7 +1091,7 @@
       "query": "How can Fortran OpenMP tasks express input and output dependencies?",
       "passed": true,
       "rank": 5,
-      "latency_ms": 134.728,
+      "latency_ms": 136.986,
       "returned": 10,
       "top_chunk_ids": [
         "3887528e20b0fd7f61534915f1ccc62a",
@@ -1112,7 +1112,7 @@
       "query": "Which OpenMP directive sentinels work in fixed form Fortran source?",
       "passed": true,
       "rank": 2,
-      "latency_ms": 134.854,
+      "latency_ms": 139.006,
       "returned": 10,
       "top_chunk_ids": [
         "80a2989451090e5e36ca3feefee4c0de",
@@ -1125,6 +1125,111 @@
         "8a73cbc00b51a9e9eb5e2b1fca556908",
         "e4efaa67b64030e492098ff2c34bd04f",
         "083e653f19180373df39437a07059f75"
+      ]
+    },
+    {
+      "id": "gnu-make-fortran-implicit-rule",
+      "category": "paraphrase",
+      "query": "Which built-in GNU Make rules use FC and FFLAGS to compile Fortran .f and .F files?",
+      "passed": false,
+      "rank": null,
+      "latency_ms": 140.835,
+      "returned": 10,
+      "top_chunk_ids": [
+        "2c615da681e0939ca719228bacf3af0d",
+        "d86051210793a976cd9fa8181b79b407",
+        "e524bf5b68c89febae0f27bdbb1cbd78",
+        "ba529bb06d4fe8015ed3c68f0025266c",
+        "6cd6bfef73002401272b921e9200c98b",
+        "c2e240acc124cf956f8f4ce40965aa5f",
+        "23f6139b48245998f1f7282eb69c688b",
+        "238734e9ac321a9eb88468bcb1296a4b",
+        "0c080719da95adcc2bfc3ddec663d5e3",
+        "2592c331b1314dd905893d7dbb432992"
+      ]
+    },
+    {
+      "id": "gnu-make-automatic-variables",
+      "category": "exact",
+      "query": "GNU Make automatic variables $@ $< $^",
+      "passed": true,
+      "rank": 1,
+      "latency_ms": 142.232,
+      "returned": 10,
+      "top_chunk_ids": [
+        "fd53959d6abd084cbb2eb0eba86e1512",
+        "1bca83899891293fd21c01828f042f02",
+        "d10170efff9c2e8ca0d00758a20748cc",
+        "238734e9ac321a9eb88468bcb1296a4b",
+        "c2e240acc124cf956f8f4ce40965aa5f",
+        "5846e75cbaa0021bf5da51424f3c910f",
+        "359a18b26f5a15fa2dfca31befdd6b8b",
+        "f895a4bf19ab6ef28183a219694cd7ff",
+        "9d6b944a4bb336fcbe03351661f389d3",
+        "aa01e4408a19aa4b51e54a6a57877170"
+      ]
+    },
+    {
+      "id": "gnu-make-disable-parallel",
+      "category": "paraphrase",
+      "query": "How do I serialize unsafe prerequisites during a GNU Make parallel build with .NOTPARALLEL or .WAIT?",
+      "passed": true,
+      "rank": 1,
+      "latency_ms": 139.342,
+      "returned": 10,
+      "top_chunk_ids": [
+        "4d1902a9f8b2f385b8ae39b38f1ce723",
+        "504c864cc2161a65e469e2c0159dadb3",
+        "de4c8bfe7086da36562c29f7aa670e88",
+        "d4daa20a9578b74030b667202e9a4245",
+        "cc213a25f0d3d2782689136456214332",
+        "d903dad2ca71c12b6eff86ecba5b33fc",
+        "46cb5a157fb1d99cd272b03c7623dc5d",
+        "4d9b3484ce31ce8fedabbc0b0b30dd94",
+        "5810f9065f3f4e2d79d1d67dca15abef",
+        "c66e964e77d1f77ca4ee61ecce6fbd13"
+      ]
+    },
+    {
+      "id": "gnu-make-pattern-rule",
+      "category": "paraphrase",
+      "query": "How do I define a GNU Make pattern rule using a percent target and stem?",
+      "passed": true,
+      "rank": 1,
+      "latency_ms": 136.286,
+      "returned": 10,
+      "top_chunk_ids": [
+        "f6a478940cf3c95a0405421cae1e34c3",
+        "21ef40af08846f2c97857b657d374214",
+        "1bca83899891293fd21c01828f042f02",
+        "2a481d1fd106b10c21c910fd66dffbc3",
+        "fd53959d6abd084cbb2eb0eba86e1512",
+        "ea96dcc4e116228058f10f4de7758597",
+        "07a324be3aaff4699a845d539235b1e1",
+        "c2e240acc124cf956f8f4ce40965aa5f",
+        "88d5012f3c2ca57c3a83bc0d1632d698",
+        "d4afb45c3c966094a2d0fe791cca3c65"
+      ]
+    },
+    {
+      "id": "gnu-make-missing-separator",
+      "category": "paraphrase",
+      "query": "Why does GNU Make report missing separator when a recipe is not indented with a tab?",
+      "passed": true,
+      "rank": 6,
+      "latency_ms": 137.702,
+      "returned": 10,
+      "top_chunk_ids": [
+        "8c4786e047ba097d64bef741a85cc0ca",
+        "65e6eac8c00665516c024d33d71b899c",
+        "f9408f4208c40a8480dbe37057699d48",
+        "4211de2d34649e9f06003fb4a2ea7c6d",
+        "5db99d31c3d7ca80a41f277d0c55323e",
+        "527f35d94ba50087ef1ca84c1247c5a0",
+        "82309b7880a26d5f2ca47d1f7d928d00",
+        "a23c8ce20cc5b5a062dd108979f7e4df",
+        "24ab47d3f192306f4b8f7a002e368560",
+        "2a481d1fd106b10c21c910fd66dffbc3"
       ]
     }
   ]

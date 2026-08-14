@@ -77,7 +77,12 @@ class Source(StrictModel):
     citation_base_url: HttpUrl
     citation_format: Literal["published-html", "source"]
     converter: Literal[
-        "none", "texinfo", "cmake-rst", "fortran-lang-markdown", "openmp-examples"
+        "none",
+        "texinfo",
+        "cmake-rst",
+        "fortran-lang-markdown",
+        "openmp-examples",
+        "gnu-make-texinfo",
     ] = "none"
     converter_entrypoint: str | None = None
     license: str = Field(min_length=1)

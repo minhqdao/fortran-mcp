@@ -620,6 +620,98 @@ def _convert_openmp_examples(source: Source, root: Path) -> tuple[tuple[FileReco
     return tuple(records), "builtin openmp-examples 1"
 
 
+GNU_MAKE_MANUAL_PAGES = (
+    "Rule-Syntax",
+    "Prerequisite-Types",
+    "Phony-Targets",
+    "Static-Pattern",
+    "Automatic-Prerequisites",
+    "Parallel",
+    "Parallel-Disable",
+    "Parallel-Output",
+    "Recursion",
+    "Pattern-Intro",
+    "Pattern-Examples",
+    "Automatic-Variables",
+    "Catalogue-of-Rules",
+    "Implicit-Variables",
+    "Errors",
+    "GNU-Free-Documentation-License",
+)
+
+
+def _convert_gnu_make_texinfo(source: Source, root: Path) -> tuple[tuple[FileRecord, ...], str]:
+    executable = shutil.which("makeinfo") or shutil.which("texi2any")
+    if executable is None:
+        raise IngestionError(
+            "GNU Make conversion requires makeinfo 7.3; install GNU Texinfo and add it to PATH"
+        )
+    try:
+        version_output = subprocess.run(
+            [executable, "--version"], check=True, capture_output=True, text=True, timeout=10
+        ).stdout
+    except (OSError, subprocess.SubprocessError) as error:
+        raise IngestionError(f"could not run Texinfo converter: {error}") from error
+    first_line = version_output.splitlines()[0] if version_output else ""
+    if first_line.rsplit(" ", 1)[-1] != "7.3":
+        raise IngestionError(f"GNU Make conversion requires makeinfo 7.3; found {first_line}")
+
+    entrypoint = root / "doc/make.texi"
+    html_dir = root / ".generated-html"
+    environment = {**os.environ, "LC_ALL": "C.UTF-8"}
+    try:
+        subprocess.run(
+            [executable, "--html", f"--output={html_dir}", str(entrypoint)],
+            check=True,
+            capture_output=True,
+            text=True,
+            timeout=120,
+            env=environment,
+        )
+    except (OSError, subprocess.SubprocessError) as error:
+        detail = getattr(error, "stderr", None) or str(error)
+        raise IngestionError(f"GNU Make Texinfo conversion failed: {detail.strip()}") from error
+
+    try:
+        from html_to_markdown import ConversionOptions, convert
+    except ImportError as error:
+        raise IngestionError(
+            "GNU Make conversion requires the 'ingest' extra: install fortran-mcp[ingest]"
+        ) from error
+
+    output_dir = root / "manual"
+    output_dir.mkdir()
+    records: list[FileRecord] = []
+    options = ConversionOptions(
+        extract_metadata=False,
+        exclude_selectors=[".header", ".nav-panel", ".copiable-link", "hr"],
+    )
+    for stem in GNU_MAKE_MANUAL_PAGES:
+        html_path = html_dir / f"{stem}.html"
+        if not html_path.is_file():
+            raise IngestionError(f"GNU Make manual page is unavailable: {stem}")
+        result = convert(html_path.read_text(encoding="utf-8"), options)
+        markdown = (result.content or "").strip()
+        if not markdown:
+            raise IngestionError(f"GNU Make manual page is empty: {stem}")
+        output_path = output_dir / f"{stem}.md"
+        output_path.write_text(markdown + "\n", encoding="utf-8")
+        records.append(_record_file(output_path, root))
+    shutil.rmtree(html_dir)
+
+    notice = root / "FORTRAN-MCP-MODIFICATION-NOTICE.txt"
+    notice.write_text(
+        "Fortran-focused GNU Make 4.4.1 Manual Extracts\n\n"
+        "Modified and selected by Fortran MCP contributors from The GNU Make Manual.\n"
+        "Principal authors: Richard M. Stallman, Roland McGrath, and Paul D. Smith.\n"
+        "Modifications: conversion to Markdown and selection of build-rule, dependency, "
+        "parallel-execution, diagnostic, and Fortran-relevant reference sections.\n",
+        encoding="utf-8",
+    )
+    records.append(_record_file(notice, root))
+    return tuple(records), f"{first_line}; curated pages 1"
+
+
 def ingest_source(
     source: Source,
     data_dir: Path | None = None,
@@ -664,6 +756,10 @@ def ingest_source(
             schema_version = 2
         elif source.converter == "openmp-examples":
             generated, converter_version = _convert_openmp_examples(source, temporary_path)
+            stored_files = tuple(sorted((*stored_files, *generated), key=lambda item: item.path))
+            schema_version = 2
+        elif source.converter == "gnu-make-texinfo":
+            generated, converter_version = _convert_gnu_make_texinfo(source, temporary_path)
             stored_files = tuple(sorted((*stored_files, *generated), key=lambda item: item.path))
             schema_version = 2
         document_count = sum(_matches(file.path, source.document_paths) for file in stored_files)

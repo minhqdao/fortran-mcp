@@ -22,3 +22,6 @@ the `ingest` optional dependency; these are maintainer requirements and are not 
 prebuilt bundle. The built-in OpenMP Examples converter selects documents with official Fortran
 examples, removes C/C++-specific sections, and embeds the corresponding fixed- or free-form source
 code alongside its explanation.
+The GNU Make converter generates only the reviewed sections that close measured Fortran build
+coverage gaps and records a modified title, all principal authors, the selection notice, cover
+texts, and complete GFDL material.

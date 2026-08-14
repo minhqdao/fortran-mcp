@@ -453,3 +453,43 @@ license_url = "https://github.com/OpenMP/Examples/blob/v6.0.1/omp_copyright.txt"
 redistribution = "redistributable"
 status = "approved"
 notes = "Official reviewed explanatory examples containing Fortran code. C and C++ source examples are excluded from generated documents; shared explanations are retained. This is practical guidance, not the normative OpenMP specification."
+
+[[sources]]
+id = "gnu-make-4.4.1-build-reference"
+title = "Fortran-focused GNU Make 4.4.1 manual extracts"
+publisher = "Free Software Foundation"
+document_type = "ecosystem-guide"
+authority = "official"
+topics = [
+  "build-system",
+  "dependency-management",
+  "fortran-compilation",
+  "make",
+  "parallel-builds",
+]
+fortran_versions = []
+compilers = []
+dialects = ["GNU Make"]
+version = "4.4.1"
+revision = "make-4.4.1"
+source_url = "https://git.savannah.gnu.org/cgit/make.git/tree/doc/make.texi?h=4.4.1"
+archive_url = "https://ftp.gnu.org/gnu/make/make-4.4.1.tar.gz"
+archive_root = "make-4.4.1"
+include_paths = [
+  "doc/fdl.texi",
+  "doc/make-stds.texi",
+  "doc/make.texi",
+  "doc/version.texi",
+]
+document_paths = ["manual/**"]
+expected_document_count = 16
+homepage_url = "https://www.gnu.org/software/make/manual/"
+published_path_prefix = "manual"
+citation_base_url = "https://www.gnu.org/software/make/manual/html_node/"
+citation_format = "published-html"
+converter = "gnu-make-texinfo"
+license = "GFDL-1.3-or-later"
+license_url = "https://www.gnu.org/software/make/manual/html_node/GNU-Free-Documentation-License.html"
+redistribution = "redistributable"
+status = "approved"
+notes = "Curated official reference sections that close measured gaps in the existing Fortran-lang Make guide. The modified title, authors, selection notice, full GFDL, and required front- and back-cover texts are preserved."

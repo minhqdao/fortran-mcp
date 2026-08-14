@@ -1,0 +1,27 @@
+Fortran-focused GNU Make 4.4.1 Manual Extracts
+
+Modified and selected by Fortran MCP contributors from The GNU Make Manual.
+Principal authors: Richard M. Stallman, Roland McGrath, and Paul D. Smith.
+
+Copyright (C) 1988-2023 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document under the terms of the GNU
+Free Documentation License, Version 1.3 or any later version published by the Free Software
+Foundation; with no Invariant Sections, with the Front-Cover Texts being (a) below, and with the
+Back-Cover Texts being (b) below. The complete license is included in the indexed section entitled
+"GNU Free Documentation License".
+
+(a) The FSF's Front-Cover Text is:
+
+A GNU Manual
+
+(b) The FSF's Back-Cover Text is:
+
+You have the freedom to copy and modify this GNU manual. Buying copies from the FSF supports it in
+developing GNU and promoting software freedom.
+
+Modifications: conversion to Markdown and selection of build-rule, dependency, parallel-execution,
+diagnostic, and Fortran-relevant reference sections.
+
+License: https://www.gnu.org/software/make/manual/html_node/GNU-Free-Documentation-License.html
+Source: https://ftp.gnu.org/gnu/make/make-4.4.1.tar.gz

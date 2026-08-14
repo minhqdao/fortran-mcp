@@ -10,7 +10,7 @@ from typing import Any
 
 import pytest
 
-from fortran_mcp.ingest import IngestionError, ingest_source
+from fortran_mcp.ingest import GNU_MAKE_MANUAL_PAGES, IngestionError, ingest_source
 from fortran_mcp.sources import Source, load_registry
 
 REGISTRY_PATH = Path(__file__).parents[1] / "docs" / "sources.toml"
@@ -215,7 +215,7 @@ def test_ingestion_rejects_unexpected_document_count(tmp_path: Path) -> None:
 
 def test_openmp_ingestion_keeps_explanations_and_fortran_examples(tmp_path: Path) -> None:
     source = (
-        load_registry(REGISTRY_PATH).sources[-1].model_copy(update={"expected_document_count": 1})
+        load_registry(REGISTRY_PATH).sources[-2].model_copy(update={"expected_document_count": 1})
     )
     archive = _archive(
         {
@@ -248,3 +248,35 @@ end program collapse
     assert "```fortran" in markdown
     assert "!$omp parallel do collapse(2)" in markdown
     assert "cexample" not in markdown
+
+
+def test_gnu_make_ingestion_selects_reviewed_manual_pages(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    source = load_registry(REGISTRY_PATH).sources[-1]
+    archive = _archive(
+        {f"{source.archive_root}/{path}": b"@c fixture\n" for path in source.include_paths}
+    )
+    monkeypatch.setattr("fortran_mcp.ingest.shutil.which", lambda _name: "/usr/bin/makeinfo")
+
+    def fake_run(command: list[str], **_kwargs: Any) -> subprocess.CompletedProcess[str]:
+        if "--version" in command:
+            return subprocess.CompletedProcess(command, 0, "texi2any (GNU texinfo) 7.3\n", "")
+        output_argument = next(item for item in command if item.startswith("--output="))
+        html_dir = Path(output_argument.removeprefix("--output="))
+        html_dir.mkdir()
+        for page in GNU_MAKE_MANUAL_PAGES:
+            (html_dir / f"{page}.html").write_text(
+                f"<html><body><h1>{page}</h1><p>GNU Make reference.</p></body></html>"
+            )
+        return subprocess.CompletedProcess(command, 0, "", "")
+
+    monkeypatch.setattr("fortran_mcp.ingest.subprocess.run", fake_run)
+
+    record = ingest_source(source, tmp_path, downloader=lambda *_args: archive)
+
+    generated = tmp_path / f"raw/{source.id}/manual/Automatic-Variables.md"
+    assert generated.read_text().startswith("# Automatic-Variables")
+    assert record.converter == "gnu-make-texinfo"
+    assert record.converter_version == "texi2any (GNU texinfo) 7.3; curated pages 1"
+    assert (tmp_path / f"raw/{source.id}/FORTRAN-MCP-MODIFICATION-NOTICE.txt").is_file()
