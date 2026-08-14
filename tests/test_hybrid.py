@@ -90,8 +90,15 @@ def test_hybrid_get_chunk_uses_lexical_source_of_truth() -> None:
 
 
 def test_hybrid_abstains_below_threshold_unless_source_is_explicit() -> None:
-    result = _result("a").model_copy(update={"score": 0.7})
+    result = _result("a").model_copy(update={"score": 0.78})
     provider = HybridSearchProvider(FakeProvider((result,)), FakeProvider((result,)))
 
     assert not provider.search("unsupported")
     assert provider.search("question", source_id="source")
+
+
+def test_hybrid_returns_results_above_the_reviewed_threshold() -> None:
+    result = _result("a").model_copy(update={"score": 0.79})
+    provider = HybridSearchProvider(FakeProvider((result,)), FakeProvider((result,)))
+
+    assert provider.search("covered")

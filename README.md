@@ -126,8 +126,9 @@ provider with `FORTRAN_MCP_SEARCH_PROVIDER=semantic` or
 
 Hybrid search conservatively returns no passages when its top semantic score is below the reviewed
 baseline threshold. An explicit source filter bypasses this automatic abstention because the caller
-has already stated which documentation applies. The threshold is provisional and will be
-recalibrated as the benchmark and source collection grow.
+has already stated which documentation applies. The threshold is calibrated against both supported
+questions and uncovered, domain-adjacent questions, and must be reviewed whenever the core source
+collection or embedding model changes.
 
 ## Data bundles
 

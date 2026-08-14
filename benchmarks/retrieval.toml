@@ -124,9 +124,65 @@ query = "CUDA Fortran unified memory"
 expect_no_results = true
 
 [[cases]]
+id = "negative-petsc-dmplex"
+category = "negative"
+query = "PETSc DMPlex parallel mesh adaptation Fortran bindings"
+expect_no_results = true
+
+[[cases]]
+id = "negative-hdf5-hyperslab"
+category = "negative"
+query = "HDF5 collective parallel hyperslab I/O Fortran"
+expect_no_results = true
+
+[[cases]]
+id = "negative-netcdf-filters"
+category = "negative"
+query = "NetCDF Fortran compression filters chunk cache"
+expect_no_results = true
+
+[[cases]]
+id = "negative-openacc-deep-copy"
+category = "negative"
+query = "OpenACC Fortran deep copy attach directive"
+expect_no_results = true
+
+[[cases]]
+id = "negative-nvfortran-memory"
+category = "negative"
+query = "NVIDIA nvfortran managed unified memory"
+expect_no_results = true
+
+[[cases]]
+id = "negative-cray-optimization"
+category = "negative"
+query = "Cray Fortran compiler optimization report flags"
+expect_no_results = true
+
+[[cases]]
+id = "negative-mkl-scalapack"
+category = "negative"
+query = "Intel MKL ScaLAPACK BLACS process grid"
+expect_no_results = true
+
+[[cases]]
+id = "negative-qt-bindings"
+category = "negative"
+query = "Fortran Qt GUI signal slot bindings"
+expect_no_results = true
+
+[[cases]]
+id = "negative-aws-lambda"
+category = "negative"
+query = "AWS Lambda deployment with Fortran container"
+expect_no_results = true
+
+[[cases]]
 id = "gfortran-coarray-events"
 category = "paraphrase"
 query = "coarray event post event wait"
+compiler_filter = "gfortran"
+version_filter = "16.2.0"
 expected_source = "gfortran-16.2.0-manual"
 expected_path = "manual/_005fgfortran_005fcaf_005fevent_005fpost.md"
 
@@ -134,6 +190,8 @@ expected_path = "manual/_005fgfortran_005fcaf_005fevent_005fpost.md"
 id = "gfortran-argument-mismatch"
 category = "exact"
 query = "-fallow-argument-mismatch"
+compiler_filter = "gfortran"
+version_filter = "16.2.0"
 expected_source = "gfortran-16.2.0-manual"
 expected_path = "manual/Fortran-Dialect-Options.md"
 expected_heading = "Options controlling Fortran dialect"

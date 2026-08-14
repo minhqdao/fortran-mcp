@@ -3,7 +3,7 @@
 from fortran_mcp.search import SearchProvider, SearchResult
 
 RRF_CONSTANT = 60
-DEFAULT_SEMANTIC_THRESHOLD = 0.74
+DEFAULT_SEMANTIC_THRESHOLD = 0.785
 
 
 class HybridSearchProvider:
