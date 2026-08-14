@@ -167,3 +167,39 @@ compiler_filter = "gfortran"
 version_filter = "16.2.0"
 expected_source = "gfortran-16.2.0-manual"
 expected_path = "manual/File-format-of-unformatted-sequential-files.md"
+
+[[cases]]
+id = "cmake-fortran-modules"
+category = "paraphrase"
+query = "Where does CMake write generated Fortran module files?"
+expected_source = "cmake-4.4.0-fortran-docs"
+expected_path = "manual/prop_tgt/Fortran_MODULE_DIRECTORY.md"
+
+[[cases]]
+id = "cmake-fortran-c-interface"
+category = "exact"
+query = "FortranCInterface_VERIFY"
+expected_source = "cmake-4.4.0-fortran-docs"
+expected_path = "manual/module/FortranCInterface.md"
+
+[[cases]]
+id = "cmake-check-fortran-source"
+category = "paraphrase"
+query = "How can CMake test whether a small Fortran program compiles?"
+expected_source = "cmake-4.4.0-fortran-docs"
+expected_path = "manual/module/CheckFortranSourceCompiles.md"
+
+[[cases]]
+id = "cmake-openmp-fortran"
+category = "exact"
+query = "OpenMP::OpenMP_Fortran"
+expected_source = "cmake-4.4.0-fortran-docs"
+expected_path = "manual/module/FindOpenMP.md"
+
+[[cases]]
+id = "cmake-source-filter"
+category = "filter"
+query = "Fortran compiler environment variable"
+source_filter = "cmake-4.4.0-fortran-docs"
+expected_source = "cmake-4.4.0-fortran-docs"
+expected_path = "manual/envvar/FC.md"

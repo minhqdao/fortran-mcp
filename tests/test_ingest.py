@@ -119,6 +119,57 @@ def test_texinfo_ingestion_records_generated_pages(
     assert generated.read_text().startswith("# GNU Fortran")
 
 
+def test_cmake_rst_ingestion_expands_includes_and_generates_markdown(tmp_path: Path) -> None:
+    source = (
+        load_registry(REGISTRY_PATH)
+        .sources[3]
+        .model_copy(
+            update={
+                "include_paths": (
+                    "Modules/CheckFortranSourceCompiles.cmake",
+                    "Help/module/include/CMAKE_REQUIRED_FLAGS.rst",
+                ),
+                "expected_document_count": 1,
+            }
+        )
+    )
+    archive = _archive(
+        {
+            f"{source.archive_root}/Modules/CheckFortranSourceCompiles.cmake": b"""
+#[==[.rst:
+CheckFortranSourceCompiles
+--------------------------
+
+.. command:: check_fortran_source_compiles
+
+  Use :variable:`CMAKE_REQUIRED_FLAGS`:
+
+  .. include:: /module/include/CMAKE_REQUIRED_FLAGS.rst
+
+  .. code-block:: cmake
+
+    check_fortran_source_compiles(\"program main\\nend\" WORKS)
+#]==]
+""",
+            f"{source.archive_root}/Help/module/include/CMAKE_REQUIRED_FLAGS.rst": b"""
+``CMAKE_REQUIRED_FLAGS``
+  Compiler flags used by the check.
+""",
+        }
+    )
+
+    record = ingest_source(source, tmp_path, downloader=lambda *_args: archive)
+
+    generated = tmp_path / f"raw/{source.id}/manual/module/CheckFortranSourceCompiles.md"
+    markdown = generated.read_text()
+    assert record.converter == "cmake-rst"
+    assert record.converter_version == "builtin cmake-rst 1"
+    assert markdown.startswith("# CheckFortranSourceCompiles")
+    assert "### `check_fortran_source_compiles`" in markdown
+    assert "`CMAKE_REQUIRED_FLAGS`" in markdown
+    assert "```cmake" in markdown
+
+
 def test_ingestion_rejects_unexpected_document_count(tmp_path: Path) -> None:
     source = _source().model_copy(update={"expected_document_count": 2})
     archive = _archive({f"{source.archive_root}/pages/index.md": b"# fpm\n"})

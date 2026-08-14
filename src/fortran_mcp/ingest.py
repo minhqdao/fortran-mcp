@@ -4,10 +4,12 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import shutil
 import subprocess
 import tarfile
 import tempfile
+import textwrap
 from collections.abc import Callable, Sequence
 from datetime import UTC, datetime
 from io import BytesIO
@@ -30,7 +32,9 @@ from fortran_mcp.sources import (
 DOWNLOAD_LIMIT = 128 * 1024 * 1024
 FILE_LIMIT = 5 * 1024 * 1024
 TOTAL_CONTENT_LIMIT = 100 * 1024 * 1024
-ALLOWED_SUFFIXES = frozenset({".f90", ".md", ".markdown", ".rst", ".texi", ".toml", ".txt"})
+ALLOWED_SUFFIXES = frozenset(
+    {".cmake", ".f90", ".md", ".markdown", ".rst", ".texi", ".toml", ".txt"}
+)
 Downloader = Callable[[str, int, int], bytes]
 
 
@@ -215,6 +219,171 @@ def _convert_texinfo(source: Source, root: Path) -> tuple[tuple[FileRecord, ...]
     return tuple(records), first_line
 
 
+def _cmake_module_document(content: str, path: Path) -> str:
+    marker = "[.rst:\n"
+    start = content.find(marker)
+    end = content.rfind("#]")
+    if start < 0 or end < start:
+        raise IngestionError(f"CMake module has no embedded RST documentation: {path}")
+    return content[start + len(marker) : end].rstrip() + "\n"
+
+
+def _expand_rst_includes(
+    content: str,
+    path: PurePosixPath,
+    documents: dict[PurePosixPath, str],
+    stack: tuple[PurePosixPath, ...] = (),
+) -> str:
+    if path in stack:
+        chain = " -> ".join(item.as_posix() for item in (*stack, path))
+        raise IngestionError(f"recursive CMake documentation include: {chain}")
+
+    output: list[str] = []
+    include_pattern = re.compile(r"^(?P<indent>\s*)\.\. include::\s+(?P<target>\S+)\s*$")
+    for line in content.splitlines():
+        match = include_pattern.match(line)
+        if match is None:
+            output.append(line)
+            continue
+        target_text = match.group("target")
+        if target_text.startswith("/"):
+            target = PurePosixPath("Help") / target_text.removeprefix("/")
+        else:
+            target = path.parent / target_text
+        included = documents.get(target)
+        if included is None:
+            raise IngestionError(f"unavailable CMake documentation include: {target}")
+        expanded = _expand_rst_includes(included, target, documents, (*stack, path))
+        indent = match.group("indent")
+        output.extend(f"{indent}{item}" if item else "" for item in expanded.splitlines())
+    return "\n".join(output) + "\n"
+
+
+def _rst_to_markdown(content: str) -> str:
+    substitutions = dict(
+        re.findall(r"^\s*\.\. \|([^|]+)\| replace::\s*(.+)$", content, re.MULTILINE)
+    )
+    content = re.sub(r"^\s*\.\. \|[^|]+\| replace::.*(?:\n|$)", "", content, flags=re.MULTILINE)
+    for name, replacement in substitutions.items():
+        content = content.replace(f"|{name}|", replacement)
+    content = re.sub(
+        r":([a-z_]+):`([^`]+)`",
+        lambda match: f":{match.group(1)}:`{' '.join(match.group(2).split())}`",
+        content,
+        flags=re.DOTALL,
+    )
+    lines = content.splitlines()
+    output: list[str] = []
+    heading_levels: dict[str, int] = {}
+    index = 0
+    while index < len(lines):
+        line = lines[index]
+        if (
+            index + 1 < len(lines)
+            and line.strip()
+            and re.fullmatch(r"([=\-\^\"*~])\1{2,}", lines[index + 1].strip())
+        ):
+            adornment = lines[index + 1].strip()[0]
+            level = heading_levels.setdefault(adornment, len(heading_levels) + 1)
+            output.append(f"{'#' * min(level, 6)} {line.strip()}")
+            index += 2
+            continue
+
+        directive = re.match(r"^(?P<indent>\s*)\.\. (?P<kind>[\w-]+)::\s*(?P<value>.*)$", line)
+        if directive:
+            indent = directive.group("indent")
+            kind = directive.group("kind")
+            value = directive.group("value").strip()
+            if kind == "code-block":
+                index += 1
+                while index < len(lines) and not lines[index].strip():
+                    index += 1
+                block: list[str] = []
+                while index < len(lines):
+                    candidate = lines[index]
+                    if candidate.strip() and len(candidate) - len(candidate.lstrip()) <= len(
+                        indent
+                    ):
+                        break
+                    block.append(candidate)
+                    index += 1
+                dedented = textwrap.dedent("\n".join(block)).splitlines()
+                output.extend(
+                    (
+                        f"{indent}```{value}",
+                        *(f"{indent}{item}" for item in dedented),
+                        f"{indent}```",
+                    )
+                )
+                continue
+            if kind in {"command", "variable"}:
+                output.append(f"{indent}### `{value}`")
+            elif kind == "rubric":
+                output.append(f"{indent}### {value}")
+            elif kind in {"versionadded", "versionchanged", "deprecated"}:
+                labels = {
+                    "versionadded": "Added",
+                    "versionchanged": "Changed",
+                    "deprecated": "Deprecated",
+                }
+                output.append(f"{indent}*{labels[kind]} in CMake {value}.*")
+            elif kind in {"note", "warning"}:
+                output.append(f"{indent}**{kind.title()}:** {value}".rstrip())
+            index += 1
+            continue
+        if re.match(r"^\s*\.\. _[^:]+:\s*$", line):
+            index += 1
+            continue
+        if re.match(r"^\s*\.\. _.+:\s+\S+\s*$", line):
+            index += 1
+            continue
+
+        line = re.sub(
+            r":\w+:`([^`]+)`",
+            lambda match: f"`{match.group(1).split(' <', 1)[0]}`",
+            line,
+        )
+        line = re.sub(r"`([^`<]+) <(https?://[^>]+)>`_", r"[\1](\2)", line)
+        line = re.sub(r"`([^`<]+) <[^>]+>`_", r"`\1`", line)
+        line = re.sub(r"``([^`]+)``", r"`\1`", line)
+        output.append(line)
+        index += 1
+    return "\n".join(output).strip() + "\n"
+
+
+def _convert_cmake_rst(source: Source, root: Path) -> tuple[tuple[FileRecord, ...], str]:
+    documents: dict[PurePosixPath, str] = {}
+    for path in sorted(root.rglob("*")):
+        if not path.is_file() or path.suffix.lower() not in {".cmake", ".rst"}:
+            continue
+        relative = PurePosixPath(path.relative_to(root).as_posix())
+        content = path.read_text(encoding="utf-8")
+        documents[relative] = (
+            _cmake_module_document(content, path) if path.suffix.lower() == ".cmake" else content
+        )
+
+    output_dir = root / "manual"
+    output_dir.mkdir()
+    records: list[FileRecord] = []
+    for document_path, content in documents.items():
+        if "include" in document_path.parts:
+            continue
+        if document_path.parts[0] == "Help":
+            published = PurePosixPath(*document_path.parts[1:]).with_suffix(".md")
+        elif document_path.parts[0] == "Modules":
+            published = PurePosixPath("module", document_path.stem).with_suffix(".md")
+        else:
+            continue
+        expanded = _expand_rst_includes(content, document_path, documents)
+        output_path = output_dir.joinpath(*published.parts)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(_rst_to_markdown(expanded), encoding="utf-8")
+        records.append(_record_file(output_path, root))
+    if not records:
+        raise IngestionError("CMake RST conversion produced no documentation pages")
+    return tuple(sorted(records, key=lambda item: item.path)), "builtin cmake-rst 1"
+
+
 def ingest_source(
     source: Source,
     data_dir: Path | None = None,
@@ -247,6 +416,10 @@ def ingest_source(
         schema_version: Literal[1, 2] = 1
         if source.converter == "texinfo":
             generated, converter_version = _convert_texinfo(source, temporary_path)
+            stored_files = tuple(sorted((*stored_files, *generated), key=lambda item: item.path))
+            schema_version = 2
+        elif source.converter == "cmake-rst":
+            generated, converter_version = _convert_cmake_rst(source, temporary_path)
             stored_files = tuple(sorted((*stored_files, *generated), key=lambda item: item.path))
             schema_version = 2
         document_count = sum(_matches(file.path, source.document_paths) for file in stored_files)

@@ -41,6 +41,7 @@ Fetch an approved documentation source by its registry ID:
 ```bash
 uv run fortran-mcp-ingest fpm-0.13.0-docs
 uv run fortran-mcp-ingest stdlib-0.8.1-docs
+uv run fortran-mcp-ingest cmake-4.4.0-fortran-docs
 ```
 
 The GNU Fortran manual is generated from its pinned Texinfo sources. Maintainers building that
@@ -68,6 +69,7 @@ Build citation-preserving document chunks after ingestion:
 ```bash
 uv run fortran-mcp-build fpm-0.13.0-docs
 uv run fortran-mcp-build stdlib-0.8.1-docs
+uv run fortran-mcp-build cmake-4.4.0-fortran-docs
 uv run fortran-mcp-index
 ```
 
@@ -175,7 +177,7 @@ configuration examples.
 
 - ISO Fortran standards and corrigenda
 - Vendor compiler documentation and language extensions
-- Build-system documentation for fpm, CMake, and Make
+- Additional build-system documentation, including Make
 - Fortran Standard Library documentation
 - C interoperability and OpenMP references
 - Dialect, compatibility, modernization, and migration guides

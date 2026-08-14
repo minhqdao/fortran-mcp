@@ -106,3 +106,80 @@ license_url = "https://gcc.gnu.org/onlinedocs/gcc-16.2.0/gfortran/GNU-Free-Docum
 redistribution = "redistributable"
 status = "approved"
 notes = "Complete release manual generated from pinned Texinfo sources with GNU Texinfo 7.3. The manual has invariant-section and cover-text requirements recorded in its license notice."
+
+[[sources]]
+id = "cmake-4.4.0-fortran-docs"
+title = "CMake documentation for Fortran projects"
+publisher = "Kitware"
+document_type = "ecosystem-guide"
+authority = "official"
+topics = [
+  "build-system",
+  "compiler-detection",
+  "compiler-options",
+  "dependency-discovery",
+  "mixed-language-programming",
+  "modules",
+  "openmp",
+  "preprocessing",
+]
+fortran_versions = []
+compilers = []
+dialects = []
+version = "4.4.0"
+revision = "v4.4.0"
+source_url = "https://github.com/Kitware/CMake/tree/v4.4.0/Help"
+archive_url = "https://github.com/Kitware/CMake/archive/refs/tags/v4.4.0.tar.gz"
+archive_root = "CMake-4.4.0"
+include_paths = [
+  "Help/command/project.rst",
+  "Help/command/enable_language.rst",
+  "Help/command/include/SUPPORTED_LANGUAGES.rst",
+  "Help/envvar/FC.rst",
+  "Help/envvar/FFLAGS.rst",
+  "Help/envvar/include/**",
+  "Help/generator/Ninja.rst",
+  "Help/module/include/**",
+  "Help/prop_sf/Fortran_FORMAT.rst",
+  "Help/prop_sf/Fortran_PREPROCESS.rst",
+  "Help/prop_tgt/Fortran_BUILDING_INTRINSIC_MODULES.rst",
+  "Help/prop_tgt/Fortran_FORMAT.rst",
+  "Help/prop_tgt/Fortran_MODULE_DIRECTORY.rst",
+  "Help/prop_tgt/Fortran_PREPROCESS.rst",
+  "Help/prop_tgt/LINKER_LANGUAGE.rst",
+  "Help/variable/CMAKE_Fortran_FORMAT.rst",
+  "Help/variable/CMAKE_Fortran_MODULE_DIRECTORY.rst",
+  "Help/variable/CMAKE_Fortran_PREPROCESS.rst",
+  "Help/variable/CMAKE_LANG_COMPILER.rst",
+  "Help/variable/CMAKE_LANG_COMPILER_FRONTEND_VARIANT.rst",
+  "Help/variable/CMAKE_LANG_COMPILER_ID.rst",
+  "Help/variable/CMAKE_LANG_COMPILER_LAUNCHER.rst",
+  "Help/variable/CMAKE_LANG_COMPILER_VERSION.rst",
+  "Help/variable/CMAKE_LANG_FLAGS.rst",
+  "Help/variable/CMAKE_LANG_FLAGS_CONFIG.rst",
+  "Help/variable/CMAKE_LANG_IMPLICIT_INCLUDE_DIRECTORIES.rst",
+  "Help/variable/CMAKE_LANG_IMPLICIT_LINK_DIRECTORIES.rst",
+  "Help/variable/CMAKE_LANG_IMPLICIT_LINK_LIBRARIES.rst",
+  "Help/variable/CMAKE_LANG_LINKER_LAUNCHER.rst",
+  "Modules/CheckFortranCompilerFlag.cmake",
+  "Modules/CheckFortranFunctionExists.cmake",
+  "Modules/CheckFortranSourceCompiles.cmake",
+  "Modules/CheckFortranSourceRuns.cmake",
+  "Modules/FindBLAS.cmake",
+  "Modules/FindLAPACK.cmake",
+  "Modules/FindMPI.cmake",
+  "Modules/FindOpenMP.cmake",
+  "Modules/FortranCInterface.cmake",
+]
+document_paths = ["manual/**"]
+expected_document_count = 35
+homepage_url = "https://cmake.org/cmake/help/v4.4/"
+published_path_prefix = "manual"
+citation_base_url = "https://cmake.org/cmake/help/v4.4/"
+citation_format = "published-html"
+converter = "cmake-rst"
+license = "BSD-3-Clause"
+license_url = "https://github.com/Kitware/CMake/blob/v4.4.0/LICENSE.rst"
+redistribution = "redistributable"
+status = "approved"
+notes = "Curated official documentation needed for Fortran builds; general CMake and unrelated language pages are excluded from the core collection."

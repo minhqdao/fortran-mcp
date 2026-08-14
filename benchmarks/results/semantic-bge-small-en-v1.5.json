@@ -1,25 +1,25 @@
 {
   "provider": "semantic:BAAI/bge-small-en-v1.5",
-  "cases": 23,
-  "hit_at_1": 0.5909090909090909,
-  "hit_at_3": 0.6818181818181818,
-  "hit_at_5": 0.6818181818181818,
-  "hit_at_10": 0.7727272727272727,
-  "mean_reciprocal_rank": 0.6383838383838384,
+  "cases": 28,
+  "hit_at_1": 0.6296296296296297,
+  "hit_at_3": 0.7037037037037037,
+  "hit_at_5": 0.7407407407407407,
+  "hit_at_10": 0.8148148148148148,
+  "mean_reciprocal_rank": 0.6775720164609054,
   "negative_accuracy": 0.0,
-  "mean_latency_ms": 115.09191304347826,
+  "mean_latency_ms": 106.30335714285715,
   "categories": {
     "exact": {
-      "cases": 6,
-      "passed": 5,
-      "pass_rate": 0.8333333333333334,
-      "mrr": 0.8333333333333334
+      "cases": 8,
+      "passed": 7,
+      "pass_rate": 0.875,
+      "mrr": 0.78125
     },
     "filter": {
-      "cases": 3,
-      "passed": 2,
-      "pass_rate": 0.6666666666666666,
-      "mrr": 0.6666666666666666
+      "cases": 4,
+      "passed": 3,
+      "pass_rate": 0.75,
+      "mrr": 0.75
     },
     "negative": {
       "cases": 1,
@@ -28,10 +28,10 @@
       "mrr": 0.0
     },
     "paraphrase": {
-      "cases": 13,
-      "passed": 10,
-      "pass_rate": 0.7692307692307693,
-      "mrr": 0.5418803418803418
+      "cases": 15,
+      "passed": 12,
+      "pass_rate": 0.8,
+      "mrr": 0.6029629629629629
     }
   },
   "results": [
@@ -41,7 +41,7 @@
       "query": "compile_commands.json",
       "passed": true,
       "rank": 1,
-      "latency_ms": 124.34,
+      "latency_ms": 116.41,
       "returned": 10,
       "top_chunk_ids": [
         "f1e9125f1d304ca33fef5f8b8407c669",
@@ -51,9 +51,9 @@
         "c9eb8043f9110b202e012afed2338a42",
         "a0c7053b108fedb2483aa55860249ec8",
         "88305060b5f1aa666fadb3406be98cc9",
-        "b82f65455e677ac87b01971c05ad2383",
-        "f9f08659d615b91ac80faf4cb7cebf55",
-        "457c18ed7c9e5a4b1a3aa14d56d9030a"
+        "4405903dd525d448de7e646e419b2c19",
+        "7eaa55ee1f09c67aafd82c22753b9adc",
+        "b82f65455e677ac87b01971c05ad2383"
       ]
     },
     {
@@ -62,7 +62,7 @@
       "query": "How do I add OpenMP to an fpm project?",
       "passed": true,
       "rank": 2,
-      "latency_ms": 124.516,
+      "latency_ms": 111.736,
       "returned": 10,
       "top_chunk_ids": [
         "53ab5105ba955f2715e903b5097dcecb",
@@ -83,7 +83,7 @@
       "query": "How do I create a new fpm project?",
       "passed": true,
       "rank": 1,
-      "latency_ms": 112.789,
+      "latency_ms": 110.824,
       "returned": 10,
       "top_chunk_ids": [
         "743f6bcf70c1457ce30ef01af9b56f9e",
@@ -104,7 +104,7 @@
       "query": "How do I clean build output?",
       "passed": true,
       "rank": 1,
-      "latency_ms": 124.038,
+      "latency_ms": 111.534,
       "returned": 10,
       "top_chunk_ids": [
         "ac97c2bdca6e18907fadcc821f5832ea",
@@ -125,7 +125,7 @@
       "query": "How do I add a git dependency to fpm?",
       "passed": false,
       "rank": null,
-      "latency_ms": 124.503,
+      "latency_ms": 115.637,
       "returned": 10,
       "top_chunk_ids": [
         "743f6bcf70c1457ce30ef01af9b56f9e",
@@ -146,7 +146,7 @@
       "query": "features profiles",
       "passed": true,
       "rank": 1,
-      "latency_ms": 133.155,
+      "latency_ms": 113.551,
       "returned": 10,
       "top_chunk_ids": [
         "3d3c9c81573ad7b5bd7f3b38729f36fd",
@@ -167,7 +167,7 @@
       "query": "stdlib_string_type",
       "passed": true,
       "rank": 1,
-      "latency_ms": 135.104,
+      "latency_ms": 113.465,
       "returned": 10,
       "top_chunk_ids": [
         "10c7f96bec2d5ff04f75a50796089e48",
@@ -188,7 +188,7 @@
       "query": "How can I represent dynamically sized text?",
       "passed": false,
       "rank": null,
-      "latency_ms": 121.603,
+      "latency_ms": 112.287,
       "returned": 10,
       "top_chunk_ids": [
         "0a45b744bbb82e792901368a5756f52e",
@@ -209,7 +209,7 @@
       "query": "How can I order array values from smallest to largest?",
       "passed": true,
       "rank": 9,
-      "latency_ms": 112.032,
+      "latency_ms": 112.505,
       "returned": 10,
       "top_chunk_ids": [
         "2d8062fd51c3668c1709ac8b5dbc4dc2",
@@ -230,7 +230,7 @@
       "query": "How do I integrate a function numerically?",
       "passed": true,
       "rank": 1,
-      "latency_ms": 127.063,
+      "latency_ms": 111.338,
       "returned": 10,
       "top_chunk_ids": [
         "531a0c4b2ad0550fe3de5606e418fefa",
@@ -251,7 +251,7 @@
       "query": "How do I generate normally distributed random numbers?",
       "passed": false,
       "rank": null,
-      "latency_ms": 114.283,
+      "latency_ms": 113.593,
       "returned": 10,
       "top_chunk_ids": [
         "edb972fa3427742392fbb5d05810ee55",
@@ -272,7 +272,7 @@
       "query": "How do I convert a string to a number?",
       "passed": true,
       "rank": 1,
-      "latency_ms": 124.018,
+      "latency_ms": 111.711,
       "returned": 10,
       "top_chunk_ids": [
         "9932702dd1d0dff950c5dd11f9b83ded",
@@ -293,7 +293,7 @@
       "query": "How can I solve a linear system?",
       "passed": true,
       "rank": 1,
-      "latency_ms": 127.318,
+      "latency_ms": 111.888,
       "returned": 10,
       "top_chunk_ids": [
         "f79ac3ecad4738cdafba809ebc38aaa1",
@@ -314,7 +314,7 @@
       "query": "chaining_hashmap_type",
       "passed": true,
       "rank": 1,
-      "latency_ms": 165.615,
+      "latency_ms": 136.26,
       "returned": 10,
       "top_chunk_ids": [
         "1234435bdf286c637913d02ad1602e21",
@@ -335,7 +335,7 @@
       "query": "sort array",
       "passed": true,
       "rank": 1,
-      "latency_ms": 94.144,
+      "latency_ms": 94.263,
       "returned": 10,
       "top_chunk_ids": [
         "e8e296a868c8c5389e1f5b6e786ff8f3",
@@ -356,7 +356,7 @@
       "query": "dependency",
       "passed": false,
       "rank": null,
-      "latency_ms": 41.878,
+      "latency_ms": 40.445,
       "returned": 10,
       "top_chunk_ids": [
         "cdbb904073e834b2b7bc6e074d37faf5",
@@ -377,7 +377,7 @@
       "query": "CUDA Fortran unified memory",
       "passed": false,
       "rank": null,
-      "latency_ms": 116.403,
+      "latency_ms": 112.256,
       "returned": 10,
       "top_chunk_ids": [
         "c654c9457ddea091edd387797ae7ca6f",
@@ -398,7 +398,7 @@
       "query": "coarray event post event wait",
       "passed": true,
       "rank": 3,
-      "latency_ms": 111.494,
+      "latency_ms": 111.83,
       "returned": 10,
       "top_chunk_ids": [
         "539bb1e895130c76f827811245b19a8a",
@@ -419,10 +419,11 @@
       "query": "-fallow-argument-mismatch",
       "passed": false,
       "rank": null,
-      "latency_ms": 117.352,
+      "latency_ms": 117.148,
       "returned": 10,
       "top_chunk_ids": [
         "5c0819b4f24f6e42b64e1f2c4ce0e929",
+        "db372ce287a5c9a8e322ca6a3f306fb5",
         "b72404e9956019e3f7a22477e0512307",
         "3a45a423a7d314224a7e9202aa3acb66",
         "62b5be5369fece65b07c7536547f0113",
@@ -430,8 +431,7 @@
         "d3d2788377c7456073561767d3023743",
         "fd71b5b3b2165da7d7509540afd579d7",
         "df957bf054a66a26a659628343c330bc",
-        "d10170efff9c2e8ca0d00758a20748cc",
-        "2d57fb41ee6742d57287a0803c3dbdf0"
+        "d10170efff9c2e8ca0d00758a20748cc"
       ]
     },
     {
@@ -440,7 +440,7 @@
       "query": "How can gfortran compile legacy DEC STRUCTURE and RECORD declarations?",
       "passed": true,
       "rank": 10,
-      "latency_ms": 110.698,
+      "latency_ms": 118.543,
       "returned": 10,
       "top_chunk_ids": [
         "1a5384fe0b785c66f53c3132949a5a8b",
@@ -461,7 +461,7 @@
       "query": "How do I convert between a Fortran pointer and a C pointer?",
       "passed": true,
       "rank": 1,
-      "latency_ms": 117.14,
+      "latency_ms": 112.461,
       "returned": 10,
       "top_chunk_ids": [
         "b4007c5710c100ddc021bf14decd86f5",
@@ -482,7 +482,7 @@
       "query": "GFORTRAN_CONVERT_UNIT",
       "passed": true,
       "rank": 1,
-      "latency_ms": 109.24,
+      "latency_ms": 111.051,
       "returned": 10,
       "top_chunk_ids": [
         "ed4607e0faab8e96aac8a47888e163f6",
@@ -503,7 +503,7 @@
       "query": "unformatted sequential record markers",
       "passed": true,
       "rank": 1,
-      "latency_ms": 58.388,
+      "latency_ms": 50.969,
       "returned": 10,
       "top_chunk_ids": [
         "6baea58ca0fcd50bc80f51619578ef1f",
@@ -516,6 +516,111 @@
         "4e018ed328381b8bc7fac80c3842763f",
         "a9a868240243d4f0c849012ae30e97f8",
         "261337b1a6e5b1c637271d951c7b773f"
+      ]
+    },
+    {
+      "id": "cmake-fortran-modules",
+      "category": "paraphrase",
+      "query": "Where does CMake write generated Fortran module files?",
+      "passed": true,
+      "rank": 1,
+      "latency_ms": 120.556,
+      "returned": 10,
+      "top_chunk_ids": [
+        "c758e7b5f6ab271110679c21bfe2d845",
+        "9b8f18141725458199e76df3180e66d4",
+        "2175eebeb7d26aa6bc36efc2014f0ba6",
+        "81f1fd84959a8c9c93b1989f1b88d170",
+        "77fef6245300ea8d0a35938e7afa917f",
+        "bcbb5f9e82cc91fb31993b966eb60f2e",
+        "23f6139b48245998f1f7282eb69c688b",
+        "a48249a29f6d5a704024f7fefceb77df",
+        "bd73b272411890f4f4eb5edd8030877f",
+        "2592c331b1314dd905893d7dbb432992"
+      ]
+    },
+    {
+      "id": "cmake-fortran-c-interface",
+      "category": "exact",
+      "query": "FortranCInterface_VERIFY",
+      "passed": true,
+      "rank": 1,
+      "latency_ms": 113.409,
+      "returned": 10,
+      "top_chunk_ids": [
+        "efe96c24aeeb0467191e293d428cf60d",
+        "7fe4cc2597315b001eac3606fca51a15",
+        "359a18b26f5a15fa2dfca31befdd6b8b",
+        "4f9d620330346aee4a188a9d8bb673e8",
+        "7ffb1ffec5f2921f79bdeb2bc6275795",
+        "9e40e2b690632368bf82ace85e9e2feb",
+        "0d075fe7852bea46dfdfc0b2db1c77d2",
+        "a7c5858d6b6621c8e01b051a9a79870d",
+        "d33c263099e637f9a8ea41cb7058c6e9",
+        "c8ac0154ed46e87603e23f7fc2ec4cdf"
+      ]
+    },
+    {
+      "id": "cmake-check-fortran-source",
+      "category": "paraphrase",
+      "query": "How can CMake test whether a small Fortran program compiles?",
+      "passed": true,
+      "rank": 1,
+      "latency_ms": 114.146,
+      "returned": 10,
+      "top_chunk_ids": [
+        "2175eebeb7d26aa6bc36efc2014f0ba6",
+        "77fef6245300ea8d0a35938e7afa917f",
+        "2c337f02f9d7457cfe024d53ce3f3363",
+        "a5831a064b6ad7fc039ead465eee4ac1",
+        "0d075fe7852bea46dfdfc0b2db1c77d2",
+        "15e060069e13112ca77c37af9588ae02",
+        "db372ce287a5c9a8e322ca6a3f306fb5",
+        "ddc6a09cea2361aac92d8e436cb2749c",
+        "ebdc44244e180cf8397790a0f34ebe0b",
+        "efe96c24aeeb0467191e293d428cf60d"
+      ]
+    },
+    {
+      "id": "cmake-openmp-fortran",
+      "category": "exact",
+      "query": "OpenMP::OpenMP_Fortran",
+      "passed": true,
+      "rank": 4,
+      "latency_ms": 117.818,
+      "returned": 10,
+      "top_chunk_ids": [
+        "765e06358edae85c8a650860d5354013",
+        "01c0a50349a7061080c0306f9b91c0df",
+        "cdb8cdd6518455962ca5f485487ed4ad",
+        "c6b5f18081255339b570f091b99645c7",
+        "4d9b3484ce31ce8fedabbc0b0b30dd94",
+        "12545d037109a03c714d2dc9ef640cee",
+        "c654c9457ddea091edd387797ae7ca6f",
+        "911e2bd029e7f437077de7af4b7aef7a",
+        "0a4347e742271857bca7724c6753a7a0",
+        "02190357d73e10e562fd2177aa4fd8b2"
+      ]
+    },
+    {
+      "id": "cmake-source-filter",
+      "category": "filter",
+      "query": "Fortran compiler environment variable",
+      "passed": true,
+      "rank": 1,
+      "latency_ms": 38.86,
+      "returned": 10,
+      "top_chunk_ids": [
+        "2592c331b1314dd905893d7dbb432992",
+        "23f6139b48245998f1f7282eb69c688b",
+        "359a18b26f5a15fa2dfca31befdd6b8b",
+        "0d075fe7852bea46dfdfc0b2db1c77d2",
+        "a5831a064b6ad7fc039ead465eee4ac1",
+        "26ad937b567f77cdc1355e8a9518f5ea",
+        "ebdc44244e180cf8397790a0f34ebe0b",
+        "2175eebeb7d26aa6bc36efc2014f0ba6",
+        "eddbdad92b852edf2fdb475f6442a0ab",
+        "ddc6a09cea2361aac92d8e436cb2749c"
       ]
     }
   ]
