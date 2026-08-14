@@ -78,7 +78,7 @@ def test_benchmark_calculates_positive_and_negative_metrics() -> None:
 def test_reviewed_benchmark_suite_is_valid() -> None:
     suite = load_suite(Path("benchmarks/retrieval.toml"))
 
-    assert len(suite.cases) == 18
+    assert len(suite.cases) == 23
     assert {case.category for case in suite.cases} == {
         "exact",
         "filter",

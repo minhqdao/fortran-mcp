@@ -90,7 +90,7 @@ def _bounded_ranges(lines: list[str], start: int, end: int) -> Iterator[tuple[in
         line_size = len(lines[index]) + 1
         if size and size + line_size > MAX_CHUNK_CHARS:
             chunk_end = (
-                last_blank if last_blank is not None and last_blank >= chunk_start else index - 1
+                last_blank if last_blank is not None and last_blank > chunk_start + 1 else index - 1
             )
             yield chunk_start, chunk_end
             chunk_start = chunk_end + 1

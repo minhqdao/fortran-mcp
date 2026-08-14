@@ -72,3 +72,17 @@ def test_build_rejects_modified_raw_content(tmp_path: Path) -> None:
 
     with pytest.raises(DocumentBuildError, match="checksum mismatch"):
         build_documents("fpm-0.13.0-docs", tmp_path)
+
+
+def test_long_section_does_not_orphan_its_heading(tmp_path: Path) -> None:
+    source = _source()
+    content = (
+        "# Options\n\n" + "\n".join(f"- option {index}: " + "x" * 120 for index in range(50))
+    ).encode()
+    archive = _archive(source, content)
+    ingest_source(source, tmp_path, downloader=lambda _url, _timeout, _limit: archive)
+
+    chunks = build_documents(source.id, tmp_path)
+
+    assert chunks[0].text.startswith("# Options\n\n- option 0:")
+    assert all(chunk.text != "# Options" for chunk in chunks)

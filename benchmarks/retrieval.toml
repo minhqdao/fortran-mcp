@@ -124,7 +124,45 @@ query = "CUDA Fortran unified memory"
 expect_no_results = true
 
 [[cases]]
-id = "negative-coarray-events"
-category = "negative"
+id = "gfortran-coarray-events"
+category = "paraphrase"
 query = "coarray event post event wait"
-expect_no_results = true
+expected_source = "gfortran-16.2.0-manual"
+expected_path = "manual/_005fgfortran_005fcaf_005fevent_005fpost.md"
+
+[[cases]]
+id = "gfortran-argument-mismatch"
+category = "exact"
+query = "-fallow-argument-mismatch"
+expected_source = "gfortran-16.2.0-manual"
+expected_path = "manual/Fortran-Dialect-Options.md"
+expected_heading = "Options controlling Fortran dialect"
+
+[[cases]]
+id = "gfortran-dec-structures"
+category = "paraphrase"
+query = "How can gfortran compile legacy DEC STRUCTURE and RECORD declarations?"
+expected_source = "gfortran-16.2.0-manual"
+expected_path = "manual/STRUCTURE-and-RECORD.md"
+
+[[cases]]
+id = "gfortran-c-pointer"
+category = "paraphrase"
+query = "How do I convert between a Fortran pointer and a C pointer?"
+expected_source = "gfortran-16.2.0-manual"
+expected_path = "manual/Working-with-C-Pointers.md"
+
+[[cases]]
+id = "gfortran-convert-unit"
+category = "exact"
+query = "GFORTRAN_CONVERT_UNIT"
+expected_source = "gfortran-16.2.0-manual"
+expected_path = "manual/GFORTRAN_005fCONVERT_005fUNIT.md"
+
+[[cases]]
+id = "gfortran-source-filter"
+category = "filter"
+query = "unformatted sequential record markers"
+source_filter = "gfortran-16.2.0-manual"
+expected_source = "gfortran-16.2.0-manual"
+expected_path = "manual/File-format-of-unformatted-sequential-files.md"
