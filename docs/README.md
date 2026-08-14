@@ -19,4 +19,6 @@ Some upstream formats require a reviewed conversion before chunking. Such source
 converter and entrypoint in the registry, record the converter version in their ingestion record,
 and may declare an expected document count. The GNU Fortran manual requires GNU Texinfo 7.3 and
 the `ingest` optional dependency; these are maintainer requirements and are not needed to query a
-prebuilt bundle.
+prebuilt bundle. The built-in OpenMP Examples converter selects documents with official Fortran
+examples, removes C/C++-specific sections, and embeds the corresponding fixed- or free-form source
+code alongside its explanation.

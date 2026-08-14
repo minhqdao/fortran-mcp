@@ -104,6 +104,15 @@ def test_hybrid_returns_results_above_the_reviewed_threshold() -> None:
     assert provider.search("covered")
 
 
+def test_hybrid_accepts_explicit_dialect_with_lexical_evidence() -> None:
+    result = _result("a").model_copy(
+        update={"score": 0.75, "source_id": "openmp-6.0.1-fortran-examples"}
+    )
+    provider = HybridSearchProvider(FakeProvider((result,)), FakeProvider((result,)))
+
+    assert provider.search("OpenMP task dependency")
+
+
 def test_hybrid_accepts_concentrated_document_evidence() -> None:
     results = tuple(
         _result(str(index)).model_copy(

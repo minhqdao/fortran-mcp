@@ -211,3 +211,40 @@ def test_ingestion_rejects_unexpected_document_count(tmp_path: Path) -> None:
 
     with pytest.raises(IngestionError, match="expected 2 document files; found 1"):
         ingest_source(source, tmp_path, downloader=lambda *_args: archive)
+
+
+def test_openmp_ingestion_keeps_explanations_and_fortran_examples(tmp_path: Path) -> None:
+    source = (
+        load_registry(REGISTRY_PATH).sources[-1].model_copy(update={"expected_document_count": 1})
+    )
+    archive = _archive(
+        {
+            f"{source.archive_root}/parallel/collapse.tex": b"""
+\\section{\\kcode{collapse} Clause}
+
+The loops are combined into one iteration space.
+
+\\cexample[3.0]{collapse}{1}
+\\ffreeexample[3.0]{collapse}{1}
+""",
+            f"{source.archive_root}/parallel/sources/collapse.1.f90": b"""! @@name: collapse.1
+! @@type: F-free
+program collapse
+  !$omp parallel do collapse(2)
+end program collapse
+""",
+            f"{source.archive_root}/omp_copyright.txt": b"OpenMP notice\n",
+        }
+    )
+
+    record = ingest_source(source, tmp_path, downloader=lambda *_args: archive)
+
+    generated = tmp_path / f"raw/{source.id}/manual/parallel/collapse.tex"
+    markdown = generated.read_text()
+    assert record.converter == "openmp-examples"
+    assert record.converter_version == "builtin openmp-examples 1"
+    assert markdown.startswith("# `collapse` Clause")
+    assert "The loops are combined" in markdown
+    assert "```fortran" in markdown
+    assert "!$omp parallel do collapse(2)" in markdown
+    assert "cexample" not in markdown

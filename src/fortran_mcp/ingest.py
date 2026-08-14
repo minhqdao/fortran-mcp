@@ -33,7 +33,19 @@ DOWNLOAD_LIMIT = 128 * 1024 * 1024
 FILE_LIMIT = 5 * 1024 * 1024
 TOTAL_CONTENT_LIMIT = 100 * 1024 * 1024
 ALLOWED_SUFFIXES = frozenset(
-    {".cmake", ".f90", ".md", ".markdown", ".rst", ".texi", ".toml", ".txt", ".yml"}
+    {
+        ".cmake",
+        ".f",
+        ".f90",
+        ".md",
+        ".markdown",
+        ".rst",
+        ".tex",
+        ".texi",
+        ".toml",
+        ".txt",
+        ".yml",
+    }
 )
 Downloader = Callable[[str, int, int], bytes]
 
@@ -64,9 +76,12 @@ def _relative_document_path(member_name: str, source: Source) -> PurePosixPath |
     except ValueError:
         return None
     included = any(
-        relative.is_relative_to(PurePosixPath(pattern.removesuffix("/**")))
-        if pattern.endswith("/**")
-        else relative == PurePosixPath(pattern)
+        pattern == "**"
+        or (
+            relative.is_relative_to(PurePosixPath(pattern.removesuffix("/**")))
+            if pattern.endswith("/**")
+            else relative == PurePosixPath(pattern)
+        )
         for pattern in source.include_paths
     )
     if not included or not relative.parts or relative.suffix.lower() not in ALLOWED_SUFFIXES:
@@ -77,9 +92,12 @@ def _relative_document_path(member_name: str, source: Source) -> PurePosixPath |
 def _matches(path: str, patterns: tuple[str, ...]) -> bool:
     candidate = PurePosixPath(path)
     return any(
-        candidate.is_relative_to(PurePosixPath(pattern.removesuffix("/**")))
-        if pattern.endswith("/**")
-        else candidate == PurePosixPath(pattern)
+        pattern == "**"
+        or (
+            candidate.is_relative_to(PurePosixPath(pattern.removesuffix("/**")))
+            if pattern.endswith("/**")
+            else candidate == PurePosixPath(pattern)
+        )
         for pattern in patterns
     )
 
@@ -474,6 +492,134 @@ def _convert_fortran_lang_markdown(
     return tuple(sorted(records, key=lambda item: item.path)), "builtin fortran-lang-markdown 1"
 
 
+OPENMP_FORTRAN_EXAMPLE = re.compile(
+    r"\\(?P<kind>f(?:free)?n?example)(?:\[[^]]+\])?"
+    r"\{(?P<name>[^}]+)\}\{(?P<number>[^}]+)\}"
+)
+
+
+def _openmp_example(content: str, path: Path) -> str:
+    """Render one official OpenMP Fortran example as a fenced block."""
+    metadata = "\n".join(
+        line.removeprefix("! @@").strip()
+        for line in content.splitlines()
+        if line.lstrip().startswith("! @@")
+    )
+    header = f"Example source: `{path.name}`"
+    if metadata:
+        header += f"\n\n```text\n{metadata}\n```"
+    return f"{header}\n\n```fortran\n{content.rstrip()}\n```"
+
+
+def _replace_tex_command(content: str, command: str, render: Callable[[str], str]) -> str:
+    """Replace a braced LaTeX command while respecting nested, unescaped braces."""
+    marker = f"\\{command}{{"
+    start = content.find(marker)
+    while start >= 0:
+        value_start = start + len(marker)
+        depth = 1
+        index = value_start
+        while index < len(content) and depth:
+            if content[index] in "{}" and (index == 0 or content[index - 1] != "\\"):
+                depth += 1 if content[index] == "{" else -1
+            index += 1
+        if depth:
+            break
+        content = content[:start] + render(content[value_start : index - 1]) + content[index:]
+        start = content.find(marker, start)
+    return content
+
+
+def _convert_openmp_tex(content: str, path: Path, root: Path) -> str | None:
+    if OPENMP_FORTRAN_EXAMPLE.search(content) is None:
+        return None
+
+    def example(match: re.Match[str]) -> str:
+        suffix = ".f90" if "free" in match.group("kind") else ".f"
+        source_path = (
+            path.parent / "sources" / (f"{match.group('name')}.{match.group('number')}{suffix}")
+        )
+        if not source_path.is_file():
+            raise IngestionError(
+                f"OpenMP Fortran example source is unavailable: {source_path.relative_to(root)}"
+            )
+        return _openmp_example(source_path.read_text(encoding="utf-8"), source_path)
+
+    content = re.sub(r"(?m)^\s*%.*$", "", content)
+    content = re.sub(r"``([^`\n]+)''", r'"\1"', content)
+    content = re.sub(
+        r"\\begin\{(?P<environment>figure|tikzpicture)\}.*?"
+        r"\\end\{(?P=environment)\}",
+        "\n[Diagram omitted; see the cited official source.]\n",
+        content,
+        flags=re.DOTALL,
+    )
+    content = re.sub(
+        r"\\begin\{(?P<language>c|cpp|ccpp)specific\}.*?"
+        r"\\end\{(?P=language)specific\}",
+        "",
+        content,
+        flags=re.DOTALL,
+    )
+    content = re.sub(r"\\(?:begin|end)\{fortranspecific\}", "", content)
+    content = OPENMP_FORTRAN_EXAMPLE.sub(example, content)
+    content = re.sub(
+        r"\\(?:c|cpp|src)n?example(?:\[[^]]+\])?"
+        r"\{[^}]+\}\{[^}]+\}(?:\{[^}]+\})?",
+        "",
+        content,
+    )
+    for command in ("kcode", "ucode", "bcode", "vcode", "code", "scode", "pout"):
+        content = _replace_tex_command(content, command, lambda value: f"`{value}`")
+    for command in ("docref", "specref"):
+        content = _replace_tex_command(content, command, lambda value: value)
+    for command in ("emph", "textit"):
+        content = _replace_tex_command(content, command, lambda value: f"*{value}*")
+    content = _replace_tex_command(content, "textbf", lambda value: f"**{value}**")
+    for command, prefix in (("section", "#"), ("subsection", "##"), ("subsubsection", "###")):
+        content = re.sub(rf"\\{command}\{{([^{{}}]+)\}}", rf"{prefix} \1", content)
+    content = re.sub(r"(?m)^\s*\\item\s*", "- ", content)
+    content = re.sub(
+        r"\\(?:begin|end)\{(?:itemize|enumerate|description|compactitem)\}", "", content
+    )
+    content = re.sub(r"\\begin\{(?:small)?verbatim\}", "```text", content)
+    content = re.sub(r"\\end\{(?:small)?verbatim\}", "```", content)
+    content = re.sub(r"\\(?:index|label|newlabel|verlabel)\{(?:[^{}]|\{[^{}]*\})*\}", "", content)
+    content = re.sub(
+        r"\\(?:pagebreak|clearpage|newpage|bigskip|smallskip|noindent|linenumbers|nolinenumbers)\b",
+        "",
+        content,
+    )
+    content = content.replace(r"\OpenMP", "OpenMP").replace(r"\LaTeX", "LaTeX")
+    content = content.replace(r"\\", "\n")
+    content = content.replace("~", " ").replace(r"\_", "_").replace(r"\%", "%")
+    content = re.sub(r"\$([^$]+)\$", r"\1", content)
+    content = content.replace(r"\times", " x ").replace(r"\rightarrow", " -> ")
+    content = content.replace(r"\le", " <= ").replace(r"\ge", " >= ")
+    content = re.sub(r"\\([A-Za-z]+)\{([^{}]*)\}", r"\2", content)
+    content = re.sub(r"\\([A-Za-z]+)\b", r"\1", content)
+    content = re.sub(r"\n{3,}", "\n\n", content).strip()
+    return content + "\n"
+
+
+def _convert_openmp_examples(source: Source, root: Path) -> tuple[tuple[FileRecord, ...], str]:
+    output_dir = root / "manual"
+    output_dir.mkdir()
+    records: list[FileRecord] = []
+    for path in sorted(root.rglob("*.tex")):
+        markdown = _convert_openmp_tex(path.read_text(encoding="utf-8"), path, root)
+        if markdown is None:
+            continue
+        relative = path.relative_to(root)
+        output_path = output_dir / relative
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(markdown, encoding="utf-8")
+        records.append(_record_file(output_path, root))
+    if not records:
+        raise IngestionError("OpenMP conversion found no Fortran examples")
+    return tuple(records), "builtin openmp-examples 1"
+
+
 def ingest_source(
     source: Source,
     data_dir: Path | None = None,
@@ -514,6 +660,10 @@ def ingest_source(
             schema_version = 2
         elif source.converter == "fortran-lang-markdown":
             generated, converter_version = _convert_fortran_lang_markdown(source, temporary_path)
+            stored_files = tuple(sorted((*stored_files, *generated), key=lambda item: item.path))
+            schema_version = 2
+        elif source.converter == "openmp-examples":
+            generated, converter_version = _convert_openmp_examples(source, temporary_path)
             stored_files = tuple(sorted((*stored_files, *generated), key=lambda item: item.path))
             schema_version = 2
         document_count = sum(_matches(file.path, source.document_paths) for file in stored_files)

@@ -415,3 +415,41 @@ license_url = "https://github.com/fortran-lang/webpage/blob/36d35714a4bc4e7d7718
 redistribution = "redistributable"
 status = "approved"
 notes = "Compact comparison of floating-point behavior across Fortran language revisions."
+
+[[sources]]
+id = "openmp-6.0.1-fortran-examples"
+title = "OpenMP 6.0.1 Fortran examples"
+publisher = "OpenMP Architecture Review Board"
+document_type = "ecosystem-guide"
+authority = "official"
+topics = [
+  "accelerator-offloading",
+  "affinity",
+  "data-environment",
+  "openmp",
+  "parallel-programming",
+  "simd",
+  "synchronization",
+  "tasking",
+]
+fortran_versions = []
+compilers = []
+dialects = ["OpenMP"]
+version = "6.0.1"
+revision = "3e4757ae2b52e51df6cd5d363d6fc1d894509719"
+source_url = "https://github.com/OpenMP/Examples/tree/v6.0.1"
+archive_url = "https://github.com/OpenMP/Examples/archive/3e4757ae2b52e51df6cd5d363d6fc1d894509719.tar.gz"
+archive_root = "Examples-3e4757ae2b52e51df6cd5d363d6fc1d894509719"
+include_paths = ["**"]
+document_paths = ["manual/**"]
+expected_document_count = 115
+homepage_url = "https://www.openmp.org/uncategorised/openmp-example-book/"
+published_path_prefix = "manual"
+citation_base_url = "https://github.com/OpenMP/Examples/blob/v6.0.1/"
+citation_format = "source"
+converter = "openmp-examples"
+license = "OpenMP-Examples"
+license_url = "https://github.com/OpenMP/Examples/blob/v6.0.1/omp_copyright.txt"
+redistribution = "redistributable"
+status = "approved"
+notes = "Official reviewed explanatory examples containing Fortran code. C and C++ source examples are excluded from generated documents; shared explanations are retained. This is practical guidance, not the normative OpenMP specification."

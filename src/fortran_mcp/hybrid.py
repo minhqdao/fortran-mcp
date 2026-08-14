@@ -1,8 +1,10 @@
 """Fuse lexical and semantic documentation rankings."""
 
+import re
 from collections import Counter
 
 from fortran_mcp.search import SearchProvider, SearchResult
+from fortran_mcp.sources import load_registry
 
 RRF_CONSTANT = 60
 DEFAULT_SEMANTIC_THRESHOLD = 0.785
@@ -10,6 +12,20 @@ CONCENTRATED_SEMANTIC_THRESHOLD = 0.74
 CONCENTRATED_DOCUMENT_RESULTS = 8
 CONCENTRATED_DOCUMENT_RATIO = 0.70
 MAX_RESULTS_PER_DOCUMENT = 4
+
+
+def _mentions_applicable_dialect(query: str, results: tuple[SearchResult, ...]) -> bool:
+    """Recognize an explicit registered dialect name backed by lexical evidence."""
+    result_sources = {result.source_id for result in results}
+    normalized_query = query.casefold()
+    return any(
+        source.id in result_sources
+        and any(
+            re.search(rf"(?<!\w){re.escape(dialect.casefold())}(?!\w)", normalized_query)
+            for dialect in source.dialects
+        )
+        for source in load_registry().sources
+    )
 
 
 class HybridSearchProvider:
@@ -49,6 +65,7 @@ class HybridSearchProvider:
             "version": version,
             "fortran_version": fortran_version,
         }
+        lexical_results = self.lexical.search(query, limit=candidate_limit, **filters)
         semantic_results = self.semantic.search(query, limit=candidate_limit, **filters)
         document_counts = Counter((result.source_id, result.path) for result in semantic_results)
         dominant_document_results = max(document_counts.values(), default=0)
@@ -56,17 +73,21 @@ class HybridSearchProvider:
             bool(semantic_results)
             and semantic_results[0].score >= CONCENTRATED_SEMANTIC_THRESHOLD
             and dominant_document_results >= CONCENTRATED_DOCUMENT_RESULTS
-            and dominant_document_results / len(semantic_results)
-            >= CONCENTRATED_DOCUMENT_RATIO
+            and dominant_document_results / len(semantic_results) >= CONCENTRATED_DOCUMENT_RATIO
         )
-        if not any(filters.values()) and (
-            not semantic_results
-            or (semantic_results[0].score < self.semantic_threshold and not concentrated)
+        dialect_evidence = _mentions_applicable_dialect(query, lexical_results)
+        if (
+            not any(filters.values())
+            and not dialect_evidence
+            and (
+                not semantic_results
+                or (semantic_results[0].score < self.semantic_threshold and not concentrated)
+            )
         ):
             return ()
         rankings = (
             (
-                self.lexical.search(query, limit=candidate_limit, **filters),
+                lexical_results,
                 self.lexical_weight,
             ),
             (

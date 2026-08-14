@@ -337,3 +337,38 @@ source_filter = "fortran-lang-intrinsics-reference"
 expected_source = "fortran-lang-intrinsics-reference"
 expected_path = "manual/learn/intrinsics/array/index.md"
 expected_heading = "reshape"
+
+[[cases]]
+id = "openmp-collapse-fortran"
+category = "paraphrase"
+query = "How do I collapse nested Fortran loops into one OpenMP iteration space?"
+expected_source = "openmp-6.0.1-fortran-examples"
+expected_path = "manual/parallel_execution/collapse.tex"
+
+[[cases]]
+id = "openmp-target-map-fortran"
+category = "paraphrase"
+query = "How do I map Fortran arrays to and from an OpenMP target device?"
+expected_source = "openmp-6.0.1-fortran-examples"
+expected_path = "manual/devices/target.tex"
+
+[[cases]]
+id = "openmp-atomic-capture-fortran"
+category = "paraphrase"
+query = "OpenMP atomic capture fetch and increment in Fortran"
+expected_source = "openmp-6.0.1-fortran-examples"
+expected_path = "manual/synchronization/atomic.tex"
+
+[[cases]]
+id = "openmp-task-depend-fortran"
+category = "paraphrase"
+query = "How can Fortran OpenMP tasks express input and output dependencies?"
+expected_source = "openmp-6.0.1-fortran-examples"
+expected_path = "manual/tasking/task_dep.tex"
+
+[[cases]]
+id = "openmp-fixed-form-sentinel"
+category = "paraphrase"
+query = "Which OpenMP directive sentinels work in fixed form Fortran source?"
+expected_source = "openmp-6.0.1-fortran-examples"
+expected_path = "manual/directives/fixed_format_comments.tex"

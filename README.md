@@ -42,12 +42,18 @@ Fetch an approved documentation source by its registry ID:
 uv run fortran-mcp-ingest fpm-0.13.0-docs
 uv run fortran-mcp-ingest stdlib-0.8.1-docs
 uv run fortran-mcp-ingest cmake-4.4.0-fortran-docs
+uv run fortran-mcp-ingest openmp-6.0.1-fortran-examples
 ```
 
 The core collection also includes separately identifiable Fortran-lang references for intrinsic
 procedures, the quickstart, best practices, object-oriented programming, Fortran 95, building and
 linking, Python-to-Fortran translation, and floating-point comparisons. They are pinned to one
 reviewed upstream revision and remain independently filterable in search results.
+
+The OpenMP source contains the official 6.0.1 explanatory examples that have corresponding
+Fortran code. Its reviewed converter retains shared and Fortran-specific explanations, embeds the
+fixed- and free-form source examples, and excludes C/C++ listings. It is practical guidance rather
+than the normative OpenMP specification.
 
 The GNU Fortran manual is generated from its pinned Texinfo sources. Maintainers building that
 source need GNU Texinfo 7.3 and the optional conversion dependency:
@@ -75,6 +81,7 @@ Build citation-preserving document chunks after ingestion:
 uv run fortran-mcp-build fpm-0.13.0-docs
 uv run fortran-mcp-build stdlib-0.8.1-docs
 uv run fortran-mcp-build cmake-4.4.0-fortran-docs
+uv run fortran-mcp-build openmp-6.0.1-fortran-examples
 uv run fortran-mcp-index
 ```
 
@@ -126,7 +133,9 @@ provider with `FORTRAN_MCP_SEARCH_PROVIDER=semantic` or
 
 Hybrid search conservatively returns no passages when its top semantic score is below the reviewed
 baseline threshold. An explicit source filter bypasses this automatic abstention because the caller
-has already stated which documentation applies. The threshold is calibrated against both supported
+has already stated which documentation applies. An explicit registered dialect name, such as
+OpenMP, can also establish applicability when lexical results from that dialect are present. The
+threshold is calibrated against both supported
 questions and uncovered, domain-adjacent questions, and must be reviewed whenever the core source
 collection or embedding model changes.
 
@@ -185,7 +194,7 @@ configuration examples.
 - Vendor compiler documentation and language extensions
 - Additional build-system documentation beyond the included Fortran-lang Make guide
 - Fortran Standard Library documentation
-- C interoperability and OpenMP references
+- C interoperability and the normative OpenMP specification
 - Dialect, compatibility, modernization, and migration guides
 
 Source licensing and redistribution terms will be recorded before documents enter the library.
