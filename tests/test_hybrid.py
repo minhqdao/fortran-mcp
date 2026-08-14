@@ -102,3 +102,42 @@ def test_hybrid_returns_results_above_the_reviewed_threshold() -> None:
     provider = HybridSearchProvider(FakeProvider((result,)), FakeProvider((result,)))
 
     assert provider.search("covered")
+
+
+def test_hybrid_accepts_concentrated_document_evidence() -> None:
+    results = tuple(
+        _result(str(index)).model_copy(
+            update={"score": 0.75, "source_id": "same", "path": "same.md"}
+        )
+        for index in range(8)
+    )
+    provider = HybridSearchProvider(FakeProvider(results), FakeProvider(results))
+
+    assert provider.search("coherent low scoring answer")
+
+
+def test_hybrid_limits_results_from_one_document() -> None:
+    repeated = tuple(
+        _result(str(index)).model_copy(update={"source_id": "same", "path": "same.md"})
+        for index in range(4)
+    )
+    different = _result("f").model_copy(update={"source_id": "other", "path": "other.md"})
+    provider = HybridSearchProvider(
+        FakeProvider((*repeated, different)), FakeProvider((*repeated, different))
+    )
+
+    results = provider.search("covered", limit=5)
+
+    assert len(results) == 5
+    assert sum(result.path == "same.md" for result in results) == 4
+    assert results[-1] == different.model_copy(update={"score": results[-1].score})
+
+
+def test_hybrid_backfills_when_few_documents_match() -> None:
+    repeated = tuple(
+        _result(str(index)).model_copy(update={"source_id": "same", "path": "same.md"})
+        for index in range(5)
+    )
+    provider = HybridSearchProvider(FakeProvider(repeated), FakeProvider(repeated))
+
+    assert len(provider.search("covered", limit=5)) == 5

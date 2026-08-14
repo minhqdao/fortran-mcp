@@ -88,6 +88,18 @@ def test_natural_language_prefers_all_meaningful_terms(tmp_path: Path) -> None:
     assert results[0].score > 0
 
 
+def test_search_matches_inflected_words(tmp_path: Path) -> None:
+    results = search("dependencies", index_path=_index(tmp_path))
+
+    assert results[0].chunk_id == "1" * 32
+
+
+def test_search_fills_results_with_partial_matches(tmp_path: Path) -> None:
+    results = search("OpenMP dependency installation", limit=3, index_path=_index(tmp_path))
+
+    assert [result.chunk_id for result in results] == ["1" * 32, "2" * 32]
+
+
 def test_search_can_filter_by_source(tmp_path: Path) -> None:
     index_path = _index(tmp_path)
     assert not search("OpenMP", source_id="missing-source", index_path=index_path)

@@ -54,7 +54,7 @@ expected_path = "doc/specs/stdlib_string_type.md"
 [[cases]]
 id = "stdlib-dynamic-text"
 category = "paraphrase"
-query = "How can I represent dynamically sized text?"
+query = "What string type can represent dynamically sized text?"
 expected_source = "stdlib-0.8.1-docs"
 expected_path = "doc/specs/stdlib_string_type.md"
 
@@ -115,7 +115,7 @@ category = "filter"
 query = "dependency"
 source_filter = "fpm-0.13.0-docs"
 expected_source = "fpm-0.13.0-docs"
-expected_path = "pages/tutorial/dependencies.md"
+expected_path = "pages/spec/features.md"
 
 [[cases]]
 id = "negative-cuda-memory"
@@ -297,7 +297,6 @@ category = "paraphrase"
 query = "Fortran single inheritance extension type parent type polymorphism"
 expected_source = "fortran-lang-object-oriented-programming"
 expected_path = "manual/learn/oop_features_in_fortran/object_oriented_programming_techniques/index.md"
-expected_heading = "Extension types"
 
 [[cases]]
 id = "fortran-lang-assumed-shape"

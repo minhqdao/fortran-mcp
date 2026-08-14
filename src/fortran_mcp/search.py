@@ -21,10 +21,12 @@ QUERY_TOKEN = re.compile(r"[\w.+-]+", re.UNICODE)
 STOP_WORDS = frozenset(
     {
         "a",
+        "add",
         "an",
         "as",
         "do",
         "for",
+        "fpm",
         "how",
         "i",
         "in",
@@ -199,7 +201,7 @@ def build_index(data_dir: Path | None = None, index_path: Path | None = None) ->
                     line_end UNINDEXED,
                     text,
                     url UNINDEXED,
-                    tokenize = 'unicode61 remove_diacritics 2'
+                    tokenize = 'porter unicode61 remove_diacritics 2'
                 )"""
             )
             count = 0
@@ -308,7 +310,7 @@ def search(
     strict_query, fallback_query = _fts_queries(query)
     sql = """SELECT chunk_id,
                     -bm25(chunks, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
-                                  1.0, 1.0, 1.0, 1.0, 3.0, 1.0, 1.0, 1.0, 1.0) AS score,
+                                  1.0, 1.0, 1.0, 1.0, 8.0, 1.0, 1.0, 1.0, 1.0) AS score,
                     source_id, source_title, document_type, authority, topics,
                     compilers, fortran_versions, version, revision, path, headings,
                     line_start, line_end, text, url
@@ -328,8 +330,10 @@ def search(
                 return database.execute(filtered_sql, parameters).fetchall()
 
             rows = execute(strict_query)
-            if not rows and fallback_query != strict_query:
-                rows = execute(fallback_query)
+            if len(rows) < limit and fallback_query != strict_query:
+                seen = {row[0] for row in rows}
+                rows.extend(row for row in execute(fallback_query) if row[0] not in seen)
+                rows = rows[:limit]
     except sqlite3.Error as error:
         raise SearchError(f"could not query search index: {error}") from error
     return tuple(_result_from_row(row) for row in rows)

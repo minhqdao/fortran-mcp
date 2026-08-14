@@ -1,9 +1,15 @@
 """Fuse lexical and semantic documentation rankings."""
 
+from collections import Counter
+
 from fortran_mcp.search import SearchProvider, SearchResult
 
 RRF_CONSTANT = 60
 DEFAULT_SEMANTIC_THRESHOLD = 0.785
+CONCENTRATED_SEMANTIC_THRESHOLD = 0.74
+CONCENTRATED_DOCUMENT_RESULTS = 8
+CONCENTRATED_DOCUMENT_RATIO = 0.70
+MAX_RESULTS_PER_DOCUMENT = 4
 
 
 class HybridSearchProvider:
@@ -44,8 +50,18 @@ class HybridSearchProvider:
             "fortran_version": fortran_version,
         }
         semantic_results = self.semantic.search(query, limit=candidate_limit, **filters)
+        document_counts = Counter((result.source_id, result.path) for result in semantic_results)
+        dominant_document_results = max(document_counts.values(), default=0)
+        concentrated = (
+            bool(semantic_results)
+            and semantic_results[0].score >= CONCENTRATED_SEMANTIC_THRESHOLD
+            and dominant_document_results >= CONCENTRATED_DOCUMENT_RESULTS
+            and dominant_document_results / len(semantic_results)
+            >= CONCENTRATED_DOCUMENT_RATIO
+        )
         if not any(filters.values()) and (
-            not semantic_results or semantic_results[0].score < self.semantic_threshold
+            not semantic_results
+            or (semantic_results[0].score < self.semantic_threshold and not concentrated)
         ):
             return ()
         rankings = (
@@ -66,7 +82,22 @@ class HybridSearchProvider:
                     RRF_CONSTANT + rank
                 )
                 results.setdefault(result.chunk_id, result)
-        ordered = sorted(scores, key=lambda chunk_id: (-scores[chunk_id], chunk_id))[:limit]
+        ranked = sorted(scores, key=lambda item: (-scores[item], item))
+        ordered: list[str] = []
+        deferred: list[str] = []
+        selected_documents: Counter[tuple[str, str]] = Counter()
+        for chunk_id in ranked:
+            result = results[chunk_id]
+            document = (result.source_id, result.path)
+            if selected_documents[document] >= MAX_RESULTS_PER_DOCUMENT:
+                deferred.append(chunk_id)
+                continue
+            ordered.append(chunk_id)
+            selected_documents[document] += 1
+            if len(ordered) == limit:
+                break
+        if len(ordered) < limit:
+            ordered.extend(deferred[: limit - len(ordered)])
         return tuple(
             results[chunk_id].model_copy(update={"score": scores[chunk_id]}) for chunk_id in ordered
         )
