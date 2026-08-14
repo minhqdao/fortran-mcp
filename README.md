@@ -44,6 +44,11 @@ uv run fortran-mcp-ingest stdlib-0.8.1-docs
 uv run fortran-mcp-ingest cmake-4.4.0-fortran-docs
 ```
 
+The core collection also includes separately identifiable Fortran-lang references for intrinsic
+procedures, the quickstart, best practices, object-oriented programming, Fortran 95, building and
+linking, Python-to-Fortran translation, and floating-point comparisons. They are pinned to one
+reviewed upstream revision and remain independently filterable in search results.
+
 The GNU Fortran manual is generated from its pinned Texinfo sources. Maintainers building that
 source need GNU Texinfo 7.3 and the optional conversion dependency:
 
@@ -177,7 +182,7 @@ configuration examples.
 
 - ISO Fortran standards and corrigenda
 - Vendor compiler documentation and language extensions
-- Additional build-system documentation, including Make
+- Additional build-system documentation beyond the included Fortran-lang Make guide
 - Fortran Standard Library documentation
 - C interoperability and OpenMP references
 - Dialect, compatibility, modernization, and migration guides

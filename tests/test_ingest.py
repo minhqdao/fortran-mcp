@@ -170,6 +170,41 @@ CheckFortranSourceCompiles
     assert "```cmake" in markdown
 
 
+def test_fortran_lang_intrinsics_are_grouped_without_tiny_heading_chunks(tmp_path: Path) -> None:
+    source = (
+        load_registry(REGISTRY_PATH).sources[4].model_copy(update={"expected_document_count": 2})
+    )
+    archive = _archive(
+        {
+            f"{source.archive_root}/data/intrinsics.yml": b'numeric:\n  - "ABS"\n',
+            f"{source.archive_root}/source/learn/intrinsics/index.md": b"# Intrinsics\n",
+            f"{source.archive_root}/source/learn/intrinsics/_pages/ABS.md": b"""
+(abs)=
+## abs
+
+### **Name**
+
+Absolute value.
+
+### **Synopsis**
+
+```fortran
+result = abs(a)
+```
+""",
+        }
+    )
+
+    record = ingest_source(source, tmp_path, downloader=lambda *_args: archive)
+
+    generated = tmp_path / f"raw/{source.id}/manual/learn/intrinsics/numeric/index.md"
+    markdown = generated.read_text()
+    assert record.converter == "fortran-lang-markdown"
+    assert markdown.startswith("# Numeric Fortran intrinsics\n\n## abs")
+    assert "**Name**" in markdown
+    assert "### **Name**" not in markdown
+
+
 def test_ingestion_rejects_unexpected_document_count(tmp_path: Path) -> None:
     source = _source().model_copy(update={"expected_document_count": 2})
     archive = _archive({f"{source.archive_root}/pages/index.md": b"# fpm\n"})

@@ -203,3 +203,80 @@ query = "Fortran compiler environment variable"
 source_filter = "cmake-4.4.0-fortran-docs"
 expected_source = "cmake-4.4.0-fortran-docs"
 expected_path = "manual/envvar/FC.md"
+
+[[cases]]
+id = "fortran-lang-move-alloc"
+category = "exact"
+query = "move_alloc intrinsic"
+expected_source = "fortran-lang-intrinsics-reference"
+expected_path = "manual/learn/intrinsics/state/index.md"
+
+[[cases]]
+id = "fortran-lang-intrinsic-c-pointer"
+category = "paraphrase"
+query = "Which intrinsic converts a C pointer into a Fortran pointer with an optional shape?"
+expected_source = "fortran-lang-intrinsics-reference"
+expected_path = "manual/learn/intrinsics/cfi/index.md"
+expected_heading = "c_f_pointer"
+
+[[cases]]
+id = "fortran-lang-do-concurrent"
+category = "paraphrase"
+query = "How do I write a parallelizable do concurrent loop?"
+expected_source = "fortran-lang-quickstart"
+expected_path = "manual/learn/quickstart/operators_control_flow/index.md"
+
+[[cases]]
+id = "fortran-lang-allocatable-practice"
+category = "paraphrase"
+query = "Why should modern Fortran prefer allocatable arrays over pointer arrays?"
+expected_source = "fortran-lang-best-practices"
+expected_path = "manual/learn/best_practices/allocatable_arrays/index.md"
+
+[[cases]]
+id = "fortran-lang-type-extension"
+category = "paraphrase"
+query = "Fortran single inheritance extension type parent type polymorphism"
+expected_source = "fortran-lang-object-oriented-programming"
+expected_path = "manual/learn/oop_features_in_fortran/object_oriented_programming_techniques/index.md"
+expected_heading = "Extension types"
+
+[[cases]]
+id = "fortran-lang-assumed-shape"
+category = "paraphrase"
+query = "How do I declare an assumed-shape array dummy argument?"
+expected_source = "fortran-lang-fortran-95-reference"
+expected_path = "manual/learn/f95_features/array_handling/index.md"
+expected_heading = "Assumed-shape arrays"
+
+[[cases]]
+id = "fortran-lang-link-objects"
+category = "paraphrase"
+query = "gfortran -c functions.f90 functions.o user_functions.mod"
+source_filter = "fortran-lang-build-and-link-guide"
+expected_source = "fortran-lang-build-and-link-guide"
+expected_path = "manual/learn/building_programs/linking_pieces/index.md"
+
+[[cases]]
+id = "fortran-lang-python-array-indexing"
+category = "paraphrase"
+query = "How do NumPy and Fortran array indexing and memory order differ?"
+expected_source = "fortran-lang-python-rosetta-stone"
+expected_path = "manual/learn/rosetta_stone/index.md"
+expected_heading = "Arrays"
+
+[[cases]]
+id = "fortran-lang-floating-tolerance"
+category = "paraphrase"
+query = "How should I compare floating-point numbers using epsilon and a tolerance?"
+expected_source = "fortran-lang-floating-point-guide"
+expected_path = "manual/learn/Floating_Point_Numbers_comparison/index.md"
+
+[[cases]]
+id = "fortran-lang-intrinsics-source-filter"
+category = "filter"
+query = "reshape array"
+source_filter = "fortran-lang-intrinsics-reference"
+expected_source = "fortran-lang-intrinsics-reference"
+expected_path = "manual/learn/intrinsics/array/index.md"
+expected_heading = "reshape"

@@ -20,6 +20,9 @@ def test_project_registry_is_valid() -> None:
     assert registry.sources[2].expected_document_count == 485
     assert registry.sources[3].id == "cmake-4.4.0-fortran-docs"
     assert registry.sources[3].expected_document_count == 35
+    assert len(registry.sources) == 12
+    assert registry.sources[4].id == "fortran-lang-intrinsics-reference"
+    assert registry.sources[-1].id == "fortran-lang-floating-point-guide"
 
 
 def test_packaged_registry_is_available() -> None:

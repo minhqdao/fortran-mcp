@@ -1,0 +1,11 @@
+Fortran-lang Fortran 95 language reference
+
+This booklet is adapted from the Wikipedia article "Fortran 95 language
+features" and retains its source attribution and revision date in the indexed
+overview. It is distributed under the Creative Commons Attribution-ShareAlike
+4.0 International license.
+
+License: https://creativecommons.org/licenses/by-sa/4.0/
+Source article: https://en.wikipedia.org/wiki/Fortran_95_language_features
+Adapted source: https://github.com/fortran-lang/webpage/tree/36d35714a4bc4e7d77183ecdfe09ed7107f3fff2/source/learn/f95_features
+

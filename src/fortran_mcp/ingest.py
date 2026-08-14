@@ -33,7 +33,7 @@ DOWNLOAD_LIMIT = 128 * 1024 * 1024
 FILE_LIMIT = 5 * 1024 * 1024
 TOTAL_CONTENT_LIMIT = 100 * 1024 * 1024
 ALLOWED_SUFFIXES = frozenset(
-    {".cmake", ".f90", ".md", ".markdown", ".rst", ".texi", ".toml", ".txt"}
+    {".cmake", ".f90", ".md", ".markdown", ".rst", ".texi", ".toml", ".txt", ".yml"}
 )
 Downloader = Callable[[str, int, int], bytes]
 
@@ -384,6 +384,96 @@ def _convert_cmake_rst(source: Source, root: Path) -> tuple[tuple[FileRecord, ..
     return tuple(sorted(records, key=lambda item: item.path)), "builtin cmake-rst 1"
 
 
+def _normalize_myst_markdown(content: str) -> str:
+    content = re.sub(r"^\([^)]+\)=\s*\n", "", content, flags=re.MULTILINE)
+    content = re.sub(r"^```\{(?:play-)?code-block\}\s*", "```", content, flags=re.MULTILINE)
+    return content
+
+
+def _compact_intrinsic(content: str) -> str:
+    content = _normalize_myst_markdown(content)
+    content = re.sub(r"^##\s+", "## ", content, count=1, flags=re.MULTILINE)
+    content = re.sub(
+        r"^#{3,6}\s+\*\*(.+?)\*\*\s*$",
+        lambda match: f"**{match.group(1)}**",
+        content,
+        flags=re.MULTILINE,
+    )
+    return content.strip()
+
+
+def _intrinsic_groups(content: str) -> dict[str, tuple[str, ...]]:
+    groups: dict[str, list[str]] = {}
+    current: str | None = None
+    for line in content.splitlines():
+        group = re.fullmatch(r"([a-z_]+):", line)
+        if group:
+            current = group.group(1)
+            groups[current] = []
+            continue
+        name = re.fullmatch(r'\s+-\s+"([A-Z0-9_]+)"', line)
+        if name and current is not None:
+            groups[current].append(name.group(1))
+    return {key: tuple(value) for key, value in groups.items()}
+
+
+def _published_fortran_lang_path(path: PurePosixPath) -> PurePosixPath:
+    relative = path.relative_to(PurePosixPath("source"))
+    if relative.suffix == ".md":
+        relative = (
+            relative.parent if relative.name == "index.md" else relative.parent / relative.stem
+        )
+    return PurePosixPath("manual", *relative.parts, "index.md")
+
+
+def _convert_fortran_lang_markdown(
+    source: Source, root: Path
+) -> tuple[tuple[FileRecord, ...], str]:
+    output_dir = root / "manual"
+    output_dir.mkdir()
+    records: list[FileRecord] = []
+
+    if source.id == "fortran-lang-intrinsics-reference":
+        groups_path = root / "data/intrinsics.yml"
+        index_path = root / "source/learn/intrinsics/index.md"
+        if not groups_path.is_file() or not index_path.is_file():
+            raise IngestionError("Fortran-lang intrinsic source metadata is incomplete")
+        groups = _intrinsic_groups(groups_path.read_text(encoding="utf-8"))
+        for group, names in groups.items():
+            parts = [f"# {group.replace('_', ' ').title()} Fortran intrinsics"]
+            for name in names:
+                path = root / f"source/learn/intrinsics/_pages/{name}.md"
+                if not path.is_file():
+                    raise IngestionError(f"Fortran-lang intrinsic page is unavailable: {name}")
+                parts.append(_compact_intrinsic(path.read_text(encoding="utf-8")))
+            output_path = output_dir / f"learn/intrinsics/{group}/index.md"
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            output_path.write_text("\n\n".join(parts) + "\n", encoding="utf-8")
+            records.append(_record_file(output_path, root))
+        overview = _normalize_myst_markdown(index_path.read_text(encoding="utf-8"))
+        overview = re.sub(r"::::\{dropdown\}.*?::::\s*", "", overview, flags=re.DOTALL)
+        output_path = output_dir / "learn/intrinsics/index.md"
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(overview.strip() + "\n", encoding="utf-8")
+        records.append(_record_file(output_path, root))
+    else:
+        for path in sorted(root.glob("source/learn/**/*.md")):
+            relative = path.relative_to(root).as_posix()
+            if not _matches(relative, source.include_paths):
+                continue
+            output_path = root.joinpath(
+                *_published_fortran_lang_path(PurePosixPath(relative)).parts
+            )
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            output_path.write_text(
+                _normalize_myst_markdown(path.read_text(encoding="utf-8")), encoding="utf-8"
+            )
+            records.append(_record_file(output_path, root))
+    if not records:
+        raise IngestionError("Fortran-lang Markdown conversion produced no documentation pages")
+    return tuple(sorted(records, key=lambda item: item.path)), "builtin fortran-lang-markdown 1"
+
+
 def ingest_source(
     source: Source,
     data_dir: Path | None = None,
@@ -420,6 +510,10 @@ def ingest_source(
             schema_version = 2
         elif source.converter == "cmake-rst":
             generated, converter_version = _convert_cmake_rst(source, temporary_path)
+            stored_files = tuple(sorted((*stored_files, *generated), key=lambda item: item.path))
+            schema_version = 2
+        elif source.converter == "fortran-lang-markdown":
+            generated, converter_version = _convert_fortran_lang_markdown(source, temporary_path)
             stored_files = tuple(sorted((*stored_files, *generated), key=lambda item: item.path))
             schema_version = 2
         document_count = sum(_matches(file.path, source.document_paths) for file in stored_files)

@@ -76,7 +76,7 @@ class Source(StrictModel):
     published_path_prefix: str
     citation_base_url: HttpUrl
     citation_format: Literal["published-html", "source"]
-    converter: Literal["none", "texinfo", "cmake-rst"] = "none"
+    converter: Literal["none", "texinfo", "cmake-rst", "fortran-lang-markdown"] = "none"
     converter_entrypoint: str | None = None
     license: str = Field(min_length=1)
     license_url: HttpUrl
