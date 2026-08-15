@@ -84,6 +84,7 @@ class Source(StrictModel):
         "openmp-examples",
         "gnu-make-texinfo",
         "numpy-f2py-rst",
+        "openmpi-fortran-rst",
     ] = "none"
     converter_entrypoint: str | None = None
     license: str = Field(min_length=1)

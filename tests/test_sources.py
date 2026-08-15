@@ -20,10 +20,11 @@ def test_project_registry_is_valid() -> None:
     assert registry.sources[2].expected_document_count == 485
     assert registry.sources[3].id == "cmake-4.4.0-fortran-docs"
     assert registry.sources[3].expected_document_count == 35
-    assert len(registry.sources) == 15
+    assert len(registry.sources) == 16
     assert registry.sources[4].id == "fortran-lang-intrinsics-reference"
-    assert registry.sources[-2].id == "gnu-make-4.4.1-build-reference"
-    assert registry.sources[-1].id == "numpy-2.5.2-f2py-docs"
+    assert registry.sources[-3].id == "gnu-make-4.4.1-build-reference"
+    assert registry.sources[-2].id == "numpy-2.5.2-f2py-docs"
+    assert registry.sources[-1].id == "openmpi-5.0.10-fortran-reference"
 
 
 def test_packaged_registry_is_available() -> None:

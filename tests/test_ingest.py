@@ -249,6 +249,125 @@ def test_numpy_f2py_ingestion_embeds_literal_examples(tmp_path: Path) -> None:
     assert "literalinclude" not in markdown
 
 
+def test_openmpi_ingestion_labels_modern_and_legacy_fortran_syntax(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    source = _source_by_id("openmpi-5.0.10-fortran-reference").model_copy(
+        update={"expected_document_count": 2}
+    )
+    monkeypatch.setattr("fortran_mcp.ingest.OPEN_MPI_FORTRAN_ROUTINES", ("MPI_Send",))
+    archive = _archive(
+        {
+            f"{source.archive_root}/LICENSE": b"BSD fixture\n",
+            f"{source.archive_root}/docs/man-openmpi/man3/MPI_Send.3.rst": b"""MPI_Send
+========
+
+C Syntax
+^^^^^^^^
+
+.. code-block:: c
+
+   int MPI_Send(void);
+
+Fortran Syntax
+^^^^^^^^^^^^^^
+
+.. code-block:: fortran
+
+   USE MPI
+
+Fortran 2008 Syntax
+^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: fortran
+
+   USE mpi_f08
+   CALL MPI_Send(buffer, 1, MPI_INTEGER, 1, 0, MPI_COMM_WORLD)
+
+DESCRIPTION
+-----------
+
+Performs a blocking send.
+
+.. code-block:: c
+
+   MPI_Send(buffer, 1, MPI_INT, 1, 0, MPI_COMM_WORLD);
+""",
+            f"{source.archive_root}/examples/hello_usempif08.f90": b"use mpi_f08\n",
+            f"{source.archive_root}/examples/ring_usempif08.f90": b"use mpi_f08\n",
+        }
+    )
+
+    record = ingest_source(source, tmp_path, downloader=lambda *_args: archive)
+
+    generated = tmp_path / f"raw/{source.id}/manual/MPI_Send.3.md"
+    markdown = generated.read_text()
+    assert record.converter == "openmpi-fortran-rst"
+    assert record.converter_version == "builtin openmpi-fortran-rst 2"
+    assert "USE mpi_f08" in markdown
+    assert "Recommended Fortran Syntax (mpi_f08)" in markdown
+    assert "Legacy Fortran Syntax (use mpi or mpif.h)" in markdown
+    assert "USE MPI" in markdown
+    assert "Performs a blocking send" in markdown
+    assert "int MPI_Send" not in markdown
+    assert "MPI_Send(buffer, 1, MPI_INT," not in markdown
+
+
+def test_openmpi_ingestion_expands_shared_routine_body(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    source = _source_by_id("openmpi-5.0.10-fortran-reference").model_copy(
+        update={"expected_document_count": 2}
+    )
+    monkeypatch.setattr("fortran_mcp.ingest.OPEN_MPI_FORTRAN_ROUTINES", ("MPI_Ibcast",))
+    archive = _archive(
+        {
+            f"{source.archive_root}/LICENSE": b"BSD fixture\n",
+            f"{source.archive_root}/docs/man-openmpi/man3/MPI_Ibcast.3.rst": b"""MPI_Ibcast
+===========
+    .. include_body
+
+.. include:: ../man3/MPI_Bcast.3.rst
+    :start-after: .. include_body
+""",
+            f"{source.archive_root}/docs/man-openmpi/man3/MPI_Bcast.3.rst": b"""MPI_Bcast
+=========
+
+.. include_body
+
+MPI_Bcast and MPI_Ibcast broadcast a message.
+
+Fortran Syntax
+^^^^^^^^^^^^^^
+
+.. code-block:: fortran
+
+   USE MPI
+   CALL MPI_IBCAST(BUFFER, COUNT, DATATYPE, ROOT, COMM, REQUEST, IERROR)
+
+Fortran 2008 Syntax
+^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: fortran
+
+   USE mpi_f08
+   CALL MPI_Ibcast(buffer, count, datatype, root, comm, request, ierror)
+""",
+            f"{source.archive_root}/examples/hello_usempif08.f90": b"use mpi_f08\n",
+            f"{source.archive_root}/examples/ring_usempif08.f90": b"use mpi_f08\n",
+        }
+    )
+
+    ingest_source(source, tmp_path, downloader=lambda *_args: archive)
+
+    markdown = (tmp_path / f"raw/{source.id}/manual/MPI_Ibcast.3.md").read_text()
+    assert markdown.startswith("# MPI_Ibcast")
+    assert "broadcast a message" in markdown
+    assert "USE MPI" in markdown
+    assert "USE mpi_f08" in markdown
+    assert "include::" not in markdown
+
+
 def test_openmp_ingestion_keeps_explanations_and_fortran_examples(tmp_path: Path) -> None:
     source = _source_by_id("openmp-6.0.1-fortran-examples").model_copy(
         update={"expected_document_count": 1}

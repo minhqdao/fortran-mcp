@@ -285,6 +285,14 @@ def _expand_rst_includes(
 
 def _rst_to_markdown(content: str) -> str:
     links = dict(re.findall(r"^\.\. _([^:]+):\s+(https?://\S+)\s*$", content, re.MULTILINE))
+
+    def rst_link(match: re.Match[str]) -> str:
+        label = match.group(1)
+        explicit = re.fullmatch(r"(.+?)\s+<(https?://[^>]+)>", label)
+        if explicit:
+            return f"[{explicit.group(1)}]({explicit.group(2)})"
+        return f"[{label}]({links[label]})" if label in links else label
+
     substitutions = dict(
         re.findall(r"^\s*\.\. \|([^|]+)\| replace::\s*(.+)$", content, re.MULTILINE)
     )
@@ -293,11 +301,7 @@ def _rst_to_markdown(content: str) -> str:
         content = content.replace(f"|{name}|", replacement)
     content = re.sub(
         r"`([^`]+)`_{1,2}",
-        lambda match: (
-            f"[{match.group(1)}]({links[match.group(1)]})"
-            if match.group(1) in links
-            else match.group(1)
-        ),
+        rst_link,
         content,
     )
     content = re.sub(
@@ -542,6 +546,151 @@ def _convert_numpy_f2py_rst(source: Source, root: Path) -> tuple[tuple[FileRecor
     if not records:
         raise IngestionError("NumPy F2PY conversion produced no documentation pages")
     return tuple(records), "builtin numpy-f2py-rst 1"
+
+
+OPEN_MPI_FORTRAN_ROUTINES = (
+    "MPI_Abort",
+    "MPI_Accumulate",
+    "MPI_Allgather",
+    "MPI_Allgatherv",
+    "MPI_Allreduce",
+    "MPI_Alltoall",
+    "MPI_Alltoallv",
+    "MPI_Barrier",
+    "MPI_Bcast",
+    "MPI_Cart_coords",
+    "MPI_Cart_create",
+    "MPI_Cart_shift",
+    "MPI_Comm_dup",
+    "MPI_Comm_free",
+    "MPI_Comm_rank",
+    "MPI_Comm_size",
+    "MPI_Comm_split",
+    "MPI_Exscan",
+    "MPI_File_close",
+    "MPI_File_open",
+    "MPI_File_read",
+    "MPI_File_read_all",
+    "MPI_File_read_at",
+    "MPI_File_set_view",
+    "MPI_File_write",
+    "MPI_File_write_all",
+    "MPI_File_write_at",
+    "MPI_Finalize",
+    "MPI_Gather",
+    "MPI_Gatherv",
+    "MPI_Get",
+    "MPI_Get_count",
+    "MPI_Iallreduce",
+    "MPI_Ibcast",
+    "MPI_Init",
+    "MPI_Init_thread",
+    "MPI_Iprobe",
+    "MPI_Irecv",
+    "MPI_Isend",
+    "MPI_Neighbor_alltoallv",
+    "MPI_Probe",
+    "MPI_Put",
+    "MPI_Recv",
+    "MPI_Reduce",
+    "MPI_Scan",
+    "MPI_Scatter",
+    "MPI_Scatterv",
+    "MPI_Send",
+    "MPI_Sendrecv",
+    "MPI_Test",
+    "MPI_Testall",
+    "MPI_Type_commit",
+    "MPI_Type_contiguous",
+    "MPI_Type_create_struct",
+    "MPI_Type_create_subarray",
+    "MPI_Type_free",
+    "MPI_Type_get_extent",
+    "MPI_Type_size",
+    "MPI_Type_vector",
+    "MPI_Wait",
+    "MPI_Waitall",
+    "MPI_Waitany",
+    "MPI_Win_allocate",
+    "MPI_Win_create",
+    "MPI_Win_fence",
+    "MPI_Win_flush",
+    "MPI_Win_free",
+    "MPI_Win_lock",
+    "MPI_Win_unlock",
+    "MPI_Wtime",
+)
+
+
+def _remove_rst_section(content: str, title: str) -> str:
+    pattern = re.compile(
+        rf"(?m)^{re.escape(title)}\s*\n(?P<adornment>[-=^\"*~])(?P=adornment){{2,}}\s*$"
+    )
+    match = pattern.search(content)
+    if match is None:
+        return content
+    adornment = re.escape(match.group("adornment"))
+    next_section = re.compile(rf"(?m)^\S.*\n{adornment}{{3,}}\s*$").search(content, match.end())
+    end = next_section.start() if next_section else len(content)
+    return content[: match.start()] + content[end:]
+
+
+def _convert_openmpi_fortran_rst(source: Source, root: Path) -> tuple[tuple[FileRecord, ...], str]:
+    source_dir = root / "docs/man-openmpi/man3"
+    output_dir = root / "manual"
+    output_dir.mkdir()
+    records: list[FileRecord] = []
+    for routine in OPEN_MPI_FORTRAN_ROUTINES:
+        path = source_dir / f"{routine}.3.rst"
+        if not path.is_file():
+            raise IngestionError(f"Open MPI routine page is unavailable: {routine}")
+        content = path.read_text(encoding="utf-8")
+        included_page = re.search(r"(?m)^\.\. include:: \.\./man3/(MPI_\w+\.3\.rst)\s*$", content)
+        if included_page:
+            included_path = source_dir / included_page.group(1)
+            if not included_path.is_file():
+                raise IngestionError(
+                    f"Open MPI included routine page is unavailable: {included_path.name}"
+                )
+            included_content = included_path.read_text(encoding="utf-8")
+            marker = ".. include_body"
+            if marker not in included_content:
+                raise IngestionError(
+                    f"Open MPI included routine page has no body: {included_path.name}"
+                )
+            content = f"{routine}\n{'=' * len(routine)}\n" + included_content.split(marker, 1)[1]
+        for title in ("C Syntax", "ERRORS", "SEE ALSO"):
+            content = _remove_rst_section(content, title)
+        content = re.sub(
+            r"(?m)^Fortran Syntax\n\^+$",
+            "Legacy Fortran Syntax (use mpi or mpif.h)\n"
+            "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+            content,
+        )
+        content = re.sub(
+            r"(?m)^Fortran 2008 Syntax\n\^+$",
+            "Recommended Fortran Syntax (mpi_f08)\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+            content,
+        )
+        content = re.sub(r"(?m)^\.\. include_body\s*$", "", content)
+        content = content.replace("|mdash|", "-").replace("|mpi_standard_version|", "3.1")
+        content = re.sub(r"(?ms)^\.\. code-block:: [cC]\s*\n(?:\n|[ \t]+.*\n?)*", "", content)
+        output_path = output_dir / f"{routine}.3.md"
+        output_path.write_text(_rst_to_markdown(content), encoding="utf-8")
+        records.append(_record_file(output_path, root))
+
+    examples = [root / "examples/hello_usempif08.f90", root / "examples/ring_usempif08.f90"]
+    if not all(path.is_file() for path in examples):
+        raise IngestionError("Open MPI Fortran 2008 examples are unavailable")
+    example_text = ["# Open MPI Fortran 2008 examples"]
+    for path in examples:
+        example_text.extend(
+            (f"## `{path.name}`", f"```fortran\n{path.read_text(encoding='utf-8').rstrip()}\n```")
+        )
+    output_path = output_dir / "Fortran-2008-examples.md"
+    output_path.write_text("\n\n".join(example_text) + "\n", encoding="utf-8")
+    records.append(_record_file(output_path, root))
+    return tuple(records), "builtin openmpi-fortran-rst 2"
 
 
 def _normalize_myst_markdown(content: str) -> str:
@@ -906,6 +1055,10 @@ def ingest_source(
             schema_version = 2
         elif source.converter == "numpy-f2py-rst":
             generated, converter_version = _convert_numpy_f2py_rst(source, temporary_path)
+            stored_files = tuple(sorted((*stored_files, *generated), key=lambda item: item.path))
+            schema_version = 2
+        elif source.converter == "openmpi-fortran-rst":
+            generated, converter_version = _convert_openmpi_fortran_rst(source, temporary_path)
             stored_files = tuple(sorted((*stored_files, *generated), key=lambda item: item.path))
             schema_version = 2
         document_count = sum(_matches(file.path, source.document_paths) for file in stored_files)

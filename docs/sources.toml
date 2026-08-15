@@ -534,3 +534,53 @@ license_url = "https://github.com/numpy/numpy/blob/v2.5.2/LICENSE.txt"
 redistribution = "redistributable"
 status = "approved"
 notes = "Complete substantive F2PY 2.5.2 documentation with referenced examples embedded. Two navigation-only RST stubs are excluded from generated documents."
+
+[[sources]]
+id = "openmpi-5.0.10-fortran-reference"
+title = "Open MPI 5.0.10 Fortran routine reference"
+publisher = "Open MPI Project"
+document_type = "ecosystem-guide"
+authority = "official"
+topics = [
+  "collective-communication",
+  "derived-datatypes",
+  "distributed-memory",
+  "fortran-2008",
+  "legacy-code-migration",
+  "mpi",
+  "mpi-f08",
+  "mpi-fortran-module",
+  "mpif.h",
+  "mpi-io",
+  "nonblocking-communication",
+  "one-sided-communication",
+  "parallel-programming",
+  "point-to-point-communication",
+  "process-topologies",
+]
+fortran_versions = []
+compilers = []
+dialects = ["MPI", "Open MPI"]
+version = "5.0.10"
+revision = "0d48030d410ae8f56790933135b28be1b3920ba1"
+source_url = "https://github.com/open-mpi/ompi/tree/v5.0.10/docs/man-openmpi/man3"
+archive_url = "https://github.com/open-mpi/ompi/archive/refs/tags/v5.0.10.tar.gz"
+archive_root = "ompi-5.0.10"
+include_paths = [
+  "LICENSE",
+  "docs/man-openmpi/man3/**",
+  "examples/hello_usempif08.f90",
+  "examples/ring_usempif08.f90",
+]
+document_paths = ["manual/**"]
+expected_document_count = 71
+homepage_url = "https://docs.open-mpi.org/en/v5.0.10/"
+published_path_prefix = "manual"
+citation_base_url = "https://docs.open-mpi.org/en/v5.0.10/man-openmpi/man3/"
+citation_format = "published-html"
+converter = "openmpi-fortran-rst"
+license = "BSD-3-Clause-Open-MPI"
+license_url = "https://github.com/open-mpi/ompi/blob/v5.0.10/LICENSE"
+redistribution = "redistributable"
+status = "approved"
+notes = "Curated standardized MPI routine semantics with the official mpi_f08, use mpi, and mpif.h-compatible Fortran signatures, plus the official Fortran 2008 hello and ring examples. Each routine keeps one shared explanation; C syntax and repeated error-handler boilerplate are excluded. mpi_f08 is labeled as the recommended interface, while older bindings are retained for understanding and migrating legacy code. This is an implementation reference, not the normative MPI standard."

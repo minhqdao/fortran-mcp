@@ -442,3 +442,76 @@ category = "paraphrase"
 query = "How do I build and install an f2py extension with Meson after distutils removal?"
 expected_source = "numpy-2.5.2-f2py-docs"
 expected_path = "manual/buildtools/meson.md"
+
+[[cases]]
+id = "openmpi-f08-hello"
+category = "paraphrase"
+query = "minimal Fortran mpi_f08 hello world initialize rank size finalize"
+expected_source = "openmpi-5.0.10-fortran-reference"
+expected_path = "manual/Fortran-2008-examples.md"
+
+[[cases]]
+id = "openmpi-nonblocking-send"
+category = "paraphrase"
+query = "How do I start a nonblocking MPI send in Fortran and wait for completion?"
+expected_source = "openmpi-5.0.10-fortran-reference"
+expected_path = "manual/MPI_Isend.3.md"
+
+[[cases]]
+id = "openmpi-allreduce"
+category = "paraphrase"
+query = "combine values from every MPI process and return the reduction result to every rank"
+expected_source = "openmpi-5.0.10-fortran-reference"
+expected_path = "manual/MPI_Allreduce.3.md"
+
+[[cases]]
+id = "openmpi-derived-struct"
+category = "paraphrase"
+query = "create an MPI derived datatype from different block lengths displacements and datatypes"
+expected_source = "openmpi-5.0.10-fortran-reference"
+expected_path = "manual/MPI_Type_create_struct.3.md"
+
+[[cases]]
+id = "openmpi-cartesian-shift"
+category = "paraphrase"
+query = "find source and destination neighbor ranks for a displacement in an MPI Cartesian topology"
+expected_source = "openmpi-5.0.10-fortran-reference"
+expected_path = "manual/MPI_Cart_shift.3.md"
+
+[[cases]]
+id = "openmpi-file-view"
+category = "paraphrase"
+query = "set an MPI file view with displacement elementary datatype and file datatype"
+expected_source = "openmpi-5.0.10-fortran-reference"
+expected_path = "manual/MPI_File_set_view.3.md"
+
+[[cases]]
+id = "openmpi-rma-flush"
+category = "paraphrase"
+query = "complete outstanding MPI one-sided RMA operations at the origin and target"
+expected_source = "openmpi-5.0.10-fortran-reference"
+expected_path = "manual/MPI_Win_flush.3.md"
+
+[[cases]]
+id = "openmpi-source-filter"
+category = "filter"
+query = "blocking standard mode send mpi_f08"
+source_filter = "openmpi-5.0.10-fortran-reference"
+expected_source = "openmpi-5.0.10-fortran-reference"
+expected_path = "manual/MPI_Send.3.md"
+
+[[cases]]
+id = "openmpi-legacy-use-mpi"
+category = "paraphrase"
+query = "migrate legacy Fortran USE MPI integer communicator MPI_COMM_RANK"
+expected_source = "openmpi-5.0.10-fortran-reference"
+expected_path = "manual/MPI_Comm_rank.3.md"
+expected_heading = "Legacy Fortran Syntax"
+
+[[cases]]
+id = "openmpi-legacy-mpifh"
+category = "paraphrase"
+query = "understand old Fortran INCLUDE mpif.h MPI_SEND integer datatype communicator"
+expected_source = "openmpi-5.0.10-fortran-reference"
+expected_path = "manual/MPI_Send.3.md"
+expected_heading = "Legacy Fortran Syntax"
