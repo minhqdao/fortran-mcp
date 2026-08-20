@@ -90,6 +90,29 @@ def test_ingestion_does_not_overwrite_existing_data(tmp_path: Path) -> None:
         ingest_source(source, tmp_path, downloader=downloader)
 
 
+def test_fortitude_ingestion_keeps_only_reviewed_native_markdown(tmp_path: Path) -> None:
+    source = _source_by_id("fortitude-0.9.2-reference").model_copy(
+        update={"expected_document_count": 2}
+    )
+    archive = _archive(
+        {
+            f"{source.archive_root}/LICENSE": b"MIT\n",
+            f"{source.archive_root}/docs/linter.md": b"# Linter\n",
+            f"{source.archive_root}/docs/rules/implicit-typing.md": b"# implicit-typing (C001)\n",
+            f"{source.archive_root}/docs/tutorial.md": b"# Excluded tutorial\n",
+            f"{source.archive_root}/crates/fortitude_linter/src/rules/mod.rs": b"// excluded\n",
+        }
+    )
+
+    record = ingest_source(source, tmp_path, downloader=lambda *_args: archive)
+
+    assert {file.path for file in record.files} == {
+        "docs/linter.md",
+        "docs/rules/implicit-typing.md",
+    }
+    assert record.converter is None
+
+
 def test_texinfo_ingestion_records_generated_pages(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:

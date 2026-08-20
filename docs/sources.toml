@@ -584,3 +584,55 @@ license_url = "https://github.com/open-mpi/ompi/blob/v5.0.10/LICENSE"
 redistribution = "redistributable"
 status = "approved"
 notes = "Curated standardized MPI routine semantics with the official mpi_f08, use mpi, and mpif.h-compatible Fortran signatures, plus the official Fortran 2008 hello and ring examples. Each routine keeps one shared explanation; C syntax and repeated error-handler boilerplate are excluded. mpi_f08 is labeled as the recommended interface, while older bindings are retained for understanding and migrating legacy code. This is an implementation reference, not the normative MPI standard."
+
+[[sources]]
+id = "fortitude-0.9.2-reference"
+title = "Fortitude 0.9.2 linter rules and usage reference"
+publisher = "PlasmaFAIR"
+document_type = "ecosystem-guide"
+authority = "official"
+topics = [
+  "correctness",
+  "diagnostics",
+  "linting",
+  "modernization",
+  "obsolescent-features",
+  "portability",
+  "style",
+]
+fortran_versions = []
+compilers = []
+dialects = ["Fortitude"]
+version = "0.9.2"
+revision = "eb0f0c464859c6a6c4f91e4f97e36d26ddcb6947"
+source_url = "https://github.com/PlasmaFAIR/fortitude/tree/eb0f0c464859c6a6c4f91e4f97e36d26ddcb6947/docs"
+archive_url = "https://github.com/PlasmaFAIR/fortitude/archive/eb0f0c464859c6a6c4f91e4f97e36d26ddcb6947.tar.gz"
+archive_root = "fortitude-eb0f0c464859c6a6c4f91e4f97e36d26ddcb6947"
+include_paths = [
+  "docs/configuration.md",
+  "docs/faq.md",
+  "docs/installation.md",
+  "docs/linter.md",
+  "docs/rules.md",
+  "docs/rules/**",
+  "docs/settings.md",
+]
+document_paths = [
+  "docs/configuration.md",
+  "docs/faq.md",
+  "docs/installation.md",
+  "docs/linter.md",
+  "docs/rules.md",
+  "docs/rules/**",
+  "docs/settings.md",
+]
+expected_document_count = 111
+homepage_url = "https://fortitude.readthedocs.io/en/v0.9.2/"
+published_path_prefix = "docs"
+citation_base_url = "https://fortitude.readthedocs.io/en/v0.9.2/"
+citation_format = "published-html"
+license = "MIT"
+license_url = "https://github.com/PlasmaFAIR/fortitude/blob/v0.9.2/LICENSE"
+redistribution = "redistributable"
+status = "approved"
+notes = "Pinned native Markdown for every v0.9.2 rule plus only the concise installation, linter, configuration, settings, FAQ, and rule-index pages. Implementation sources, fixtures, media, integrations, editor setup, tutorial, preview, and release history are excluded. Fortitude is practical diagnostic guidance, not a language standard or compiler authority."

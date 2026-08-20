@@ -509,6 +509,62 @@ expected_path = "manual/MPI_Comm_rank.3.md"
 expected_heading = "Legacy Fortran Syntax"
 
 [[cases]]
+id = "fortitude-implicit-external"
+category = "paraphrase"
+query = "How can a linter require implicit none external and catch implicit procedure interfaces?"
+expected_source = "fortitude-0.9.2-reference"
+expected_path = "docs/rules/implicit-external-procedures.md"
+
+[[cases]]
+id = "fortitude-common-block"
+category = "paraphrase"
+query = "Which Fortitude warning identifies an obsolete Fortran COMMON block?"
+expected_source = "fortitude-0.9.2-reference"
+expected_path = "docs/rules/common-block.md"
+
+[[cases]]
+id = "fortitude-old-array-literal"
+category = "exact"
+query = "old-style-array-literal MOD011"
+expected_source = "fortitude-0.9.2-reference"
+expected_path = "docs/rules/old-style-array-literal.md"
+
+[[cases]]
+id = "fortitude-mpi-module"
+category = "paraphrase"
+query = "Fortitude rule for replacing the old mpi module with mpi_f08"
+expected_source = "fortitude-0.9.2-reference"
+expected_path = "docs/rules/old-mpi-module.md"
+
+[[cases]]
+id = "fortitude-invalid-tab"
+category = "exact"
+query = "invalid-tab PORT031"
+expected_source = "fortitude-0.9.2-reference"
+expected_path = "docs/rules/invalid-tab.md"
+
+[[cases]]
+id = "fortitude-target-standard"
+category = "paraphrase"
+query = "How do I configure the target Fortran standard used by Fortitude?"
+expected_source = "fortitude-0.9.2-reference"
+expected_path = "docs/settings.md"
+
+[[cases]]
+id = "fortitude-config-discovery"
+category = "paraphrase"
+query = "Where does Fortitude look for fortitude.toml fpm.toml and pyproject.toml configuration?"
+expected_source = "fortitude-0.9.2-reference"
+expected_path = "docs/configuration.md"
+
+[[cases]]
+id = "fortitude-fixed-form"
+category = "paraphrase"
+query = "Can Fortitude lint old fixed-form Fortran source files?"
+expected_source = "fortitude-0.9.2-reference"
+expected_path = "docs/faq.md"
+
+[[cases]]
 id = "openmpi-legacy-mpifh"
 category = "paraphrase"
 query = "understand old Fortran INCLUDE mpif.h MPI_SEND integer datatype communicator"

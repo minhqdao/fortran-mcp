@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 
 from fortran_mcp.documents import DocumentChunk
-from fortran_mcp.search import SearchError, build_index, get_chunk, search
+from fortran_mcp.search import SearchError, _fts_queries, build_index, get_chunk, search
 
 
 def _chunk(
@@ -86,6 +86,19 @@ def test_natural_language_prefers_all_meaningful_terms(tmp_path: Path) -> None:
 
     assert results[0].chunk_id == "1" * 32
     assert results[0].score > 0
+
+
+def test_recommendation_phrasing_is_not_used_as_a_search_term() -> None:
+    strict, fallback = _fts_queries(
+        "Why should modern Fortran prefer allocatable arrays over pointer arrays?"
+    )
+
+    assert (
+        strict == '"modern" AND "fortran" AND "allocatable" AND "arrays" AND "over" AND "pointer"'
+    )
+    assert "why" not in fallback
+    assert "should" not in fallback
+    assert "prefer" not in fallback
 
 
 def test_search_matches_inflected_words(tmp_path: Path) -> None:

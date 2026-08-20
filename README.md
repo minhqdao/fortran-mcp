@@ -46,6 +46,7 @@ uv run fortran-mcp-ingest openmp-6.0.1-fortran-examples
 uv run fortran-mcp-ingest gnu-make-4.4.1-build-reference
 uv run fortran-mcp-ingest numpy-2.5.2-f2py-docs
 uv run fortran-mcp-ingest openmpi-5.0.10-fortran-reference
+uv run fortran-mcp-ingest fortitude-0.9.2-reference
 ```
 
 The core collection also includes separately identifiable Fortran-lang references for intrinsic
@@ -62,6 +63,12 @@ The GNU Make source is a deliberately small set of official 4.4.1 manual section
 prerequisites, automatic variables, parallel and recursive builds, diagnostics, and the built-in
 Fortran compiler variables and rules. Its modified-title and attribution notice, required cover
 texts, and complete GFDL are retained.
+
+The Fortitude source adds practical diagnostics for correctness, modernization, obsolete features,
+portability, and style. It uses Fortitude's pinned native Markdown: one page per rule plus the small
+set of pages needed to install, run, and configure the linter. Parser sources, tests, media, editor
+setup, integrations, and release history are excluded. The material complements language and
+compiler references; it is not treated as normative Fortran guidance.
 
 The GNU Fortran manual is generated from its pinned Texinfo sources. Maintainers building that
 source need GNU Texinfo 7.3 and the optional conversion dependency:
@@ -91,6 +98,7 @@ uv run fortran-mcp-build stdlib-0.8.1-docs
 uv run fortran-mcp-build cmake-4.4.0-fortran-docs
 uv run fortran-mcp-build openmp-6.0.1-fortran-examples
 uv run fortran-mcp-build gnu-make-4.4.1-build-reference
+uv run fortran-mcp-build fortitude-0.9.2-reference
 uv run fortran-mcp-index
 ```
 
@@ -204,7 +212,7 @@ configuration examples.
 - Additional build-system documentation beyond the included fpm, CMake, Fortran-lang, and GNU Make material
 - Fortran Standard Library documentation
 - C interoperability and the normative OpenMP specification
-- Dialect, compatibility, modernization, and migration guides
+- Additional dialect, compatibility, modernization, and migration guides that clear licensing and measured-value review
 
 Source licensing and redistribution terms will be recorded before documents enter the library.
 The reviewed source inventory lives in [`docs/sources.toml`](docs/sources.toml); its policy is

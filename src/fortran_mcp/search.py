@@ -34,8 +34,11 @@ STOP_WORDS = frozenset(
         "it",
         "of",
         "on",
+        "prefer",
+        "should",
         "the",
         "to",
+        "why",
     }
 )
 

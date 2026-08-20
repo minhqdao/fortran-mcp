@@ -25,3 +25,5 @@ code alongside its explanation.
 The GNU Make converter generates only the reviewed sections that close measured Fortran build
 coverage gaps and records a modified title, all principal authors, the selection notice, cover
 texts, and complete GFDL material.
+Fortitude needs no converter: the pinned release already contains one native Markdown document per
+rule. Its source entry deliberately adds only those rule pages and the minimum operational reference.
