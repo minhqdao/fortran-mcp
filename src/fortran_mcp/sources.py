@@ -86,6 +86,8 @@ class Source(StrictModel):
         "numpy-f2py-rst",
         "openmpi-fortran-rst",
         "codee-fortran-subset",
+        "old-fortran-idioms-latex",
+        "prima-modernization-subset",
     ] = "none"
     converter_entrypoint: str | None = None
     license: str = Field(min_length=1)

@@ -86,7 +86,10 @@ def test_benchmark_can_match_source_neutral_content_terms() -> None:
                 id="migration-guidance",
                 category="migration",
                 query="modernize safely",
-                expected_terms=("characterization tests", "small changes"),
+                expected_term_groups=(
+                    ("characterization tests", "baseline tests"),
+                    ("small changes", "incremental changes"),
+                ),
             ),
         ),
     )

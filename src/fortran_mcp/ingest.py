@@ -39,6 +39,7 @@ ALLOWED_SUFFIXES = frozenset(
         ".f",
         ".f90",
         ".build",
+        ".bib",
         ".dat",
         ".fypp",
         ".ini",
@@ -767,6 +768,150 @@ def _convert_codee_fortran_subset(source: Source, root: Path) -> tuple[tuple[Fil
     return tuple(records), "builtin codee-fortran-subset 1"
 
 
+OLD_FORTRAN_IDIOM_CHAPTERS = (
+    "old_source_form.tex",
+    "old_subroutine_function.tex",
+    "old_floating_point.tex",
+    "old_character_handling.tex",
+    "old_control_structures.tex",
+    "old_memory_management.tex",
+    "old_input_output.tex",
+    "old_miscellaneous.tex",
+    "old_caveats_for_c_programmers.tex",
+)
+OLD_FORTRAN_IDIOMS_NOTICE = (
+    "> Modified copy: converted from the upstream LaTeX chapters to Markdown-compatible text. "
+    "The community-authored guidance is practical rather than normative."
+)
+
+
+def _bibtex_urls(content: str) -> dict[str, str]:
+    urls: dict[str, str] = {}
+    for entry in re.finditer(r"@\w+\{(?P<key>[^,{}]+),(?P<body>.*?)\n\}", content, re.DOTALL):
+        url = re.search(r"\burl\s*=\s*\{(?P<url>https?://[^}]+)\}", entry.group("body"))
+        if url:
+            urls[entry.group("key").casefold()] = url.group("url").replace(r"\#", "#")
+    if "ieee754" in urls:
+        urls["ieee"] = urls["ieee754"]
+    urls["modernizeoldfortran"] = "https://fortranwiki.org/fortran/show/Modernizing%2BOld%2BFortran"
+    return urls
+
+
+def _convert_old_idioms_tex(content: str, citation_urls: dict[str, str]) -> str:
+    """Convert the deliberately small LaTeX vocabulary used by the idioms guide."""
+    content = re.sub(r"(?m)^\s*%.*$", "", content)
+    content = re.sub(r"\\verb(?P<delimiter>[^\w\s])(?P<value>.*?)\1", r"`\g<value>`", content)
+    for command, prefix in (
+        ("section", "#"),
+        ("subsection", "##"),
+        ("subsubsection", "###"),
+    ):
+        content = re.sub(rf"\\{command}\*?\{{([^{{}}]+)\}}", rf"{prefix} \1", content)
+    for command in ("emph", "textit"):
+        content = _replace_tex_command(content, command, lambda value: f"*{value}*")
+    content = _replace_tex_command(content, "textbf", lambda value: f"**{value}**")
+    content = _replace_tex_command(content, "footnote", lambda value: f" (Note: {value})")
+    content = re.sub(r"\\begin\{verbatim\}", "```fortran", content)
+    content = re.sub(r"\\end\{verbatim\}", "```", content)
+    content = re.sub(r"(?m)^\s*\\item\s*", "- ", content)
+    content = re.sub(r"\\(?:begin|end)\{(?:itemize|enumerate|quote|quotation)\}", "", content)
+    content = re.sub(r"\\begin\{(?:table|tabular)\}(?:\[[^]]*\])?(?:\{[^}]*\})?", "", content)
+    content = re.sub(r"\\end\{(?:table|tabular)\}", "", content)
+    content = re.sub(r"(?m)\s*\\\\\s*$", "", content)
+    content = re.sub(r"\\(?:label|bibliography|bibliographystyle)\{[^{}]*\}", "", content)
+
+    def citation(match: re.Match[str]) -> str:
+        rendered = [
+            f"[{key}]({citation_urls[key.casefold()]})"
+            if key.casefold() in citation_urls
+            else f"[citation: {key}]"
+            for key in (item.strip() for item in match.group(1).split(","))
+        ]
+        return "(" + ", ".join(rendered) + ")"
+
+    content = re.sub(r"\\cite\{([^{}]+)\}", citation, content)
+    content = re.sub(r"\\ref\{[^{}]*\}", "the referenced section", content)
+    content = re.sub(r"\\vspace\{[^{}]*\}", "", content)
+    content = re.sub(r"\\(?:noindent|newpage|clearpage)\b", "", content)
+    content = content.replace(r"\%", "%").replace(r"\_", "_")
+    content = content.replace(r"\&", "&").replace(r"\,", "")
+    content = content.replace("~", " ")
+    content = re.sub(r"\$([^$]+)\$", r"\1", content)
+    content = re.sub(r"\\([A-Za-z]+)\{([^{}]*)\}", r"\2", content)
+    content = re.sub(r"\\([A-Za-z]+)\b", "", content)
+    content = re.sub(r"\n{3,}", "\n\n", content).strip()
+    lines: list[str] = []
+    in_fence = False
+    for line in content.splitlines():
+        if line.startswith("```"):
+            in_fence = not in_fence
+        elif not in_fence:
+            line = line.replace(" & ", " — ")
+        lines.append(line)
+    if not lines or not lines[0].startswith("# "):
+        raise IngestionError("old Fortran idioms chapter has no section title")
+    lines[1:1] = ["", OLD_FORTRAN_IDIOMS_NOTICE]
+    return "\n".join(lines).rstrip() + "\n"
+
+
+def _convert_old_fortran_idioms(source: Source, root: Path) -> tuple[tuple[FileRecord, ...], str]:
+    bibliography_path = root / "src" / "old_idioms.bib"
+    if not bibliography_path.is_file():
+        raise IngestionError("old Fortran idioms bibliography is unavailable")
+    citation_urls = _bibtex_urls(bibliography_path.read_text(encoding="utf-8"))
+    records: list[FileRecord] = []
+    for filename in OLD_FORTRAN_IDIOM_CHAPTERS:
+        input_path = root / "src" / filename
+        if not input_path.is_file():
+            raise IngestionError(f"old Fortran idioms chapter is unavailable: {filename}")
+        content = input_path.read_text(encoding="utf-8")
+        if filename == "old_memory_management.tex":
+            content = re.sub(
+                r"\\subsection\{Initialising variables in COMMON blocks: BLOCK DATA\}.*?"
+                r"(?=\\subsection\{Work arrays\})",
+                "",
+                content,
+                flags=re.DOTALL,
+            )
+        output_path = root / "manual" / "src" / filename
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(_convert_old_idioms_tex(content, citation_urls), encoding="utf-8")
+        records.append(_record_file(output_path, root))
+    return tuple(records), "builtin old-fortran-idioms-latex 1"
+
+
+PRIMA_MODIFICATION_NOTICE = (
+    "> Modified copy: only the compact goal and testing method for modernizing the original "
+    "Fortran 77 implementation are retained; project-specific material is excluded."
+)
+
+
+def _convert_prima_modernization(source: Source, root: Path) -> tuple[tuple[FileRecord, ...], str]:
+    readme_path = root / "README.md"
+    if not readme_path.is_file():
+        raise IngestionError("PRIMA README is unavailable")
+    content = readme_path.read_text(encoding="utf-8")
+    try:
+        goal_start = content.index("PRIMA aims to provide")
+        goal_end = content.index("There do exist", goal_start)
+        method_start = content.index("The mission of PRIMA is nontrivial", goal_end)
+        method_end = content.index("[The tests](./tests.md) are **automated**", method_start)
+    except ValueError as error:
+        raise IngestionError("PRIMA modernization sections changed upstream") from error
+    output = "\n\n".join(
+        (
+            "# Behavior-preserving modernization in PRIMA",
+            PRIMA_MODIFICATION_NOTICE,
+            "## Goal and constraints\n\n" + content[goal_start:goal_end].strip(),
+            "## Incremental testing method\n\n" + content[method_start:method_end].strip(),
+        )
+    )
+    output_path = root / "manual" / "README.md"
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(output.rstrip() + "\n", encoding="utf-8")
+    return (_record_file(output_path, root),), "builtin prima-modernization-subset 1"
+
+
 def _normalize_myst_markdown(content: str) -> str:
     content = re.sub(r"^\([^)]+\)=\s*\n", "", content, flags=re.MULTILINE)
     content = re.sub(r"^```\{(?:play-)?code-block\}\s*", "```", content, flags=re.MULTILINE)
@@ -1137,6 +1282,14 @@ def ingest_source(
             schema_version = 2
         elif source.converter == "codee-fortran-subset":
             generated, converter_version = _convert_codee_fortran_subset(source, temporary_path)
+            stored_files = tuple(sorted((*stored_files, *generated), key=lambda item: item.path))
+            schema_version = 2
+        elif source.converter == "old-fortran-idioms-latex":
+            generated, converter_version = _convert_old_fortran_idioms(source, temporary_path)
+            stored_files = tuple(sorted((*stored_files, *generated), key=lambda item: item.path))
+            schema_version = 2
+        elif source.converter == "prima-modernization-subset":
+            generated, converter_version = _convert_prima_modernization(source, temporary_path)
             stored_files = tuple(sorted((*stored_files, *generated), key=lambda item: item.path))
             schema_version = 2
         document_count = sum(_matches(file.path, source.document_paths) for file in stored_files)

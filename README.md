@@ -48,6 +48,8 @@ uv run fortran-mcp-ingest numpy-2.5.2-f2py-docs
 uv run fortran-mcp-ingest openmpi-5.0.10-fortran-reference
 uv run fortran-mcp-ingest fortitude-0.9.2-reference
 uv run fortran-mcp-ingest codee-open-catalog-fortran-subset
+uv run fortran-mcp-ingest old-fortran-programming-idioms
+uv run fortran-mcp-ingest prima-modernization-case-study
 ```
 
 The core collection also includes separately identifiable Fortran-lang references for intrinsic
@@ -77,6 +79,15 @@ converter retains shared guidance and Fortran examples, removes C/C++ examples, 
 links to the pinned revision, and adds the Apache-required modification notice. The rest of the
 catalog is excluded because it substantially overlaps existing sources or did not justify its
 retrieval weight. This is community guidance, not normative material or a product endorsement.
+
+The legacy-migration material has two complementary roles. *Old programming idioms explained*
+converts nine MIT-licensed chapters about the meaning, hazards, and modern alternatives of old
+Fortran constructs. Its bibliography supplies external citation links but is not itself indexed;
+the unfinished outline, separate examples, PDF, and a redundant BLOCK DATA section that ranked
+below Fortitude's guidance are excluded.
+The much smaller PRIMA case-study subset contributes an official numerical-software workflow:
+establish a faithful reference, convert layout first, and test after every tiny refactoring. Neither
+source is treated as a language standard.
 
 The GNU Fortran manual is generated from its pinned Texinfo sources. Maintainers building that
 source need GNU Texinfo 7.3 and the optional conversion dependency:
@@ -108,6 +119,8 @@ uv run fortran-mcp-build openmp-6.0.1-fortran-examples
 uv run fortran-mcp-build gnu-make-4.4.1-build-reference
 uv run fortran-mcp-build fortitude-0.9.2-reference
 uv run fortran-mcp-build codee-open-catalog-fortran-subset
+uv run fortran-mcp-build old-fortran-programming-idioms
+uv run fortran-mcp-build prima-modernization-case-study
 uv run fortran-mcp-index
 ```
 

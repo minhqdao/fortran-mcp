@@ -678,3 +678,88 @@ license_url = "https://github.com/codee-com/open-catalog/blob/12c507e3f413609313
 redistribution = "redistributable"
 status = "approved"
 notes = "A measured five-page subset only: loop-invariant conditionals, uninitialized and conditionally initialized variables, uninitialized output arguments, and out-of-bounds array access. The converter removes C/C++ example sections and adds a prominent modification notice. Broader catalog rules were excluded because they overlap existing Fortitude, GNU Fortran, Fortran-lang, OpenMP, or OpenACC material, or did not justify their retrieval weight. This independent guidance is useful but non-normative and is not an endorsement of Codee products."
+
+[[sources]]
+id = "old-fortran-programming-idioms"
+title = "Old programming idioms explained"
+publisher = "Arjen Markus"
+document_type = "migration-guide"
+authority = "community"
+topics = [
+  "control-flow",
+  "fixed-form",
+  "io",
+  "language-extensions",
+  "legacy-code-migration",
+  "memory-management",
+  "procedures",
+  "portability",
+]
+fortran_versions = ["FORTRAN 66", "FORTRAN 77", "Fortran 90"]
+compilers = []
+dialects = []
+version = "2025-01-19"
+revision = "bcb10375153bcdd104f247d23eb1f32ee6c1424d"
+source_url = "https://github.com/arjenmarkus/old-programming-idioms/tree/bcb10375153bcdd104f247d23eb1f32ee6c1424d/src"
+archive_url = "https://github.com/arjenmarkus/old-programming-idioms/archive/bcb10375153bcdd104f247d23eb1f32ee6c1424d.tar.gz"
+archive_root = "old-programming-idioms-bcb10375153bcdd104f247d23eb1f32ee6c1424d"
+include_paths = [
+  "LICENSE",
+  "src/old_idioms.bib",
+  "src/old_source_form.tex",
+  "src/old_subroutine_function.tex",
+  "src/old_floating_point.tex",
+  "src/old_character_handling.tex",
+  "src/old_control_structures.tex",
+  "src/old_memory_management.tex",
+  "src/old_input_output.tex",
+  "src/old_miscellaneous.tex",
+  "src/old_caveats_for_c_programmers.tex",
+]
+document_paths = ["manual/**"]
+expected_document_count = 9
+homepage_url = "https://github.com/arjenmarkus/old-programming-idioms"
+published_path_prefix = "manual"
+citation_base_url = "https://github.com/arjenmarkus/old-programming-idioms/blob/bcb10375153bcdd104f247d23eb1f32ee6c1424d"
+citation_format = "source"
+converter = "old-fortran-idioms-latex"
+license = "MIT"
+license_url = "https://github.com/arjenmarkus/old-programming-idioms/blob/bcb10375153bcdd104f247d23eb1f32ee6c1424d/LICENSE"
+redistribution = "redistributable"
+status = "approved"
+notes = "Pinned community guide explaining the semantics, portability hazards, and modern alternatives for old Fortran idioms. Nine substantive LaTeX chapters are converted; the bibliography is used to preserve external citation links but is not indexed. The unfinished outline, separate examples, prebuilt PDF, and overlapping BLOCK DATA section are excluded. Treat recommendations as practical guidance and use normative or compiler documentation for exact language rules."
+
+[[sources]]
+id = "prima-modernization-case-study"
+title = "PRIMA behavior-preserving Fortran modernization case study"
+publisher = "PRIMA project"
+document_type = "migration-guide"
+authority = "official"
+topics = [
+  "differential-testing",
+  "legacy-code-migration",
+  "numerical-software",
+  "refactoring",
+  "testing",
+]
+fortran_versions = ["FORTRAN 77", "Fortran 2008"]
+compilers = []
+dialects = []
+version = "2026-05-27"
+revision = "1d76fb88aeffb427cd17ed1e9d0d3b34f414913f"
+source_url = "https://github.com/libprima/prima/blob/1d76fb88aeffb427cd17ed1e9d0d3b34f414913f/README.md"
+archive_url = "https://github.com/libprima/prima/archive/1d76fb88aeffb427cd17ed1e9d0d3b34f414913f.tar.gz"
+archive_root = "prima-1d76fb88aeffb427cd17ed1e9d0d3b34f414913f"
+include_paths = ["LICENCE.txt", "README.md"]
+document_paths = ["manual/README.md"]
+expected_document_count = 1
+homepage_url = "https://www.libprima.net/"
+published_path_prefix = "manual"
+citation_base_url = "https://github.com/libprima/prima/blob/1d76fb88aeffb427cd17ed1e9d0d3b34f414913f"
+citation_format = "source"
+converter = "prima-modernization-subset"
+license = "BSD-3-Clause"
+license_url = "https://github.com/libprima/prima/blob/1d76fb88aeffb427cd17ed1e9d0d3b34f414913f/LICENCE.txt"
+redistribution = "redistributable"
+status = "approved"
+notes = "A very small official case-study subset: the modernization goal and the behavior-preserving workflow of free-form conversion followed by extensive tests after every tiny modification. Build instructions, solver documentation, status, publicity, and test-volume claims are excluded. This is evidence from one renowned numerical project, not a universal migration recipe."

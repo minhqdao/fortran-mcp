@@ -30,3 +30,8 @@ rule. Its source entry deliberately adds only those rule pages and the minimum o
 The Codee converter enforces a five-page allowlist, removes C/C++ example sections, rewrites links
 to the pinned revision, and places a prominent modification notice in every generated page. The
 selection is intentionally community-level, non-normative guidance rather than the full catalog.
+The old-idioms converter turns nine selected LaTeX chapters into citation-preserving Markdown-like
+text, preserves external links from its bibliography, and excludes the unfinished outline,
+separate examples, PDF, and overlapping BLOCK DATA section. The PRIMA
+converter retains only the official README passages that explain the modernization goal and its
+incremental differential-testing method. Both generated sources carry modification notices.

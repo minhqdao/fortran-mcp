@@ -31,6 +31,7 @@ class BenchmarkCase(StrictModel):
     expected_path: str | None = None
     expected_heading: str | None = None
     expected_terms: tuple[str, ...] = ()
+    expected_term_groups: tuple[tuple[str, ...], ...] = ()
     expect_no_results: bool = False
 
     @model_validator(mode="after")
@@ -41,7 +42,15 @@ class BenchmarkCase(StrictModel):
             raise ValueError("expected_source and expected_path must be defined together")
         if any(not term.strip() for term in self.expected_terms):
             raise ValueError("expected_terms must not contain blank terms")
-        positive = (has_source and has_path) or bool(self.expected_terms)
+        invalid_groups = any(
+            not group or any(not term.strip() for term in group)
+            for group in self.expected_term_groups
+        )
+        if invalid_groups:
+            raise ValueError("expected_term_groups must contain non-blank alternatives")
+        positive = (has_source and has_path) or bool(
+            self.expected_terms or self.expected_term_groups
+        )
         if self.expect_no_results == positive:
             raise ValueError(
                 "case must define a source/path or content-term expectation, or expect_no_results"
@@ -119,7 +128,11 @@ def _rank(case: BenchmarkCase, results: tuple[SearchResult, ...]) -> int | None:
         )
         searchable_text = "\n".join((*result.headings, result.text)).casefold()
         terms_match = all(term.casefold() in searchable_text for term in case.expected_terms)
-        if location_matches and heading_matches and terms_match:
+        groups_match = all(
+            any(term.casefold() in searchable_text for term in group)
+            for group in case.expected_term_groups
+        )
+        if location_matches and heading_matches and terms_match and groups_match:
             return rank
     return None
 

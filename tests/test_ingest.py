@@ -13,6 +13,7 @@ import pytest
 from fortran_mcp.ingest import (
     CODEE_FORTRAN_GUIDELINES,
     GNU_MAKE_MANUAL_PAGES,
+    OLD_FORTRAN_IDIOM_CHAPTERS,
     IngestionError,
     ingest_source,
 )
@@ -161,6 +162,99 @@ end program demo
         f"{source.revision}/Glossary/Vectorization.md"
     ) in content
     assert f"/tree/{source.revision}/Checks/PWR022/" in content
+
+
+def test_old_fortran_idioms_ingestion_converts_reviewed_chapters(tmp_path: Path) -> None:
+    source = _source_by_id("old-fortran-programming-idioms")
+    chapter = b"""\\section{Legacy feature}
+
+Use \\verb+COMMON+ and its \\emph{modern alternative} \\cite{Example}.
+
+\\begin{verbatim}
+      COMMON /STATE/ VALUE
+     & CONTINUATION
+\\end{verbatim}
+"""
+    memory_chapter = (
+        chapter
+        + b"""
+\\subsection{Initialising variables in COMMON blocks: BLOCK DATA}
+Redundant guidance.
+\\subsection{Work arrays}
+Retained guidance.
+"""
+    )
+    archive = _archive(
+        {
+            f"{source.archive_root}/src/{filename}": (
+                memory_chapter if filename == "old_memory_management.tex" else chapter
+            )
+            for filename in OLD_FORTRAN_IDIOM_CHAPTERS
+        }
+        | {
+            f"{source.archive_root}/LICENSE": b"MIT\n",
+            f"{source.archive_root}/src/old_idioms.bib": b"""@Electronic{Example,
+  url = {https://example.com/reference},
+}
+""",
+        }
+    )
+
+    record = ingest_source(source, tmp_path, downloader=lambda *_args: archive)
+
+    generated = tmp_path / "raw" / source.id / "manual/src/old_source_form.tex"
+    content = generated.read_text(encoding="utf-8")
+    assert record.converter == "old-fortran-idioms-latex"
+    assert record.converter_version == "builtin old-fortran-idioms-latex 1"
+    assert sum(file.path.startswith("manual/") for file in record.files) == 9
+    assert content.startswith("# Legacy feature\n")
+    assert "community-authored guidance" in content
+    assert "`COMMON`" in content
+    assert "*modern alternative*" in content
+    assert "[Example](https://example.com/reference)" in content
+    assert "```fortran" in content
+    assert "     & CONTINUATION" in content
+    memory = (tmp_path / "raw" / source.id / "manual/src/old_memory_management.tex").read_text(
+        encoding="utf-8"
+    )
+    assert "Redundant guidance" not in memory
+    assert "Retained guidance" in memory
+
+
+def test_prima_ingestion_keeps_only_modernization_method(tmp_path: Path) -> None:
+    source = _source_by_id("prima-modernization-case-study")
+    readme = b"""# PRIMA
+
+PRIMA aims to provide a faithful modern implementation.
+
+There do exist translations.
+
+### How
+
+The mission of PRIMA is nontrivial. Test after every tiny modification.
+
+[The tests](./tests.md) are **automated** by CI.
+
+### Current status
+
+Project-specific status.
+"""
+    archive = _archive(
+        {
+            f"{source.archive_root}/README.md": readme,
+            f"{source.archive_root}/LICENCE.txt": b"BSD-3-Clause\n",
+        }
+    )
+
+    record = ingest_source(source, tmp_path, downloader=lambda *_args: archive)
+
+    generated = tmp_path / "raw" / source.id / "manual/README.md"
+    content = generated.read_text(encoding="utf-8")
+    assert record.converter == "prima-modernization-subset"
+    assert record.converter_version == "builtin prima-modernization-subset 1"
+    assert "faithful modern implementation" in content
+    assert "every tiny modification" in content
+    assert "Project-specific status" not in content
 
 
 def test_texinfo_ingestion_records_generated_pages(

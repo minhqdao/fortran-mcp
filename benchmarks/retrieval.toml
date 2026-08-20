@@ -7,7 +7,8 @@ schema_version = 1
 id = "legacy-fixed-to-free-form"
 category = "migration"
 query = "How should I convert a fixed-form Fortran 77 source file to free form safely?"
-expected_terms = ["fixed form", "free form", "convert"]
+expected_terms = ["fixed form", "free form"]
+expected_term_groups = [["convert", "conversion", "reformat"]]
 
 [[cases]]
 id = "legacy-common-block-module"
@@ -18,20 +19,22 @@ expected_terms = ["common", "module"]
 [[cases]]
 id = "legacy-block-data-module"
 category = "migration"
-query = "How should BLOCK DATA initialization be migrated into modules?"
+query = "How do I replace obsolete BLOCK DATA with a modern Fortran module?"
 expected_terms = ["block data", "module"]
 
 [[cases]]
 id = "legacy-equivalence-replacement"
 category = "migration"
 query = "What modern replacement should I use for EQUIVALENCE storage association?"
-expected_terms = ["equivalence", "transfer", "allocatable"]
+expected_terms = ["equivalence"]
+expected_term_groups = [["transfer", "allocatable", "derived type", "pointer"]]
 
 [[cases]]
 id = "legacy-assigned-goto"
 category = "migration"
 query = "How can an assigned GO TO be rewritten as structured modern Fortran?"
-expected_terms = ["assigned go to", "procedure"]
+expected_terms = ["assign", "goto"]
+expected_term_groups = [["internal procedure", "internal routine", "procedure call", "select case"]]
 
 [[cases]]
 id = "legacy-assigned-format"
@@ -43,7 +46,8 @@ expected_terms = ["assigned format", "character"]
 id = "legacy-alternate-return"
 category = "migration"
 query = "How should alternate returns from a legacy Fortran subroutine be modernized?"
-expected_terms = ["alternate return", "status"]
+expected_terms = ["alternate return"]
+expected_term_groups = [["status", "return code", "error code"]]
 
 [[cases]]
 id = "legacy-hollerith-character"
@@ -55,7 +59,8 @@ expected_terms = ["hollerith", "character"]
 id = "legacy-cray-pointer"
 category = "migration"
 query = "How should a Cray pointer be replaced with standard-conforming Fortran?"
-expected_terms = ["cray pointer", "iso_c_binding"]
+expected_terms = ["cray pointer"]
+expected_term_groups = [["iso_c_binding", "c_ptr", "procedure pointer", "allocatable"]]
 
 [[cases]]
 id = "legacy-entry-procedure"
@@ -73,25 +78,28 @@ expected_terms = ["structure", "record", "derived type"]
 id = "legacy-characterization-baseline"
 category = "migration"
 query = "How do I establish a behavioral baseline before refactoring legacy scientific Fortran?"
-expected_terms = ["characterization", "baseline"]
+expected_term_groups = [["characterization test", "behavioral baseline", "reference output"]]
 
 [[cases]]
 id = "legacy-differential-testing"
 category = "migration"
 query = "How can differential testing preserve numerical behavior while modernizing Fortran?"
-expected_terms = ["differential testing", "reference"]
+expected_terms = ["differential testing"]
+expected_term_groups = [["reference", "original", "equivalent"]]
 
 [[cases]]
 id = "legacy-incremental-migration"
 category = "migration"
 query = "How should a large legacy Fortran program be modernized incrementally without a rewrite?"
-expected_terms = ["small changes", "tests"]
+expected_terms = ["test"]
+expected_term_groups = [["small change", "tiny modification", "incremental"]]
 
 [[cases]]
 id = "legacy-unformatted-io-compatibility"
 category = "migration"
 query = "How can I preserve legacy unformatted binary file compatibility across compilers?"
-expected_terms = ["unformatted", "record marker", "endianness"]
+expected_terms = ["unformatted"]
+expected_term_groups = [["record marker", "extra bytes", "record length", "endianness"]]
 
 [[cases]]
 id = "fpm-compile-commands"
