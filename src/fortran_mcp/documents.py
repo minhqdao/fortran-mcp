@@ -193,7 +193,10 @@ def build_documents(source_id: str, data_dir: Path | None = None) -> tuple[Docum
     record_path = data_dir / "records" / f"{source_id}.json"
     if not record_path.is_file():
         raise DocumentBuildError(f"ingestion record not found: {source_id}")
-    record = IngestionRecord.model_validate_json(record_path.read_text(encoding="utf-8"))
+    try:
+        record = IngestionRecord.model_validate_json(record_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as error:
+        raise DocumentBuildError(f"invalid ingestion record: {source_id}") from error
     if record.source_id != source_id:
         raise DocumentBuildError("ingestion record source ID does not match its filename")
 

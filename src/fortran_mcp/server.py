@@ -15,7 +15,12 @@ from fortran_mcp.sources import load_registry
 
 mcp = MCPServer(
     "Fortran MCP",
-    instructions="Authoritative documentation for modern and legacy Fortran development.",
+    instructions=(
+        "Search the local cited corpus before answering Fortran questions. Use source, compiler, "
+        "version, or topic filters when applicability matters. Cite each result's URL and "
+        "distinguish normative, official, and community guidance. If relevant passages are absent, "
+        "state the coverage gap instead of inventing an answer."
+    ),
 )
 
 
@@ -50,7 +55,7 @@ def search_fortran_docs(
     version: str | None = None,
     fortran_version: str | None = None,
 ) -> list[SearchResult]:
-    """Search cited Fortran docs, optionally narrowed by source applicability."""
+    """Search cited Fortran docs; use applicability filters and cite returned URLs."""
     filtered = any(value is not None for value in (document_type, authority, topic))
     results = search_provider().search(
         query,

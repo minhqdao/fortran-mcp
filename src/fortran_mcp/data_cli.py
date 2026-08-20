@@ -171,6 +171,8 @@ def _print_status(status: DataStatus) -> None:
     print(f"lexical: {'ready' if status.lexical_ready else 'unavailable'}")
     print(f"semantic: {'ready' if status.semantic_ready else 'unavailable'}")
     print(f"hybrid: {'ready' if status.hybrid_ready else 'unavailable'}")
+    if not status.lexical_ready:
+        print("next: fortran-mcp data install core")
 
 
 def _parser() -> argparse.ArgumentParser:

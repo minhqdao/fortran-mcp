@@ -65,11 +65,14 @@ class IngestionError(RuntimeError):
 def download(url: str, timeout: int, limit: int) -> bytes:
     """Download a URL while enforcing a maximum response size."""
     request = Request(url, headers={"User-Agent": "fortran-mcp/0.1"})
-    with urlopen(request, timeout=timeout) as response:
-        declared_size = response.headers.get("Content-Length")
-        if declared_size is not None and int(declared_size) > limit:
-            raise IngestionError(f"download exceeds {limit} bytes")
-        content = cast("bytes", response.read(limit + 1))
+    try:
+        with urlopen(request, timeout=timeout) as response:
+            declared_size = response.headers.get("Content-Length")
+            if declared_size is not None and int(declared_size) > limit:
+                raise IngestionError(f"download exceeds {limit} bytes")
+            content = cast("bytes", response.read(limit + 1))
+    except (OSError, ValueError) as error:
+        raise IngestionError(f"could not download source from {url}: {error}") from error
     if len(content) > limit:
         raise IngestionError(f"download exceeds {limit} bytes")
     return content

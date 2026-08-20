@@ -16,6 +16,7 @@ from fortran_mcp.ingest import (
     GNU_MAKE_MANUAL_PAGES,
     OLD_FORTRAN_IDIOM_CHAPTERS,
     IngestionError,
+    download,
     ingest_source,
 )
 from fortran_mcp.sources import Source, load_registry
@@ -71,6 +72,16 @@ def test_ingestion_rejects_an_unapproved_source(tmp_path: Path) -> None:
 
     with pytest.raises(IngestionError, match="not approved"):
         ingest_source(source, tmp_path, downloader=lambda _url, _timeout, _limit: b"")
+
+
+def test_source_download_wraps_network_errors(monkeypatch: pytest.MonkeyPatch) -> None:
+    def offline(*_args: object, **_kwargs: object) -> None:
+        raise OSError("offline")
+
+    monkeypatch.setattr("fortran_mcp.ingest.urlopen", offline)
+
+    with pytest.raises(IngestionError, match=r"could not download source.*offline"):
+        download("https://example.com/source.tar.gz", 1, 1024)
 
 
 def test_beliavsky_package_ingestion_removes_only_redundant_toc(tmp_path: Path) -> None:

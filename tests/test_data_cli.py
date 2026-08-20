@@ -101,7 +101,7 @@ def test_remove_rejects_unsafe_manifest_path(tmp_path: Path) -> None:
     try:
         remove_data(installed)
     except BundleError as error:
-        assert "unsafe path" in str(error)
+        assert "manifest is invalid" in str(error)
     else:
         raise AssertionError("unsafe manifest path was accepted")
 

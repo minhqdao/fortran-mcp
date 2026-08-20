@@ -14,6 +14,8 @@ from fortran_mcp.sources import DocumentType, SourceAuthority
 
 def test_server_has_expected_name() -> None:
     assert mcp.name == "Fortran MCP"
+    assert "Cite each result's URL" in str(mcp.instructions)
+    assert "coverage gap" in str(mcp.instructions)
 
 
 def test_server_exposes_documentation_search() -> None:

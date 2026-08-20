@@ -16,7 +16,7 @@ from urllib.request import Request, urlopen
 
 from packaging.specifiers import InvalidSpecifier, SpecifierSet
 from packaging.version import InvalidVersion, Version
-from pydantic import Field
+from pydantic import Field, model_validator
 
 from fortran_mcp.config import data_directory
 from fortran_mcp.search import INDEX_FILENAME
@@ -40,6 +40,19 @@ class BundleFile(StrictModel):
     path: str
     size: int = Field(ge=0)
     sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+
+    @model_validator(mode="after")
+    def path_is_safe_payload(self) -> "BundleFile":
+        path = PurePosixPath(self.path)
+        if (
+            path.is_absolute()
+            or ".." in path.parts
+            or len(path.parts) < 2
+            or path.parts[0] not in {"indexes", "licenses"}
+            or "\\" in self.path
+        ):
+            raise ValueError("bundle file path must be a safe index or license path")
+        return self
 
 
 class BundleSource(StrictModel):
@@ -265,7 +278,7 @@ def _download_bundle(url: str, destination: Path) -> None:
                 if total > DOWNLOAD_LIMIT:
                     raise BundleError("bundle download exceeds the size limit")
                 output.write(block)
-    except OSError as error:
+    except (OSError, ValueError) as error:
         raise BundleError(f"could not download bundle: {error}") from error
 
 

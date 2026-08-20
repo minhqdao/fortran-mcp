@@ -74,6 +74,15 @@ def test_build_rejects_modified_raw_content(tmp_path: Path) -> None:
         build_documents("fpm-0.13.0-docs", tmp_path)
 
 
+def test_build_rejects_invalid_ingestion_record_cleanly(tmp_path: Path) -> None:
+    records = tmp_path / "records"
+    records.mkdir()
+    (records / "fpm-0.13.0-docs.json").write_text("not json")
+
+    with pytest.raises(DocumentBuildError, match="invalid ingestion record"):
+        build_documents("fpm-0.13.0-docs", tmp_path)
+
+
 def test_long_section_does_not_orphan_its_heading(tmp_path: Path) -> None:
     source = _source()
     content = (

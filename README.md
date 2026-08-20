@@ -12,12 +12,23 @@ Prerequisite: Python 3.11+ and [uv](https://docs.astral.sh/uv/).
 ```bash
 uv tool install fortran-mcp
 fortran-mcp data install core
-fortran-mcp data status
+fortran-mcp doctor
 ```
 
 Configure an MCP client to launch the stdio command `fortran-mcp`; see
-[Connect an MCP client](docs/clients.md) for examples. The optional semantic bundle and runtime are
-not needed for the default lexical search.
+[Connect an MCP client](https://github.com/minhqdao/fortran-mcp/blob/main/docs/clients.md) for
+examples. The optional semantic bundle and runtime are not needed for the default lexical search.
+
+Useful first commands:
+
+```bash
+fortran-mcp --help
+fortran-mcp --version
+fortran-mcp data status
+```
+
+After connecting a client, try: “How do I add OpenMP to an fpm project? Use the Fortran
+documentation server and cite the source.”
 
 ## Development
 
@@ -50,6 +61,18 @@ uv run pytest
 ```
 
 ## Ingestion
+
+Maintainers can inspect the reviewed registry and run the complete source-to-index pipeline with:
+
+```bash
+uv run fortran-mcp source list
+uv run fortran-mcp source sync SOURCE_ID --data-dir data
+```
+
+See
+[Adding or updating a documentation source](https://github.com/minhqdao/fortran-mcp/blob/main/docs/adding-sources.md)
+for the provenance, licensing, selection, and benchmark gate. The lower-level commands below
+remain useful when working on converters individually.
 
 Fetch an approved documentation source by its registry ID:
 
@@ -254,25 +277,32 @@ checksums for every payload. The default catalog is loaded over HTTPS from the l
 catalog URL, and the advertised archive size and SHA-256 are checked before the bundle's own
 manifest and payload checks. Installation enforces server compatibility and installs semantic data
 only alongside the exact required core index. See
-[Data bundle format](docs/bundles.md) for the artifact contract.
+[Data bundle format](https://github.com/minhqdao/fortran-mcp/blob/main/docs/bundles.md) for the
+artifact contract.
 
-See [Connect an MCP client](docs/clients.md) for Codex, Claude Desktop, and generic stdio
-configuration examples.
+See [Connect an MCP client](https://github.com/minhqdao/fortran-mcp/blob/main/docs/clients.md) for
+Codex, Claude Desktop, and generic stdio configuration examples.
 
-## Planned sources
+See [Contributing](https://github.com/minhqdao/fortran-mcp/blob/main/CONTRIBUTING.md) for local
+checks and source-submission expectations. Coding agents should also read
+[AGENTS.md](https://github.com/minhqdao/fortran-mcp/blob/main/AGENTS.md) for the repository map and
+invariants.
 
-- ISO Fortran standards and corrigenda
-- Vendor compiler documentation and language extensions
-- Additional build-system documentation beyond the included fpm, CMake, Fortran-lang, and GNU Make material
-- Fortran Standard Library documentation
-- C interoperability and the normative OpenMP specification
-- Additional dialect, compatibility, modernization, and migration guides that clear licensing and measured-value review
+## Source policy
 
-Source licensing and redistribution terms will be recorded before documents enter the library.
-The reviewed source inventory lives in [`docs/sources.toml`](docs/sources.toml); its policy is
-described in [`docs/README.md`](docs/README.md).
+The 23-source core is intentionally frozen for the first release. A new source is considered only
+when realistic benchmark questions demonstrate a gap, the exact material has clear transformation
+and redistribution rights, and a trial shows enough unique retrieval value to justify its bytes and
+ranking interference. Public access alone is not permission to redistribute documentation; this is
+especially relevant to standards, books, and vendor manuals.
+
+The reviewed source inventory lives in
+[`docs/sources.toml`](https://github.com/minhqdao/fortran-mcp/blob/main/docs/sources.toml); its policy
+is described in
+[`docs/README.md`](https://github.com/minhqdao/fortran-mcp/blob/main/docs/README.md).
 
 ## License
 
-The server software is available under the [MIT License](LICENSE). Ingested documentation retains its
-original copyright and license.
+The server software is available under the
+[MIT License](https://github.com/minhqdao/fortran-mcp/blob/main/LICENSE). Ingested documentation
+retains its original copyright and license.

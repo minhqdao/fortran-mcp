@@ -75,4 +75,10 @@ jobs:
         run: |
           .package-venv/bin/python -c \
             "from fortran_mcp.sources import load_registry; assert load_registry().sources"
+          .package-venv/bin/fortran-mcp --version
+          .package-venv/bin/fortran-mcp --help
+          .package-venv/bin/fortran-mcp doctor --json
+          .package-venv/bin/fortran-mcp source list --json
           .package-venv/bin/fortran-mcp data status --json
+          uv pip check --python .package-venv/bin/python
+          ! tar -tzf dist/*.tar.gz | grep -q '/todo.md$'

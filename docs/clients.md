@@ -9,6 +9,8 @@ fortran-mcp data status
 ```
 
 The server uses stdio and needs no working-directory setting.
+If a graphical client cannot find the command, run `command -v fortran-mcp` and use that absolute
+path as the configured `command`; graphical applications do not always inherit the shell's `PATH`.
 
 ## Codex
 

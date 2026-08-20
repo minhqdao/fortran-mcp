@@ -12,7 +12,13 @@ from urllib.request import Request, urlopen
 
 from pydantic import Field, model_validator
 
-from fortran_mcp.bundle import DOWNLOAD_LIMIT, BundleManifest, install_bundle, verify_bundle
+from fortran_mcp.bundle import (
+    DOWNLOAD_LIMIT,
+    BundleError,
+    BundleManifest,
+    install_bundle,
+    verify_bundle,
+)
 from fortran_mcp.config import data_directory
 from fortran_mcp.sources import StrictModel
 
@@ -281,7 +287,7 @@ def main(argv: Sequence[str] | None = None) -> None:
                 data_dir=args.data_dir,
             )
             print(f"Installed {manifest.bundle_id} into {args.data_dir}")
-    except CatalogError as error:
+    except (BundleError, CatalogError) as error:
         parser.error(str(error))
 
 

@@ -5,15 +5,18 @@ build-backend = "hatchling.build"
 [project]
 name = "fortran-mcp"
 version = "0.1.0"
-description = "MCP server for authoritative Fortran documentation"
+description = "Compact MCP server for cited modern and legacy Fortran documentation"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT"
 authors = [{ name = "Minh Dao" }]
-keywords = ["fortran", "mcp", "model-context-protocol", "documentation"]
+keywords = ["fortran", "mcp", "model-context-protocol", "documentation", "legacy-code"]
 classifiers = [
-  "Development Status :: 2 - Pre-Alpha",
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
   "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
@@ -22,10 +25,17 @@ classifiers = [
   "Typing :: Typed",
 ]
 dependencies = [
-  "mcp[cli]>=2.0,<3",
+  "mcp>=2.0,<3",
   "packaging>=26.2,<27",
   "pydantic>=2.13,<3",
 ]
+
+[project.urls]
+Homepage = "https://github.com/minhqdao/fortran-mcp"
+Repository = "https://github.com/minhqdao/fortran-mcp"
+Issues = "https://github.com/minhqdao/fortran-mcp/issues"
+Documentation = "https://github.com/minhqdao/fortran-mcp#readme"
+Changelog = "https://github.com/minhqdao/fortran-mcp/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
 ingest = [
@@ -57,6 +67,9 @@ packages = ["src/fortran_mcp"]
 
 [tool.hatch.build.targets.wheel.force-include]
 "docs/sources.toml" = "fortran_mcp/data/sources.toml"
+
+[tool.hatch.build.targets.sdist]
+exclude = ["todo.md"]
 
 [tool.pytest.ini_options]
 addopts = ["--strict-config", "--strict-markers"]
