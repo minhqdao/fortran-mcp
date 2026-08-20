@@ -1,12 +1,16 @@
 """Tests for local bundle discovery catalogs."""
 
 import sqlite3
+from io import BytesIO
 from pathlib import Path
+from urllib.request import Request
 
 import pytest
 
 from fortran_mcp.bundle import build_bundle
 from fortran_mcp.catalog import (
+    DEFAULT_CATALOG_URL,
+    CatalogBundle,
     CatalogError,
     build_catalog,
     install_from_catalog,
@@ -78,3 +82,79 @@ def test_catalog_rejects_unknown_role(tmp_path: Path) -> None:
 
     with pytest.raises(CatalogError, match="semantic"):
         install_from_catalog("semantic", catalog_path)
+
+
+@pytest.mark.parametrize("path", ["../core.zip", "%2e%2e/core.zip", "https://evil/core.zip"])
+def test_catalog_rejects_unsafe_remote_artifact_paths(path: str) -> None:
+    with pytest.raises(ValueError, match="safe and relative"):
+        CatalogBundle(
+            role="core",
+            path=path,
+            size=1,
+            sha256="a" * 64,
+            bundle_id="core",
+            bundle_version="1",
+        )
+
+
+def test_remote_catalog_resolves_and_verifies_relative_bundle_url(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    bundle = _core_bundle(tmp_path)
+    catalog_path = bundle.parent / "catalog.json"
+    build_catalog("2026.08.1", catalog_path, [bundle])
+    resolved_catalog = (
+        "https://github.com/minhqdao/fortran-mcp/releases/download/v0.1.0/catalog.json"
+    )
+    responses = [
+        (catalog_path.read_bytes(), resolved_catalog),
+        (bundle.read_bytes(), resolved_catalog.removesuffix("catalog.json") + bundle.name),
+    ]
+    requested: list[str] = []
+
+    class Response:
+        def __init__(self, content: bytes, url: str) -> None:
+            self.stream = BytesIO(content)
+            self.headers = {"Content-Length": str(len(content))}
+            self.url = url
+
+        def __enter__(self) -> "Response":
+            return self
+
+        def __exit__(self, *_args: object) -> None:
+            return None
+
+        def read(self, size: int = -1) -> bytes:
+            return self.stream.read(size)
+
+        def geturl(self) -> str:
+            return self.url
+
+    def fake_urlopen(request: Request, *, timeout: int) -> Response:
+        requested.append(request.full_url)
+        content, url = responses.pop(0)
+        return Response(content, url)
+
+    monkeypatch.setattr("fortran_mcp.catalog.urlopen", fake_urlopen)
+    destination = tmp_path / "installed"
+
+    manifest = install_from_catalog("core", DEFAULT_CATALOG_URL, data_dir=destination)
+
+    assert manifest.role == "core"
+    assert requested == [
+        DEFAULT_CATALOG_URL,
+        "https://github.com/minhqdao/fortran-mcp/releases/latest/download/fortran-mcp-core.zip",
+    ]
+    assert (destination / "fortran-mcp.db").is_file()
+
+
+def test_remote_catalog_failure_suggests_local_override(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    def offline(*_args: object, **_kwargs: object) -> None:
+        raise OSError("offline")
+
+    monkeypatch.setattr("fortran_mcp.catalog.urlopen", offline)
+
+    with pytest.raises(CatalogError, match=r"Check network access or pass --catalog"):
+        load_catalog(DEFAULT_CATALOG_URL)

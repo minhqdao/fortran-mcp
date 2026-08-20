@@ -183,3 +183,8 @@ def test_index_rejects_stale_chunks(tmp_path: Path) -> None:
 
     with pytest.raises(SearchError, match="stale chunks"):
         build_index(tmp_path, tmp_path / "search.db")
+
+
+def test_missing_core_data_has_actionable_install_command(tmp_path: Path) -> None:
+    with pytest.raises(SearchError, match=r"fortran-mcp data install core"):
+        search("modules", index_path=tmp_path / "missing.db")

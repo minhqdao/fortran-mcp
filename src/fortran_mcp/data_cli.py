@@ -12,7 +12,7 @@ from typing import Literal
 from pydantic import Field
 
 from fortran_mcp.bundle import BundleError, BundleManifest
-from fortran_mcp.catalog import CatalogError, install_from_catalog
+from fortran_mcp.catalog import DEFAULT_CATALOG_URL, CatalogError, install_from_catalog
 from fortran_mcp.config import data_directory
 from fortran_mcp.search import INDEX_FILENAME
 from fortran_mcp.semantic import SEMANTIC_INDEX_FILENAME
@@ -180,7 +180,11 @@ def _parser() -> argparse.ArgumentParser:
     subparsers = parser.add_subparsers(dest="command", required=True)
     install = subparsers.add_parser("install")
     install.add_argument("role", choices=("core", "semantic"))
-    install.add_argument("--catalog", required=True, type=Path)
+    install.add_argument(
+        "--catalog",
+        default=DEFAULT_CATALOG_URL,
+        help="local catalog path or HTTPS URL",
+    )
     install.add_argument("--data-dir", type=Path, default=data_directory())
     status = subparsers.add_parser("status")
     status.add_argument("--data-dir", type=Path, default=data_directory())

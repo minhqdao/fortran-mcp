@@ -3,11 +3,15 @@
 import json
 import sqlite3
 from pathlib import Path
+from types import SimpleNamespace
 
 from pytest import CaptureFixture, MonkeyPatch
 
 from fortran_mcp.bundle import BundleError, build_bundle, install_bundle
+from fortran_mcp.catalog import DEFAULT_CATALOG_URL, build_catalog
 from fortran_mcp.data_cli import data_status, inspect_role, main, remove_data
+from fortran_mcp.documents import DocumentChunk
+from fortran_mcp.search import SQLiteSearchProvider, build_index
 
 
 def _installed_core(tmp_path: Path) -> Path:
@@ -100,3 +104,64 @@ def test_remove_rejects_unsafe_manifest_path(tmp_path: Path) -> None:
         assert "unsafe path" in str(error)
     else:
         raise AssertionError("unsafe manifest path was accepted")
+
+
+def test_install_uses_default_release_catalog(
+    tmp_path: Path, monkeypatch: MonkeyPatch, capsys: CaptureFixture[str]
+) -> None:
+    called: list[tuple[str, str, Path]] = []
+
+    def install(role: str, catalog: str, *, data_dir: Path) -> SimpleNamespace:
+        called.append((role, catalog, data_dir))
+        return SimpleNamespace(bundle_id="fortran-mcp-core-test")
+
+    monkeypatch.setattr("fortran_mcp.data_cli.install_from_catalog", install)
+
+    main(["install", "core", "--data-dir", str(tmp_path)])
+
+    assert called == [("core", DEFAULT_CATALOG_URL, tmp_path)]
+    assert "Installed fortran-mcp-core-test" in capsys.readouterr().out
+
+
+def test_local_catalog_install_reaches_first_search(tmp_path: Path) -> None:
+    release_data = tmp_path / "release-data"
+    chunks = release_data / "chunks"
+    chunks.mkdir(parents=True)
+    chunk = DocumentChunk(
+        id="a" * 32,
+        source_id="fpm-0.13.0-docs",
+        revision="5097350c24ea7b5ceec233714f5a2604f79d0c02",
+        path="pages/spec/manifest.md",
+        headings=("Manifest reference", "OpenMP"),
+        line_start=1,
+        line_end=2,
+        text="Add OpenMP as a built-in metapackage dependency in fpm.toml.",
+        sha256="b" * 64,
+    )
+    (chunks / "fpm.jsonl").write_text(chunk.model_dump_json() + "\n")
+    build_index(release_data)
+    licenses = tmp_path / "licenses"
+    licenses.mkdir()
+    (licenses / "fpm-0.13.0-docs.txt").write_text("MIT\n")
+    release = tmp_path / "release"
+    bundle = release / "fortran-mcp-core.zip"
+    build_bundle("core", bundle, data_dir=release_data, license_dir=licenses)
+    catalog = release / "catalog.json"
+    build_catalog("2026.08.1", catalog, [bundle])
+    installed = tmp_path / "installed"
+
+    main(
+        [
+            "install",
+            "core",
+            "--catalog",
+            str(catalog),
+            "--data-dir",
+            str(installed),
+        ]
+    )
+    results = SQLiteSearchProvider(installed / "fortran-mcp.db").search("OpenMP dependency")
+
+    assert data_status(installed).lexical_ready is True
+    assert results[0].chunk_id == chunk.id
+    assert str(results[0].url) == "https://fpm.fortran-lang.org/spec/manifest.html"

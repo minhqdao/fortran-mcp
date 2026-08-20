@@ -1,8 +1,23 @@
 # Fortran MCP
 
-Fortran MCP brings standard specifications, compiler manuals, ecosystem tooling, dialect variations, and refactoring guides directly to your AI tools.
+Fortran MCP gives AI tools a compact, cited reference for modern and legacy Fortran development.
+Its local corpus covers language and compiler behavior, builds, preprocessing, interoperability,
+parallel programming, correctness, modernization, and ecosystem discovery without requiring a
+hosted search service.
 
-It gives LLM assistants a structured way to query everything from modern ISO standards to historical compiler documentation, helping you write modern Fortran or migrate legacy codebases with grounded context.
+## Install
+
+Prerequisite: Python 3.11+ and [uv](https://docs.astral.sh/uv/).
+
+```bash
+uv tool install fortran-mcp
+fortran-mcp data install core
+fortran-mcp data status
+```
+
+Configure an MCP client to launch the stdio command `fortran-mcp`; see
+[Connect an MCP client](docs/clients.md) for examples. The optional semantic bundle and runtime are
+not needed for the default lexical search.
 
 ## Development
 
@@ -217,10 +232,10 @@ uv run fortran-mcp-catalog build --data-version 2026.08.1 \
 uv run fortran-mcp-catalog install core --catalog dist/catalog.json
 ```
 
-Normal users use the unified command instead:
+Normal users use the built-in GitHub Release catalog through the unified command:
 
 ```bash
-fortran-mcp data install core --catalog dist/catalog.json
+fortran-mcp data install core
 fortran-mcp data status
 fortran-mcp data verify
 fortran-mcp data remove
@@ -234,11 +249,11 @@ not the Python package itself. If installed with `uv tool`, uninstall that separ
 `uv tool uninstall fortran-mcp`.
 
 Bundles use a versioned manifest, deterministic ZIP metadata, stable file ordering, and SHA-256
-checksums for every payload. Installation accepts a local path or explicit HTTPS URL, verifies the
-complete archive before writing it, enforces server compatibility, and installs semantic data only
-alongside the exact required core index. Automatic release discovery and publishing are intentionally
-not implemented yet. A local catalog provides independent data versioning, whole-archive checksums,
-download sizes, and role-based installation without assuming a future release URL. See
+checksums for every payload. The default catalog is loaded over HTTPS from the latest GitHub Release;
+`--catalog` accepts another HTTPS URL or local path. Relative artifact paths are resolved against the
+catalog URL, and the advertised archive size and SHA-256 are checked before the bundle's own
+manifest and payload checks. Installation enforces server compatibility and installs semantic data
+only alongside the exact required core index. See
 [Data bundle format](docs/bundles.md) for the artifact contract.
 
 See [Connect an MCP client](docs/clients.md) for Codex, Claude Desktop, and generic stdio

@@ -1,34 +1,28 @@
 # Connect an MCP client
 
-Build the local data before connecting a client:
+Install the published server and compact core data before connecting a client:
 
 ```bash
-uv sync
-uv run fortran-mcp-ingest fpm-0.13.0-docs
-uv run fortran-mcp-ingest stdlib-0.8.1-docs
-uv run fortran-mcp-build fpm-0.13.0-docs
-uv run fortran-mcp-build stdlib-0.8.1-docs
-uv run fortran-mcp-index
+uv tool install fortran-mcp
+fortran-mcp data install core
+fortran-mcp data status
 ```
 
-Use absolute paths in client configuration. Replace `/absolute/path/to/fortran-mcp` below with
-this repository's absolute path.
+The server uses stdio and needs no working-directory setting.
 
 ## Codex
 
 Add the server from the command line:
 
 ```bash
-codex mcp add fortran-docs -- uv --directory /absolute/path/to/fortran-mcp run fortran-mcp
+codex mcp add fortran-docs -- fortran-mcp
 ```
 
 Alternatively, add this to `~/.codex/config.toml` or a trusted project's `.codex/config.toml`:
 
 ```toml
 [mcp_servers.fortran_docs]
-command = "uv"
-args = ["run", "fortran-mcp"]
-cwd = "/absolute/path/to/fortran-mcp"
+command = "fortran-mcp"
 ```
 
 Restart the Codex client after changing the configuration. Use `/mcp` in the CLI to inspect the
@@ -42,13 +36,7 @@ Add this entry to the client's MCP configuration:
 {
   "mcpServers": {
     "fortran-docs": {
-      "command": "uv",
-      "args": [
-        "--directory",
-        "/absolute/path/to/fortran-mcp",
-        "run",
-        "fortran-mcp"
-      ]
+      "command": "fortran-mcp"
     }
   }
 }
@@ -57,8 +45,8 @@ Add this entry to the client's MCP configuration:
 Completely restart the client after saving the configuration. The server communicates over
 standard input and output, so an idle process is normal while the client is connected.
 
-Set `FORTRAN_MCP_DATA_DIR` in the client's server environment when generated data is stored
-outside the repository's `data/` directory.
+Set `FORTRAN_MCP_DATA_DIR` in the client's server environment only when data was installed outside
+the platform default directory.
 
 ## Local Streamable HTTP
 

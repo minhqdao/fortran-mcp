@@ -32,9 +32,10 @@ with a core bundle whose lexical-index checksum differs from its declared requir
 optional source bundles will use a later manifest schema once their composition rules are defined.
 
 Bundle verification rejects invalid manifests, unsafe or duplicate paths, undeclared files, missing
-files, size mismatches, and checksum mismatches. Authenticating a remotely downloaded artifact will
-be defined with the download and release workflow; internal checksums alone do not establish who
-published an archive.
+files, size mismatches, and checksum mismatches. For v0.1, publisher authenticity relies on HTTPS
+delivery from the project's GitHub Release location. Catalog and bundle assets must be uploaded to a
+draft release and the release published only after every asset is present. Signing can be added later
+without changing the bundle's internal integrity checks.
 
 Installation accepts local files and explicit HTTPS URLs. It verifies an archive before extraction,
 checks the manifest's server-version constraint, writes payloads through temporary files, and records
@@ -49,7 +50,9 @@ A catalog is a deterministic JSON discovery document for one data release. Its `
 the relative bundle path, compressed byte size, whole-archive SHA-256 checksum, bundle ID, and bundle
 version.
 
-Catalog paths are relative to the catalog file and cannot escape its directory. Local catalog
-installation verifies the advertised archive size and checksum, then verifies that the bundle ID and
-version match the internal manifest before invoking normal installation. Remote catalog discovery is
-deferred until the project has a stable release location and authenticated catalog policy.
+Catalog paths are relative to the catalog file and cannot escape its directory. The normal data
+command loads `catalog.json` from the latest GitHub Release over HTTPS; `--catalog` overrides it with
+another HTTPS URL or a local path. Remote paths resolve against the requested catalog URL; this lets
+GitHub redirect each named release asset independently through its download service.
+Installation verifies the advertised archive size and whole-archive SHA-256, then verifies that the
+bundle ID and version match the internal manifest before invoking normal installation.

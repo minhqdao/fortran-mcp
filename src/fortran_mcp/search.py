@@ -301,7 +301,10 @@ def search(
     if not 1 <= limit <= 20:
         raise SearchError("limit must be between 1 and 20")
     if not index_path.is_file():
-        raise SearchError(f"search index not found: {index_path}")
+        raise SearchError(
+            f"Fortran MCP core data is not installed at {index_path}. "
+            "Run 'fortran-mcp data install core'."
+        )
     source_ids = applicable_source_ids(
         source_id=source_id,
         compiler=compiler,
@@ -347,7 +350,10 @@ def get_chunk(chunk_id: str, index_path: Path = DEFAULT_INDEX_PATH) -> SearchRes
     if not re.fullmatch(r"[0-9a-f]{32}", chunk_id):
         raise SearchError("chunk ID must be 32 lowercase hexadecimal characters")
     if not index_path.is_file():
-        raise SearchError(f"search index not found: {index_path}")
+        raise SearchError(
+            f"Fortran MCP core data is not installed at {index_path}. "
+            "Run 'fortran-mcp data install core'."
+        )
     sql = """SELECT chunk_id, 0.0, source_id, source_title,
                     document_type, authority, topics, compilers, fortran_versions,
                     version, revision,
