@@ -33,6 +33,7 @@ class BenchmarkCase(StrictModel):
     expected_terms: tuple[str, ...] = ()
     expected_term_groups: tuple[tuple[str, ...], ...] = ()
     expect_no_results: bool = False
+    answer_authority: Literal["normative", "guidance"] = "guidance"
 
     @model_validator(mode="after")
     def expectation_is_complete(self) -> Self:
@@ -78,6 +79,7 @@ class CaseResult(StrictModel):
     id: str
     category: str
     query: str
+    answer_authority: Literal["normative", "guidance"]
     passed: bool
     rank: int | None
     latency_ms: float
@@ -168,6 +170,7 @@ def run_benchmark(
                 id=case.id,
                 category=case.category,
                 query=case.query,
+                answer_authority=case.answer_authority,
                 passed=passed,
                 rank=rank,
                 latency_ms=round(latency_ms, 3),
@@ -218,6 +221,7 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--provider", choices=("lexical", "semantic", "hybrid"), default="lexical")
     parser.add_argument("--semantic-index", type=Path)
     parser.add_argument("--model")
+    parser.add_argument("--semantic-threshold", type=float)
     parser.add_argument("--output", type=Path)
     return parser
 
@@ -238,7 +242,12 @@ def main(argv: Sequence[str] | None = None) -> None:
         if args.provider == "hybrid":
             from fortran_mcp.hybrid import HybridSearchProvider
 
-            provider = HybridSearchProvider(SQLiteSearchProvider(args.index), semantic)
+            options = (
+                {"semantic_threshold": args.semantic_threshold}
+                if args.semantic_threshold is not None
+                else {}
+            )
+            provider = HybridSearchProvider(SQLiteSearchProvider(args.index), semantic, **options)
             provider_name = f"hybrid:sqlite-fts5+{model.name}"
         else:
             provider = semantic

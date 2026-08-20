@@ -204,6 +204,17 @@ uv run fortran-mcp-benchmark --output benchmarks/results/sqlite-fts5.json
 The report records ranking accuracy, negative-query accuracy, latency, and every individual query
 result. It is a baseline for comparing future lexical, semantic, or hybrid search providers.
 
+To measure whether each source earns its footprint, run the leave-one-source-out analysis:
+
+```bash
+uv run fortran-mcp-contributions --data-dir data \
+  --output benchmarks/results/source-contributions.json
+```
+
+It records unique passes, regressions, vector and byte costs, and latency for the baseline and each
+omitted source. The concise reviewed result lives in
+`benchmarks/results/source-contributions.md`.
+
 To build and evaluate the optional local semantic index:
 
 ```bash

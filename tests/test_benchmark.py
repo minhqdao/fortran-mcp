@@ -110,7 +110,7 @@ def test_benchmark_can_match_source_neutral_content_terms() -> None:
 def test_reviewed_benchmark_suite_is_valid() -> None:
     suite = load_suite(Path("benchmarks/retrieval.toml"))
 
-    assert len(suite.cases) == 123
+    assert len(suite.cases) == 134
     assert {case.category for case in suite.cases} == {
         "exact",
         "filter",
@@ -118,3 +118,6 @@ def test_reviewed_benchmark_suite_is_valid() -> None:
         "negative",
         "paraphrase",
     }
+    new_cases = [case for case in suite.cases if case.id.startswith("language-")]
+    assert len(new_cases) == 11
+    assert {case.answer_authority for case in new_cases} == {"guidance", "normative"}

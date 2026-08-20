@@ -25,6 +25,10 @@ Add a pinned entry to `docs/sources.toml` and its complete required notice to
 necessary, add a deterministic converter, a modification notice where required, an expected output
 count, and focused converter tests.
 
+If a fetched document is generated navigation or other measured retrieval noise, list its exact
+converted path in `excluded_document_paths`. Keep exclusions narrow and explain the evidence in the
+registry notes; ingestion still preserves the document while chunk building omits it.
+
 Inspect the result in human- or machine-readable form:
 
 ```bash
@@ -39,6 +43,8 @@ For a newly registered source:
 ```bash
 uv run fortran-mcp source sync SOURCE_ID --data-dir data
 uv run fortran-mcp-benchmark --output benchmarks/results/sqlite-fts5.json
+uv run fortran-mcp-contributions --data-dir data \
+  --output benchmarks/results/source-contributions.json
 ```
 
 The sync command validates IDs before writing, downloads only a missing immutable ingestion,
@@ -46,8 +52,11 @@ rebuilds that source's chunks, and rebuilds the lexical index once. Use a fresh 
 a changed upstream revision or a clean release rebuild.
 
 Add the gap questions to `benchmarks/retrieval.toml`. Compare unique passes, regressions, chunk and
-compressed byte cost, latency, and negative-query behavior. Reject or narrow the source when its
-weight or retrieval interference outweighs its benefit.
+compressed core cost, vector count, latency, and negative-query behavior. The contribution report
+rebuilds the lexical corpus once per omitted source. `passes_lost_without_source` records all
+ranking-dependent losses, `unique_passes` narrows those to cases whose matching baseline passage
+came from that source, and `recovered_passes_without_source` reveals retrieval interference. Reject
+or narrow a source when its weight or interference outweighs its benefit.
 
 ## 5. Finish the change
 

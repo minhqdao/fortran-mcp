@@ -52,6 +52,7 @@ fortran-mcp-build = "fortran_mcp.documents:main"
 fortran-mcp-index = "fortran_mcp.search:main"
 fortran-mcp-semantic-index = "fortran_mcp.semantic:main"
 fortran-mcp-benchmark = "fortran_mcp.benchmark:main"
+fortran-mcp-contributions = "fortran_mcp.contribution:main"
 fortran-mcp-bundle = "fortran_mcp.bundle:main"
 fortran-mcp-catalog = "fortran_mcp.catalog:main"
 

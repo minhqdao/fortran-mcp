@@ -1,5 +1,6 @@
 """Tests for hybrid rank fusion."""
 
+import pytest
 from pydantic import HttpUrl
 
 from fortran_mcp.hybrid import HybridSearchProvider
@@ -49,6 +50,11 @@ class FakeProvider:
 
     def get_chunk(self, chunk_id: str) -> SearchResult:
         return next(result for result in self.results if result.chunk_id == chunk_id)
+
+
+def test_hybrid_rejects_invalid_threshold() -> None:
+    with pytest.raises(ValueError, match="threshold"):
+        HybridSearchProvider(FakeProvider(()), FakeProvider(()), semantic_threshold=1.1)
 
 
 def test_hybrid_fusion_rewards_results_found_by_both_providers() -> None:

@@ -14,11 +14,29 @@ from pydantic import Field, model_validator
 
 from fortran_mcp.config import data_directory
 from fortran_mcp.ingest import IngestionError
-from fortran_mcp.sources import IngestionRecord, StrictModel
+from fortran_mcp.sources import IngestionRecord, StrictModel, load_registry
 
 MAX_CHUNK_CHARS = 4_000
 HEADING = re.compile(r"^(#{1,6})\s+(.+?)(?:\s+#+)?$")
 LITERAL_INCLUDE = re.compile(r"^```\{literalinclude\}\s+(.+?)\s*$")
+HTML_COMMENT = re.compile(r"<!--.*?-->", re.DOTALL)
+INLINE_SECTION_TITLES = frozenset(
+    {
+        "argument",
+        "arguments",
+        "class",
+        "input parameter",
+        "input parameters",
+        "input/output parameter",
+        "input/output parameters",
+        "output parameter",
+        "output parameters",
+        "result",
+        "result value",
+        "return value",
+        "status",
+    }
+)
 
 
 class DocumentChunk(StrictModel):
@@ -55,6 +73,14 @@ def _content_start(lines: list[str]) -> int:
     return 0
 
 
+def _has_substantive_body(lines: list[str]) -> bool:
+    """Return whether a section contains more than headings, comments, and whitespace."""
+    without_comments = HTML_COMMENT.sub("", "\n".join(lines))
+    return any(
+        line.strip() and HEADING.match(line) is None for line in without_comments.splitlines()
+    )
+
+
 def _sections(lines: list[str]) -> Iterator[tuple[tuple[str, ...], int, int]]:
     start = _content_start(lines)
     section_start = start
@@ -69,15 +95,20 @@ def _sections(lines: list[str]) -> Iterator[tuple[tuple[str, ...], int, int]]:
         match = None if in_fence else HEADING.match(lines[index])
         if match is None:
             continue
-        if index > section_start and any(line.strip() for line in lines[section_start:index]):
-            yield section_headings, section_start, index - 1
         level = len(match.group(1))
         title = match.group(2).strip()
         headings[level - 1 :] = [title]
+        if title.casefold() in INLINE_SECTION_TITLES:
+            continue
+        if index > section_start and _has_substantive_body(lines[section_start:index]):
+            yield section_headings, section_start, index - 1
+            section_start = index
+        else:
+            # Keep structural container headings in the text, but use the nearest one as metadata.
+            section_start = min(section_start, index)
         section_headings = tuple(headings)
-        section_start = index
 
-    if section_start < len(lines) and any(line.strip() for line in lines[section_start:]):
+    if section_start < len(lines) and _has_substantive_body(lines[section_start:]):
         yield section_headings, section_start, len(lines) - 1
 
 
@@ -199,6 +230,10 @@ def build_documents(source_id: str, data_dir: Path | None = None) -> tuple[Docum
         raise DocumentBuildError(f"invalid ingestion record: {source_id}") from error
     if record.source_id != source_id:
         raise DocumentBuildError("ingestion record source ID does not match its filename")
+    registry = {source.id: source for source in load_registry().sources}
+    source = registry.get(source_id)
+    if source is None or source.revision != record.revision:
+        raise DocumentBuildError(f"source registry does not match ingestion record: {source_id}")
 
     documents: dict[str, str] = {}
     raw_dir = data_dir / "raw" / source_id
@@ -217,7 +252,9 @@ def build_documents(source_id: str, data_dir: Path | None = None) -> tuple[Docum
 
     chunks: list[DocumentChunk] = []
     for file_record in record.files:
-        if not _matches(file_record.path, record.document_paths):
+        if not _matches(file_record.path, record.document_paths) or _matches(
+            file_record.path, source.excluded_document_paths
+        ):
             continue
         chunks.extend(
             _chunks_for_file(

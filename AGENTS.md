@@ -55,6 +55,11 @@ rebuild, use a fresh data directory rather than mutating old ingestion records.
 See `docs/adding-sources.md` before changing the corpus and `docs/bundles.md` before changing data
 distribution. Run `fortran-mcp doctor` when debugging a user installation.
 
+After changing chunking or corpus scope, regenerate the three retrieval reports and run
+`uv run fortran-mcp-contributions --data-dir data --output <report.json>`. Use the reviewed summary
+in `benchmarks/results/source-contributions.md` to judge whether each source earns its bytes; do not
+infer contribution from source size alone.
+
 ## Change discipline
 
 - Preserve unrelated work in a dirty tree and never commit ignored generated data.

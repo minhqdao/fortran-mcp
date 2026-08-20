@@ -71,6 +71,7 @@ class Source(StrictModel):
     archive_root: str = Field(min_length=1)
     include_paths: tuple[str, ...] = Field(min_length=1)
     document_paths: tuple[str, ...] = Field(min_length=1)
+    excluded_document_paths: tuple[str, ...] = ()
     expected_document_count: int | None = Field(default=None, ge=1)
     homepage_url: HttpUrl
     published_path_prefix: str

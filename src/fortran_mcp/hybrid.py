@@ -42,6 +42,8 @@ class HybridSearchProvider:
     ) -> None:
         if lexical_weight <= 0 or semantic_weight <= 0:
             raise ValueError("hybrid provider weights must be positive")
+        if not 0 <= semantic_threshold <= 1:
+            raise ValueError("semantic threshold must be between zero and one")
         self.lexical = lexical
         self.semantic = semantic
         self.lexical_weight = lexical_weight

@@ -95,3 +95,48 @@ def test_long_section_does_not_orphan_its_heading(tmp_path: Path) -> None:
 
     assert chunks[0].text.startswith("# Options\n\n- option 0:")
     assert all(chunk.text != "# Options" for chunk in chunks)
+
+
+def test_build_keeps_small_api_metadata_with_procedure_context(tmp_path: Path) -> None:
+    source = _source()
+    content = b"""# API
+
+## parse
+
+### Status
+
+Experimental
+
+### Description
+
+Parses an input value.
+
+### Syntax
+
+`result = parse(input)`
+
+### Class
+
+Pure function.
+
+### Arguments
+
+`input`: the value to parse.
+
+### Result value
+
+The parsed value.
+"""
+    ingest_source(
+        source,
+        tmp_path,
+        downloader=lambda _url, _timeout, _limit: _archive(source, content),
+    )
+
+    chunks = build_documents(source.id, tmp_path)
+
+    assert len(chunks) == 3
+    assert chunks[0].headings == ("API", "parse")
+    assert "### Status\n\nExperimental" in chunks[0].text
+    assert "### Class\n\nPure function." in chunks[2].text
+    assert "### Result value\n\nThe parsed value." in chunks[2].text

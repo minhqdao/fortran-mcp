@@ -3,6 +3,96 @@ schema_version = 1
 # Migration cases use source-neutral content terms so that the benchmark measures
 # whether the corpus can answer the question, without choosing a source in advance.
 
+# Compiler-neutral language cases explicitly record whether a dependable answer needs normative
+# authority or whether practical guidance is sufficient. A retrieval pass for a normative case
+# demonstrates coverage, not that the current source has normative status.
+
+[[cases]]
+id = "language-submodules-dependency"
+category = "paraphrase"
+query = "How can Fortran submodules separate a module interface from its implementation and reduce recompilation?"
+expected_terms = ["submodule"]
+expected_term_groups = [["dependency", "recompilation"], ["interface", "implementation"]]
+answer_authority = "guidance"
+
+[[cases]]
+id = "language-generic-distinguishability"
+category = "paraphrase"
+query = "When are two specific Fortran procedures distinguishable in the same generic interface?"
+expected_terms = ["generic"]
+expected_term_groups = [["distinguishable", "distinguish", "resolution"], ["specific procedure", "specific procedures"]]
+answer_authority = "normative"
+
+[[cases]]
+id = "language-polymorphic-class-type"
+category = "paraphrase"
+query = "What is the difference between TYPE and CLASS declarations for polymorphic Fortran objects?"
+expected_terms = ["polymorphic"]
+expected_term_groups = [["class", "class(*)"], ["type", "declared type"]]
+answer_authority = "guidance"
+
+[[cases]]
+id = "language-finalization-rules"
+category = "paraphrase"
+query = "When is a Fortran derived-type final subroutine invoked, and when is an object not finalized?"
+expected_term_groups = [["finalizer", "finalization", "finalized"], ["invoked", "executed", "not final"]]
+answer_authority = "normative"
+
+[[cases]]
+id = "language-do-concurrent-independence"
+category = "paraphrase"
+query = "What independence restrictions must iterations of a standard Fortran DO CONCURRENT loop obey?"
+expected_terms = ["do concurrent"]
+expected_term_groups = [["independent", "independence", "restriction", "dependency"]]
+answer_authority = "normative"
+
+[[cases]]
+id = "language-coarray-teams"
+category = "paraphrase"
+query = "How do FORM TEAM and CHANGE TEAM create and enter a Fortran coarray team?"
+expected_terms = ["team"]
+expected_term_groups = [["form team", "form_team"], ["change team", "change_team"]]
+answer_authority = "normative"
+
+[[cases]]
+id = "language-coarray-events"
+category = "paraphrase"
+query = "How do EVENT POST and EVENT WAIT synchronize Fortran images?"
+expected_terms = ["event"]
+expected_term_groups = [["event post", "event_post"], ["event wait", "event_wait"], ["image", "images"]]
+answer_authority = "normative"
+
+[[cases]]
+id = "language-io-error-handling"
+category = "paraphrase"
+query = "How should portable Fortran I/O errors be handled with IOSTAT and IOMSG?"
+expected_terms = ["iostat", "iomsg"]
+expected_term_groups = [["error", "errors", "error handling"]]
+answer_authority = "guidance"
+
+[[cases]]
+id = "language-c-descriptor-assumed-rank"
+category = "paraphrase"
+query = "How does a C descriptor represent an assumed-rank or allocatable Fortran argument?"
+expected_term_groups = [["descriptor", "CFI_cdesc_t", "ISO_Fortran_binding.h"], ["assumed-rank", "allocatable"]]
+answer_authority = "normative"
+
+[[cases]]
+id = "language-fortran-2018-assumed-rank"
+category = "paraphrase"
+query = "Which Fortran 2018 constructs inspect an assumed-rank dummy argument at runtime?"
+expected_terms = ["assumed-rank"]
+expected_term_groups = [["select rank", "rank"]]
+answer_authority = "normative"
+
+[[cases]]
+id = "language-fortran-2023-overview"
+category = "paraphrase"
+query = "How do the new enumeration type and TYPEOF declaration work in Fortran 2023?"
+expected_terms = ["Fortran 2023"]
+expected_term_groups = [["enumeration type", "enum type"], ["typeof"]]
+answer_authority = "normative"
+
 [[cases]]
 id = "legacy-fixed-to-free-form"
 category = "migration"
