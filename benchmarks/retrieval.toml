@@ -1,5 +1,98 @@
 schema_version = 1
 
+# Migration cases use source-neutral content terms so that the benchmark measures
+# whether the corpus can answer the question, without choosing a source in advance.
+
+[[cases]]
+id = "legacy-fixed-to-free-form"
+category = "migration"
+query = "How should I convert a fixed-form Fortran 77 source file to free form safely?"
+expected_terms = ["fixed form", "free form", "convert"]
+
+[[cases]]
+id = "legacy-common-block-module"
+category = "migration"
+query = "How do I replace a COMMON block shared by several files with a modern Fortran module?"
+expected_terms = ["common", "module"]
+
+[[cases]]
+id = "legacy-block-data-module"
+category = "migration"
+query = "How should BLOCK DATA initialization be migrated into modules?"
+expected_terms = ["block data", "module"]
+
+[[cases]]
+id = "legacy-equivalence-replacement"
+category = "migration"
+query = "What modern replacement should I use for EQUIVALENCE storage association?"
+expected_terms = ["equivalence", "transfer", "allocatable"]
+
+[[cases]]
+id = "legacy-assigned-goto"
+category = "migration"
+query = "How can an assigned GO TO be rewritten as structured modern Fortran?"
+expected_terms = ["assigned go to", "procedure"]
+
+[[cases]]
+id = "legacy-assigned-format"
+category = "migration"
+query = "How do I replace an assigned FORMAT statement and ASSIGN used for formatted I/O?"
+expected_terms = ["assigned format", "character"]
+
+[[cases]]
+id = "legacy-alternate-return"
+category = "migration"
+query = "How should alternate returns from a legacy Fortran subroutine be modernized?"
+expected_terms = ["alternate return", "status"]
+
+[[cases]]
+id = "legacy-hollerith-character"
+category = "migration"
+query = "How do I replace Hollerith constants without changing the stored data?"
+expected_terms = ["hollerith", "character"]
+
+[[cases]]
+id = "legacy-cray-pointer"
+category = "migration"
+query = "How should a Cray pointer be replaced with standard-conforming Fortran?"
+expected_terms = ["cray pointer", "iso_c_binding"]
+
+[[cases]]
+id = "legacy-entry-procedure"
+category = "migration"
+query = "How can an ENTRY statement with multiple procedure entry points be removed?"
+expected_terms = ["entry", "procedure"]
+
+[[cases]]
+id = "legacy-dec-structure-derived-type"
+category = "migration"
+query = "How do I migrate DEC STRUCTURE and RECORD declarations to derived types?"
+expected_terms = ["structure", "record", "derived type"]
+
+[[cases]]
+id = "legacy-characterization-baseline"
+category = "migration"
+query = "How do I establish a behavioral baseline before refactoring legacy scientific Fortran?"
+expected_terms = ["characterization", "baseline"]
+
+[[cases]]
+id = "legacy-differential-testing"
+category = "migration"
+query = "How can differential testing preserve numerical behavior while modernizing Fortran?"
+expected_terms = ["differential testing", "reference"]
+
+[[cases]]
+id = "legacy-incremental-migration"
+category = "migration"
+query = "How should a large legacy Fortran program be modernized incrementally without a rewrite?"
+expected_terms = ["small changes", "tests"]
+
+[[cases]]
+id = "legacy-unformatted-io-compatibility"
+category = "migration"
+query = "How can I preserve legacy unformatted binary file compatibility across compilers?"
+expected_terms = ["unformatted", "record marker", "endianness"]
+
 [[cases]]
 id = "fpm-compile-commands"
 category = "exact"

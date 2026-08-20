@@ -26,7 +26,7 @@ class FakeProvider:
         raise NotImplementedError
 
 
-def _result(path: str) -> SearchResult:
+def _result(path: str, *, text: str = "Text") -> SearchResult:
     return SearchResult.model_validate(
         {
             "chunk_id": "a" * 32,
@@ -42,7 +42,7 @@ def _result(path: str) -> SearchResult:
             "headings": ["Heading"],
             "line_start": 1,
             "line_end": 2,
-            "text": "Text",
+            "text": text,
             "url": "https://example.com",
         }
     )
@@ -78,13 +78,40 @@ def test_benchmark_calculates_positive_and_negative_metrics() -> None:
     assert all(result.passed for result in report.results)
 
 
+def test_benchmark_can_match_source_neutral_content_terms() -> None:
+    suite = BenchmarkSuite(
+        schema_version=1,
+        cases=(
+            BenchmarkCase(
+                id="migration-guidance",
+                category="migration",
+                query="modernize safely",
+                expected_terms=("characterization tests", "small changes"),
+            ),
+        ),
+    )
+    provider = FakeProvider(
+        {
+            "modernize safely": (
+                _result("unrelated.md", text="Use characterization tests before small changes."),
+            )
+        }
+    )
+
+    report = run_benchmark(suite, provider)
+
+    assert report.hit_at_1 == 1
+    assert report.categories["migration"].pass_rate == 1
+
+
 def test_reviewed_benchmark_suite_is_valid() -> None:
     suite = load_suite(Path("benchmarks/retrieval.toml"))
 
-    assert len(suite.cases) == 85
+    assert len(suite.cases) == 100
     assert {case.category for case in suite.cases} == {
         "exact",
         "filter",
+        "migration",
         "negative",
         "paraphrase",
     }
