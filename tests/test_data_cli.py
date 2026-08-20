@@ -5,6 +5,7 @@ import sqlite3
 from pathlib import Path
 from types import SimpleNamespace
 
+import pytest
 from pytest import CaptureFixture, MonkeyPatch
 
 from fortran_mcp.bundle import BundleError, build_bundle, install_bundle
@@ -89,6 +90,47 @@ def test_remove_requires_confirmation(tmp_path: Path, monkeypatch: MonkeyPatch) 
     main(["remove", "--data-dir", str(installed)])
 
     assert (installed / "fortran-mcp.db").is_file()
+
+
+def test_remove_with_confirmation_yes(tmp_path: Path, monkeypatch: MonkeyPatch) -> None:
+    installed = _installed_core(tmp_path)
+    monkeypatch.setattr("builtins.input", lambda _prompt: "yes")
+
+    main(["remove", "--data-dir", str(installed)])
+
+    assert not (installed / "fortran-mcp.db").exists()
+
+
+def test_data_verify_cli_reports_ok_for_valid_install(
+    tmp_path: Path, capsys: CaptureFixture[str]
+) -> None:
+    installed = _installed_core(tmp_path)
+
+    main(["verify", "--data-dir", str(installed)])
+
+    assert "Installed data bundles verified" in capsys.readouterr().out
+
+
+def test_data_verify_cli_rejects_corrupted_install(
+    tmp_path: Path, capsys: CaptureFixture[str]
+) -> None:
+    installed = _installed_core(tmp_path)
+    (installed / "fortran-mcp.db").write_bytes(b"corrupted")
+
+    with pytest.raises(SystemExit):
+        main(["verify", "--data-dir", str(installed)])
+    assert "verification failed" in capsys.readouterr().err
+
+
+def test_data_verify_cli_rejects_empty_data_dir(
+    tmp_path: Path, capsys: CaptureFixture[str]
+) -> None:
+    installed = tmp_path / "empty"
+    installed.mkdir()
+
+    with pytest.raises(SystemExit):
+        main(["verify", "--data-dir", str(installed)])
+    assert "no data bundles" in capsys.readouterr().err
 
 
 def test_remove_rejects_unsafe_manifest_path(tmp_path: Path) -> None:

@@ -132,6 +132,13 @@ class SourceRegistry(StrictModel):
             raise ValueError("source IDs must be unique")
         return self
 
+    def get(self, source_id: str) -> Source:
+        """Return the source with the given ID, raising KeyError if absent."""
+        for source in self.sources:
+            if source.id == source_id:
+                return source
+        raise KeyError(source_id)
+
 
 class CitationLocation(StrictModel):
     """Stable location within an ingested document."""
