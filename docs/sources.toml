@@ -800,3 +800,73 @@ license_url = "https://github.com/libprima/prima/blob/1d76fb88aeffb427cd17ed1e9d
 redistribution = "redistributable"
 status = "approved"
 notes = "A very small official case-study subset: the modernization goal and the behavior-preserving workflow of free-form conversion followed by extensive tests after every tiny modification. Build instructions, solver documentation, status, publicity, and test-volume claims are excluded. This is evidence from one renowned numerical project, not a universal migration recipe."
+
+[[sources]]
+id = "beliavsky-fortran-packages-list"
+title = "Beliavsky list of fpm-compatible Fortran projects"
+publisher = "Beliavsky"
+document_type = "ecosystem-guide"
+authority = "community"
+topics = [
+  "ecosystem-discovery",
+  "fpm",
+  "libraries",
+  "package-discovery",
+  "scientific-software",
+]
+fortran_versions = []
+compilers = []
+dialects = ["fpm"]
+version = "2025-03-05"
+revision = "13f715138fd1640b44d4d13ef4818f7d8b9340e0"
+source_url = "https://github.com/Beliavsky/Fortran-packages-list/tree/13f715138fd1640b44d4d13ef4818f7d8b9340e0"
+archive_url = "https://github.com/Beliavsky/Fortran-packages-list/archive/13f715138fd1640b44d4d13ef4818f7d8b9340e0.tar.gz"
+archive_root = "Fortran-packages-list-13f715138fd1640b44d4d13ef4818f7d8b9340e0"
+include_paths = ["LICENSE", "README.md"]
+document_paths = ["manual/README.md"]
+expected_document_count = 1
+homepage_url = "https://github.com/Beliavsky/Fortran-packages-list"
+published_path_prefix = "manual"
+citation_base_url = "https://github.com/Beliavsky/Fortran-packages-list/blob/13f715138fd1640b44d4d13ef4818f7d8b9340e0"
+citation_format = "source"
+converter = "beliavsky-packages"
+license = "MIT"
+license_url = "https://github.com/Beliavsky/Fortran-packages-list/blob/13f715138fd1640b44d4d13ef4818f7d8b9340e0/LICENSE"
+redistribution = "redistributable"
+status = "approved"
+notes = "Primary broad ecosystem directory, selected for its useful categorization and active community stewardship. All 396 fpm-compatible project entries are retained while the redundant table of contents is removed. Inclusion is discovery metadata, not an endorsement or evidence of maintenance, licensing, compatibility, or a successful current fpm build."
+
+[[sources]]
+id = "fortran-lang-package-index-additions"
+title = "Fortran-lang package index additions"
+publisher = "Fortran-lang community"
+document_type = "ecosystem-guide"
+authority = "community"
+topics = [
+  "ecosystem-discovery",
+  "libraries",
+  "package-discovery",
+  "scientific-software",
+  "tooling",
+]
+fortran_versions = []
+compilers = []
+dialects = []
+version = "2026-08-13"
+revision = "36d35714a4bc4e7d77183ecdfe09ed7107f3fff2"
+source_url = "https://github.com/fortran-lang/webpage/blob/36d35714a4bc4e7d77183ecdfe09ed7107f3fff2/data/package_index.yml"
+archive_url = "https://github.com/fortran-lang/webpage/archive/36d35714a4bc4e7d77183ecdfe09ed7107f3fff2.tar.gz"
+archive_root = "webpage-36d35714a4bc4e7d77183ecdfe09ed7107f3fff2"
+include_paths = ["LICENSE", "data/package_index.yml"]
+document_paths = ["manual/data/package_index.yml"]
+expected_document_count = 1
+homepage_url = "https://fortran-lang.org/packages/"
+published_path_prefix = "manual"
+citation_base_url = "https://github.com/fortran-lang/webpage/blob/36d35714a4bc4e7d77183ecdfe09ed7107f3fff2"
+citation_format = "source"
+converter = "fortran-lang-package-index"
+license = "MIT"
+license_url = "https://github.com/fortran-lang/webpage/blob/36d35714a4bc4e7d77183ecdfe09ed7107f3fff2/LICENSE"
+redistribution = "redistributable"
+status = "approved"
+notes = "Secondary ecosystem index using the same pinned Fortran-lang revision as the other project references. The converter retains the 204 entries whose normalized repository URLs are absent from the pinned Beliavsky list and deterministically omits all 68 overlaps. The official index has community review criteria, but inclusion still is not a maintenance or compatibility guarantee."

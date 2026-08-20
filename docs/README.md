@@ -39,3 +39,8 @@ text, preserves external links from its bibliography, and excludes the unfinishe
 separate examples, PDF, and overlapping BLOCK DATA section. The PRIMA
 converter retains only the official README passages that explain the modernization goal and its
 incremental differential-testing method. Both generated sources carry modification notices.
+The Beliavsky package-list converter keeps all 396 categorized project entries, removes only the
+redundant table of contents, and labels the result as discovery metadata rather than endorsement.
+It is the primary ecosystem directory. The Fortran-lang package-index converter then keeps only
+the 204 repositories not present in that pinned list: all 68 normalized-URL overlaps are checked
+and omitted deterministically. Both source files remain independently attributable and filterable.

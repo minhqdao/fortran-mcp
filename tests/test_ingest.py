@@ -11,6 +11,7 @@ from typing import Any
 import pytest
 
 from fortran_mcp.ingest import (
+    BELIAVSKY_PACKAGE_URLS_IN_FORTRAN_LANG,
     CODEE_FORTRAN_GUIDELINES,
     GNU_MAKE_MANUAL_PAGES,
     OLD_FORTRAN_IDIOM_CHAPTERS,
@@ -70,6 +71,60 @@ def test_ingestion_rejects_an_unapproved_source(tmp_path: Path) -> None:
 
     with pytest.raises(IngestionError, match="not approved"):
         ingest_source(source, tmp_path, downloader=lambda _url, _timeout, _limit: b"")
+
+
+def test_beliavsky_package_ingestion_removes_only_redundant_toc(tmp_path: Path) -> None:
+    source = _source_by_id("beliavsky-fortran-packages-list")
+    entries = "\n\n".join(
+        f"[Package {number}](https://example.com/package-{number}): useful package"
+        for number in range(396)
+    )
+    archive = _archive(
+        {
+            f"{source.archive_root}/LICENSE": b"MIT\n",
+            f"{source.archive_root}/README.md": (
+                "### Projects\n\n* [Libraries](#libraries)\n\n## Libraries\n\n" + entries
+            ).encode(),
+        }
+    )
+
+    record = ingest_source(source, tmp_path, downloader=lambda *_args: archive)
+
+    markdown = (tmp_path / f"raw/{source.id}/manual/README.md").read_text()
+    assert record.converter_version == "builtin beliavsky-packages 1"
+    assert "Discovery directory, not an endorsement" in markdown
+    assert "* [Libraries](#libraries)" not in markdown
+    assert "[Package 395]" in markdown
+
+
+def test_fortran_lang_package_ingestion_deduplicates_beliavsky_urls(tmp_path: Path) -> None:
+    source = _source_by_id("fortran-lang-package-index-additions")
+    overlapping = "\n\n".join(
+        f"- name: Overlap {number}\n  url: {url}\n  description: duplicate\n  categories: libraries"
+        for number, url in enumerate(sorted(BELIAVSKY_PACKAGE_URLS_IN_FORTRAN_LANG))
+    )
+    additions = "\n\n".join(
+        f"- name: Addition {number}\n  github: example/addition-{number}\n"
+        "  description: useful addition\n  categories: scientific libraries\n"
+        "  tags: discovery"
+        for number in range(204)
+    )
+    archive = _archive(
+        {
+            f"{source.archive_root}/LICENSE": b"MIT\n",
+            f"{source.archive_root}/data/package_index.yml": (
+                overlapping + "\n\n" + additions
+            ).encode(),
+        }
+    )
+
+    record = ingest_source(source, tmp_path, downloader=lambda *_args: archive)
+
+    markdown = (tmp_path / f"raw/{source.id}/manual/data/package_index.yml").read_text()
+    assert record.converter_version == "builtin fortran-lang-package-index 1"
+    assert "68 overlaps are omitted" in markdown
+    assert "Overlap 0" not in markdown
+    assert "[Addition 203](https://github.com/example/addition-203)" in markdown
 
 
 def test_ingestion_rejects_unsafe_archive_paths(tmp_path: Path) -> None:

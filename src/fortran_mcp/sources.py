@@ -89,6 +89,8 @@ class Source(StrictModel):
         "codee-fortran-subset",
         "old-fortran-idioms-latex",
         "prima-modernization-subset",
+        "beliavsky-packages",
+        "fortran-lang-package-index",
     ] = "none"
     converter_entrypoint: str | None = None
     license: str = Field(min_length=1)

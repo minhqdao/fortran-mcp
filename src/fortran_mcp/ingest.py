@@ -781,6 +781,203 @@ def _convert_codee_fortran_subset(source: Source, root: Path) -> tuple[tuple[Fil
     return tuple(records), "builtin codee-fortran-subset 1"
 
 
+BELIAVSKY_PACKAGE_URLS_IN_FORTRAN_LANG = frozenset(
+    {
+        "https://github.com/dftd4/dftd4",
+        "https://github.com/exequantcode/raffle",
+        "https://github.com/flexi-framework/flexi",
+        "https://github.com/fluidnumerics/feq-parse",
+        "https://github.com/fortran-gaming/blocktran",
+        "https://github.com/fortran-lang/stdlib",
+        "https://github.com/fortran-lang/test-drive",
+        "https://github.com/geospace-code/h5fortran",
+        "https://github.com/geospace-code/maptran3d",
+        "https://github.com/geospace-code/nc4fortran",
+        "https://github.com/interkosmos/fortran-curl",
+        "https://github.com/interkosmos/fortran-grace",
+        "https://github.com/interkosmos/fortran-lmdb",
+        "https://github.com/interkosmos/fortran-lua54",
+        "https://github.com/interkosmos/fortran-modbus",
+        "https://github.com/interkosmos/fortran-motif",
+        "https://github.com/interkosmos/fortran-pcre2",
+        "https://github.com/interkosmos/fortran-raylib",
+        "https://github.com/interkosmos/fortran-sdl2",
+        "https://github.com/interkosmos/fortran-sqlite3",
+        "https://github.com/interkosmos/fortran-tcl86",
+        "https://github.com/interkosmos/fortran-unix",
+        "https://github.com/interkosmos/fortran-xlib",
+        "https://github.com/interkosmos/fortran-xmpp",
+        "https://github.com/interkosmos/fortran-zlib",
+        "https://github.com/interkosmos/fortran-zstd",
+        "https://github.com/jacobwilliams/astro-fortran",
+        "https://github.com/jacobwilliams/bspline-fortran",
+        "https://github.com/jacobwilliams/ddeabm",
+        "https://github.com/jacobwilliams/dop853",
+        "https://github.com/jacobwilliams/fortran-astrodynamics-toolkit",
+        "https://github.com/jacobwilliams/json-fortran",
+        "https://github.com/jacobwilliams/nlesolver-fortran",
+        "https://github.com/jacobwilliams/numdiff",
+        "https://github.com/jacobwilliams/pchip",
+        "https://github.com/jacobwilliams/pyplot-fortran",
+        "https://github.com/jacobwilliams/quadpack",
+        "https://github.com/jacobwilliams/regridpack",
+        "https://github.com/jacobwilliams/roots-fortran",
+        "https://github.com/jacobwilliams/slsqp",
+        "https://github.com/kookma/ogpf",
+        "https://github.com/modern-fortran/neural-fortran",
+        "https://github.com/nedtaylor/athena",
+        "https://github.com/perazz/fitpack",
+        "https://github.com/perazz/fortran-bessels",
+        "https://github.com/perazz/fortran-lapack",
+        "https://github.com/perazz/fortran-regex",
+        "https://github.com/perazz/fortran-shlex",
+        "https://github.com/princemahajan/flint",
+        "https://github.com/samharrison7/fortran-error-handler",
+        "https://github.com/scivision/fortran2018-examples",
+        "https://github.com/scivision/rpn-calc-fortran",
+        "https://github.com/szaghi/flap",
+        "https://github.com/szaghi/penf",
+        "https://github.com/szaghi/stringifor",
+        "https://github.com/szaghi/vtkfortran",
+        "https://github.com/toml-f/toml-f",
+        "https://github.com/urbanjost/general-purpose-fortran",
+        "https://github.com/urbanjost/m_draw",
+        "https://github.com/urbanjost/m_history",
+        "https://github.com/urbanjost/m_io",
+        "https://github.com/urbanjost/m_ncurses",
+        "https://github.com/urbanjost/m_process",
+        "https://github.com/urbanjost/m_strings",
+        "https://github.com/urbanjost/m_system",
+        "https://github.com/urbanjost/m_time",
+        "https://github.com/vmagnin/gtk-fortran",
+        "https://github.com/wavebitscientific/functional-fortran",
+    }
+)
+PACKAGE_DIRECTORY_NOTICE = (
+    "> Discovery directory, not an endorsement: package entries are brief upstream descriptions. "
+    "Check the linked repository for current maintenance, license, compatibility, and installation "
+    "instructions before adopting a package."
+)
+
+
+def _convert_beliavsky_packages(source: Source, root: Path) -> tuple[tuple[FileRecord, ...], str]:
+    input_path = root / "README.md"
+    if not input_path.is_file():
+        raise IngestionError("Beliavsky package list README is unavailable")
+    content = input_path.read_text(encoding="utf-8")
+    first_category = re.search(r"(?m)^## ", content)
+    if first_category is None:
+        raise IngestionError("Beliavsky package list contains no categories")
+    entries = re.findall(r"(?m)^\[[^]]+\]\(https?://[^)]+\)", content)
+    if len(entries) != 396:
+        raise IngestionError(f"expected 396 Beliavsky package entries; found {len(entries)}")
+    body = content[first_category.start() :].strip()
+    markdown = (
+        "# Beliavsky list of fpm-compatible Fortran projects\n\n"
+        f"{PACKAGE_DIRECTORY_NOTICE}\n\n"
+        "This pinned community-maintained snapshot is the primary broad package directory in "
+        "Fortran MCP. Its table of contents was removed as redundant; all categorized entries "
+        "are retained.\n\n"
+        f"{body}\n"
+    )
+    output_path = root / "manual" / "README.md"
+    output_path.parent.mkdir(parents=True)
+    output_path.write_text(markdown, encoding="utf-8")
+    return (_record_file(output_path, root),), "builtin beliavsky-packages 1"
+
+
+def _yaml_scalar(value: str) -> str:
+    value = value.strip()
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in {'"', "'"}:
+        return value[1:-1]
+    return value
+
+
+def _parse_fortran_lang_packages(content: str) -> list[dict[str, str]]:
+    """Parse the deliberately flat, documented package-index YAML schema without a dependency."""
+    packages: list[dict[str, str]] = []
+    current: dict[str, str] | None = None
+    for line in content.splitlines():
+        if line.startswith("- name: "):
+            if current is not None:
+                packages.append(current)
+            current = {"name": _yaml_scalar(line.partition(":")[2])}
+        elif current is not None and re.match(r"^  [a-z]+: ", line):
+            key, _, value = line.strip().partition(":")
+            current[key] = _yaml_scalar(value)
+    if current is not None:
+        packages.append(current)
+    return packages
+
+
+def _package_url(package: dict[str, str]) -> str:
+    if "github" in package:
+        return f"https://github.com/{package['github']}"
+    if "gitlab" in package:
+        return f"https://gitlab.com/{package['gitlab']}"
+    return package.get("url", "")
+
+
+def _normalized_repository_url(url: str) -> str:
+    return url.casefold().rstrip("/").removesuffix(".git")
+
+
+def _convert_fortran_lang_package_index(
+    source: Source, root: Path
+) -> tuple[tuple[FileRecord, ...], str]:
+    input_path = root / "data" / "package_index.yml"
+    if not input_path.is_file():
+        raise IngestionError("Fortran-lang package index is unavailable")
+    packages = _parse_fortran_lang_packages(input_path.read_text(encoding="utf-8"))
+    if len(packages) != 272:
+        raise IngestionError(f"expected 272 Fortran-lang package entries; found {len(packages)}")
+
+    retained: list[dict[str, str]] = []
+    excluded: list[dict[str, str]] = []
+    for package in packages:
+        required = {"name", "description", "categories"}
+        if not required.issubset(package) or not _package_url(package):
+            raise IngestionError(f"incomplete Fortran-lang package entry: {package.get('name')}")
+        target = _normalized_repository_url(_package_url(package))
+        if target in BELIAVSKY_PACKAGE_URLS_IN_FORTRAN_LANG:
+            excluded.append(package)
+        else:
+            retained.append(package)
+    if len(excluded) != 68 or len(retained) != 204:
+        raise IngestionError(
+            "package-index deduplication drifted: "
+            f"excluded {len(excluded)} and retained {len(retained)} entries"
+        )
+
+    by_category: dict[str, list[dict[str, str]]] = {}
+    for package in retained:
+        category = package["categories"].split()[0].replace("-", " ").title()
+        by_category.setdefault(category, []).append(package)
+    lines = [
+        "# Additional Fortran-lang package index entries",
+        "",
+        PACKAGE_DIRECTORY_NOTICE,
+        "",
+        "This pinned official community index contributes 204 entries absent by normalized "
+        "repository URL from the pinned Beliavsky list. The 68 overlaps are omitted so each "
+        "repository is indexed only once. Categories and tags are retained for discovery.",
+    ]
+    for category, category_packages in by_category.items():
+        lines.extend(("", f"## {category}", ""))
+        for package in category_packages:
+            metadata = [f"Categories: {package['categories']}"]
+            if tags := package.get("tags"):
+                metadata.append(f"Tags: {tags}")
+            lines.append(
+                f"- [{package['name']}]({_package_url(package)}): "
+                f"{package['description']}. {'; '.join(metadata)}."
+            )
+    output_path = root / "manual" / "data" / "package_index.yml"
+    output_path.parent.mkdir(parents=True)
+    output_path.write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
+    return (_record_file(output_path, root),), "builtin fortran-lang-package-index 1"
+
+
 OLD_FORTRAN_IDIOM_CHAPTERS = (
     "old_source_form.tex",
     "old_subroutine_function.tex",
@@ -1307,6 +1504,16 @@ def ingest_source(
             schema_version = 2
         elif source.converter == "prima-modernization-subset":
             generated, converter_version = _convert_prima_modernization(source, temporary_path)
+            stored_files = tuple(sorted((*stored_files, *generated), key=lambda item: item.path))
+            schema_version = 2
+        elif source.converter == "beliavsky-packages":
+            generated, converter_version = _convert_beliavsky_packages(source, temporary_path)
+            stored_files = tuple(sorted((*stored_files, *generated), key=lambda item: item.path))
+            schema_version = 2
+        elif source.converter == "fortran-lang-package-index":
+            generated, converter_version = _convert_fortran_lang_package_index(
+                source, temporary_path
+            )
             stored_files = tuple(sorted((*stored_files, *generated), key=lambda item: item.path))
             schema_version = 2
         document_count = sum(_matches(file.path, source.document_paths) for file in stored_files)

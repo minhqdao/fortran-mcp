@@ -51,6 +51,8 @@ uv run fortran-mcp-ingest fortitude-0.9.2-reference
 uv run fortran-mcp-ingest codee-open-catalog-fortran-subset
 uv run fortran-mcp-ingest old-fortran-programming-idioms
 uv run fortran-mcp-ingest prima-modernization-case-study
+uv run fortran-mcp-ingest beliavsky-fortran-packages-list
+uv run fortran-mcp-ingest fortran-lang-package-index-additions
 ```
 
 The core collection also includes separately identifiable Fortran-lang references for intrinsic
@@ -95,6 +97,13 @@ The much smaller PRIMA case-study subset contributes an official numerical-softw
 establish a faithful reference, convert layout first, and test after every tiny refactoring. Neither
 source is treated as a language standard.
 
+Ecosystem discovery uses two small, complementary directories. Beliavsky's actively curated list is
+the primary source and retains all 396 categorized fpm-compatible projects. The Fortran-lang package
+index adds 204 repositories absent from that snapshot; its 68 normalized-URL overlaps are removed
+deterministically. These entries help users find existing libraries and tools, but inclusion is not
+an endorsement or a guarantee of maintenance, licensing, compatibility, or a current successful
+build. Always check the linked project before adoption.
+
 The GNU Fortran manual is generated from its pinned Texinfo sources. Maintainers building that
 source need GNU Texinfo 7.3 and the optional conversion dependency:
 
@@ -127,6 +136,8 @@ uv run fortran-mcp-build fortitude-0.9.2-reference
 uv run fortran-mcp-build codee-open-catalog-fortran-subset
 uv run fortran-mcp-build old-fortran-programming-idioms
 uv run fortran-mcp-build prima-modernization-case-study
+uv run fortran-mcp-build beliavsky-fortran-packages-list
+uv run fortran-mcp-build fortran-lang-package-index-additions
 uv run fortran-mcp-index
 ```
 

@@ -769,3 +769,138 @@ query = "How can Fypp preserve original source line numbers in compiler error me
 expected_source = "fypp-3.2-manual"
 expected_path = "manual/fypp.md"
 expected_heading = "Line numbering markers"
+
+[[cases]]
+id = "ecosystem-json-parser"
+category = "paraphrase"
+query = "Which Fortran JSON parser library provides rojff?"
+expected_source = "beliavsky-fortran-packages-list"
+expected_path = "manual/README.md"
+expected_heading = "File I/O"
+expected_terms = ["rojff"]
+
+[[cases]]
+id = "ecosystem-command-line-parser"
+category = "paraphrase"
+query = "Which Fortran library parses command-line arguments from a prototype string?"
+expected_source = "beliavsky-fortran-packages-list"
+expected_path = "manual/README.md"
+expected_heading = "General Purpose"
+expected_terms = ["M_CLI2"]
+
+[[cases]]
+id = "ecosystem-automatic-differentiation"
+category = "paraphrase"
+query = "Which Fortran automatic differentiation package computes gradients and Jacobians?"
+expected_source = "beliavsky-fortran-packages-list"
+expected_path = "manual/README.md"
+expected_heading = "Automatic Differentiation"
+expected_terms = ["forwarddiff"]
+
+[[cases]]
+id = "ecosystem-date-time"
+category = "paraphrase"
+query = "Which Fortran package provides date and time manipulation?"
+expected_source = "beliavsky-fortran-packages-list"
+expected_path = "manual/README.md"
+expected_heading = "Dates and Times"
+expected_terms = ["datetime-fortran"]
+
+[[cases]]
+id = "ecosystem-ode-solver"
+category = "paraphrase"
+query = "Which modern object-oriented Fortran library integrates differential equations?"
+expected_source = "beliavsky-fortran-packages-list"
+expected_path = "manual/README.md"
+expected_heading = "Ordinary Differential Equations"
+expected_terms = ["FLINT"]
+
+[[cases]]
+id = "ecosystem-sqlite-bindings"
+category = "paraphrase"
+query = "Which Fortran package provides SQLite 3 interface bindings?"
+expected_source = "beliavsky-fortran-packages-list"
+expected_path = "manual/README.md"
+expected_heading = "Databases"
+expected_terms = ["fortran-sqlite3"]
+
+[[cases]]
+id = "ecosystem-matplotlib-plotting"
+category = "paraphrase"
+query = "Which package generates plots from Fortran using matplotlib pyplot?"
+expected_source = "beliavsky-fortran-packages-list"
+expected_path = "manual/README.md"
+expected_heading = "Graphics, Plotting, and User Interfaces"
+expected_terms = ["pyplot-fortran"]
+
+[[cases]]
+id = "ecosystem-unit-testing"
+category = "paraphrase"
+query = "Which lightweight standard Fortran unit testing framework can I use?"
+expected_source = "beliavsky-fortran-packages-list"
+expected_path = "manual/README.md"
+expected_heading = "Unit Testing"
+expected_terms = ["test-drive"]
+
+[[cases]]
+id = "ecosystem-yaml-parser"
+category = "paraphrase"
+query = "Which Fortran library parses YAML files?"
+expected_source = "fortran-lang-package-index-additions"
+expected_path = "manual/data/package_index.yml"
+expected_heading = "Libraries"
+expected_terms = ["yaFyaml"]
+
+[[cases]]
+id = "ecosystem-pytorch-interface"
+category = "paraphrase"
+query = "Which library interfaces Fortran with PyTorch?"
+expected_source = "fortran-lang-package-index-additions"
+expected_path = "manual/data/package_index.yml"
+expected_heading = "Interfaces"
+expected_terms = ["FTorch"]
+
+[[cases]]
+id = "ecosystem-parquet-io"
+category = "paraphrase"
+query = "Which Fortran library reads and writes Apache Parquet files?"
+expected_source = "fortran-lang-package-index-additions"
+expected_path = "manual/data/package_index.yml"
+expected_heading = "Io"
+expected_terms = ["parquet-fortran"]
+
+[[cases]]
+id = "ecosystem-source-formatter"
+category = "paraphrase"
+query = "Which fast configurable Fortran formatter supports Fypp Doxygen OpenACC and OpenMP?"
+expected_source = "fortran-lang-package-index-additions"
+expected_path = "manual/data/package_index.yml"
+expected_heading = "Programming"
+expected_terms = ["ffmt"]
+
+[[cases]]
+id = "ecosystem-netcdf-interface"
+category = "paraphrase"
+query = "Which package supplies Fortran interfaces for the netCDF C library?"
+expected_source = "fortran-lang-package-index-additions"
+expected_path = "manual/data/package_index.yml"
+expected_heading = "Io"
+expected_terms = ["netCDF-Fortran"]
+
+[[cases]]
+id = "ecosystem-automatic-differentiation-tool"
+category = "paraphrase"
+query = "Which source transformation tool does automatic differentiation of Fortran and C?"
+expected_source = "fortran-lang-package-index-additions"
+expected_path = "manual/data/package_index.yml"
+expected_heading = "Programming"
+expected_terms = ["Tapenade"]
+
+[[cases]]
+id = "ecosystem-design-patterns"
+category = "paraphrase"
+query = "Where can I find popular design patterns implemented in Fortran?"
+expected_source = "fortran-lang-package-index-additions"
+expected_path = "manual/data/package_index.yml"
+expected_heading = "Examples"
+expected_terms = ["Fortran patterns"]
