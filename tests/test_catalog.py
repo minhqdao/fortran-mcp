@@ -16,6 +16,9 @@ from fortran_mcp.catalog import (
     install_from_catalog,
     load_catalog,
 )
+from fortran_mcp.catalog import (
+    main as catalog_main,
+)
 
 
 def _core_bundle(tmp_path: Path) -> Path:
@@ -158,3 +161,27 @@ def test_remote_catalog_failure_suggests_local_override(
 
     with pytest.raises(CatalogError, match=r"Check network access or pass --catalog"):
         load_catalog(DEFAULT_CATALOG_URL)
+
+
+def test_catalog_verify_cli_passes_for_valid_catalog(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    bundle = _core_bundle(tmp_path)
+    catalog_path = bundle.parent / "catalog.json"
+    build_catalog("2026.08.1", catalog_path, [bundle])
+
+    catalog_main(["verify", str(catalog_path)])
+
+    assert "Verified" in capsys.readouterr().out
+
+
+def test_catalog_verify_cli_rejects_corrupted_artifact(
+    tmp_path: Path,
+) -> None:
+    bundle = _core_bundle(tmp_path)
+    catalog_path = bundle.parent / "catalog.json"
+    build_catalog("2026.08.1", catalog_path, [bundle])
+    bundle.write_bytes(bundle.read_bytes() + b"x")
+
+    with pytest.raises(SystemExit):
+        catalog_main(["verify", str(catalog_path)])
