@@ -571,3 +571,38 @@ query = "understand old Fortran INCLUDE mpif.h MPI_SEND integer datatype communi
 expected_source = "openmpi-5.0.10-fortran-reference"
 expected_path = "manual/MPI_Send.3.md"
 expected_heading = "Legacy Fortran Syntax"
+
+[[cases]]
+id = "codee-loop-unswitching"
+category = "paraphrase"
+query = "move loop invariant conditional outside loop vectorization Fortran"
+expected_source = "codee-open-catalog-fortran-subset"
+expected_path = "manual/Checks/PWR022/README.md"
+
+[[cases]]
+id = "codee-uninitialized-variable"
+category = "paraphrase"
+query = "uninitialized variable indeterminate unpredictable Fortran"
+expected_source = "codee-open-catalog-fortran-subset"
+expected_path = "manual/Checks/PWR079/README.md"
+
+[[cases]]
+id = "codee-conditional-initialization"
+category = "paraphrase"
+query = "conditionally initialized variables undefined behavior"
+expected_source = "codee-open-catalog-fortran-subset"
+expected_path = "manual/Checks/PWR080/README.md"
+
+[[cases]]
+id = "codee-uninitialized-output"
+category = "paraphrase"
+query = "output argument not initialized before procedure returns"
+expected_source = "codee-open-catalog-fortran-subset"
+expected_path = "manual/Checks/PWR081/README.md"
+
+[[cases]]
+id = "codee-array-bounds"
+category = "paraphrase"
+query = "Fortran array subscript outside declared bounds"
+expected_source = "codee-open-catalog-fortran-subset"
+expected_path = "manual/Checks/PWD004/README.md"

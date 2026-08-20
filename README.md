@@ -47,6 +47,7 @@ uv run fortran-mcp-ingest gnu-make-4.4.1-build-reference
 uv run fortran-mcp-ingest numpy-2.5.2-f2py-docs
 uv run fortran-mcp-ingest openmpi-5.0.10-fortran-reference
 uv run fortran-mcp-ingest fortitude-0.9.2-reference
+uv run fortran-mcp-ingest codee-open-catalog-fortran-subset
 ```
 
 The core collection also includes separately identifiable Fortran-lang references for intrinsic
@@ -69,6 +70,13 @@ portability, and style. It uses Fortitude's pinned native Markdown: one page per
 set of pages needed to install, run, and configure the linter. Parser sources, tests, media, editor
 setup, integrations, and release history are excluded. The material complements language and
 compiler references; it is not treated as normative Fortran guidance.
+
+The Codee Open Catalog source is limited to five independently useful pages that fill measured
+gaps: loop-invariant conditionals, three initialization hazards, and array-bounds errors. Its
+converter retains shared guidance and Fortran examples, removes C/C++ examples, rewrites internal
+links to the pinned revision, and adds the Apache-required modification notice. The rest of the
+catalog is excluded because it substantially overlaps existing sources or did not justify its
+retrieval weight. This is community guidance, not normative material or a product endorsement.
 
 The GNU Fortran manual is generated from its pinned Texinfo sources. Maintainers building that
 source need GNU Texinfo 7.3 and the optional conversion dependency:
@@ -99,6 +107,7 @@ uv run fortran-mcp-build cmake-4.4.0-fortran-docs
 uv run fortran-mcp-build openmp-6.0.1-fortran-examples
 uv run fortran-mcp-build gnu-make-4.4.1-build-reference
 uv run fortran-mcp-build fortitude-0.9.2-reference
+uv run fortran-mcp-build codee-open-catalog-fortran-subset
 uv run fortran-mcp-index
 ```
 

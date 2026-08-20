@@ -10,7 +10,12 @@ from typing import Any
 
 import pytest
 
-from fortran_mcp.ingest import GNU_MAKE_MANUAL_PAGES, IngestionError, ingest_source
+from fortran_mcp.ingest import (
+    CODEE_FORTRAN_GUIDELINES,
+    GNU_MAKE_MANUAL_PAGES,
+    IngestionError,
+    ingest_source,
+)
 from fortran_mcp.sources import Source, load_registry
 
 REGISTRY_PATH = Path(__file__).parents[1] / "docs" / "sources.toml"
@@ -111,6 +116,51 @@ def test_fortitude_ingestion_keeps_only_reviewed_native_markdown(tmp_path: Path)
         "docs/rules/implicit-typing.md",
     }
     assert record.converter is None
+
+
+def test_codee_ingestion_keeps_only_selected_fortran_material(tmp_path: Path) -> None:
+    source = _source_by_id("codee-open-catalog-fortran-subset")
+    page = b"""# Guideline
+
+Shared [glossary](../../Glossary/Vectorization.md).
+
+#### C
+
+```c
+int main(void) {}
+```
+
+#### Fortran
+
+```fortran
+program demo
+end program demo
+```
+
+[Examples](https://github.com/codee-com/open-catalog/tree/main/Checks/PWR022/)
+"""
+    archive = _archive(
+        {
+            f"{source.archive_root}/Checks/{guideline}/README.md": page
+            for guideline in CODEE_FORTRAN_GUIDELINES
+        }
+    )
+
+    record = ingest_source(source, tmp_path, downloader=lambda *_args: archive)
+
+    generated = tmp_path / "raw" / source.id / "manual/Checks/PWR022/README.md"
+    content = generated.read_text(encoding="utf-8")
+    assert record.converter == "codee-fortran-subset"
+    assert record.converter_version == "builtin codee-fortran-subset 1"
+    assert sum(file.path.startswith("manual/") for file in record.files) == 5
+    assert "Fortran MCP modification notice" in content
+    assert "int main" not in content
+    assert "program demo" in content
+    assert (
+        "https://github.com/codee-com/open-catalog/blob/"
+        f"{source.revision}/Glossary/Vectorization.md"
+    ) in content
+    assert f"/tree/{source.revision}/Checks/PWR022/" in content
 
 
 def test_texinfo_ingestion_records_generated_pages(

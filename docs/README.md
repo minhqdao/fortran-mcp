@@ -27,3 +27,6 @@ coverage gaps and records a modified title, all principal authors, the selection
 texts, and complete GFDL material.
 Fortitude needs no converter: the pinned release already contains one native Markdown document per
 rule. Its source entry deliberately adds only those rule pages and the minimum operational reference.
+The Codee converter enforces a five-page allowlist, removes C/C++ example sections, rewrites links
+to the pinned revision, and places a prominent modification notice in every generated page. The
+selection is intentionally community-level, non-normative guidance rather than the full catalog.

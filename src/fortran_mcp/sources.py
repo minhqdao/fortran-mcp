@@ -85,6 +85,7 @@ class Source(StrictModel):
         "gnu-make-texinfo",
         "numpy-f2py-rst",
         "openmpi-fortran-rst",
+        "codee-fortran-subset",
     ] = "none"
     converter_entrypoint: str | None = None
     license: str = Field(min_length=1)

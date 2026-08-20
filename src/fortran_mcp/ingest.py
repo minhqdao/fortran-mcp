@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import json
 import os
+import posixpath
 import re
 import shutil
 import subprocess
@@ -693,6 +694,79 @@ def _convert_openmpi_fortran_rst(source: Source, root: Path) -> tuple[tuple[File
     return tuple(records), "builtin openmpi-fortran-rst 2"
 
 
+CODEE_FORTRAN_GUIDELINES = ("PWR022", "PWR079", "PWR080", "PWR081", "PWD004")
+CODEE_MODIFICATION_NOTICE = (
+    "> **Fortran MCP modification notice:** This page was modified from the pinned Open Catalog "
+    "source: C and C++ example sections were removed. The shared guidance and Fortran examples "
+    "are otherwise retained."
+)
+
+
+def _remove_codee_non_fortran_sections(content: str) -> str:
+    """Remove Markdown sections explicitly headed C or C++ while retaining shared guidance."""
+    lines = content.splitlines()
+    output: list[str] = []
+    skipped_level: int | None = None
+    in_fence = False
+    for line in lines:
+        if re.match(r"^\s*(```|~~~)", line):
+            in_fence = not in_fence
+        heading = None if in_fence else re.match(r"^(#{1,6})\s+(.+?)\s*$", line)
+        if heading:
+            level = len(heading.group(1))
+            title = heading.group(2).strip().casefold()
+            if skipped_level is not None and level <= skipped_level:
+                skipped_level = None
+            if title in {"c", "c++", "c/c++", "c and c++", "c++ and c"}:
+                skipped_level = level
+                continue
+        if skipped_level is None:
+            output.append(line)
+    return "\n".join(output).strip() + "\n"
+
+
+def _rewrite_codee_links(content: str, source: Source, document: PurePosixPath) -> str:
+    base = str(source.citation_base_url).rstrip("/")
+
+    def replace(match: re.Match[str]) -> str:
+        target = match.group(1)
+        if target.startswith(("#", "mailto:")):
+            return target
+        target = target.replace("/tree/main/", f"/tree/{source.revision}/")
+        target = target.replace("/blob/main/", f"/blob/{source.revision}/")
+        if target.startswith(("http://", "https://")):
+            return target
+        path, separator, fragment = target.partition("#")
+        if path.startswith("/"):
+            resolved = path.lstrip("/")
+        else:
+            resolved = posixpath.normpath(f"{document.parent.as_posix()}/{path}")
+        suffix = f"#{fragment}" if separator else ""
+        return f"{base}/{resolved}{suffix}"
+
+    return re.sub(r"(?<=\]\()([^)]+)", replace, content)
+
+
+def _convert_codee_fortran_subset(source: Source, root: Path) -> tuple[tuple[FileRecord, ...], str]:
+    records: list[FileRecord] = []
+    for guideline in CODEE_FORTRAN_GUIDELINES:
+        relative = PurePosixPath("Checks", guideline, "README.md")
+        input_path = root.joinpath(*relative.parts)
+        if not input_path.is_file():
+            raise IngestionError(f"selected Codee guideline is unavailable: {guideline}")
+        content = _remove_codee_non_fortran_sections(input_path.read_text(encoding="utf-8"))
+        content = _rewrite_codee_links(content, source, relative)
+        lines = content.splitlines()
+        if not lines or not lines[0].startswith("# "):
+            raise IngestionError(f"selected Codee guideline has no title: {guideline}")
+        lines[1:1] = ["", CODEE_MODIFICATION_NOTICE]
+        output_path = root / "manual" / "Checks" / guideline / "README.md"
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
+        records.append(_record_file(output_path, root))
+    return tuple(records), "builtin codee-fortran-subset 1"
+
+
 def _normalize_myst_markdown(content: str) -> str:
     content = re.sub(r"^\([^)]+\)=\s*\n", "", content, flags=re.MULTILINE)
     content = re.sub(r"^```\{(?:play-)?code-block\}\s*", "```", content, flags=re.MULTILINE)
@@ -1059,6 +1133,10 @@ def ingest_source(
             schema_version = 2
         elif source.converter == "openmpi-fortran-rst":
             generated, converter_version = _convert_openmpi_fortran_rst(source, temporary_path)
+            stored_files = tuple(sorted((*stored_files, *generated), key=lambda item: item.path))
+            schema_version = 2
+        elif source.converter == "codee-fortran-subset":
+            generated, converter_version = _convert_codee_fortran_subset(source, temporary_path)
             stored_files = tuple(sorted((*stored_files, *generated), key=lambda item: item.path))
             schema_version = 2
         document_count = sum(_matches(file.path, source.document_paths) for file in stored_files)
