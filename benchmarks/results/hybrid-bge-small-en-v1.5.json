@@ -5,9 +5,9 @@
   "hit_at_3": 0.7258064516129032,
   "hit_at_5": 0.7741935483870968,
   "hit_at_10": 0.8145161290322581,
-  "mean_reciprocal_rank": 0.676689708141321,
+  "mean_reciprocal_rank": 0.6782258064516129,
   "negative_accuracy": 1.0,
-  "mean_latency_ms": 188.2994850746269,
+  "mean_latency_ms": 193.9849328358209,
   "categories": {
     "exact": {
       "cases": 14,
@@ -37,7 +37,7 @@
       "cases": 89,
       "passed": 73,
       "pass_rate": 0.8202247191011236,
-      "mrr": 0.6693953986088818
+      "mrr": 0.6715355805243446
     }
   },
   "results": [
@@ -48,7 +48,7 @@
       "answer_authority": "guidance",
       "passed": false,
       "rank": null,
-      "latency_ms": 206.514,
+      "latency_ms": 264.007,
       "returned": 0,
       "top_chunk_ids": []
     },
@@ -59,7 +59,7 @@
       "answer_authority": "normative",
       "passed": false,
       "rank": null,
-      "latency_ms": 195.021,
+      "latency_ms": 250.469,
       "returned": 10,
       "top_chunk_ids": [
         "297ae05359d171cb93be82c7df41fb41",
@@ -81,7 +81,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 215.553,
+      "latency_ms": 301.814,
       "returned": 10,
       "top_chunk_ids": [
         "27af3e7ad47c1b87764a22abef116dc7",
@@ -103,7 +103,7 @@
       "answer_authority": "normative",
       "passed": true,
       "rank": 1,
-      "latency_ms": 198.74,
+      "latency_ms": 200.12,
       "returned": 10,
       "top_chunk_ids": [
         "526093fda175d0f4da4a0743152a585e",
@@ -125,7 +125,7 @@
       "answer_authority": "normative",
       "passed": true,
       "rank": 1,
-      "latency_ms": 187.721,
+      "latency_ms": 194.068,
       "returned": 10,
       "top_chunk_ids": [
         "99d3b73c53d59deb9dd9783e3820fc91",
@@ -147,7 +147,7 @@
       "answer_authority": "normative",
       "passed": false,
       "rank": null,
-      "latency_ms": 213.156,
+      "latency_ms": 186.876,
       "returned": 0,
       "top_chunk_ids": []
     },
@@ -158,7 +158,7 @@
       "answer_authority": "normative",
       "passed": true,
       "rank": 1,
-      "latency_ms": 191.753,
+      "latency_ms": 194.447,
       "returned": 10,
       "top_chunk_ids": [
         "c5ded123ca11011ba4cbd672e2f1cf66",
@@ -180,7 +180,7 @@
       "answer_authority": "guidance",
       "passed": false,
       "rank": null,
-      "latency_ms": 197.13,
+      "latency_ms": 212.266,
       "returned": 0,
       "top_chunk_ids": []
     },
@@ -191,7 +191,7 @@
       "answer_authority": "normative",
       "passed": true,
       "rank": 1,
-      "latency_ms": 219.462,
+      "latency_ms": 218.216,
       "returned": 10,
       "top_chunk_ids": [
         "1c6cc8fc13858cdc03d950dc007ec625",
@@ -213,7 +213,7 @@
       "answer_authority": "normative",
       "passed": false,
       "rank": null,
-      "latency_ms": 237.819,
+      "latency_ms": 319.402,
       "returned": 0,
       "top_chunk_ids": []
     },
@@ -224,7 +224,7 @@
       "answer_authority": "normative",
       "passed": false,
       "rank": null,
-      "latency_ms": 271.657,
+      "latency_ms": 200.605,
       "returned": 0,
       "top_chunk_ids": []
     },
@@ -235,7 +235,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 4,
-      "latency_ms": 260.335,
+      "latency_ms": 280.079,
       "returned": 10,
       "top_chunk_ids": [
         "2889107bc48355df01fb25d836898ad6",
@@ -257,7 +257,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 193.04,
+      "latency_ms": 245.681,
       "returned": 10,
       "top_chunk_ids": [
         "9300f9e77fcd607ed6f22d6da16c6265",
@@ -279,7 +279,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 2,
-      "latency_ms": 188.008,
+      "latency_ms": 189.515,
       "returned": 10,
       "top_chunk_ids": [
         "c830c8b3ec49418d0a99d9e5f4c80aa1",
@@ -301,7 +301,7 @@
       "answer_authority": "guidance",
       "passed": false,
       "rank": null,
-      "latency_ms": 183.385,
+      "latency_ms": 189.235,
       "returned": 0,
       "top_chunk_ids": []
     },
@@ -312,7 +312,7 @@
       "answer_authority": "guidance",
       "passed": false,
       "rank": null,
-      "latency_ms": 182.715,
+      "latency_ms": 189.898,
       "returned": 0,
       "top_chunk_ids": []
     },
@@ -323,7 +323,7 @@
       "answer_authority": "guidance",
       "passed": false,
       "rank": null,
-      "latency_ms": 198.699,
+      "latency_ms": 202.884,
       "returned": 0,
       "top_chunk_ids": []
     },
@@ -334,7 +334,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 193.822,
+      "latency_ms": 192.608,
       "returned": 10,
       "top_chunk_ids": [
         "d822e6a9cb9926857680ac9c07839334",
@@ -356,7 +356,7 @@
       "answer_authority": "guidance",
       "passed": false,
       "rank": null,
-      "latency_ms": 180.029,
+      "latency_ms": 203.648,
       "returned": 0,
       "top_chunk_ids": []
     },
@@ -367,7 +367,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 183.615,
+      "latency_ms": 193.14,
       "returned": 10,
       "top_chunk_ids": [
         "1530c2abfcc5e149fb7e7ec8eaa31653",
@@ -389,7 +389,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 184.845,
+      "latency_ms": 185.704,
       "returned": 10,
       "top_chunk_ids": [
         "c3751b53c590a580d1c16f7c869be22e",
@@ -411,7 +411,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 193.928,
+      "latency_ms": 188.461,
       "returned": 10,
       "top_chunk_ids": [
         "b83e9fac76a8855139aea498acc5e8b8",
@@ -433,7 +433,7 @@
       "answer_authority": "guidance",
       "passed": false,
       "rank": null,
-      "latency_ms": 240.308,
+      "latency_ms": 187.23,
       "returned": 10,
       "top_chunk_ids": [
         "cb41ded90c2503b0df451a58518753cc",
@@ -455,7 +455,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 3,
-      "latency_ms": 209.067,
+      "latency_ms": 198.507,
       "returned": 10,
       "top_chunk_ids": [
         "5d7f631a054f92dbf755dbf87e57afc9",
@@ -477,7 +477,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 4,
-      "latency_ms": 188.152,
+      "latency_ms": 204.943,
       "returned": 10,
       "top_chunk_ids": [
         "5d7f631a054f92dbf755dbf87e57afc9",
@@ -499,7 +499,7 @@
       "answer_authority": "guidance",
       "passed": false,
       "rank": null,
-      "latency_ms": 185.067,
+      "latency_ms": 202.919,
       "returned": 0,
       "top_chunk_ids": []
     },
@@ -510,7 +510,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 177.323,
+      "latency_ms": 186.295,
       "returned": 10,
       "top_chunk_ids": [
         "f1e9125f1d304ca33fef5f8b8407c669",
@@ -532,7 +532,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 196.572,
+      "latency_ms": 187.687,
       "returned": 10,
       "top_chunk_ids": [
         "5528717ebe43fe1249b42ba87733815c",
@@ -554,7 +554,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 184.269,
+      "latency_ms": 184.47,
       "returned": 10,
       "top_chunk_ids": [
         "743f6bcf70c1457ce30ef01af9b56f9e",
@@ -576,7 +576,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 180.508,
+      "latency_ms": 192.019,
       "returned": 10,
       "top_chunk_ids": [
         "9be055c1d3904c26ebde7aa19851d977",
@@ -598,7 +598,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 4,
-      "latency_ms": 191.797,
+      "latency_ms": 261.9,
       "returned": 10,
       "top_chunk_ids": [
         "7aceb93f6db420ac62ea217240007966",
@@ -620,7 +620,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 197.828,
+      "latency_ms": 207.135,
       "returned": 10,
       "top_chunk_ids": [
         "e9f5e0a18b886873939b546f34b94c0e",
@@ -642,7 +642,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 176.704,
+      "latency_ms": 179.181,
       "returned": 10,
       "top_chunk_ids": [
         "57a51d83f7cbf435654b543536b89e3a",
@@ -664,7 +664,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 2,
-      "latency_ms": 193.63,
+      "latency_ms": 183.962,
       "returned": 10,
       "top_chunk_ids": [
         "5e2a18391ffe883856c14d70b813c061",
@@ -686,7 +686,7 @@
       "answer_authority": "guidance",
       "passed": false,
       "rank": null,
-      "latency_ms": 186.543,
+      "latency_ms": 185.46,
       "returned": 0,
       "top_chunk_ids": []
     },
@@ -697,7 +697,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 179.183,
+      "latency_ms": 180.92,
       "returned": 10,
       "top_chunk_ids": [
         "369c6f47451c466b27e360ec9e3ea0f3",
@@ -719,7 +719,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 4,
-      "latency_ms": 182.007,
+      "latency_ms": 186.941,
       "returned": 10,
       "top_chunk_ids": [
         "de98a4a6c2dee9881126a44fae39ac81",
@@ -741,7 +741,7 @@
       "answer_authority": "guidance",
       "passed": false,
       "rank": null,
-      "latency_ms": 196.882,
+      "latency_ms": 197.281,
       "returned": 0,
       "top_chunk_ids": []
     },
@@ -752,7 +752,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 181.976,
+      "latency_ms": 183.175,
       "returned": 10,
       "top_chunk_ids": [
         "91873fe80de8cc23391506f873afed2d",
@@ -774,7 +774,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 178.25,
+      "latency_ms": 181.742,
       "returned": 10,
       "top_chunk_ids": [
         "1234435bdf286c637913d02ad1602e21",
@@ -796,7 +796,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 131.099,
+      "latency_ms": 136.949,
       "returned": 10,
       "top_chunk_ids": [
         "fd7807c39246aa99e1a22718db6c15f5",
@@ -818,7 +818,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 103.493,
+      "latency_ms": 102.496,
       "returned": 10,
       "top_chunk_ids": [
         "cdbb904073e834b2b7bc6e074d37faf5",
@@ -840,7 +840,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": null,
-      "latency_ms": 185.468,
+      "latency_ms": 178.76,
       "returned": 0,
       "top_chunk_ids": []
     },
@@ -851,7 +851,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": null,
-      "latency_ms": 188.602,
+      "latency_ms": 182.995,
       "returned": 0,
       "top_chunk_ids": []
     },
@@ -862,7 +862,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": null,
-      "latency_ms": 205.836,
+      "latency_ms": 210.939,
       "returned": 0,
       "top_chunk_ids": []
     },
@@ -873,7 +873,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": null,
-      "latency_ms": 187.64,
+      "latency_ms": 184.644,
       "returned": 0,
       "top_chunk_ids": []
     },
@@ -884,7 +884,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": null,
-      "latency_ms": 182.291,
+      "latency_ms": 180.405,
       "returned": 0,
       "top_chunk_ids": []
     },
@@ -895,7 +895,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": null,
-      "latency_ms": 177.954,
+      "latency_ms": 177.136,
       "returned": 0,
       "top_chunk_ids": []
     },
@@ -906,7 +906,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": null,
-      "latency_ms": 186.929,
+      "latency_ms": 180.015,
       "returned": 0,
       "top_chunk_ids": []
     },
@@ -917,7 +917,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": null,
-      "latency_ms": 181.466,
+      "latency_ms": 177.256,
       "returned": 0,
       "top_chunk_ids": []
     },
@@ -928,7 +928,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": null,
-      "latency_ms": 186.677,
+      "latency_ms": 180.665,
       "returned": 0,
       "top_chunk_ids": []
     },
@@ -939,7 +939,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": null,
-      "latency_ms": 200.274,
+      "latency_ms": 196.791,
       "returned": 0,
       "top_chunk_ids": []
     },
@@ -950,7 +950,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 2,
-      "latency_ms": 119.417,
+      "latency_ms": 108.751,
       "returned": 10,
       "top_chunk_ids": [
         "539bb1e895130c76f827811245b19a8a",
@@ -972,7 +972,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 2,
-      "latency_ms": 112.334,
+      "latency_ms": 110.229,
       "returned": 10,
       "top_chunk_ids": [
         "5c0819b4f24f6e42b64e1f2c4ce0e929",
@@ -994,7 +994,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 187.495,
+      "latency_ms": 186.863,
       "returned": 10,
       "top_chunk_ids": [
         "b83e9fac76a8855139aea498acc5e8b8",
@@ -1016,7 +1016,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 183.278,
+      "latency_ms": 185.26,
       "returned": 10,
       "top_chunk_ids": [
         "b4007c5710c100ddc021bf14decd86f5",
@@ -1038,7 +1038,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 174.164,
+      "latency_ms": 174.123,
       "returned": 10,
       "top_chunk_ids": [
         "ed4607e0faab8e96aac8a47888e163f6",
@@ -1060,7 +1060,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 110.482,
+      "latency_ms": 109.993,
       "returned": 10,
       "top_chunk_ids": [
         "6baea58ca0fcd50bc80f51619578ef1f",
@@ -1081,20 +1081,20 @@
       "query": "Where does CMake write generated Fortran module files?",
       "answer_authority": "guidance",
       "passed": true,
-      "rank": 3,
-      "latency_ms": 197.819,
+      "rank": 2,
+      "latency_ms": 197.085,
       "returned": 10,
       "top_chunk_ids": [
-        "81f1fd84959a8c9c93b1989f1b88d170",
         "a6e037fe37eafb122116a7c57a841f76",
         "c758e7b5f6ab271110679c21bfe2d845",
-        "a48249a29f6d5a704024f7fefceb77df",
         "d09abd9a4b6d40dd8d4a93895d74d7df",
         "72786226f67691512312ea76b3f9834e",
+        "bd95b099eb9f2aaf8317c961c5fe9538",
         "3f67aafe3147e06a9276429baee63949",
+        "a5ba5b65a4e2e55eb497feed9d0b521b",
         "9b8f18141725458199e76df3180e66d4",
         "19745c55e3a9734f89def28a1f109615",
-        "a5ba5b65a4e2e55eb497feed9d0b521b"
+        "238734e9ac321a9eb88468bcb1296a4b"
       ]
     },
     {
@@ -1104,7 +1104,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 174.475,
+      "latency_ms": 177.985,
       "returned": 10,
       "top_chunk_ids": [
         "efe96c24aeeb0467191e293d428cf60d",
@@ -1112,11 +1112,11 @@
         "9e40e2b690632368bf82ace85e9e2feb",
         "0d075fe7852bea46dfdfc0b2db1c77d2",
         "a7c5858d6b6621c8e01b051a9a79870d",
+        "3711e7ec79475c9657f21563813ec771",
         "d33c263099e637f9a8ea41cb7058c6e9",
         "15e060069e13112ca77c37af9588ae02",
         "e600ffa1e676117c82c79063725744b9",
-        "f56c615cb892582bbad93dd39dfd5a27",
-        "424824facadcc72b4d7d4b23ecbc4c34"
+        "f56c615cb892582bbad93dd39dfd5a27"
       ]
     },
     {
@@ -1126,19 +1126,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 187.86,
+      "latency_ms": 183.415,
       "returned": 10,
       "top_chunk_ids": [
         "0d075fe7852bea46dfdfc0b2db1c77d2",
-        "a5831a064b6ad7fc039ead465eee4ac1",
-        "2c337f02f9d7457cfe024d53ce3f3363",
-        "ebdc44244e180cf8397790a0f34ebe0b",
+        "1ab4a8c1ec2cfbdaf061e32bf636b015",
+        "f679bbffac6c608a65087622ebde874b",
         "a6e037fe37eafb122116a7c57a841f76",
-        "2175eebeb7d26aa6bc36efc2014f0ba6",
-        "77fef6245300ea8d0a35938e7afa917f",
+        "3711e7ec79475c9657f21563813ec771",
+        "e8a16543143e20ec7827dd23f2936dee",
+        "2f35f6fb3919dd47bd77d3ba768ffa8e",
         "ddc6a09cea2361aac92d8e436cb2749c",
-        "0280e568bd03759ec67e3ebd596c7c82",
-        "efe96c24aeeb0467191e293d428cf60d"
+        "efe96c24aeeb0467191e293d428cf60d",
+        "d9674cddf547b02324a025216bc5ffee"
       ]
     },
     {
@@ -1148,19 +1148,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 2,
-      "latency_ms": 180.565,
+      "latency_ms": 176.006,
       "returned": 10,
       "top_chunk_ids": [
         "765e06358edae85c8a650860d5354013",
-        "c6b5f18081255339b570f091b99645c7",
+        "5f0079b51c43a0db473bce2456f95163",
         "083e653f19180373df39437a07059f75",
         "5528717ebe43fe1249b42ba87733815c",
-        "911e2bd029e7f437077de7af4b7aef7a",
+        "58891cb0b43f367b0e8c966d1303bf18",
+        "7f9d84c2428ff3126492910500ce68b7",
         "01c0a50349a7061080c0306f9b91c0df",
         "cdb8cdd6518455962ca5f485487ed4ad",
         "4d9b3484ce31ce8fedabbc0b0b30dd94",
-        "ae93c650d6417fa88b72f7093cc0375e",
-        "12545d037109a03c714d2dc9ef640cee"
+        "ae93c650d6417fa88b72f7093cc0375e"
       ]
     },
     {
@@ -1170,19 +1170,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 105.697,
+      "latency_ms": 103.848,
       "returned": 10,
       "top_chunk_ids": [
         "2592c331b1314dd905893d7dbb432992",
         "23f6139b48245998f1f7282eb69c688b",
-        "a5831a064b6ad7fc039ead465eee4ac1",
-        "ebdc44244e180cf8397790a0f34ebe0b",
+        "1ab4a8c1ec2cfbdaf061e32bf636b015",
+        "f679bbffac6c608a65087622ebde874b",
         "9db77729de5a2d04c8b0ec28e344376e",
-        "eddbdad92b852edf2fdb475f6442a0ab",
-        "ef9e9f1baba600c79c6c6c6ba50514c3",
+        "ec6afd6a9c3c801807bf065d85a6e06f",
         "c0af8638da9f5f7c427edb973e46516b",
         "0d075fe7852bea46dfdfc0b2db1c77d2",
-        "1852554cbbfa2232af6b1e325ea45d21"
+        "997b2c4bd573be30da005585a2076816",
+        "26ad937b567f77cdc1355e8a9518f5ea"
       ]
     },
     {
@@ -1192,7 +1192,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 176.891,
+      "latency_ms": 175.953,
       "returned": 10,
       "top_chunk_ids": [
         "1899ca744d777def2064ec9667d30d98",
@@ -1214,7 +1214,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 187.626,
+      "latency_ms": 188.341,
       "returned": 10,
       "top_chunk_ids": [
         "1709a3e891ab05e1ac7ddbe0c33d10f9",
@@ -1236,7 +1236,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 196.52,
+      "latency_ms": 192.559,
       "returned": 10,
       "top_chunk_ids": [
         "99d3b73c53d59deb9dd9783e3820fc91",
@@ -1258,7 +1258,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 2,
-      "latency_ms": 189.108,
+      "latency_ms": 181.936,
       "returned": 10,
       "top_chunk_ids": [
         "a9ceb5645cb847304fca452e31affa6e",
@@ -1280,7 +1280,7 @@
       "answer_authority": "guidance",
       "passed": false,
       "rank": null,
-      "latency_ms": 182.264,
+      "latency_ms": 186.981,
       "returned": 0,
       "top_chunk_ids": []
     },
@@ -1291,7 +1291,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 181.333,
+      "latency_ms": 287.28,
       "returned": 10,
       "top_chunk_ids": [
         "b5eabb30933aa038dc98d58e0366770d",
@@ -1313,7 +1313,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 3,
-      "latency_ms": 104.735,
+      "latency_ms": 203.155,
       "returned": 10,
       "top_chunk_ids": [
         "0c080719da95adcc2bfc3ddec663d5e3",
@@ -1335,7 +1335,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 186.016,
+      "latency_ms": 216.051,
       "returned": 10,
       "top_chunk_ids": [
         "0adaf3a015fa79a2236621410753e9fb",
@@ -1357,7 +1357,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 186.991,
+      "latency_ms": 359.353,
       "returned": 10,
       "top_chunk_ids": [
         "3492770e58c26b9aedf04020be6b1553",
@@ -1379,7 +1379,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 119.729,
+      "latency_ms": 150.432,
       "returned": 10,
       "top_chunk_ids": [
         "7c4c11deebe99363ea18718aeddc5a16",
@@ -1401,7 +1401,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 184.214,
+      "latency_ms": 224.926,
       "returned": 10,
       "top_chunk_ids": [
         "5a3b35e8d0286b871c35ba6d991323e9",
@@ -1423,7 +1423,7 @@
       "answer_authority": "guidance",
       "passed": false,
       "rank": null,
-      "latency_ms": 187.788,
+      "latency_ms": 223.533,
       "returned": 10,
       "top_chunk_ids": [
         "cf481c6bd15e513035b3c34c04c3ffee",
@@ -1445,7 +1445,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 4,
-      "latency_ms": 186.165,
+      "latency_ms": 211.785,
       "returned": 10,
       "top_chunk_ids": [
         "e3d259f1929d74cf9681a8a08bfa73cf",
@@ -1467,7 +1467,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 187.436,
+      "latency_ms": 201.911,
       "returned": 10,
       "top_chunk_ids": [
         "91848c9b65fab1b3da01049ce1d64b03",
@@ -1475,8 +1475,8 @@
         "0af7456d4187ff6812adde78ac81103f",
         "5f73d38ac5e16f0ebd6a11c5672b5475",
         "89435da60bf2c2ca0e2bee9aa4fd225f",
-        "f6c5d770d7f2d4475e321df2775513a8",
         "839b60cd70acab23d93451d9c7c889ca",
+        "f6c5d770d7f2d4475e321df2775513a8",
         "19745c55e3a9734f89def28a1f109615",
         "238734e9ac321a9eb88468bcb1296a4b",
         "765e06358edae85c8a650860d5354013"
@@ -1489,7 +1489,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 194.217,
+      "latency_ms": 199.236,
       "returned": 10,
       "top_chunk_ids": [
         "def7c15a8d28022a1d0c3a15a17862e0",
@@ -1511,7 +1511,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 10,
-      "latency_ms": 241.027,
+      "latency_ms": 207.675,
       "returned": 10,
       "top_chunk_ids": [
         "c2e240acc124cf956f8f4ce40965aa5f",
@@ -1533,7 +1533,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 204.865,
+      "latency_ms": 205.506,
       "returned": 10,
       "top_chunk_ids": [
         "fd53959d6abd084cbb2eb0eba86e1512",
@@ -1555,7 +1555,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 188.154,
+      "latency_ms": 231.4,
       "returned": 10,
       "top_chunk_ids": [
         "4d1902a9f8b2f385b8ae39b38f1ce723",
@@ -1577,7 +1577,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 189.622,
+      "latency_ms": 201.335,
       "returned": 10,
       "top_chunk_ids": [
         "f6a478940cf3c95a0405421cae1e34c3",
@@ -1599,7 +1599,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 186.507,
+      "latency_ms": 208.66,
       "returned": 10,
       "top_chunk_ids": [
         "527f35d94ba50087ef1ca84c1247c5a0",
@@ -1621,7 +1621,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 6,
-      "latency_ms": 187.394,
+      "latency_ms": 194.098,
       "returned": 10,
       "top_chunk_ids": [
         "22e15c32465c463ae5bd1ee37a4c5a0a",
@@ -1643,7 +1643,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 193.266,
+      "latency_ms": 209.408,
       "returned": 10,
       "top_chunk_ids": [
         "990d3a1d0e88d52ac556619479bf3384",
@@ -1665,7 +1665,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 185.004,
+      "latency_ms": 210.407,
       "returned": 10,
       "top_chunk_ids": [
         "cd6bd8c464a8e612697cabebd1eeb98f",
@@ -1687,7 +1687,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 199.937,
+      "latency_ms": 281.466,
       "returned": 10,
       "top_chunk_ids": [
         "82ab8cfe82dfadaf4ee0add049027639",
@@ -1709,7 +1709,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 6,
-      "latency_ms": 199.438,
+      "latency_ms": 208.858,
       "returned": 10,
       "top_chunk_ids": [
         "2896be5a51bf2adf8aad3aef8b13abda",
@@ -1731,7 +1731,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 183.563,
+      "latency_ms": 235.532,
       "returned": 10,
       "top_chunk_ids": [
         "397856ff79fe760b4d882086bd1e4348",
@@ -1753,7 +1753,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 2,
-      "latency_ms": 185.617,
+      "latency_ms": 189.726,
       "returned": 10,
       "top_chunk_ids": [
         "b19136b9ca370064b99eab229b3965db",
@@ -1775,7 +1775,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 196.939,
+      "latency_ms": 189.528,
       "returned": 10,
       "top_chunk_ids": [
         "4b2749a949f9bd11e9337c46ff5f94f6",
@@ -1797,7 +1797,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 222.551,
+      "latency_ms": 192.188,
       "returned": 10,
       "top_chunk_ids": [
         "6bb8e5144a5d9c88a0ab4ec62387485c",
@@ -1819,7 +1819,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 222.985,
+      "latency_ms": 184.477,
       "returned": 10,
       "top_chunk_ids": [
         "567d5b736bd5d3d5fa1e259db28d439d",
@@ -1841,7 +1841,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 270.89,
+      "latency_ms": 198.812,
       "returned": 10,
       "top_chunk_ids": [
         "1d8423da5fbda48b09e142fb70188c4d",
@@ -1863,7 +1863,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 246.012,
+      "latency_ms": 182.705,
       "returned": 10,
       "top_chunk_ids": [
         "0f8e3832e4f9fa6f6cc6608c0c7b8fbd",
@@ -1885,7 +1885,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 112.7,
+      "latency_ms": 110.712,
       "returned": 10,
       "top_chunk_ids": [
         "92b3c2da1cfd155a0dd3e5c071eac39f",
@@ -1907,7 +1907,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 195.313,
+      "latency_ms": 186.346,
       "returned": 10,
       "top_chunk_ids": [
         "0d7186b3181ddceef3837e4d823e7910",
@@ -1929,7 +1929,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 186.153,
+      "latency_ms": 183.421,
       "returned": 10,
       "top_chunk_ids": [
         "a4f5748756733cccf1c2c9696e4a1e03",
@@ -1951,7 +1951,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 3,
-      "latency_ms": 185.225,
+      "latency_ms": 185.816,
       "returned": 10,
       "top_chunk_ids": [
         "d4bc5389e4588ac3b04ac5d21b5191ca",
@@ -1973,7 +1973,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 177.641,
+      "latency_ms": 175.873,
       "returned": 10,
       "top_chunk_ids": [
         "19bd9f5edb4e3bb230721d122b75ad99",
@@ -1995,7 +1995,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 215.226,
+      "latency_ms": 199.974,
       "returned": 10,
       "top_chunk_ids": [
         "0b0218e3cd8c528b904a8f8ce370927b",
@@ -2017,7 +2017,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 185.713,
+      "latency_ms": 179.281,
       "returned": 10,
       "top_chunk_ids": [
         "f0c180e50c913ba2c88a90af2bba80af",
@@ -2039,7 +2039,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 2,
-      "latency_ms": 190.469,
+      "latency_ms": 193.851,
       "returned": 10,
       "top_chunk_ids": [
         "42ce54392379e08047be3a4218163616",
@@ -2061,7 +2061,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 195.216,
+      "latency_ms": 197.537,
       "returned": 10,
       "top_chunk_ids": [
         "a59dc590c1c31d9c642f14126591dae7",
@@ -2083,7 +2083,7 @@
       "answer_authority": "guidance",
       "passed": false,
       "rank": null,
-      "latency_ms": 185.169,
+      "latency_ms": 191.095,
       "returned": 10,
       "top_chunk_ids": [
         "2576cc55c36bf9c886dbb96b68744b5b",
@@ -2105,7 +2105,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 186.666,
+      "latency_ms": 185.862,
       "returned": 10,
       "top_chunk_ids": [
         "e2f676865201969ff0f2daaddf2348c4",
@@ -2127,7 +2127,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 185.785,
+      "latency_ms": 183.211,
       "returned": 10,
       "top_chunk_ids": [
         "68cb1551f2b070e3a5ac8c6c0a65a4d6",
@@ -2149,7 +2149,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 2,
-      "latency_ms": 201.036,
+      "latency_ms": 194.381,
       "returned": 10,
       "top_chunk_ids": [
         "d7c5f115964db371ac3e075ed6ea88dd",
@@ -2171,7 +2171,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 189.842,
+      "latency_ms": 179.871,
       "returned": 10,
       "top_chunk_ids": [
         "39caca0b150f5c44afa28de80cc07e05",
@@ -2193,7 +2193,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 187.522,
+      "latency_ms": 181.547,
       "returned": 10,
       "top_chunk_ids": [
         "ea57064d9bd5af7e985481d8377ca3c5",
@@ -2215,7 +2215,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 182.477,
+      "latency_ms": 179.905,
       "returned": 10,
       "top_chunk_ids": [
         "032b90a5fb37edd45b0a6fa8dda77141",
@@ -2236,20 +2236,20 @@
       "query": "Why is a Fortran INCLUDE file not preprocessed and when should I use #include?",
       "answer_authority": "guidance",
       "passed": true,
-      "rank": 7,
-      "latency_ms": 191.982,
+      "rank": 6,
+      "latency_ms": 187.049,
       "returned": 10,
       "top_chunk_ids": [
         "885fd6ce87647d5d55086acaad69e99b",
-        "a48249a29f6d5a704024f7fefceb77df",
         "5f37c6a41d4fba3f16417b6acd657d4b",
-        "81f1fd84959a8c9c93b1989f1b88d170",
+        "8aeb1625cac34659d289b5305cd2edc2",
         "cff4ed484334c9904be8009911a5a011",
         "a5ba5b65a4e2e55eb497feed9d0b521b",
         "9c94c2076e711fc3671a1ea95baa84fd",
         "a1a1922f493274ffabea4d2f5ede8b4d",
         "462e28e3361b279fe804581cff46fc42",
-        "5528fa49d077933caff56e81ee0db9c2"
+        "5528fa49d077933caff56e81ee0db9c2",
+        "cbba696e66bcf62375b15995aee992f9"
       ]
     },
     {
@@ -2259,7 +2259,7 @@
       "answer_authority": "guidance",
       "passed": false,
       "rank": null,
-      "latency_ms": 187.787,
+      "latency_ms": 177.072,
       "returned": 0,
       "top_chunk_ids": []
     },
@@ -2270,7 +2270,7 @@
       "answer_authority": "guidance",
       "passed": false,
       "rank": null,
-      "latency_ms": 190.411,
+      "latency_ms": 182.387,
       "returned": 0,
       "top_chunk_ids": []
     },
@@ -2281,7 +2281,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 196.773,
+      "latency_ms": 189.977,
       "returned": 10,
       "top_chunk_ids": [
         "b2c0ff81c659e472eb25c8aff0291b4d",
@@ -2303,7 +2303,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 3,
-      "latency_ms": 189.332,
+      "latency_ms": 178.052,
       "returned": 10,
       "top_chunk_ids": [
         "3696895992a2d9fb85c808426e8b7854",
@@ -2325,7 +2325,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 185.026,
+      "latency_ms": 179.862,
       "returned": 10,
       "top_chunk_ids": [
         "1bbbeecbaeec0a7e7b2cc099fb1fd057",
@@ -2347,7 +2347,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 185.16,
+      "latency_ms": 182.939,
       "returned": 10,
       "top_chunk_ids": [
         "c479ff0d07f864f27d987e0f314702bb",
@@ -2369,7 +2369,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 190.522,
+      "latency_ms": 181.523,
       "returned": 10,
       "top_chunk_ids": [
         "926d747ecaeaa3dc323faeb6c184a393",
@@ -2391,19 +2391,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 187.054,
+      "latency_ms": 182.839,
       "returned": 10,
       "top_chunk_ids": [
         "6e7ad2fefe85ede67c4a24dd935e24a2",
         "c5d2bfc8802b8c332037b6445883b747",
         "2c32002c0cd3d6182eb8c18fa0e642f5",
         "d0f6d577aed767efca755943ff92d65f",
+        "a4044ae0505707f9f4ed4f1ec8686981",
         "f1e9125f1d304ca33fef5f8b8407c669",
-        "975f181b1dbbad8402d0d54c6bb32692",
-        "1f21458ec8fa14b99101be471c690a3e",
         "2da8a7f71efe38770944f13ae143beef",
         "8d93e2f34a53ee2c2fc0338100e61898",
-        "416c44398bcb15bf045ef62aa062880c"
+        "9bd26f5eb1e3b5d8fd9c095ff4da3d71",
+        "975f181b1dbbad8402d0d54c6bb32692"
       ]
     },
     {
@@ -2413,7 +2413,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 2,
-      "latency_ms": 197.641,
+      "latency_ms": 183.231,
       "returned": 10,
       "top_chunk_ids": [
         "bfb788489c2bbdbdf5b03a629751d43f",
@@ -2435,7 +2435,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 212.957,
+      "latency_ms": 198.675,
       "returned": 10,
       "top_chunk_ids": [
         "3706e790396c8e158a92d416d69ff66e",
@@ -2457,7 +2457,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 192.384,
+      "latency_ms": 182.879,
       "returned": 10,
       "top_chunk_ids": [
         "8d99c7569834af3b785ad42fa431e87a",
@@ -2479,7 +2479,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 187.012,
+      "latency_ms": 182.127,
       "returned": 10,
       "top_chunk_ids": [
         "8e8e6e4ba331411234f5f1e7924b757a",
@@ -2501,7 +2501,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 185.748,
+      "latency_ms": 186.007,
       "returned": 10,
       "top_chunk_ids": [
         "ee5573921a489184657318c19e9de2d7",
@@ -2523,7 +2523,7 @@
       "answer_authority": "guidance",
       "passed": false,
       "rank": null,
-      "latency_ms": 190.316,
+      "latency_ms": 183.96,
       "returned": 0,
       "top_chunk_ids": []
     },
@@ -2534,7 +2534,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 184.392,
+      "latency_ms": 184.059,
       "returned": 10,
       "top_chunk_ids": [
         "7c758c065ca2360982de7919dd3475d5",
@@ -2556,7 +2556,7 @@
       "answer_authority": "guidance",
       "passed": false,
       "rank": null,
-      "latency_ms": 181.874,
+      "latency_ms": 179.392,
       "returned": 0,
       "top_chunk_ids": []
     },
@@ -2567,7 +2567,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 197.934,
+      "latency_ms": 200.978,
       "returned": 10,
       "top_chunk_ids": [
         "20d5e7ca243b41075d3c62201b410ad1",
@@ -2575,10 +2575,10 @@
         "975f181b1dbbad8402d0d54c6bb32692",
         "8d93e2f34a53ee2c2fc0338100e61898",
         "4f9d620330346aee4a188a9d8bb673e8",
-        "79d613326c8a918c06a4de3638ae7e1f",
+        "f9f3baa7a21bfc3089f981b6273e43c2",
         "8ecdd2ae2c26efa03f49eea5f0e0dca9",
         "c614dad0ad09474ed6f6877e3b61de08",
-        "7f38cabae856f4907e9a17df1295dd86",
+        "ad5eeb94dd46f45803859dd929d6bd2a",
         "67781ca84f646bd393e07db893d11bb3"
       ]
     },
@@ -2589,7 +2589,7 @@
       "answer_authority": "guidance",
       "passed": false,
       "rank": null,
-      "latency_ms": 186.704,
+      "latency_ms": 192.547,
       "returned": 0,
       "top_chunk_ids": []
     },
@@ -2600,7 +2600,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 6,
-      "latency_ms": 188.789,
+      "latency_ms": 189.575,
       "returned": 10,
       "top_chunk_ids": [
         "01c0a50349a7061080c0306f9b91c0df",
@@ -2622,7 +2622,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 4,
-      "latency_ms": 182.119,
+      "latency_ms": 181.987,
       "returned": 10,
       "top_chunk_ids": [
         "79f366b1f8a0363984d9fab280968c57",
@@ -2634,7 +2634,7 @@
         "8d93e2f34a53ee2c2fc0338100e61898",
         "4d9b3484ce31ce8fedabbc0b0b30dd94",
         "56b921086ad20a11bb3084b880e8c986",
-        "79d613326c8a918c06a4de3638ae7e1f"
+        "f9f3baa7a21bfc3089f981b6273e43c2"
       ]
     },
     {
@@ -2644,7 +2644,7 @@
       "answer_authority": "guidance",
       "passed": false,
       "rank": null,
-      "latency_ms": 185.554,
+      "latency_ms": 183.996,
       "returned": 0,
       "top_chunk_ids": []
     },
@@ -2655,7 +2655,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 183.375,
+      "latency_ms": 181.453,
       "returned": 10,
       "top_chunk_ids": [
         "60881d928400f01449dfa63da9f11fc5",
