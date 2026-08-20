@@ -550,6 +550,19 @@ def _convert_numpy_f2py_rst(source: Source, root: Path) -> tuple[tuple[FileRecor
     return tuple(records), "builtin numpy-f2py-rst 1"
 
 
+def _convert_fypp_rst(source: Source, root: Path) -> tuple[tuple[FileRecord, ...], str]:
+    source_path = root / "docs/fypp.rst"
+    if not source_path.is_file():
+        raise IngestionError("Fypp manual is unavailable: docs/fypp.rst")
+    output_path = root / "manual/fypp.md"
+    output_path.parent.mkdir()
+    output_path.write_text(
+        _rst_to_markdown(source_path.read_text(encoding="utf-8")),
+        encoding="utf-8",
+    )
+    return (_record_file(output_path, root),), "builtin fypp-rst 1"
+
+
 OPEN_MPI_FORTRAN_ROUTINES = (
     "MPI_Abort",
     "MPI_Accumulate",
@@ -1274,6 +1287,10 @@ def ingest_source(
             schema_version = 2
         elif source.converter == "numpy-f2py-rst":
             generated, converter_version = _convert_numpy_f2py_rst(source, temporary_path)
+            stored_files = tuple(sorted((*stored_files, *generated), key=lambda item: item.path))
+            schema_version = 2
+        elif source.converter == "fypp-rst":
+            generated, converter_version = _convert_fypp_rst(source, temporary_path)
             stored_files = tuple(sorted((*stored_files, *generated), key=lambda item: item.path))
             schema_version = 2
         elif source.converter == "openmpi-fortran-rst":

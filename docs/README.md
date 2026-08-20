@@ -25,6 +25,10 @@ code alongside its explanation.
 The GNU Make converter generates only the reviewed sections that close measured Fortran build
 coverage gaps and records a modified title, all principal authors, the selection notice, cover
 texts, and complete GFDL material.
+The Fypp converter turns the complete compact official 3.2 RST manual into citation-ready Markdown.
+It retains the preprocessor language, command-line usage, Fortran-specific line-folding cautions,
+examples, build integration, and API overview because the complete manual has high utility at
+negligible corpus weight.
 Fortitude needs no converter: the pinned release already contains one native Markdown document per
 rule. Its source entry deliberately adds only those rule pages and the minimum operational reference.
 The Codee converter enforces a five-page allowlist, removes C/C++ example sections, rewrites links

@@ -416,6 +416,43 @@ def test_numpy_f2py_ingestion_embeds_literal_examples(tmp_path: Path) -> None:
     assert "literalinclude" not in markdown
 
 
+def test_fypp_ingestion_generates_citation_ready_markdown(tmp_path: Path) -> None:
+    source = _source_by_id("fypp-3.2-manual")
+    archive = _archive(
+        {
+            f"{source.archive_root}/docs/fypp.rst": b"""Fypp
+****
+
+Running
+========
+
+Invoke Fypp::
+
+  fypp source.fpp source.f90
+
+Line folding
+============
+
+.. warning::
+
+  Do not put inline Fortran comments in generated macros.
+""",
+            f"{source.archive_root}/LICENSE.txt": b"BSD-2-Clause fixture\n",
+        }
+    )
+
+    record = ingest_source(source, tmp_path, downloader=lambda *_args: archive)
+
+    generated = tmp_path / f"raw/{source.id}/manual/fypp.md"
+    markdown = generated.read_text()
+    assert record.converter == "fypp-rst"
+    assert record.converter_version == "builtin fypp-rst 1"
+    assert markdown.startswith("# Fypp")
+    assert "## Running" in markdown
+    assert "```text\nfypp source.fpp source.f90\n```" in markdown
+    assert "**Warning:**" in markdown
+
+
 def test_openmpi_ingestion_labels_modern_and_legacy_fortran_syntax(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:

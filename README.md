@@ -45,6 +45,7 @@ uv run fortran-mcp-ingest cmake-4.4.0-fortran-docs
 uv run fortran-mcp-ingest openmp-6.0.1-fortran-examples
 uv run fortran-mcp-ingest gnu-make-4.4.1-build-reference
 uv run fortran-mcp-ingest numpy-2.5.2-f2py-docs
+uv run fortran-mcp-ingest fypp-3.2-manual
 uv run fortran-mcp-ingest openmpi-5.0.10-fortran-reference
 uv run fortran-mcp-ingest fortitude-0.9.2-reference
 uv run fortran-mcp-ingest codee-open-catalog-fortran-subset
@@ -66,6 +67,11 @@ The GNU Make source is a deliberately small set of official 4.4.1 manual section
 prerequisites, automatic variables, parallel and recursive builds, diagnostics, and the built-in
 Fortran compiler variables and rules. Its modified-title and attribution notice, required cover
 texts, and complete GFDL are retained.
+
+The Fypp source is the complete compact official 3.2 manual. It adds the preprocessor language,
+command-line definitions and includes, macro scopes, line markers, and Fortran-specific folding
+pitfalls that are not covered by the existing fpm configuration or F2PY generic-interface example.
+The pinned RST is converted to citation-ready Markdown without changing its substantive content.
 
 The Fortitude source adds practical diagnostics for correctness, modernization, obsolete features,
 portability, and style. It uses Fortitude's pinned native Markdown: one page per rule plus the small

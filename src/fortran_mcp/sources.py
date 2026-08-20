@@ -84,6 +84,7 @@ class Source(StrictModel):
         "openmp-examples",
         "gnu-make-texinfo",
         "numpy-f2py-rst",
+        "fypp-rst",
         "openmpi-fortran-rst",
         "codee-fortran-subset",
         "old-fortran-idioms-latex",

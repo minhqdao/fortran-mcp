@@ -707,3 +707,65 @@ category = "paraphrase"
 query = "Fortran array subscript outside declared bounds"
 expected_source = "codee-open-catalog-fortran-subset"
 expected_path = "manual/Checks/PWD004/README.md"
+
+[[cases]]
+id = "gfortran-preprocessor-include"
+category = "paraphrase"
+query = "Why is a Fortran INCLUDE file not preprocessed and when should I use #include?"
+expected_source = "gfortran-16.2.0-manual"
+expected_path = "manual/Preprocessing-Options.md"
+
+[[cases]]
+id = "cmake-fortran-preprocess-source"
+category = "exact"
+query = "Fortran_PREPROCESS source file property"
+expected_source = "cmake-4.4.0-fortran-docs"
+expected_path = "manual/prop_sf/Fortran_PREPROCESS.md"
+
+[[cases]]
+id = "fpm-preprocessor-configuration"
+category = "paraphrase"
+query = "Configure fpm preprocessing suffixes directories and macros"
+expected_source = "fpm-0.13.0-docs"
+expected_path = "pages/spec/manifest.md"
+expected_heading = "Preprocessor configuration"
+
+[[cases]]
+id = "fypp-command-line"
+category = "exact"
+query = "fypp source.fpp source.f90"
+expected_source = "fypp-3.2-manual"
+expected_path = "manual/fypp.md"
+expected_heading = "Running"
+
+[[cases]]
+id = "fypp-template-loop"
+category = "paraphrase"
+query = "Fypp for directive iterable loop variable every iteration"
+expected_source = "fypp-3.2-manual"
+expected_path = "manual/fypp.md"
+expected_heading = "for"
+
+[[cases]]
+id = "fypp-include-path"
+category = "paraphrase"
+query = "Fypp include directive relative file lookup paths command line option"
+expected_source = "fypp-3.2-manual"
+expected_path = "manual/fypp.md"
+expected_heading = "include"
+
+[[cases]]
+id = "fypp-line-folding-comments"
+category = "paraphrase"
+query = "Why can Fypp line folding make inline Fortran comments invalid inside generated macros?"
+expected_source = "fypp-3.2-manual"
+expected_path = "manual/fypp.md"
+expected_heading = "Line folding"
+
+[[cases]]
+id = "fypp-line-number-markers"
+category = "paraphrase"
+query = "How can Fypp preserve original source line numbers in compiler error messages?"
+expected_source = "fypp-3.2-manual"
+expected_path = "manual/fypp.md"
+expected_heading = "Line numbering markers"

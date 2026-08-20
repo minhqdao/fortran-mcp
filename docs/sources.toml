@@ -536,6 +536,43 @@ status = "approved"
 notes = "Complete substantive F2PY 2.5.2 documentation with referenced examples embedded. Two navigation-only RST stubs are excluded from generated documents."
 
 [[sources]]
+id = "fypp-3.2-manual"
+title = "Fypp 3.2 documentation"
+publisher = "Bálint Aradi"
+document_type = "ecosystem-guide"
+authority = "official"
+topics = [
+  "conditional-compilation",
+  "fortran-metaprogramming",
+  "preprocessing",
+  "source-generation",
+]
+fortran_versions = []
+compilers = []
+dialects = ["Fypp"]
+version = "3.2"
+revision = "b8dd58b946a0165a95f5630bfa8b45b1509d0dac"
+source_url = "https://github.com/aradi/fypp/tree/b8dd58b946a0165a95f5630bfa8b45b1509d0dac/docs"
+archive_url = "https://github.com/aradi/fypp/archive/b8dd58b946a0165a95f5630bfa8b45b1509d0dac.tar.gz"
+archive_root = "fypp-b8dd58b946a0165a95f5630bfa8b45b1509d0dac"
+include_paths = [
+  "docs/fypp.rst",
+  "LICENSE.txt",
+]
+document_paths = ["manual/**"]
+expected_document_count = 1
+homepage_url = "https://fypp.readthedocs.io/en/stable/"
+published_path_prefix = "manual"
+citation_base_url = "https://fypp.readthedocs.io/en/stable/"
+citation_format = "published-html"
+converter = "fypp-rst"
+license = "BSD-2-Clause"
+license_url = "https://github.com/aradi/fypp/blob/b8dd58b946a0165a95f5630bfa8b45b1509d0dac/LICENSE.txt"
+redistribution = "redistributable"
+status = "approved"
+notes = "Complete compact official 3.2 manual. It fills Fypp language and Fortran-specific preprocessing gaps left by the existing fpm configuration and F2PY example material."
+
+[[sources]]
 id = "openmpi-5.0.10-fortran-reference"
 title = "Open MPI 5.0.10 Fortran routine reference"
 publisher = "Open MPI Project"
