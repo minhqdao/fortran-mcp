@@ -7,7 +7,8 @@ from fortran_mcp.search import SearchProvider, SearchResult
 from fortran_mcp.sources import load_registry
 
 RRF_CONSTANT = 60
-DEFAULT_SEMANTIC_THRESHOLD = 0.785
+# Calibrated against benchmarks/retrieval.toml; re-sweep when corpus chunk shape changes.
+DEFAULT_SEMANTIC_THRESHOLD = 0.79
 CONCENTRATED_SEMANTIC_THRESHOLD = 0.74
 CONCENTRATED_DOCUMENT_RESULTS = 8
 CONCENTRATED_DOCUMENT_RATIO = 0.70

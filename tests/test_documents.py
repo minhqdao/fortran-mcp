@@ -2,11 +2,17 @@
 
 import tarfile
 from io import BytesIO
+from itertools import pairwise
 from pathlib import Path
 
 import pytest
 
-from fortran_mcp.documents import DocumentBuildError, build_documents
+from fortran_mcp.documents import (
+    MAX_CHUNK_CHARS,
+    DocumentBuildError,
+    DocumentChunk,
+    build_documents,
+)
 from fortran_mcp.ingest import ingest_source
 from fortran_mcp.sources import Source, load_registry
 
@@ -17,18 +23,27 @@ def _source() -> Source:
     return load_registry(REGISTRY_PATH).sources[0]
 
 
-def _archive(source: Source, content: bytes) -> bytes:
+def _archive(source: Source, content: bytes, include_content: bytes = b'name = "demo"\n') -> bytes:
     buffer = BytesIO()
     with tarfile.open(fileobj=buffer, mode="w:gz") as archive:
         files = {
             f"{source.archive_root}/pages/guide.md": content,
-            f"{source.archive_root}/src/example.toml": b'name = "demo"\n',
+            f"{source.archive_root}/src/example.toml": include_content,
         }
         for name, file_content in files.items():
             member = tarfile.TarInfo(name)
             member.size = len(file_content)
             archive.addfile(member, BytesIO(file_content))
     return buffer.getvalue()
+
+
+def _build_chunks(
+    content: bytes, tmp_path: Path, include_content: bytes = b'name = "demo"\n'
+) -> tuple[DocumentChunk, ...]:
+    source = _source()
+    archive = _archive(source, content, include_content)
+    ingest_source(source, tmp_path, downloader=lambda _url, _timeout, _limit: archive)
+    return build_documents(source.id, tmp_path)
 
 
 def _ingest_fixture(tmp_path: Path) -> None:
@@ -140,3 +155,38 @@ The parsed value.
     assert "### Status\n\nExperimental" in chunks[0].text
     assert "### Class\n\nPure function." in chunks[2].text
     assert "### Result value\n\nThe parsed value." in chunks[2].text
+
+
+def test_long_sections_split_within_character_budget(tmp_path: Path) -> None:
+    paragraphs = "\n\n".join(f"Paragraph {index}: " + "x" * 90 for index in range(40))
+    content = ("# Guide\n\n" + paragraphs).encode()
+
+    chunks = _build_chunks(content, tmp_path)
+
+    assert len(chunks) > 1
+    assert all(len(chunk.text) <= MAX_CHUNK_CHARS for chunk in chunks)
+    ranges = [(chunk.line_start, chunk.line_end) for chunk in chunks]
+    assert all(left[1] < right[0] for left, right in pairwise(ranges))
+
+
+def test_expanded_literal_includes_count_toward_the_budget(tmp_path: Path) -> None:
+    include = "```{literalinclude} ../src/example.toml\n```"
+    content = ("# Guide\n\n" + "\n\n".join([include] * 5)).encode()
+
+    chunks = _build_chunks(content, tmp_path, include_content=b"z" * 500 + b"\n")
+
+    assert len(chunks) > 1
+    assert all(len(chunk.text) <= MAX_CHUNK_CHARS for chunk in chunks)
+    assert all("{literalinclude}" not in chunk.text for chunk in chunks)
+    assert any("```toml" in chunk.text for chunk in chunks)
+
+
+def test_splits_prefer_boundaries_outside_code_fences(tmp_path: Path) -> None:
+    block = "```fortran\n" + "\n".join("! " + "y" * 78 for _ in range(5)) + "\n```"
+    content = ("# Guide\n\n" + "\n\n".join([block] * 5)).encode()
+
+    chunks = _build_chunks(content, tmp_path)
+
+    assert len(chunks) > 1
+    assert all(len(chunk.text) <= MAX_CHUNK_CHARS for chunk in chunks)
+    assert all(chunk.text.count("```") % 2 == 0 for chunk in chunks)

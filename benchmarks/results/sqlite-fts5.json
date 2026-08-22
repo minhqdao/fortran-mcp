@@ -1,13 +1,13 @@
 {
   "provider": "sqlite-fts5",
   "cases": 134,
-  "hit_at_1": 0.717741935483871,
-  "hit_at_3": 0.8387096774193549,
-  "hit_at_5": 0.8870967741935484,
-  "hit_at_10": 0.9516129032258065,
-  "mean_reciprocal_rank": 0.7935899897593446,
+  "hit_at_1": 0.7016129032258065,
+  "hit_at_3": 0.8306451612903226,
+  "hit_at_5": 0.8790322580645161,
+  "hit_at_10": 0.9354838709677419,
+  "mean_reciprocal_rank": 0.7764208909370199,
   "negative_accuracy": 0.0,
-  "mean_latency_ms": 7.077544776119403,
+  "mean_latency_ms": 9.231261194029852,
   "categories": {
     "exact": {
       "cases": 14,
@@ -25,7 +25,7 @@
       "cases": 15,
       "passed": 12,
       "pass_rate": 0.8,
-      "mrr": 0.6555555555555556
+      "mrr": 0.6
     },
     "negative": {
       "cases": 10,
@@ -35,9 +35,9 @@
     },
     "paraphrase": {
       "cases": 89,
-      "passed": 86,
-      "pass_rate": 0.9662921348314607,
-      "mrr": 0.7817059033351169
+      "passed": 84,
+      "pass_rate": 0.9438202247191011,
+      "mrr": 0.7671482075976458
     }
   },
   "results": [
@@ -48,19 +48,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 27.517,
+      "latency_ms": 14.118,
       "returned": 10,
       "top_chunk_ids": [
         "5a0c877bc1c27f9ff804072e52efd95c",
         "ded0a6b0377db604528c8803ed4f9fae",
-        "05682e25f3dac1d731a201d0509dad2c",
+        "878a0e8c71a70a3d9988354d28d71fc2",
         "9af278d68aac24081dcb9de4642e62b2",
         "d317100dd5e44676ad1b81ebf8d0743f",
-        "2dd9ddfb8d5f1d9e39839d6feec67b94",
-        "80b8710f70d87cb71abdc4c53f2dc163",
-        "63ba1cbe9d0e403c3c105208afeaa4c7",
-        "8cb0fabe34c588d2327cfea00c433cf5",
-        "2d075409ab6abf923544d9eb8ee04cac"
+        "bd02ec1c6f62b234c9df6731bed06ed2",
+        "d0d422aeeca73a53171e9094dba1a44a",
+        "e28845e6bd06a2e41fd60cdc409005e4",
+        "515691089700266bf974daa803e48541",
+        "ecd85fc080c4ba63be7de7f71dd52711"
       ]
     },
     {
@@ -70,7 +70,7 @@
       "answer_authority": "normative",
       "passed": false,
       "rank": null,
-      "latency_ms": 11.091,
+      "latency_ms": 17.922,
       "returned": 10,
       "top_chunk_ids": [
         "297ae05359d171cb93be82c7df41fb41",
@@ -78,11 +78,11 @@
         "e31251b0134a09b2b6d737a82c915668",
         "3de49afae79c20f0fb7dafea5d06cb11",
         "b5241330d8bac55b1f173dc6c9f0dc98",
-        "0a332f9b1eaee5d2d38ec15e4f4e8cb3",
         "14d7a368c0a2118afd346ebe25e41475",
         "1cc85f3fb355ee3854907deb67f023f6",
-        "3ade427d5b05beca834927f54a72cbda",
-        "08dc48ddce0b3d7dbed6166b05613fea"
+        "db0fb97af5ae84bdaf89bf8fe89bcace",
+        "e1281f731036ea59c385034381e5e575",
+        "5f5deafb34af849d7cf255d99ae42f75"
       ]
     },
     {
@@ -92,19 +92,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 14.317,
+      "latency_ms": 12.461,
       "returned": 10,
       "top_chunk_ids": [
         "27af3e7ad47c1b87764a22abef116dc7",
-        "497819e24ace8b03a056b9d1de26765b",
-        "ed47742da84957a62425c8aa94830c44",
-        "da191356cbe595f10e1f73bbb0cd7034",
-        "531a334a2a9cdacbbad4c18d71941879",
-        "b085d8500de03611f682c70907034948",
-        "e33fee3ce7cac43c6a8e62e30bfbb40a",
-        "668e72fef4bab354a9b739b642878a69",
-        "cfe478ac3a18e53b39d357c923d56520",
-        "c4a64cd62d508f08b26d85628920f93b"
+        "6e4f41b98b8563f2ed21cfecfb9e8fb7",
+        "7ffc866fcd341945e0b9bb7bc71227da",
+        "dbe6a704cba9a61dfa5ab0bce0cbe552",
+        "a160e630b919042b49592f6186f0b6c6",
+        "bffd24c565b1c496b0dfbea6f5094fc5",
+        "153cdf12e813a3dcebfc17cc7476879b",
+        "a2b5c057e1a0bea5eb19bb025f41cc50",
+        "dac5c2f2e9a6764b2076a411aad9ff9f",
+        "531a334a2a9cdacbbad4c18d71941879"
       ]
     },
     {
@@ -114,19 +114,19 @@
       "answer_authority": "normative",
       "passed": true,
       "rank": 1,
-      "latency_ms": 15.547,
+      "latency_ms": 14.959,
       "returned": 10,
       "top_chunk_ids": [
-        "526093fda175d0f4da4a0743152a585e",
+        "a87cdd1703ca43fb92dea797e667637f",
+        "f28919d1a3dfef041bb2a02686b62992",
+        "ee165e5f4dffbe6ac064a99818589de2",
+        "43e5a1a1aa5ec380e6c3e95fc587e1f3",
         "cea12e8cae52f639fec6f23cd0e8ddff",
-        "cef7cb8898375e12773ecb0799ccba0a",
-        "a441d45044965c4cb01ba715b06e8668",
         "bc2709e7ec0c45079b0f2fb9f98086ac",
-        "a6d03182098f6c4383d7e0431603d195",
-        "fca34506ce87be08ca0d5ff1c3ec3c92",
-        "807266c0acbea721bb0a1809820fdaf7",
-        "1234435bdf286c637913d02ad1602e21",
-        "1771f2e460c072741d61478b8cc5245d"
+        "cef7cb8898375e12773ecb0799ccba0a",
+        "63eddcc146bab7e56b386fcb2e67faec",
+        "f1f4194db4ccb6b19ba8ddd0c99eec35",
+        "350a74ed587becc405259bb7ea0136ff"
       ]
     },
     {
@@ -136,19 +136,19 @@
       "answer_authority": "normative",
       "passed": true,
       "rank": 1,
-      "latency_ms": 10.417,
+      "latency_ms": 9.256,
       "returned": 10,
       "top_chunk_ids": [
         "99d3b73c53d59deb9dd9783e3820fc91",
-        "7a0889236c7b59bb2607316a5caed3ee",
-        "94d294e5819586b83557e87cfb680fbc",
+        "8889bfcc0582ac736b6f56abdb74de95",
+        "6e07ffc81f4386203e7b80dda7de5933",
+        "b9a084db166d124a1c908222fe21d863",
+        "ba694bc9cc1f411dcb3ef593edcd1c63",
+        "6569e8f7366e6445a948443e25257763",
         "83e3cba0921eee477b3da53a10d1740c",
-        "12c2a60ee5b2d526275b657399cafcab",
-        "3696895992a2d9fb85c808426e8b7854",
+        "a2b050a2dd478f43f767f266bbe8a298",
         "d6d6fe25e29e6c1934a6e6d8d4f0c59d",
-        "cb527b284c13a58b5d615a0387dca165",
-        "0c1790420a87d20f0587eb58b337a59c",
-        "a794078615fc14c07abce161c022b0e3"
+        "cb527b284c13a58b5d615a0387dca165"
       ]
     },
     {
@@ -156,21 +156,21 @@
       "category": "paraphrase",
       "query": "How do FORM TEAM and CHANGE TEAM create and enter a Fortran coarray team?",
       "answer_authority": "normative",
-      "passed": true,
-      "rank": 7,
-      "latency_ms": 10.083,
+      "passed": false,
+      "rank": null,
+      "latency_ms": 10.767,
       "returned": 10,
       "top_chunk_ids": [
         "1c55b88e1c58ad690284ca939b889619",
         "d797e0df3aa2d9846c0f183df5bd3b2b",
-        "f570d99f3db3fcf0c88ca2affa956d53",
-        "84e4c5801007a8367a6153786a48a828",
+        "522fa91123b6a8018ebd7d3ae34d5fd5",
+        "f4c3159c6da3b6492e040ecd5afe5bf3",
+        "33dffa57d643bca5c958f994b2c19362",
+        "12384d2f797cb2dceb4a15c2a9e28775",
         "c93490981fb78ca050af19687da98ec9",
-        "cb68eaf5694af09a0d60f283a6dd0ce8",
-        "5cc11bccec6c2c0daf3a0efeee882bd4",
-        "8e03cbc365d9a12d27d363eeb2bc2d21",
-        "c1d4032cdc05653505c2faa7fc09a8f8",
-        "cf2c93e957a7bda352acb52d1cf56313"
+        "00cac82a6b6f816a0b275bc387ed35af",
+        "efffabb1b94b83927218b896b0a2d8f4",
+        "09d045d6c36fffab658b6a3939727057"
       ]
     },
     {
@@ -180,19 +180,19 @@
       "answer_authority": "normative",
       "passed": true,
       "rank": 1,
-      "latency_ms": 9.248,
+      "latency_ms": 11.835,
       "returned": 10,
       "top_chunk_ids": [
-        "c5ded123ca11011ba4cbd672e2f1cf66",
+        "4f9059917c6bb8c0356ab12245e7f6ab",
         "f482f5c2c1c5b4b6238e423ff5a0a2ae",
+        "9941e9b41b99d4c26f8e381ccd89d947",
+        "77cb2b8928d3d62c27e8abc307567afd",
+        "49b8924326ad4914b4e5602ae32174c0",
+        "1fb43043f31714fcc9d956723d3587c1",
         "539bb1e895130c76f827811245b19a8a",
         "c994c7b51e0b8696b89036337fd4c755",
-        "1370459cf8fd44194d6121c4b793cbbf",
-        "4e018ed328381b8bc7fac80c3842763f",
-        "29c0951f2ef0debdf65b9b494859f98e",
         "979129c28564293a67910f43e7fd61bc",
-        "15b39660672702b66272a33fbbb8b090",
-        "11d7b5a03a3f30b218159744e35e64a8"
+        "c2c74b92dcc301dfb0523d99f7e3b04c"
       ]
     },
     {
@@ -202,19 +202,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 9.872,
+      "latency_ms": 12.893,
       "returned": 10,
       "top_chunk_ids": [
         "a6d03182098f6c4383d7e0431603d195",
         "13a941b491d0b410a52d4b8d0c7ec9ea",
         "361c74ec4799a7b9c5c449fae2b78a40",
-        "8a1609dcf4d57a3cfd61ff4305e8ebec",
+        "dac5c2f2e9a6764b2076a411aad9ff9f",
+        "03048206e19f2c1c2700ce3e0ef9cdc0",
         "97a0096545666c340675466c6a000ddc",
         "b0c467092c33c172ecc9ba6d709dbeed",
         "fb3a00cedaf9d9c924d2adb15a383b1d",
-        "3571ec0fa8531739a351e337b977e2c7",
-        "93381d039e99dc319b8a3398a642e27c",
-        "f0a92abcf179192d87933fe244bd36c0"
+        "8a1609dcf4d57a3cfd61ff4305e8ebec",
+        "93381d039e99dc319b8a3398a642e27c"
       ]
     },
     {
@@ -224,19 +224,19 @@
       "answer_authority": "normative",
       "passed": true,
       "rank": 1,
-      "latency_ms": 9.267,
+      "latency_ms": 10.921,
       "returned": 10,
       "top_chunk_ids": [
         "0a5b89f229194d3f980aad2351c7da3d",
-        "1c6cc8fc13858cdc03d950dc007ec625",
-        "077e5806be7f3e01d29250495fa59103",
-        "9206b0d9312dc1bfea0a90502a5dd62d",
-        "016c9699bc0293103e4abe91d5b159b2",
+        "2876243b7a8c917b07583856cb9e2749",
+        "d16a61dff3a70b0288c5e4bfa132dc55",
+        "45875012297ea675b4ebcd0f2773082c",
+        "519befe231e5255d16f0fcb79f54787a",
+        "aaf894a1f82ed90e3b5911084e8b5b11",
         "4a1ea51f91eb3f9d04e1a40b95494117",
-        "b610888c74ee41e32e751c538a8118db",
-        "979129c28564293a67910f43e7fd61bc",
+        "e51bf51511ee7e8eb1056f6326edf71f",
         "f046e983d8b45ebcd87c0b0220bb1464",
-        "917bf7a3f4b3af83cb5b4938849c2217"
+        "fb4902022daeaf0ae82fd4ce4a529547"
       ]
     },
     {
@@ -245,20 +245,20 @@
       "query": "Which Fortran 2018 constructs inspect an assumed-rank dummy argument at runtime?",
       "answer_authority": "normative",
       "passed": true,
-      "rank": 2,
-      "latency_ms": 11.659,
+      "rank": 3,
+      "latency_ms": 9.784,
       "returned": 10,
       "top_chunk_ids": [
         "35712cf6ba36455a6eed8bf20d955ceb",
-        "016c9699bc0293103e4abe91d5b159b2",
         "8e6ccd584a1a3e24ba4d40115a313805",
+        "aaf894a1f82ed90e3b5911084e8b5b11",
         "979129c28564293a67910f43e7fd61bc",
-        "1c6cc8fc13858cdc03d950dc007ec625",
-        "0a5b89f229194d3f980aad2351c7da3d",
         "7ae42399c95aae07e8d63f2104c38902",
-        "c830c8b3ec49418d0a99d9e5f4c80aa1",
+        "ae79c95766e9374a706cc411ccd63060",
         "ad0180e405deb8087251f91451695ce5",
-        "a288741209cdd70bb96d626a1f49a589"
+        "c830c8b3ec49418d0a99d9e5f4c80aa1",
+        "a288741209cdd70bb96d626a1f49a589",
+        "ba82d19c35057a8d844ef28e83cc821c"
       ]
     },
     {
@@ -268,19 +268,19 @@
       "answer_authority": "normative",
       "passed": false,
       "rank": null,
-      "latency_ms": 9.28,
+      "latency_ms": 11.211,
       "returned": 10,
       "top_chunk_ids": [
-        "2193664d284fa4509bf5c697fd240dd8",
+        "e08ff5ae60ae6cf2ff57cecc49b36365",
         "69212372063dca51a40aa2b0d2989087",
         "43575addeefefffb1d5cedb2630add74",
-        "0a332f9b1eaee5d2d38ec15e4f4e8cb3",
-        "0019953a3326b3182ec1ece76dc1863a",
+        "f103cbeada7926bd5b985ebd84685273",
+        "6e4f41b98b8563f2ed21cfecfb9e8fb7",
+        "0379b5352646fd29677925059d3e3b7c",
+        "b0b728f82e253c2b76c5199315d01f8c",
         "ca20f48b991a898f660bd40529beabd1",
-        "cef7cb8898375e12773ecb0799ccba0a",
-        "497819e24ace8b03a056b9d1de26765b",
-        "6eb2b59f537669b849905032fe31d07e",
-        "430cf05f838583190ff1ac078e13eca0"
+        "3fe502af39b1c213a625c4759167c624",
+        "cdb261cb7df2c570a34705550647a064"
       ]
     },
     {
@@ -290,19 +290,19 @@
       "answer_authority": "guidance",
       "passed": false,
       "rank": null,
-      "latency_ms": 7.453,
+      "latency_ms": 8.433,
       "returned": 10,
       "top_chunk_ids": [
         "be628687e7d1560e54aa85cfef1c89cc",
         "2889107bc48355df01fb25d836898ad6",
         "f439e4bf2c9670532c99a08a12161d6a",
         "62c7ea10e02b81471a429da5adb44061",
-        "11d5eff6e3c9611e49985af7e4ed186a",
-        "1813d5548fe358565d8f53824a0ef142",
+        "474ce01f94a6da787c2d76e346ca208c",
+        "4dbae2a84c1dfa3da57839d7145eb55f",
+        "df2dff2248981d11e1d7868b968b7fb4",
         "66fb2823fc2b6b122bfb1d1884bcfbb9",
-        "272def6f70ae66c3cc4547219a2122c3",
-        "e524bf5b68c89febae0f27bdbb1cbd78",
-        "b25f9a4d75ebe8c9cb70d6eb820d6e4d"
+        "08b943314fd899f39648ef57fe6d6525",
+        "1813d5548fe358565d8f53824a0ef142"
       ]
     },
     {
@@ -311,20 +311,20 @@
       "query": "How do I replace a COMMON block shared by several files with a modern Fortran module?",
       "answer_authority": "guidance",
       "passed": true,
-      "rank": 3,
-      "latency_ms": 12.005,
+      "rank": 4,
+      "latency_ms": 11.241,
       "returned": 10,
       "top_chunk_ids": [
-        "cf316b5a561bb963f08476aae25d86bf",
+        "388f7d0a1ef4023e37b52c6f66c20ddd",
+        "79d5eba0902c7a2261a85db8751c964d",
+        "5fc080cec8498a26f8862be26ba0e29e",
+        "0f3748d7ff452f238031aefedb005727",
         "5b673c37fa9a687541c1ca568520f210",
         "619b822ff12aef02606e3dcf52dac235",
-        "9300f9e77fcd607ed6f22d6da16c6265",
-        "eae6ceadebc287c2a6836ebf76b22486",
+        "8357b82a229610cd9413bc0bfe49374d",
         "3414e14930cbd1af8efb93b29e6d8708",
-        "3c3a1ecf0477e80bc92c9bdbdd7e5874",
-        "dfdf59f15f24bd60720bf9aa670b072c",
-        "aa870a4dc5ed31df36815257b97fd7cd",
-        "20b552c37622f4cd574720a5f62109df"
+        "abec908a63a45e7e5a3bac2b46906b18",
+        "3c3a1ecf0477e80bc92c9bdbdd7e5874"
       ]
     },
     {
@@ -333,13 +333,13 @@
       "query": "How do I replace obsolete BLOCK DATA with a modern Fortran module?",
       "answer_authority": "guidance",
       "passed": true,
-      "rank": 2,
-      "latency_ms": 8.98,
+      "rank": 3,
+      "latency_ms": 9.879,
       "returned": 10,
       "top_chunk_ids": [
         "c830c8b3ec49418d0a99d9e5f4c80aa1",
-        "2d119b3b3efe4bc54d16048cff7c5aa7",
         "3d56d023f1748b5b2585fd0fb679a27e",
+        "2d119b3b3efe4bc54d16048cff7c5aa7",
         "9b8b6492cd02e3608f671887e4860375",
         "7f08cada9b9f91c34d9d665d25224d17",
         "35697a1dc29d76b33d991f5133b62f4b",
@@ -356,19 +356,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 6.002,
+      "latency_ms": 7.613,
       "returned": 10,
       "top_chunk_ids": [
         "cfd1f9b7e785a8d2c456ad6be6145746",
-        "0a81da442e0283d990f5ce96b3d36120",
+        "794496627a3ab0b7f919ec358ccd135f",
+        "791fc8a989397b458f73dfc1af695a79",
         "49cf7aa8276dca0162c8591393bb3b01",
-        "72d9556b57500abc13e63df3addae11a",
+        "0a81da442e0283d990f5ce96b3d36120",
         "02e20e4b722c78782c697199f115ffd3",
-        "944946587398674e075aabb867bbb0e1",
         "6091f04343ce9d5cc16d3254dbe58684",
-        "ebc177b6267b7a14788bd27239b01b5a",
-        "30e3322ec8cfc500aca9fe6c5de95588",
-        "f1874a6e217baa8c5d4588c0b2583cfb"
+        "21a2e00d6754aa4432ba9e8e90744871",
+        "fafe85dbf899458c9f17e376082e7dbd",
+        "917c22f9fa19e3db1de5477612337cb7"
       ]
     },
     {
@@ -377,20 +377,20 @@
       "query": "How can an assigned GO TO be rewritten as structured modern Fortran?",
       "answer_authority": "guidance",
       "passed": true,
-      "rank": 2,
-      "latency_ms": 8.006,
+      "rank": 4,
+      "latency_ms": 10.173,
       "returned": 10,
       "top_chunk_ids": [
         "97cc104a977f3ac69bcf769f3feca946",
-        "809b8c212f575eb4eb162c62281c4d51",
-        "b83e9fac76a8855139aea498acc5e8b8",
+        "8ac5e29e0c6de4fbab9998fbbb9c9ac0",
+        "328f44411488854f9540db480461be48",
+        "36cae6499c4b081474dfe9c04b3b0eca",
         "60c8b7110bd1c6504f15b3b646b89a84",
-        "125ca6422876e2afbc29eba9085ba24a",
-        "cef7cb8898375e12773ecb0799ccba0a",
+        "745f63f51a97afe667600d53742ec91e",
+        "edb18b7a02b672c6b60b3b0168bb4a53",
         "18e3ab4ab06e481f5fe60815be9f9015",
-        "cd366d33cfcf30402bf2e9e51d0c2223",
-        "de1c09477aebb50c183e48ac93f92c94",
-        "7c68d383fdaefb2c0f188222b1983843"
+        "384f21329d83b88fb30ba25a27d5c820",
+        "a40e69c7bf1e18b8faa786ec71fc2650"
       ]
     },
     {
@@ -400,19 +400,19 @@
       "answer_authority": "guidance",
       "passed": false,
       "rank": null,
-      "latency_ms": 12.575,
+      "latency_ms": 10.977,
       "returned": 10,
       "top_chunk_ids": [
-        "176bdf7e098cb209eae28d85f8e95bd2",
+        "880827186abba7441e51623aa7c5ff3a",
         "b886ec244ec7819309bd27bbde80c42b",
-        "54890b158c86e168dbce9e9cea3658e2",
-        "72463c8998cd7b83c8552f1e9651513d",
-        "53a5c9303c4021d9265a3b6bf04dcfb6",
+        "dac5c2f2e9a6764b2076a411aad9ff9f",
+        "15c33535d18672dfa9e8985614a05c41",
         "79fd0a7353472a33fb4e09bbffa4e07e",
-        "181779df8f87d738c87a51e91f7bb58d",
+        "72463c8998cd7b83c8552f1e9651513d",
         "9aed40ae3d7c3237d763d24fdc82ba66",
-        "914918b43dee15afe6c34a035679493e",
-        "6a76bb4d0624e925718389bad9066522"
+        "54890b158c86e168dbce9e9cea3658e2",
+        "6a76bb4d0624e925718389bad9066522",
+        "d28e750847ce146f9ecc5413da648f15"
       ]
     },
     {
@@ -422,19 +422,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 8.821,
+      "latency_ms": 11.223,
       "returned": 10,
       "top_chunk_ids": [
         "d822e6a9cb9926857680ac9c07839334",
         "395efba83494bbb7402d41d97a863f8c",
         "451b83faca64cdcf8615b4aa1be1f000",
+        "8fee1bcb8439ea656dd26d50b6e8cb47",
+        "514befc2aeac73e0d9bda375d6208649",
         "0bd8be62b71be9e6d8a553bcee79e180",
-        "125ca6422876e2afbc29eba9085ba24a",
         "fa5132ff31d173791f042ded0126a7b8",
-        "88f0c716dc90e708917adf1153667867",
-        "cb41ded90c2503b0df451a58518753cc",
-        "a908a31168af323fd3512435974358ee",
-        "5d7f631a054f92dbf755dbf87e57afc9"
+        "8ed775a2422f8825e3b5c9d39982adf3",
+        "1e31a572cd76e1b958198e41731a1fd9",
+        "55755dd10e12c967ef71a75462874e9a"
       ]
     },
     {
@@ -444,19 +444,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 3.998,
+      "latency_ms": 4.158,
       "returned": 10,
       "top_chunk_ids": [
-        "71483b081af235c7daebc2496a303c80",
-        "fa3b10ded5c18ebb50b1c897b772f69d",
+        "86194f7a675ac08679dc473b917543f2",
+        "c36178472f112ef4ab1d5b3f4e26672a",
+        "b72370bdbbd18fa9ef417e1f76224573",
+        "6bb2a9013dcfe48df850ec3241220440",
         "264bb2c0a11de803053e35679c56e78b",
+        "2180bf6496b5d014e2889c4ccdda1d26",
+        "fe61adaa4895cbfeb50ac5e06bbdec85",
+        "384f21329d83b88fb30ba25a27d5c820",
         "35697a1dc29d76b33d991f5133b62f4b",
-        "cf2c93e957a7bda352acb52d1cf56313",
-        "daea0b3de0e85918de084a02df7e1fc1",
-        "d2ebe91dcb524d430e12f9e64320c7e8",
-        "41b7b5642ddcf8ff3089c97565352724",
-        "7f08cada9b9f91c34d9d665d25224d17",
-        "3d56d023f1748b5b2585fd0fb679a27e"
+        "daea0b3de0e85918de084a02df7e1fc1"
       ]
     },
     {
@@ -466,19 +466,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 8.15,
+      "latency_ms": 16.912,
       "returned": 10,
       "top_chunk_ids": [
         "1530c2abfcc5e149fb7e7ec8eaa31653",
         "00a06a589176b1f94b4e563d192c8bc6",
-        "528caaf9d38829f41457d7472351b04b",
+        "aaa082c7513b9a4f8e0a4c0b3fd819b2",
+        "71d93040c9ef928a0d83486d64797a73",
+        "f5e5b3d0c35afc3b17ede248c9b828e3",
         "3b7ca47fc7c9fb626069a9ef38fe357c",
+        "0e28806e1c1cb5ba207448bed2cebbf3",
         "88f0c716dc90e708917adf1153667867",
         "9a3081b4a4b713afa8641ba8f3af450b",
-        "0e28806e1c1cb5ba207448bed2cebbf3",
-        "9a619735fb89bd426ebdbcb9930add7f",
-        "764375f47e38faaf6888105469c3552a",
-        "49e10bd7a5f2d96594bc7df01e4c77c1"
+        "9a619735fb89bd426ebdbcb9930add7f"
       ]
     },
     {
@@ -488,7 +488,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 7.777,
+      "latency_ms": 9.439,
       "returned": 10,
       "top_chunk_ids": [
         "c3751b53c590a580d1c16f7c869be22e",
@@ -496,11 +496,11 @@
         "b6645736050c3f82e30242d798a398ff",
         "3adc430586e2573cfa9d88843620b017",
         "ec14c03b6f9455f3fd51bfb25acccfc3",
-        "33ded4285a7cf1560410cf09bafa4cd1",
+        "9d4abf5dc9f0bcf84f756f0549aa2621",
         "451b83faca64cdcf8615b4aa1be1f000",
         "799e6eae6709e7ba33b7b95d68ba0f31",
-        "1ed05271881ee565709831b2c669727d",
-        "eca7bac81ab5036fa2cb126ec1ed3d4d"
+        "eca7bac81ab5036fa2cb126ec1ed3d4d",
+        "b405cc4342ecf149ea1189bd1c20c1f2"
       ]
     },
     {
@@ -510,19 +510,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 15.188,
+      "latency_ms": 15.825,
       "returned": 10,
       "top_chunk_ids": [
-        "b83e9fac76a8855139aea498acc5e8b8",
-        "b9cd2e6fed285fe5c846d074e5221989",
-        "c1a7b64af677106cccf05bab562094f8",
-        "38828becb114191425fd9f53cb85c0d5",
+        "549b11e8221f251bff9bd41aa75cbd75",
+        "328f44411488854f9540db480461be48",
+        "39b0079b5a15860ec33df8c439913adc",
+        "ae0c8a7832a4e9fc3bc8f123c80d1bd1",
+        "b3ff34374b4e73fca694a49c0d540b94",
+        "745f63f51a97afe667600d53742ec91e",
+        "e7940abd7a24c1f82b1ac749248f6589",
         "a65959da5235d4366e09104650f9515e",
         "14a6528de48b249ba17bc543c3ad97c5",
-        "2ed8b926cc59a561886270f86b1535bb",
-        "4693f6b71d4b03b961b1cc8f93622bc0",
-        "8f95fea8507930508ac8df5b803e8441",
-        "fa7f683ac73584f73489c46b386dd918"
+        "6ac9af1507f5bef0262a330a42b84be8"
       ]
     },
     {
@@ -532,19 +532,19 @@
       "answer_authority": "guidance",
       "passed": false,
       "rank": null,
-      "latency_ms": 6.543,
+      "latency_ms": 8.007,
       "returned": 10,
       "top_chunk_ids": [
         "4f12083ae19c1eccad2041f0fe0ada88",
-        "977376f9e3de0be032030144072292a1",
+        "5015fc69e5cb067fd2177386e02f6d62",
+        "11b821d1c8d4f0a5c672a09b956c59c6",
         "cb41ded90c2503b0df451a58518753cc",
         "094009efca491160bd311647bb6ccc5c",
-        "1354155043e0c2aec4fdb71933d6b10e",
         "d325011fd456b7d022dc42e7e3963428",
+        "1354155043e0c2aec4fdb71933d6b10e",
         "f1faa347b02f79f4430136bcfff8c1b7",
         "ea57064d9bd5af7e985481d8377ca3c5",
-        "1a0e29f7bd47765116be0466e8cd48c2",
-        "5d0ebb29a686857fe84e9501388adf6a"
+        "1a0e29f7bd47765116be0466e8cd48c2"
       ]
     },
     {
@@ -554,19 +554,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 6.793,
+      "latency_ms": 8.158,
       "returned": 10,
       "top_chunk_ids": [
         "cd366d33cfcf30402bf2e9e51d0c2223",
         "5d7f631a054f92dbf755dbf87e57afc9",
         "cb41ded90c2503b0df451a58518753cc",
         "60881d928400f01449dfa63da9f11fc5",
-        "8e8e6e4ba331411234f5f1e7924b757a",
-        "20106f5982105abf3f24751d0ee5816d",
-        "e05bcee24b16737e19e9eec1232ccc78",
+        "8d9c19bc1a939577fc14103176ac8c91",
+        "e055c415ef8af8d970968d78912ebc34",
+        "e68276e1e2736288a7917177cd542fc1",
+        "84d214f870de2edcd3d6485febeec31b",
         "3706e790396c8e158a92d416d69ff66e",
-        "a013e9284b04f625b4cacb45df22c99a",
-        "604f4085c6c3dd3a3f4242c3b8212c82"
+        "ea117917299fa02a760106d90c006c22"
       ]
     },
     {
@@ -576,19 +576,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 7.721,
+      "latency_ms": 8.943,
       "returned": 10,
       "top_chunk_ids": [
         "cb41ded90c2503b0df451a58518753cc",
         "990d559663c7b6c9861ff19744cd80be",
         "8cf62189d54c87cd84b921632d6dcc10",
-        "53f8d078239de22d7b2b886bb407cdb4",
+        "8fee1bcb8439ea656dd26d50b6e8cb47",
         "b87f6e886ee5bc9412273a89f9bee3f8",
-        "e98e6cb7edc7902af73ad2648d1c3b57",
-        "d4bc5389e4588ac3b04ac5d21b5191ca",
-        "2b85b5a1880c9d73eb9fc82946965cfb",
-        "2d075409ab6abf923544d9eb8ee04cac",
-        "41b7b5642ddcf8ff3089c97565352724"
+        "6f0d1f19786b659705c0a1a6a226eca4",
+        "d3380e0a9de19dbf5a0c203921e49e09",
+        "5d2487a91b0a98be34f0566d66d40953",
+        "382d09b085d4593a0e432dcb346d3d72",
+        "bd533cc085383952cb500ea50a2bac4c"
       ]
     },
     {
@@ -597,20 +597,20 @@
       "query": "How can I preserve legacy unformatted binary file compatibility across compilers?",
       "answer_authority": "guidance",
       "passed": true,
-      "rank": 2,
-      "latency_ms": 5.113,
+      "rank": 6,
+      "latency_ms": 5.52,
       "returned": 10,
       "top_chunk_ids": [
+        "24ad28e932c316598ead90618ef05596",
         "5f9bc4c6ca59f558881eded88214a26d",
-        "c63f10678937c1b2beaa37fa4db6a70a",
         "ccdf9bde36325fee5558f5ebf730aaf2",
-        "7d9ee0fd3a7e1f43c66b2c082a1e2322",
+        "2ecd626fa7782efd52fcaf8d47512fad",
         "d0f6d577aed767efca755943ff92d65f",
-        "6baea58ca0fcd50bc80f51619578ef1f",
+        "2ef197c6a946b08c6d1a1013b852bf03",
+        "4eae5e65e6781ea022359db217388a01",
+        "8314ab491e72e7b246b362acb6a9a986",
         "0eee338560bad068c1beeaab2218a804",
-        "23be751d40adb8fe0cd070fb4f95b474",
-        "ed4607e0faab8e96aac8a47888e163f6",
-        "c0e76124e80a9ce0b7a549f04fde46ca"
+        "7361d7a9842cd4f7b2ee09eaf789a80d"
       ]
     },
     {
@@ -620,7 +620,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 0.506,
+      "latency_ms": 0.979,
       "returned": 8,
       "top_chunk_ids": [
         "f1e9125f1d304ca33fef5f8b8407c669",
@@ -639,20 +639,20 @@
       "query": "How do I add OpenMP to an fpm project?",
       "answer_authority": "guidance",
       "passed": true,
-      "rank": 4,
-      "latency_ms": 0.521,
+      "rank": 3,
+      "latency_ms": 1.73,
       "returned": 10,
       "top_chunk_ids": [
         "9e753c137bcbdb925107a01c7125894f",
         "9d95118fa5d9afdd860376a893e82b09",
-        "13b08f24a9450170df16608d359f4543",
         "5528717ebe43fe1249b42ba87733815c",
-        "01c0a50349a7061080c0306f9b91c0df",
-        "5f0079b51c43a0db473bce2456f95163",
+        "13b08f24a9450170df16608d359f4543",
+        "8bc2228b270da6f4727602af36dfc349",
         "7f9d84c2428ff3126492910500ce68b7",
-        "e05bcee24b16737e19e9eec1232ccc78",
-        "8eeb6541eaf4bc98e54e201a11541466",
-        "20106f5982105abf3f24751d0ee5816d"
+        "d845e77c399c6373794b621c03dc40e0",
+        "e68276e1e2736288a7917177cd542fc1",
+        "e055c415ef8af8d970968d78912ebc34",
+        "ae93c650d6417fa88b72f7093cc0375e"
       ]
     },
     {
@@ -662,19 +662,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 0.499,
+      "latency_ms": 0.445,
       "returned": 10,
       "top_chunk_ids": [
-        "743f6bcf70c1457ce30ef01af9b56f9e",
-        "112d28f72bf90faf6c88dd3bf0a895eb",
+        "e24298b5592bf0704d8f9d8e501c9aee",
+        "51cd720ad90595f8f0985fbd8d67b12c",
+        "dd39dfb62c7a280db2a4c062c05b895c",
+        "f9c64dbadab399833a73f3ff0ad53213",
+        "1a8f48cb90803e9834063b6edf1a4742",
         "38a7497230147e5830e8b22202616c91",
-        "2da8a7f71efe38770944f13ae143beef",
+        "646d27e61ec3eb083ae0198afdb0c7e1",
+        "06be6015c9c48aa226857fa34395ac5d",
         "c2a670e5185fd27f61f93af528a83172",
-        "064c389ebe61231023a855af59ff3c56",
-        "c3049b0c236dede34590c9d042682df9",
-        "21c3f2cd2b80e1ef6b9785c9c4df0393",
-        "0b9cca69885a2ba87e0da4708130df8f",
-        "89435da60bf2c2ca0e2bee9aa4fd225f"
+        "c3049b0c236dede34590c9d042682df9"
       ]
     },
     {
@@ -684,18 +684,18 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 1.953,
+      "latency_ms": 2.078,
       "returned": 10,
       "top_chunk_ids": [
         "9be055c1d3904c26ebde7aa19851d977",
-        "0c080719da95adcc2bfc3ddec663d5e3",
+        "9521c8834608d92280e506bec547ee51",
+        "622579c6e0b37a551e861377e4316010",
+        "b8e5c28a539df847b17b6048582fb394",
         "c3049b0c236dede34590c9d042682df9",
-        "ee7ced7a56d0c1d80293bd4863d7bbbf",
-        "2a481d1fd106b10c21c910fd66dffbc3",
-        "238734e9ac321a9eb88468bcb1296a4b",
+        "c21250ef176473df09cb9c843502f66f",
         "c85a2025d860e8243564f42fb1322093",
-        "1f97362eb09ae0c400ec5f9e82411103",
         "56e840930fc1bbcdd8a25fbc4a589629",
+        "1f97362eb09ae0c400ec5f9e82411103",
         "b29a595db7d1efc00c99b304ec3ba707"
       ]
     },
@@ -706,19 +706,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 0.468,
+      "latency_ms": 0.441,
       "returned": 10,
       "top_chunk_ids": [
         "28d30d8c46d1976b3a3d556a2bbe6994",
         "36fcb23761cdc3fc6004494b83ae8bdc",
-        "e64f16f517fedf5ead3d2c58010f4db1",
         "73b8e6f3e79395f4d51ae25cad127fec",
+        "e64f16f517fedf5ead3d2c58010f4db1",
         "ce0715814f7573e3afb5180b52bc782b",
         "05770a1f83173579f891296faee0e8b2",
-        "3887528e20b0fd7f61534915f1ccc62a",
-        "e4712169d0d556f630c4c5bd9ff05401",
-        "d931717b271db74ec93ca8733ef8b8e1",
-        "23f01e9c41c48db50b6d6fa6c9e9b039"
+        "be09c63807a22caee41d268b82863423",
+        "06be6015c9c48aa226857fa34395ac5d",
+        "c8660f002ff54db6a694a444a13edc46",
+        "db2fe4c48cbf8f9ed27fc36750ceffe0"
       ]
     },
     {
@@ -728,7 +728,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 0.609,
+      "latency_ms": 0.518,
       "returned": 10,
       "top_chunk_ids": [
         "e9f5e0a18b886873939b546f34b94c0e",
@@ -738,8 +738,8 @@
         "3ea62df35eb74b38b92ef7f98419d3e6",
         "80ae938671940f1b637163b686484d9b",
         "32385b96d7cbc2e208ffd0cc803099bf",
-        "9268bf9a92cadd170746b90db70e765f",
         "ed28747713fa56b15bafcc1879a793ca",
+        "9268bf9a92cadd170746b90db70e765f",
         "89c27f2205e33048d721f76b1422273c"
       ]
     },
@@ -750,7 +750,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 0.71,
+      "latency_ms": 0.722,
       "returned": 10,
       "top_chunk_ids": [
         "57a51d83f7cbf435654b543536b89e3a",
@@ -771,20 +771,20 @@
       "query": "What string type can represent dynamically sized text?",
       "answer_authority": "guidance",
       "passed": true,
-      "rank": 7,
-      "latency_ms": 7.15,
+      "rank": 4,
+      "latency_ms": 8.064,
       "returned": 10,
       "top_chunk_ids": [
         "5e2a18391ffe883856c14d70b813c061",
         "efe05f4c074b1d7067d72b8a363d1cc6",
-        "b0d88972e080362b7bf0b0e261f92317",
-        "3b7ca47fc7c9fb626069a9ef38fe357c",
         "f8967e20ef674c6b79d1ec13b903b89e",
-        "0a5f1ed22aeb2c2ec26f47f614f09746",
         "99f175dd83b51cac20ab6836754e2dca",
-        "94b74b7a5cb41dfa847d49fbb6b39483",
+        "a1bd93a92c6d6817b395761cdbf5df60",
         "1cda6797310c55dedc9fe4d348984e76",
-        "da191356cbe595f10e1f73bbb0cd7034"
+        "d1c8cfd541db896cf0d3eb0a4942f4d8",
+        "b06b0ee1711e2f9f124eba085e61a1c8",
+        "1d39a06e840979815b6d830b31156c8b",
+        "0f0ff87d0464f7a75fc92d455159f22b"
       ]
     },
     {
@@ -794,19 +794,19 @@
       "answer_authority": "guidance",
       "passed": false,
       "rank": null,
-      "latency_ms": 7.334,
+      "latency_ms": 9.846,
       "returned": 10,
       "top_chunk_ids": [
-        "19fb45397c9c2150a18549be9f3e8782",
         "2d8062fd51c3668c1709ac8b5dbc4dc2",
+        "f737e6419edd456b568edf30ed9a0887",
         "3a050e04280a123b00000f45822f0be7",
-        "cd350b2f8a722ef675882ee1786e0a15",
         "63f9ec17f55f4816e2251b6985cec72a",
         "1136c3712c3fabdc6a5e007d218d8a9d",
         "8f9325e9ca78994de9f5c751c07f6d7f",
         "1af4a7c1a9d3104383052c758b6f66cf",
         "2efde47a86e2ee38f3bf76a3a2c00d4c",
-        "b6f57be0b8a2fdd741379f4423454fad"
+        "b6f57be0b8a2fdd741379f4423454fad",
+        "cbe016d031976158793f07d076999a2c"
       ]
     },
     {
@@ -816,7 +816,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 0.615,
+      "latency_ms": 0.575,
       "returned": 10,
       "top_chunk_ids": [
         "369c6f47451c466b27e360ec9e3ea0f3",
@@ -826,9 +826,9 @@
         "3bd802795f4051c99b65e08384236220",
         "24e2680db308627c9a1ce66655a3371c",
         "22eb4f619c51d2c8f9b7296a67d529c5",
-        "c8549e84aa21fc6f5d4326d0766b783f",
-        "80b8710f70d87cb71abdc4c53f2dc163",
-        "53437ab395b1f6f7036b5e0ce8e810be"
+        "e28845e6bd06a2e41fd60cdc409005e4",
+        "176cce75e3264913f16216f4c9dea4fd",
+        "beae2a24e9a4cf4f4881f822d67781e6"
       ]
     },
     {
@@ -837,20 +837,20 @@
       "query": "How do I generate normally distributed random numbers?",
       "answer_authority": "guidance",
       "passed": true,
-      "rank": 4,
-      "latency_ms": 3.506,
+      "rank": 3,
+      "latency_ms": 3.872,
       "returned": 10,
       "top_chunk_ids": [
         "de98a4a6c2dee9881126a44fae39ac81",
-        "c48396507a950a0a550c670e5a15e8bc",
-        "84efadafefd570f95267b02706519059",
+        "e1f15a8b11ededad90c261045955e6ba",
         "08f5c8575ee8c8540c9b95bfe46713ab",
         "709c9aa8e4c2075a1f6390aa0c48519e",
         "d7cbf6475fbee94064832dcd19eba9e0",
         "e767b900f789bfba12eac6242fde9dc6",
-        "dea3f1967dc4f30745ab09da4b3b616d",
         "d51f1a536d1189b4b6d67bc7df69db16",
-        "8b5b121f72e3ebfebf9516c0b3d16fea"
+        "8b5b121f72e3ebfebf9516c0b3d16fea",
+        "e6ea8d104f5ad496a1cbb18e7d9548eb",
+        "dea3f1967dc4f30745ab09da4b3b616d"
       ]
     },
     {
@@ -860,19 +860,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 0.56,
+      "latency_ms": 0.606,
       "returned": 10,
       "top_chunk_ids": [
         "6eb14a8c9b4664bf0303f3d32faac559",
         "720e51822afc06cafb98fcf68283f047",
-        "ce2e81354b5d444deef57c85ed0c5969",
-        "57941ae38699f741834229f411b7c846",
-        "21c3f2cd2b80e1ef6b9785c9c4df0393",
+        "19343969536f89b2866bcc3f2ec096a0",
         "5e2a18391ffe883856c14d70b813c061",
+        "b9a3f37b1237bd4427e9539b507277da",
         "3b7c2f45efad73ab08fe3b833bfe0a91",
         "16decbda185c8d6af85bca01e68f8f2d",
-        "e5d2c93900b1560d44987206c35df29d",
-        "f0acbb9431eb1ba5449a84aab4ec959c"
+        "d66d9a2313c8d5842d5a2d3a90444023",
+        "1a8f48cb90803e9834063b6edf1a4742",
+        "0a4ca028b077e8eec31f3b5fe7b00852"
       ]
     },
     {
@@ -882,19 +882,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 3.986,
+      "latency_ms": 5.131,
       "returned": 10,
       "top_chunk_ids": [
-        "78bb6be98bc6be0510cd70ba8c5c1c38",
-        "8e8e6e4ba331411234f5f1e7924b757a",
-        "e05bcee24b16737e19e9eec1232ccc78",
+        "a9c6f2eceb4263c3546c24b6b848bc06",
         "91873fe80de8cc23391506f873afed2d",
         "8e2e6c67e7fa87103b42c00ce4f067f7",
         "4d97c4ea21734c4fb9b448489bc917b9",
         "122c2f79b3fb7087d3eee75a16529ef7",
+        "149a23624ee0ae79a82eb6a03bc25a44",
         "71dd42a5caa96d6ae917cc4ab0865b14",
         "19c12b11c5c5841b1da2789d32cae014",
-        "b408fa85c3c63b2f5b038cb09ceb0a4c"
+        "b408fa85c3c63b2f5b038cb09ceb0a4c",
+        "353a34589d3d8fe408b6dc4e29319d64"
       ]
     },
     {
@@ -904,19 +904,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 0.519,
+      "latency_ms": 0.597,
       "returned": 10,
       "top_chunk_ids": [
-        "1234435bdf286c637913d02ad1602e21",
+        "70c1f1888433f66b23c2c11fdb37c71a",
+        "221638312cb3602cc2edddb678972ba5",
+        "ecd85fc080c4ba63be7de7f71dd52711",
         "6c6f5435e223cb75759d08c6f734d69a",
         "7726e400c6bb278c0079a45d2d56b7d5",
         "496b44bbd8eb4e627f306cd556f599da",
         "396fa97b4490c08fa3f5f6e3bb243804",
-        "63ba1cbe9d0e403c3c105208afeaa4c7",
         "ed3b888505ca910c09b6e6edd89e8f27",
         "539d2b929c2d67b3ccce764b6b58148b",
-        "afeb4fd298f75c927dfbfbe74cac1f0d",
-        "35697a1dc29d76b33d991f5133b62f4b"
+        "afeb4fd298f75c927dfbfbe74cac1f0d"
       ]
     },
     {
@@ -926,7 +926,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 6.062,
+      "latency_ms": 4.753,
       "returned": 10,
       "top_chunk_ids": [
         "ab8066e6a86a042994c150a33f2650d3",
@@ -935,9 +935,9 @@
         "bac07bbb0e88b5fab07aecb995ff29ce",
         "e7a753f625499a95174ffdd6c25bd007",
         "08136729e0ffd5818051f07a81d2562b",
-        "8fc02d3bc491eeffcde5c59f25faf8af",
         "08d39db51932d418e4d8ffa77f656cc9",
         "592511cdd5e0b479973e42c257847755",
+        "8fc02d3bc491eeffcde5c59f25faf8af",
         "fa4cdec327437690f4bf482862bf20ac"
       ]
     },
@@ -948,7 +948,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 2,
-      "latency_ms": 4.351,
+      "latency_ms": 4.283,
       "returned": 10,
       "top_chunk_ids": [
         "ace59fad71352df5a55b1a8d506f4c37",
@@ -958,9 +958,9 @@
         "375915f8fbdf3324d5701c24a7b738ec",
         "ce0715814f7573e3afb5180b52bc782b",
         "745bb0b2b3981b03bbce21839329b00d",
-        "36fcb23761cdc3fc6004494b83ae8bdc",
         "dfccac53687000dace16880d9034b27c",
-        "ee3a89eb2b6dabc30e0ffd859d93bfdd"
+        "36fcb23761cdc3fc6004494b83ae8bdc",
+        "e9f5e0a18b886873939b546f34b94c0e"
       ]
     },
     {
@@ -970,19 +970,19 @@
       "answer_authority": "guidance",
       "passed": false,
       "rank": null,
-      "latency_ms": 5.28,
+      "latency_ms": 6.654,
       "returned": 10,
       "top_chunk_ids": [
-        "b25738fe6692e2950d0a54ad5ec57a1f",
-        "4751c8d99d23aea77db9abc6cda21827",
-        "38904138f131ade8c72a79aa96098196",
-        "29bc9c5019818d95d39cbbf2703d899a",
+        "ed771a9ce630f310ca293134f8e681e5",
+        "c873918ef30026c260947e5bb70a938a",
+        "5b5e07569e28a9aaed38476db3b3f15e",
+        "874d41ec03af0eaf8559c4b387f8cacc",
+        "009eaf1f0af1fad8ad6ef4e4f541b1fd",
+        "202e8220f07b183c13dc501bf323aef7",
         "7f9d84c2428ff3126492910500ce68b7",
-        "997b2c4bd573be30da005585a2076816",
-        "6f972ae6cda7b1870b936d6f274a45fd",
-        "a5ba5b65a4e2e55eb497feed9d0b521b",
-        "a70072df898a9e6cb5eeaeeaf2433eca",
-        "84efadafefd570f95267b02706519059"
+        "0dc8a4c84a944bd13aa440d9447f76d5",
+        "b742c44d8e0616926818ec663e1e0341",
+        "997b2c4bd573be30da005585a2076816"
       ]
     },
     {
@@ -992,19 +992,19 @@
       "answer_authority": "guidance",
       "passed": false,
       "rank": null,
-      "latency_ms": 6.15,
+      "latency_ms": 6.953,
       "returned": 10,
       "top_chunk_ids": [
-        "7337ebfdd55ffbf08b1efdfd1eafff3f",
-        "0d9758dae33a9fbb140f5aead0e940a9",
+        "c026a4ccdce352106d3102521d190b2d",
         "c2a642285979b8f6025f0b663b1814c1",
-        "19a381ed180d281ba9ecdf29f6a2f6ca",
+        "0d9758dae33a9fbb140f5aead0e940a9",
+        "e1f15a8b11ededad90c261045955e6ba",
+        "1fcb00f1110fdaa0dae87a1677785800",
+        "d591478a2fc6746b3cf5b4968a5b6e9c",
         "6143ecf3cf532037043dce4cb744ce91",
         "8670d2ceb6b229129edb970f60f96ffa",
-        "e05bcee24b16737e19e9eec1232ccc78",
-        "4d97df1298b033c7f1e3a6e4e6bdb85c",
-        "8d93e2f34a53ee2c2fc0338100e61898",
-        "46410afb1787d070d3d242a5213b1da0"
+        "39983fef90db8baf884332df6560f161",
+        "f55e18491d2bbb60d665ac34b8b7dc02"
       ]
     },
     {
@@ -1014,19 +1014,19 @@
       "answer_authority": "guidance",
       "passed": false,
       "rank": null,
-      "latency_ms": 6.106,
+      "latency_ms": 7.103,
       "returned": 10,
       "top_chunk_ids": [
-        "2da8a7f71efe38770944f13ae143beef",
-        "8d93e2f34a53ee2c2fc0338100e61898",
+        "8c378ccc77362235d18e37849bc53f84",
+        "a6ce332df6911a81dc7a12e02579c575",
+        "e3822486c25cc847f85fcbf06ec7085f",
         "b8ff0b78059ab3bfcccafce02a1c7bd0",
+        "1a6a8ba1fdcca49231fcdac6007ea8f9",
+        "6f929737b4bc46e2c9ea35c52c46caf5",
         "79bc58295769b5ed425a8a77bfc1edea",
-        "de7d46554ff13d7a061acca54899cd6a",
-        "c4e6953be0f57b2d9cc80f0caab008ee",
         "b4a00dd13a542e4ccc9616c162d35bd8",
         "3ea62df35eb74b38b92ef7f98419d3e6",
-        "1985b8582d8bc661826d76d131b62ae4",
-        "54b6c6c3709783ba3bb7e289f101fcc0"
+        "df856224be17a358fa9d524e0d5a301d"
       ]
     },
     {
@@ -1036,7 +1036,7 @@
       "answer_authority": "guidance",
       "passed": false,
       "rank": null,
-      "latency_ms": 5.721,
+      "latency_ms": 7.798,
       "returned": 10,
       "top_chunk_ids": [
         "79f366b1f8a0363984d9fab280968c57",
@@ -1058,19 +1058,19 @@
       "answer_authority": "guidance",
       "passed": false,
       "rank": null,
-      "latency_ms": 6.047,
+      "latency_ms": 7.012,
       "returned": 10,
       "top_chunk_ids": [
-        "13b5d6e38aaf4e08aebb0fbe400ace88",
+        "a2b2c2880b6add11a8e799b8de207084",
+        "6f922bae645d5af0af0341d4cf901a57",
         "62c7ea10e02b81471a429da5adb44061",
-        "9e2dcbbd2456c994f559d6a373828cb9",
-        "a32771a97865ad78848b9d90aa45b846",
-        "01c0a50349a7061080c0306f9b91c0df",
-        "a382cc8c34b9997c8eb8a7d6bcd858a7",
+        "3142470cacdb1ae7b4430411a2873590",
+        "87acf58d0eee082615edfa7c47d8d247",
         "007e6a4c84532573247737eb3afdb9c7",
-        "3c0dd076c42585c08f2268b279705af9",
-        "00352541e0b7a82fbdd1188e663671cf",
-        "29bc9c5019818d95d39cbbf2703d899a"
+        "1807fc72160a16aadcfb230ac7274ae2",
+        "7403e6f47d0287fff951a01f3d7ddc7a",
+        "a382cc8c34b9997c8eb8a7d6bcd858a7",
+        "7161e8722b5a11eca0975b346d501db0"
       ]
     },
     {
@@ -1080,19 +1080,19 @@
       "answer_authority": "guidance",
       "passed": false,
       "rank": null,
-      "latency_ms": 1.502,
+      "latency_ms": 1.728,
       "returned": 10,
       "top_chunk_ids": [
-        "b25738fe6692e2950d0a54ad5ec57a1f",
+        "ed771a9ce630f310ca293134f8e681e5",
+        "c873918ef30026c260947e5bb70a938a",
+        "b3e73dadacda38a111ac0fcfdc071903",
+        "b27090115619c01c8b0b39c45d7a5f1f",
         "94b74b7a5cb41dfa847d49fbb6b39483",
+        "345e35a0e55af1d4857af801959f2bc0",
         "aa870a4dc5ed31df36815257b97fd7cd",
-        "5d232d919118b1fcdc0ef4ea0bfcad28",
-        "4751c8d99d23aea77db9abc6cda21827",
-        "38904138f131ade8c72a79aa96098196",
-        "fef28f8160f2a59c50997fc982e134d4",
-        "eae6ceadebc287c2a6836ebf76b22486",
-        "25a82550c7aa2234bea485341c8ef4e2",
-        "29bc9c5019818d95d39cbbf2703d899a"
+        "4e4d7e88b158075004d80cca43bc5022",
+        "5b5e07569e28a9aaed38476db3b3f15e",
+        "5d232d919118b1fcdc0ef4ea0bfcad28"
       ]
     },
     {
@@ -1102,19 +1102,19 @@
       "answer_authority": "guidance",
       "passed": false,
       "rank": null,
-      "latency_ms": 6.276,
+      "latency_ms": 7.162,
       "returned": 10,
       "top_chunk_ids": [
+        "71d93040c9ef928a0d83486d64797a73",
         "0734dbaf07416e4994b504bd230d4169",
         "8e8dd5b01373821025b8646013aa4d9a",
         "df64ddd6694f0267eba135bf959dcb4d",
-        "528caaf9d38829f41457d7472351b04b",
         "0e28806e1c1cb5ba207448bed2cebbf3",
+        "67e2e2c495775b551ab1fd224557b973",
+        "f4fdd425cf479d35bad800ee750c810a",
         "1530c2abfcc5e149fb7e7ec8eaa31653",
-        "05fec8e16ca0705fe0843f8bce307001",
-        "01173479a9047d7ded27c9210e245bba",
-        "f679bbffac6c608a65087622ebde874b",
-        "4ab058806afd8730e7c249f999197f70"
+        "bcd5cee5771c31e47d2000af1a0a1b17",
+        "f5e5b3d0c35afc3b17ede248c9b828e3"
       ]
     },
     {
@@ -1124,19 +1124,19 @@
       "answer_authority": "guidance",
       "passed": false,
       "rank": null,
-      "latency_ms": 1.783,
+      "latency_ms": 1.696,
       "returned": 10,
       "top_chunk_ids": [
         "e95fe65db179695e7c2316d2ebeddc48",
         "b95541cf1e65e5e28b16dddea52b9ee8",
-        "c0f1022858e9e123ecc8fc4538ebe48a",
+        "cad3ba5920d0dc04dc76ddf50b8371ae",
         "39fb9f9f25f65471ab04c4bd57e1ecf2",
+        "6163ce31cb09940460498f9997a2be09",
+        "c0d5cf9ac485e7ae814c574a805fa9b3",
         "99195851d73bc0bf3b2fd004485efbc1",
-        "1899ca744d777def2064ec9667d30d98",
-        "03c92009a6c0079a91962c56957d34b3",
-        "47afd2ddd63832a70d88143e0ae8d61a",
-        "b30d08441c9f7ee290e8361b724df085",
-        "2d1bb86b11dd6fbf8952bfc3ccf156ff"
+        "ef070a44eaa2760a6bfee7d9349def53",
+        "bb5ef4bd5afc618a58e9d51a01010287",
+        "e4352a201f28c57baa7f0c200aa1da89"
       ]
     },
     {
@@ -1146,19 +1146,19 @@
       "answer_authority": "guidance",
       "passed": false,
       "rank": null,
-      "latency_ms": 5.678,
+      "latency_ms": 8.114,
       "returned": 10,
       "top_chunk_ids": [
-        "a8bf792fe9e84216998582531a5d7f9a",
+        "36ec0b5eecd5b9065ed7b5eec4635aeb",
+        "70e55d037ddb95bcb7269fc7d505f85d",
         "08466e8c17302e4cbd0e306ed7111fec",
+        "841f4e95405818c3b61786a7ca8e6158",
         "27320f055becd3deef698d938a4a156e",
         "550908fc34e560c75d2cb4c4b44ebb99",
         "b7b0ad384ed73ea9de7ddb7315efdac4",
-        "74ed8de7e9fc8d61fcded347d85515a6",
         "6ca1c23ac73f7f04805eba92da44cb13",
         "ee63f7b5912a8cb0a3dbdf3d14f7e6b3",
-        "975d99eab2db9524c416b1492c9cbb51",
-        "ab669c35859035898cce2e4cfc0cac73"
+        "975d99eab2db9524c416b1492c9cbb51"
       ]
     },
     {
@@ -1168,19 +1168,19 @@
       "answer_authority": "guidance",
       "passed": false,
       "rank": null,
-      "latency_ms": 6.824,
+      "latency_ms": 8.823,
       "returned": 10,
       "top_chunk_ids": [
         "7b3c2320e3d76c8a5e9c6a022124d9c8",
         "ebb13a3cce8ea415f17181963f30787d",
+        "42a3cd775ad7fcc7f3b04929a6b6b576",
         "8cfb5bed9030dfdb48d810c9ebe0cef7",
         "c3fa17b32d511ab7ece4a5650a471f47",
         "8352ff7b01be6db10a985a6158ae20a7",
         "c70f096e2b29e6f89c2df8fb929b7312",
-        "6c1679c4d079fd719dd35fbeb83f57fb",
-        "9d0d6172c1225ebcff8a61de2e5a0187",
-        "e5d08a328de61ec3272d767631411cbe",
-        "45bf8c121c607b2f2a4a8ce807c06045"
+        "c107571aea325c13113897a3cae8f627",
+        "1d8bef031abf053e9838a4a3daff6a1f",
+        "6c1679c4d079fd719dd35fbeb83f57fb"
       ]
     },
     {
@@ -1189,20 +1189,20 @@
       "query": "coarray event post event wait",
       "answer_authority": "guidance",
       "passed": true,
-      "rank": 1,
-      "latency_ms": 4.744,
+      "rank": 4,
+      "latency_ms": 4.375,
       "returned": 10,
       "top_chunk_ids": [
-        "c5ded123ca11011ba4cbd672e2f1cf66",
         "539bb1e895130c76f827811245b19a8a",
+        "77cb2b8928d3d62c27e8abc307567afd",
         "f482f5c2c1c5b4b6238e423ff5a0a2ae",
-        "29c0951f2ef0debdf65b9b494859f98e",
-        "1370459cf8fd44194d6121c4b793cbbf",
+        "4f9059917c6bb8c0356ab12245e7f6ab",
+        "9941e9b41b99d4c26f8e381ccd89d947",
+        "c2c74b92dcc301dfb0523d99f7e3b04c",
+        "1fb43043f31714fcc9d956723d3587c1",
+        "49b8924326ad4914b4e5602ae32174c0",
         "979129c28564293a67910f43e7fd61bc",
-        "963b11be17f64ba269ca904f2fa3e150",
-        "4e018ed328381b8bc7fac80c3842763f",
-        "d44bc941b91d34003f760b7525cbbd28",
-        "917bf7a3f4b3af83cb5b4938849c2217"
+        "1d47e6f747ea3c48259e01ab94d48cf2"
       ]
     },
     {
@@ -1212,12 +1212,12 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 4.228,
+      "latency_ms": 3.644,
       "returned": 3,
       "top_chunk_ids": [
-        "c1a7b64af677106cccf05bab562094f8",
-        "5c0819b4f24f6e42b64e1f2c4ce0e929",
-        "4ed41e1c704c2491b022a81b2dc60410"
+        "da5d33c850643b7ab855ca8f76b6b4ed",
+        "208c02965394509dd3c666e47d43a2ec",
+        "51dd3db32e477488ef23683b18543233"
       ]
     },
     {
@@ -1226,20 +1226,20 @@
       "query": "How can gfortran compile legacy DEC STRUCTURE and RECORD declarations?",
       "answer_authority": "guidance",
       "passed": true,
-      "rank": 2,
-      "latency_ms": 8.203,
+      "rank": 1,
+      "latency_ms": 11.43,
       "returned": 10,
       "top_chunk_ids": [
-        "c1a7b64af677106cccf05bab562094f8",
-        "b83e9fac76a8855139aea498acc5e8b8",
-        "b9cd2e6fed285fe5c846d074e5221989",
+        "328f44411488854f9540db480461be48",
+        "549b11e8221f251bff9bd41aa75cbd75",
+        "39b0079b5a15860ec33df8c439913adc",
         "6edf65a2e9805a30174b735164ff2af0",
+        "ae0c8a7832a4e9fc3bc8f123c80d1bd1",
+        "b3ff34374b4e73fca694a49c0d540b94",
+        "8fb28acbf923d4496e4e1a876290108e",
         "395efba83494bbb7402d41d97a863f8c",
-        "1f67d67bcf1f5996743f998a83b6834c",
-        "38828becb114191425fd9f53cb85c0d5",
-        "41b7b5642ddcf8ff3089c97565352724",
-        "6baea58ca0fcd50bc80f51619578ef1f",
-        "ee666d97c889070a95abf15f341c685a"
+        "96c98ecf1c8fe9b5016942fe5779b17d",
+        "8314ab491e72e7b246b362acb6a9a986"
       ]
     },
     {
@@ -1249,19 +1249,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 8.704,
+      "latency_ms": 15.849,
       "returned": 10,
       "top_chunk_ids": [
-        "b4007c5710c100ddc021bf14decd86f5",
+        "7198f1a7e18ede72b52dd94e3797b00c",
+        "94cbad99292a3a1ca25546e690b19a80",
+        "61982bfaeb06e00d686b9d3d6ee946cd",
         "d45d21d33a94cfef2692b87b15486cf6",
-        "36f41003e8ed208de98469d2af6380b4",
+        "0ae5ba98c28a7f4c039587ebfba9df6b",
         "8959c1cdc10a01e392d698a34e174e96",
         "2afacf14fdee8ff79c2ba599ee28230c",
         "1709a3e891ab05e1ac7ddbe0c33d10f9",
         "88230ff3c4b4a68fb599355d818a4d93",
-        "ef4182b8ad3de719c9e72006761ca142",
-        "4be89f4894c5f9eb084cf98ffd63e49d",
-        "d27d3ecd0bf41fd95399738cc4ac6f63"
+        "7c681d9550bc79909bc4599754ad3b70"
       ]
     },
     {
@@ -1271,15 +1271,17 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 0.526,
-      "returned": 6,
+      "latency_ms": 8.455,
+      "returned": 8,
       "top_chunk_ids": [
-        "ed4607e0faab8e96aac8a47888e163f6",
-        "6213f40b995f81ad757da4b75db6bbc2",
+        "b73d5c050ccd5b471f1ed65ea9c98b97",
+        "266459c894d6811251a112422864335e",
+        "9bda911157e88449d8da3ff3cb8606ae",
         "7b189748735303961b24db9119aeac16",
-        "23be751d40adb8fe0cd070fb4f95b474",
-        "6baea58ca0fcd50bc80f51619578ef1f",
-        "4d9b3484ce31ce8fedabbc0b0b30dd94"
+        "e9bdceaa353bf376b5b2b4941d8e132f",
+        "cb8ede26709d03bed0bdce0fe0261e89",
+        "ebda1a8d323c837503c28d1ada40599b",
+        "2ef197c6a946b08c6d1a1013b852bf03"
       ]
     },
     {
@@ -1289,19 +1291,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 4.158,
+      "latency_ms": 9.761,
       "returned": 10,
       "top_chunk_ids": [
-        "6baea58ca0fcd50bc80f51619578ef1f",
+        "2ef197c6a946b08c6d1a1013b852bf03",
         "6edf65a2e9805a30174b735164ff2af0",
-        "23be751d40adb8fe0cd070fb4f95b474",
+        "4eae5e65e6781ea022359db217388a01",
+        "ebda1a8d323c837503c28d1ada40599b",
+        "96c98ecf1c8fe9b5016942fe5779b17d",
         "20d4f1c4f06684bda600b601cdd189d7",
-        "47bbb2352dc5e8b421bcdda89cb01ae9",
         "f8aa90a830cf3429985ee79223432ca1",
-        "6213f40b995f81ad757da4b75db6bbc2",
-        "1f67d67bcf1f5996743f998a83b6834c",
-        "0b4e067b872b7c9b3aba15a4cb9b934e",
-        "41b7b5642ddcf8ff3089c97565352724"
+        "fe61adaa4895cbfeb50ac5e06bbdec85",
+        "47bbb2352dc5e8b421bcdda89cb01ae9",
+        "b67493ae4c782017b617af152202a37b"
       ]
     },
     {
@@ -1309,21 +1311,21 @@
       "category": "paraphrase",
       "query": "Where does CMake write generated Fortran module files?",
       "answer_authority": "guidance",
-      "passed": true,
-      "rank": 8,
-      "latency_ms": 8.348,
+      "passed": false,
+      "rank": null,
+      "latency_ms": 19.231,
       "returned": 10,
       "top_chunk_ids": [
-        "3f67aafe3147e06a9276429baee63949",
+        "ee57ba8ed79335e1f215c885015ee0fc",
         "a5ba5b65a4e2e55eb497feed9d0b521b",
         "d09abd9a4b6d40dd8d4a93895d74d7df",
         "bd95b099eb9f2aaf8317c961c5fe9538",
-        "a6e037fe37eafb122116a7c57a841f76",
+        "11591a8df656c67dcf1f38e47f42bcf5",
         "4f22110fb2cb851732e7c3863a0df9f3",
-        "72786226f67691512312ea76b3f9834e",
-        "c758e7b5f6ab271110679c21bfe2d845",
-        "01f13506719e4125f1873e3e68cad932",
-        "24e4be7dd492e45d6bb6a68cd59954af"
+        "7759407facf936ab469ca22ae7c467bc",
+        "2346bfda7abeb5e432fb91ca680c3885",
+        "fc09bf5c12267eccd6a21344ee4d6a12",
+        "22ec5c3d2fdc65ff819ff4a6e7c0bb49"
       ]
     },
     {
@@ -1333,7 +1335,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 1.213,
+      "latency_ms": 0.53,
       "returned": 1,
       "top_chunk_ids": [
         "efe96c24aeeb0467191e293d428cf60d"
@@ -1346,19 +1348,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 9.089,
+      "latency_ms": 13.255,
       "returned": 10,
       "top_chunk_ids": [
         "0d075fe7852bea46dfdfc0b2db1c77d2",
-        "a6e037fe37eafb122116a7c57a841f76",
-        "f679bbffac6c608a65087622ebde874b",
-        "1ab4a8c1ec2cfbdaf061e32bf636b015",
-        "ec6afd6a9c3c801807bf065d85a6e06f",
-        "d9674cddf547b02324a025216bc5ffee",
+        "2346bfda7abeb5e432fb91ca680c3885",
+        "11591a8df656c67dcf1f38e47f42bcf5",
+        "aba1ea1113d008fd830494dc678f6e73",
+        "b742c44d8e0616926818ec663e1e0341",
         "ddc6a09cea2361aac92d8e436cb2749c",
-        "efe96c24aeeb0467191e293d428cf60d",
+        "67e2e2c495775b551ab1fd224557b973",
         "e8a16543143e20ec7827dd23f2936dee",
-        "c2ae85528ed0aca56b399f670f3ab6da"
+        "c2ae85528ed0aca56b399f670f3ab6da",
+        "d9674cddf547b02324a025216bc5ffee"
       ]
     },
     {
@@ -1368,19 +1370,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 1.24,
+      "latency_ms": 1.303,
       "returned": 10,
       "top_chunk_ids": [
-        "5f0079b51c43a0db473bce2456f95163",
-        "765e06358edae85c8a650860d5354013",
-        "083e653f19180373df39437a07059f75",
+        "d845e77c399c6373794b621c03dc40e0",
+        "93cd680b06de33dda540e5ed9ecc8ab7",
+        "474ce01f94a6da787c2d76e346ca208c",
         "5528717ebe43fe1249b42ba87733815c",
         "ae93c650d6417fa88b72f7093cc0375e",
+        "39983fef90db8baf884332df6560f161",
         "2711a22a23c5ba8e2bfecd8eeb6f6444",
+        "8bc2228b270da6f4727602af36dfc349",
         "9d95118fa5d9afdd860376a893e82b09",
-        "a13bea661b2aa434cb8ac1da9a68c531",
-        "90341d5a51fd78e2e4ef12fa7a4285b2",
-        "9e753c137bcbdb925107a01c7125894f"
+        "ebbf97ef6313ed2a1d3d6fcaafc99b1e"
       ]
     },
     {
@@ -1390,19 +1392,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 2,
-      "latency_ms": 8.143,
+      "latency_ms": 9.699,
       "returned": 10,
       "top_chunk_ids": [
-        "c0af8638da9f5f7c427edb973e46516b",
+        "0a9be85e495824cd68687fbdcd7b0584",
         "2592c331b1314dd905893d7dbb432992",
         "23f6139b48245998f1f7282eb69c688b",
         "997b2c4bd573be30da005585a2076816",
+        "bcd5cee5771c31e47d2000af1a0a1b17",
         "b95541cf1e65e5e28b16dddea52b9ee8",
-        "0b9cca69885a2ba87e0da4708130df8f",
-        "9db77729de5a2d04c8b0ec28e344376e",
+        "e153df6703c5fd518fc03fb216134558",
         "4b270ddf77d731c15b1c8e82cf636419",
         "6f972ae6cda7b1870b936d6f274a45fd",
-        "f679bbffac6c608a65087622ebde874b"
+        "67e2e2c495775b551ab1fd224557b973"
       ]
     },
     {
@@ -1412,19 +1414,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 2.298,
+      "latency_ms": 0.779,
       "returned": 10,
       "top_chunk_ids": [
-        "1899ca744d777def2064ec9667d30d98",
-        "b610888c74ee41e32e751c538a8118db",
+        "bb5ef4bd5afc618a58e9d51a01010287",
+        "64f7bce0f0b724f4649c362ecc501ef7",
+        "e51bf51511ee7e8eb1056f6326edf71f",
+        "59819c5c723d61f173ef0a71b850bf63",
+        "fa9935fc17f3eb241a50e5c3975c8476",
+        "3b28bf208a005342b5aece86599f5414",
+        "55f95e0d38f151696ce96c4578428551",
+        "89128ffd3fca28bf97bc8bfaf1a50ee3",
         "fca34506ce87be08ca0d5ff1c3ec3c92",
-        "73ea703545492468603b0ea7d8d5ed41",
-        "ee8e397a4561501b20c9db19ceb4aef8",
-        "4a0c8033fcb957264fe27b5d0bea962a",
-        "0eb7060e535026c356a29fac2a8630da",
-        "ce9d7e53812049ec628a5eb665b0ce68",
-        "c643ea250ad5a51b74675220b3523c03",
-        "054e0942789f4087a1e3a914707def54"
+        "abbafb2c43ab2d54c1792cbdb95461de"
       ]
     },
     {
@@ -1434,19 +1436,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 2,
-      "latency_ms": 8.401,
+      "latency_ms": 17.489,
       "returned": 10,
       "top_chunk_ids": [
-        "36f41003e8ed208de98469d2af6380b4",
+        "61982bfaeb06e00d686b9d3d6ee946cd",
         "1709a3e891ab05e1ac7ddbe0c33d10f9",
+        "94cbad99292a3a1ca25546e690b19a80",
         "d45d21d33a94cfef2692b87b15486cf6",
+        "0ae5ba98c28a7f4c039587ebfba9df6b",
         "88230ff3c4b4a68fb599355d818a4d93",
-        "b4007c5710c100ddc021bf14decd86f5",
+        "7c681d9550bc79909bc4599754ad3b70",
         "8959c1cdc10a01e392d698a34e174e96",
-        "0a5b89f229194d3f980aad2351c7da3d",
         "2afacf14fdee8ff79c2ba599ee28230c",
-        "3176adc1f582551c2aefa1b25fe63749",
-        "7c4c11deebe99363ea18718aeddc5a16"
+        "0a5b89f229194d3f980aad2351c7da3d"
       ]
     },
     {
@@ -1456,19 +1458,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 2.357,
+      "latency_ms": 4.463,
       "returned": 10,
       "top_chunk_ids": [
         "99d3b73c53d59deb9dd9783e3820fc91",
-        "7a0889236c7b59bb2607316a5caed3ee",
+        "8889bfcc0582ac736b6f56abdb74de95",
+        "ba694bc9cc1f411dcb3ef593edcd1c63",
+        "6e07ffc81f4386203e7b80dda7de5933",
+        "fbfc14f236a28c73266d99df95af7572",
         "d6d6fe25e29e6c1934a6e6d8d4f0c59d",
         "cb527b284c13a58b5d615a0387dca165",
-        "5f73d38ac5e16f0ebd6a11c5672b5475",
-        "a794078615fc14c07abce161c022b0e3",
-        "c9bf3275b2169155d0b0643c80f3de95",
-        "224026a3ece10e781b2d741f64faf62a",
-        "5864891e1d45e75f9e007b22efb2edc4",
-        "83e3cba0921eee477b3da53a10d1740c"
+        "d88c6765f13946f1e4cf15c80aaee6bc",
+        "de16b574bd291a8f309083e736034190",
+        "a45e27df8738a1e394b2109b68df6fec"
       ]
     },
     {
@@ -1477,20 +1479,20 @@
       "query": "Why should modern Fortran prefer allocatable arrays over pointer arrays?",
       "answer_authority": "guidance",
       "passed": true,
-      "rank": 10,
-      "latency_ms": 6.498,
+      "rank": 6,
+      "latency_ms": 12.547,
       "returned": 10,
       "top_chunk_ids": [
+        "9918d1515ccfb362b4ba78cb8a5b7430",
         "2e4cf589fd085fcabda70d653a0919b4",
         "dcded0d1771876d2ce95921abead0787",
+        "5b6011639f514e468e381a158bc2b877",
+        "8708eef28834e50adc7cf2a446fb6014",
+        "30a09e63b08d16f7d31b2317d40e9fc1",
         "d1f4fd6736602e9e9d7738493e47a54b",
-        "a9ceb5645cb847304fca452e31affa6e",
-        "80bf60a469d6b16e41876df550ae8459",
-        "00a06a589176b1f94b4e563d192c8bc6",
-        "cfd1f9b7e785a8d2c456ad6be6145746",
-        "9afeff2053751c0d8696a4a9b386f3bd",
-        "e00761a12466d699973a192ca4e80433",
-        "4a0c8033fcb957264fe27b5d0bea962a"
+        "e2061ef117ab7f27e31aa1628c335029",
+        "d16a61dff3a70b0288c5e4bfa132dc55",
+        "00a06a589176b1f94b4e563d192c8bc6"
       ]
     },
     {
@@ -1499,20 +1501,20 @@
       "query": "Fortran single inheritance extension type parent type polymorphism",
       "answer_authority": "guidance",
       "passed": true,
-      "rank": 1,
-      "latency_ms": 8.616,
+      "rank": 2,
+      "latency_ms": 13.416,
       "returned": 10,
       "top_chunk_ids": [
-        "e33fee3ce7cac43c6a8e62e30bfbb40a",
+        "e7940abd7a24c1f82b1ac749248f6589",
+        "a41bd43dc4345e040aef25361db2577e",
+        "7ffc866fcd341945e0b9bb7bc71227da",
+        "cf27370d2469a45da35fb99eb89850e1",
         "668e72fef4bab354a9b739b642878a69",
-        "642151ae2362a0fa240d823a2001bff4",
-        "3800a81704e8bc4875e8dd91c3bbb09c",
+        "783d409dc8ad115da8588564a9f251ef",
+        "b6990e5a7382a44ab3c1d23a38ac039b",
         "b085d8500de03611f682c70907034948",
-        "497819e24ace8b03a056b9d1de26765b",
-        "ed47742da84957a62425c8aa94830c44",
-        "cfe478ac3a18e53b39d357c923d56520",
-        "531a334a2a9cdacbbad4c18d71941879",
-        "297ae05359d171cb93be82c7df41fb41"
+        "dbe6a704cba9a61dfa5ab0bce0cbe552",
+        "c42b210e05b50660aa74a5146e277c4b"
       ]
     },
     {
@@ -1521,20 +1523,20 @@
       "query": "How do I declare an assumed-shape array dummy argument?",
       "answer_authority": "guidance",
       "passed": true,
-      "rank": 4,
-      "latency_ms": 5.028,
+      "rank": 3,
+      "latency_ms": 7.924,
       "returned": 10,
       "top_chunk_ids": [
-        "1c6cc8fc13858cdc03d950dc007ec625",
-        "529e8c5a3e1974aa9caf1883261c086e",
+        "869659a39201a0bcca0ad4f2f0342b46",
         "e919c4fa23377fb91d629f357589fd4f",
         "b5eabb30933aa038dc98d58e0366770d",
-        "016c9699bc0293103e4abe91d5b159b2",
+        "2876243b7a8c917b07583856cb9e2749",
         "962d78e5e696167cc3aa147b338be0d4",
+        "e7c938d02cbcab941bc461c5f7717e60",
         "4c0b196f379004a46843e724612c1c61",
-        "86367c6551a491ffa7b59fb23e62a625",
-        "9206b0d9312dc1bfea0a90502a5dd62d",
-        "0a5b89f229194d3f980aad2351c7da3d"
+        "d786b667dd2bbe0a36e4cdc08040fa35",
+        "f3cebcb11b5aef605f75a9d92f32107d",
+        "73e6c548229447826fef095167f79c03"
       ]
     },
     {
@@ -1544,19 +1546,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 4,
-      "latency_ms": 5.602,
+      "latency_ms": 6.207,
       "returned": 10,
       "top_chunk_ids": [
-        "885fd6ce87647d5d55086acaad69e99b",
-        "ee7ced7a56d0c1d80293bd4863d7bbbf",
-        "0c080719da95adcc2bfc3ddec663d5e3",
-        "18b6ab4f6a8705305a6e14c1e19cb620",
-        "3fe4025f100b4ef052afd6af709ad080",
-        "a6e037fe37eafb122116a7c57a841f76",
-        "acd4fd6c0f7372573508e42e6565322a",
-        "9f9b3a00fa5386b3fc0d429ae83ad622",
-        "d0463e49b214de73b0a8d5c13431abc1",
-        "41b278e9fed03e061b1bac44372be96d"
+        "1c62d081642df8161dd23620e77443ef",
+        "9521c8834608d92280e506bec547ee51",
+        "622579c6e0b37a551e861377e4316010",
+        "5744d78fef596eee06593f66a45cc399",
+        "52a5b9050a46ffea721e022c7383298b",
+        "3da055bd3bfd1706fa2c9a204034a32f",
+        "112e004547b36992e0f922dd57d3d0b7",
+        "11591a8df656c67dcf1f38e47f42bcf5",
+        "18b73cc156fede5e59e3f6d1ecf8f79f",
+        "e5f085c005889a7ee7ef8267eef3d77c"
       ]
     },
     {
@@ -1566,19 +1568,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 13.122,
+      "latency_ms": 10.5,
       "returned": 10,
       "top_chunk_ids": [
-        "0adaf3a015fa79a2236621410753e9fb",
+        "4af557ff19367a14395ad7f2b83b4b46",
         "c04a3baae3d389452ad8cb89da3b6c17",
-        "ea9a37a16af7baa50dfd2db1dd94e762",
-        "cd6bd8c464a8e612697cabebd1eeb98f",
+        "84e6b01e763f8f3250fc74ecaf7a57c4",
+        "0bcc1d3ad0d8d42a87a6f3ded86260a5",
+        "b99dcd409d84910668180871ad710490",
         "0c40bf4500e9b561a7798ea6972793d3",
         "45711d27195f4d2875c12d377f72cb5d",
-        "de31d92c617f8138d4fef95088576aec",
-        "7d6473cb1d49a426c3621a2545c2f917",
+        "b7b9b40a12678f4487cf6c25dee0b89e",
         "574266740979636ca09074ea5b450ed0",
-        "d06b5b51086e27647a3f95256d6a32db"
+        "de31d92c617f8138d4fef95088576aec"
       ]
     },
     {
@@ -1588,7 +1590,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 8.61,
+      "latency_ms": 15.915,
       "returned": 10,
       "top_chunk_ids": [
         "3492770e58c26b9aedf04020be6b1553",
@@ -1597,10 +1599,10 @@
         "2784171efb8a426775f23e5d571023e9",
         "fdbb024754cd49d67bef4b85e83563c5",
         "80afcd62df44bafa3a20c1a74198cd83",
-        "833df3a195cb3f1e290a363e7d4d0859",
-        "4090822c6d6efe0354201e0701880cfd",
+        "666962675caef5a33fc24a113ce2b9b1",
+        "5558c9c5eae815d1d18b42645eb5a57d",
         "0bfc49e8da765ec38a0d841683a1ae01",
-        "23192f0f41f483a89af70831ac5b3d5b"
+        "4090822c6d6efe0354201e0701880cfd"
       ]
     },
     {
@@ -1610,19 +1612,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 3.811,
+      "latency_ms": 4.057,
       "returned": 10,
       "top_chunk_ids": [
-        "7c4c11deebe99363ea18718aeddc5a16",
-        "c0d004ac4fa77560d13bd6a17a6e643d",
-        "633e4a5d9d4baa37bc64e6831ca094a8",
-        "8f922a1aba9b4b9899a23144e58f9998",
-        "bdfd1c6c53be1691c4f02afda765dadd",
-        "22b582101811e69f441a44494faf7e16",
-        "02eae70e55df0e2c4b1b790711cee924",
-        "077e5806be7f3e01d29250495fa59103",
-        "e972038a5739e277458f246577e7de95",
-        "2a01f7f829aaacdb9dce9fd4b7de61b6"
+        "c3e050de41369ae08de7a504bf8105da",
+        "d196292c9df0ebfe3636f06bb1c45fcf",
+        "d45f8c0a7bf8ea1bca0a8225b7dc62e1",
+        "640393f9ae498aabaa684297026b7b34",
+        "f7adb40dd7d5c2f62533f2b227adffa3",
+        "53d3780d35b03e0925b051102626b2c7",
+        "c5e7a5086f06ce16f75865b4833ae4d3",
+        "9b92f6e6ea80fd6f27728c20db9d4b1f",
+        "437e2d459f91b7cb24720395727ebf94",
+        "ba471018a82ba3f049e5508af8ed3ff1"
       ]
     },
     {
@@ -1632,19 +1634,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 7.369,
+      "latency_ms": 9.62,
       "returned": 10,
       "top_chunk_ids": [
-        "900c3aae313437218540d8241c83baf1",
-        "5a3b35e8d0286b871c35ba6d991323e9",
-        "5617078cae53700a1dbf52a01f77b1de",
-        "e51268b847b1acd981b81a02fdd80bd1",
-        "6a61e1ef0aab7217866ab7ed617859cf",
-        "bc67172fb8cd4c66596d5ea8a0d424c3",
-        "4e0bad2c7ab5168664ca679222474cdb",
-        "30386a2ba7bfbe46eb02dfce4282bd71",
-        "f1874a6e217baa8c5d4588c0b2583cfb",
-        "6ec849ec46c6d259b9ed15ed078732ed"
+        "194c7024081e7848dd9eadddc842b2a9",
+        "a6edb39916d2671710e85f1eca85912f",
+        "d4ce5d44baed4edec8d4303c4b3285a1",
+        "f47aa1021f114b682802bee44d2fdda0",
+        "baf751ab1e432d0258140a3a279b7b42",
+        "79011667cc6e7230f0b6af17cb777f12",
+        "92032e4bf163861518e38257027d0640",
+        "f355496ec53a5bb8b5bcf2ec912089a6",
+        "734b482289425b4d7e7c0b0882b8e2f0",
+        "80acf231d1acf0fd36987fb3980fdce8"
       ]
     },
     {
@@ -1653,20 +1655,20 @@
       "query": "How do I map Fortran arrays to and from an OpenMP target device?",
       "answer_authority": "guidance",
       "passed": true,
-      "rank": 9,
-      "latency_ms": 9.546,
+      "rank": 3,
+      "latency_ms": 12.926,
       "returned": 10,
       "top_chunk_ids": [
-        "13b5d6e38aaf4e08aebb0fbe400ace88",
-        "cf481c6bd15e513035b3c34c04c3ffee",
-        "dae36a45b87568e78a100a5d2fbf30dc",
-        "c968eb7d502ea74df7350b4415ba2167",
-        "29bc9c5019818d95d39cbbf2703d899a",
-        "bba532cd3a1bdc8b8657c8a63fe730e7",
-        "abe8110584cecc68508d4357b94077e0",
-        "b9f5619bff9344db18aaf19cc2aafe2e",
-        "df6b09209293bc300d3b7ff68e8b35cf",
-        "cb9400085664f0bdb954316c7eef686c"
+        "17525361b19ce98be33f36aa5c07993c",
+        "7403e6f47d0287fff951a01f3d7ddc7a",
+        "55d026467ccc7c8d03b328c58678fdb6",
+        "6f922bae645d5af0af0341d4cf901a57",
+        "52ef2ca3fec0442842718d7f2ca59aa3",
+        "53ce9b0f85007939dd2114ed703a9424",
+        "10dbec46d52f23c1dcce038260ca092b",
+        "00163ee132e072f697ba007cfdc7bd5f",
+        "11336037e481bde00c3d079d8a5f7903",
+        "002d9cd0c37da5f9bbbfd1474e1a5d22"
       ]
     },
     {
@@ -1676,19 +1678,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 10.571,
+      "latency_ms": 14.288,
       "returned": 10,
       "top_chunk_ids": [
-        "249c080fda993f811cda95299cc739f5",
-        "8b36638a4f1d6d3feb31338de4a6afa5",
-        "947bc9fb186acfb405e9d961a8f42467",
-        "e3d259f1929d74cf9681a8a08bfa73cf",
-        "8bf7dbb3ccd19d56dec01072a020d548",
-        "90b0aacfdc1bbdcf0b2830566e6f0f7c",
-        "964223ba92b883385a0a3729a95a9600",
-        "af82644a9238ca4efaf381a77e2e4f9b",
-        "f96c7f1f9e22631e6c9de959d81b6847",
-        "57c9b281a8d10a39bbf95c314bb054e0"
+        "07352acdcee6987a1c3dc5dd081ac682",
+        "4d5e19c634d523ce8f33142fd107c58e",
+        "09ae337719f1ccbd4dafcfd1c6e9c5ea",
+        "a0c2a3a120ceba79a6f0f345c479db90",
+        "7b28b6f6514e898577985d941f2ceb83",
+        "9f56886ea29bc9fe53f8d311d1f341d6",
+        "826d62ffa8536156a2e43688bb3251d8",
+        "caf602038dd8eff05f585d853ac90706",
+        "d771ca9ac99752cd5f94ececa65adcaf",
+        "dd7b6bb2fd7e3c54a45f8faeeef41459"
       ]
     },
     {
@@ -1698,19 +1700,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 8.844,
+      "latency_ms": 11.593,
       "returned": 10,
       "top_chunk_ids": [
-        "0af7456d4187ff6812adde78ac81103f",
         "91848c9b65fab1b3da01049ce1d64b03",
-        "8ad94469a9a679d4d70b5f3ebc27e388",
-        "5f73d38ac5e16f0ebd6a11c5672b5475",
-        "76a05b90d5cfc44601aea7b35187310c",
-        "1419312d1d71d2d7f7a8b00be013a7da",
-        "3887528e20b0fd7f61534915f1ccc62a",
-        "4e835c4be8027e4df46bae6a1a3c28ee",
-        "9e87665752a6eca4854fed3cc6747d1c",
-        "b9dcc92079f517881be923509449e9d3"
+        "e54a00592cd9f1939fcd087233351015",
+        "2c992f3b908641d754716f85f5bc33be",
+        "e15c3943fef3602aebcee6cf4922df64",
+        "b5e8c952a5ad40c16aa5f2c4a1044b9a",
+        "2e9a98346dfd8f7345fcacca05902d64",
+        "911e8eef73f212ae0fe0c4c3eb906608",
+        "56043152278c7cee03142486f2ef7bfe",
+        "c8660f002ff54db6a694a444a13edc46",
+        "d34896654e750f52f93103333707638e"
       ]
     },
     {
@@ -1720,19 +1722,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 7.459,
+      "latency_ms": 10.566,
       "returned": 10,
       "top_chunk_ids": [
-        "def7c15a8d28022a1d0c3a15a17862e0",
+        "b1b9f6341f48b7fea8d9af8292e94915",
+        "1807fc72160a16aadcfb230ac7274ae2",
+        "474ce01f94a6da787c2d76e346ca208c",
         "42be5dc17559fca6e78bd709c7c55044",
+        "29e65d85336a963ddcf70fa84f71ff17",
         "62c7ea10e02b81471a429da5adb44061",
-        "765e06358edae85c8a650860d5354013",
-        "a12aa3b688e2f486f43da2760e5cf12d",
-        "80a2989451090e5e36ca3feefee4c0de",
-        "177412b8cea9d128338a0906f9ea6106",
-        "d7278898dbf8efdbedc7a31775fc5f75",
-        "6feb03c2aeac89370e803629cda686ff",
-        "9fd37accdce55974d30021333b9bd192"
+        "274e269576eab40b2984f8af613da66f",
+        "26f80ee6ea6171a9fa1096f608240eb1",
+        "cdb261cb7df2c570a34705550647a064",
+        "853317c91c45a83071444bd01bc2db35"
       ]
     },
     {
@@ -1742,19 +1744,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 12.115,
+      "latency_ms": 12.743,
       "returned": 10,
       "top_chunk_ids": [
-        "d9b1e9578da55144b4663d3cb6fb6df3",
-        "bcff7a0cd4f02e84306a845b0867131a",
-        "398a231f2f1217b9f6125f204a61f5b6",
-        "80f6fd8fe400224fc7b6e7de4c148cb9",
-        "0c080719da95adcc2bfc3ddec663d5e3",
-        "c2e240acc124cf956f8f4ce40965aa5f",
-        "93a149f82b345d4763358a24c71849c1",
-        "d903dad2ca71c12b6eff86ecba5b33fc",
-        "2592c331b1314dd905893d7dbb432992",
-        "21ef40af08846f2c97857b657d374214"
+        "6a7ff42a27b21128227bd92c86ddad4a",
+        "45d3bb70030d36329a02be8a0c5fdaf7",
+        "a650e7ac43fceb2aa5a2377dc4a729a6",
+        "622579c6e0b37a551e861377e4316010",
+        "b000bdc38e46922f3644914ae7d4e3da",
+        "5f4aac409b3d5984d2076e5f6ffd2c7c",
+        "c7f0e116184ae1a4490bba762c3c3315",
+        "77b9f16d5a0e065ad94a1b10f15e7d4d",
+        "066ac4b5450854c41655cbec52f71232",
+        "ac0a6ded49e4205e8da68cded7b68f6a"
       ]
     },
     {
@@ -1764,19 +1766,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 3.819,
+      "latency_ms": 5.551,
       "returned": 10,
       "top_chunk_ids": [
-        "fd53959d6abd084cbb2eb0eba86e1512",
-        "1bca83899891293fd21c01828f042f02",
-        "d9b1e9578da55144b4663d3cb6fb6df3",
-        "219b68cbf11ff5d80b2c3f84f3a85fe9",
-        "ba529bb06d4fe8015ed3c68f0025266c",
-        "2e327a8967a407029a023d991ca8c7d1",
-        "d903dad2ca71c12b6eff86ecba5b33fc",
-        "e30bc4182aa132b89033ad6f9881268c",
-        "238734e9ac321a9eb88468bcb1296a4b",
-        "dd0db915f80e3560dc2788b4501a26fc"
+        "6d1510d79994c24d628d66e9c96cd2bf",
+        "39a15a31785becd2959c7a032997a3ab",
+        "6116793cc3121398ee9a318c37fb99bf",
+        "7a3598633b304cda8f1d8eccdec908f3",
+        "261013e60a6f848a807fcca64734776d",
+        "d14c4b1dcf46c2fb1c666a521cf55d5e",
+        "b29b4322d53c691201f527071f338288",
+        "0e35ffc890f0d85d5794ec01dde04ac9",
+        "53d3c50d8e3e9c1173edd97e9e1665cd",
+        "3a0469d9349302604f07f7aa48a87733"
       ]
     },
     {
@@ -1786,19 +1788,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 6.779,
+      "latency_ms": 9.98,
       "returned": 10,
       "top_chunk_ids": [
-        "4d1902a9f8b2f385b8ae39b38f1ce723",
-        "cc213a25f0d3d2782689136456214332",
+        "5cedb43b41d127ae2031b5a41bff8999",
+        "7506d4bbd2380aeb3e3869fa31be5a8f",
+        "251d5b0fd258dd51577cceccfdf0830f",
+        "df856224be17a358fa9d524e0d5a301d",
         "594904fe7f285c0d36d18c6c1b5835a7",
-        "cb221370a29f60e37149c628534e6e9f",
-        "aa55f82c761090f965852e68f12667e7",
-        "d903dad2ca71c12b6eff86ecba5b33fc",
-        "8c45ea2f990d82e7b4c835b3d8998209",
-        "f6a478940cf3c95a0405421cae1e34c3",
-        "e6edff31cf03de93064b599972d3b43c",
-        "2e327a8967a407029a023d991ca8c7d1"
+        "70e55d037ddb95bcb7269fc7d505f85d",
+        "4c7b940c020298ed8a424ebef804f0e3",
+        "00b2d340cf7906b6a6f5555f4f510bb2",
+        "7a3598633b304cda8f1d8eccdec908f3",
+        "8c45ea2f990d82e7b4c835b3d8998209"
       ]
     },
     {
@@ -1808,19 +1810,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 8.483,
+      "latency_ms": 13.326,
       "returned": 10,
       "top_chunk_ids": [
-        "f6a478940cf3c95a0405421cae1e34c3",
-        "fd53959d6abd084cbb2eb0eba86e1512",
-        "1bca83899891293fd21c01828f042f02",
-        "21ef40af08846f2c97857b657d374214",
+        "343a1128844b2fe546bfc3f584d00302",
+        "dd98626f2f81434c52f6da52dd6e15f3",
+        "454b59e728d9d1f03eabb01a578d122b",
+        "d3eafacbf351f3e74c574d91c4377815",
+        "39a15a31785becd2959c7a032997a3ab",
+        "7a3598633b304cda8f1d8eccdec908f3",
         "6b7425a9c9b683555d9102406069743a",
-        "d903dad2ca71c12b6eff86ecba5b33fc",
-        "aa55f82c761090f965852e68f12667e7",
-        "2a481d1fd106b10c21c910fd66dffbc3",
-        "8c45ea2f990d82e7b4c835b3d8998209",
-        "ea96dcc4e116228058f10f4de7758597"
+        "395d313f005c39ddbe724568cce45154",
+        "de939f97f004cb5107fa016a783f697b",
+        "000324f48cdcd8fd8fd51adc8a3c9ebf"
       ]
     },
     {
@@ -1830,19 +1832,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 2,
-      "latency_ms": 9.417,
+      "latency_ms": 10.898,
       "returned": 10,
       "top_chunk_ids": [
-        "ea96dcc4e116228058f10f4de7758597",
-        "527f35d94ba50087ef1ca84c1247c5a0",
+        "b8e5c28a539df847b17b6048582fb394",
+        "9221550c2cc969311a12609716fa6b9b",
         "ca719788978e8c567790c080f3384e83",
-        "21ef40af08846f2c97857b657d374214",
+        "de939f97f004cb5107fa016a783f697b",
         "a2f6346188ed0256c12c3de0c5230db2",
-        "2a481d1fd106b10c21c910fd66dffbc3",
+        "dd98626f2f81434c52f6da52dd6e15f3",
         "d64f9ab065f41cd82e253437bbf1c052",
-        "cc213a25f0d3d2782689136456214332",
-        "cb221370a29f60e37149c628534e6e9f",
-        "f6a478940cf3c95a0405421cae1e34c3"
+        "74c5e77cdb000ff317451a4370192cb7",
+        "d2c59d4fb7be146eb6d8d7f319fa4ca8",
+        "5705a92e32ee3935182b3332ebca5e96"
       ]
     },
     {
@@ -1851,20 +1853,20 @@
       "query": "How do I compile a Fortran subroutine into a Python extension with numpy f2py?",
       "answer_authority": "guidance",
       "passed": true,
-      "rank": 3,
-      "latency_ms": 7.986,
+      "rank": 10,
+      "latency_ms": 17.801,
       "returned": 10,
       "top_chunk_ids": [
-        "376f86e1bedee11d16073d7e7c32180e",
         "d44a057c8def07e82c34774e284cbd1d",
-        "ff8d42d770c1054c7e388aa850841826",
         "2896be5a51bf2adf8aad3aef8b13abda",
         "c40c276406a38dab0f8e91a8b09944e1",
-        "416c44398bcb15bf045ef62aa062880c",
-        "555c808e182ecb5260053d181854a226",
+        "750aded1d46b38a4e89b205a7c8fa13a",
         "d20824b2a1fc6f5834fd7e343f6360f4",
+        "e1d59364704eef000dcd4ddfa9094aad",
         "22e15c32465c463ae5bd1ee37a4c5a0a",
-        "53f8d078239de22d7b2b886bb407cdb4"
+        "317714b606fb94f27fe8d0d00a8b5259",
+        "d3380e0a9de19dbf5a0c203921e49e09",
+        "945de1b83a399a00b671b006672fffa2"
       ]
     },
     {
@@ -1873,20 +1875,20 @@
       "query": "How do pyf signature files specify intent in intent out optional depend and hide arguments?",
       "answer_authority": "guidance",
       "passed": true,
-      "rank": 3,
-      "latency_ms": 9.364,
+      "rank": 1,
+      "latency_ms": 13.131,
       "returned": 10,
       "top_chunk_ids": [
-        "85eb7717926d3a06d533af41afb67785",
-        "376f86e1bedee11d16073d7e7c32180e",
-        "bfc474479bff2cbfb9345097f1c46e59",
-        "990d3a1d0e88d52ac556619479bf3384",
+        "333dcd6e860c105b84f7288ef950cec9",
+        "88d98ac63d2719388ef1092fffb0afa5",
+        "937ad6bf2e172f6cf21c5ad1e6404fc0",
+        "ae89ca4b6b8cb5d9c90a5d29df947969",
+        "41ab2daab8059db2ae9ba7e93163cf1c",
+        "021ca10f6ab2fcc645d716ffed63baec",
         "6b3ba8e4f73f703f0aa5ce495562b8d8",
-        "2bf42bce4eec07aece5951f251add65b",
-        "d6d3eb3f2e5a17f6bbcb5bd8e658b564",
-        "5bf2faacc30432670c5c9cd3b62fdad7",
-        "b5fc9d8838b156fb48577ac1e84f49bc",
-        "bf607ed23ae898785c80cda6959130ea"
+        "cad78f16f6cc95d33f48c156ed0592e5",
+        "d80a06e4280e3daf231c2099ad296f6c",
+        "d60d1b172f82d7c32ca93e54fc23e192"
       ]
     },
     {
@@ -1895,20 +1897,20 @@
       "query": "Why did f2py copy my NumPy array instead of modifying it in place?",
       "answer_authority": "guidance",
       "passed": true,
-      "rank": 5,
-      "latency_ms": 4.702,
+      "rank": 7,
+      "latency_ms": 6.206,
       "returned": 10,
       "top_chunk_ids": [
         "4228935814925add6cbd8014166a4493",
+        "08c1eef5ef9fa9bb4ef84f14df222a4d",
         "c815e37a94811ed2bb89c601cec57d5a",
-        "376f86e1bedee11d16073d7e7c32180e",
-        "53f8d078239de22d7b2b886bb407cdb4",
-        "cd6bd8c464a8e612697cabebd1eeb98f",
-        "22e15c32465c463ae5bd1ee37a4c5a0a",
+        "312fd6b3cf054652a40eba936f8c5926",
         "d20824b2a1fc6f5834fd7e343f6360f4",
-        "41c7338b7ee025ac83a4620d6af9bd58",
-        "555c808e182ecb5260053d181854a226",
-        "2bf42bce4eec07aece5951f251add65b"
+        "22e15c32465c463ae5bd1ee37a4c5a0a",
+        "b99dcd409d84910668180871ad710490",
+        "9f2338fe961b840751ed416792ec31ea",
+        "75b8ca72b3d61da287059773399d560f",
+        "484e5730da91f3f9657b975f279a0b50"
       ]
     },
     {
@@ -1918,19 +1920,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 10.749,
+      "latency_ms": 11.102,
       "returned": 10,
       "top_chunk_ids": [
-        "82ab8cfe82dfadaf4ee0add049027639",
-        "bf607ed23ae898785c80cda6959130ea",
-        "eaf8fc7d9e8c98650c3e081841324bc2",
-        "8e36e29d8e746a9d298e99e655cbc832",
+        "c51db4ecfbb539f040c4523d1fed8dc5",
+        "d60d1b172f82d7c32ca93e54fc23e192",
+        "d81cc388fbe4faea514f3a2dc2851bbc",
+        "53a0a8fa672bc107be592cc325de0cf1",
+        "ad977aed85bdd755aab685c8ec6fe590",
+        "01acbe4031a444cbe7ba6c2785588152",
         "d20824b2a1fc6f5834fd7e343f6360f4",
-        "bfc474479bff2cbfb9345097f1c46e59",
-        "efe6d9843e67c5ca80a63ecb32e4356f",
+        "ae89ca4b6b8cb5d9c90a5d29df947969",
         "6b3ba8e4f73f703f0aa5ce495562b8d8",
-        "03c56214269c26442f2f42baf0e8ec3e",
-        "79114c79ba9c280afdc0a994a3c8a04d"
+        "ffebfc932308c65ab8a157da4dec2288"
       ]
     },
     {
@@ -1939,20 +1941,20 @@
       "query": "How do I build and install an f2py extension with Meson after distutils removal?",
       "answer_authority": "guidance",
       "passed": true,
-      "rank": 6,
-      "latency_ms": 10.764,
+      "rank": 8,
+      "latency_ms": 13.202,
       "returned": 10,
       "top_chunk_ids": [
         "2896be5a51bf2adf8aad3aef8b13abda",
+        "b06634aaf3c6eccbb89ded970e4c8dae",
         "8eccc169633291503a91da0f5026cd2d",
-        "48167bfad328b60b5c0a4bb32c3eec06",
+        "f678fcb0f67534f4ef14f94e7ccaf708",
         "47586389f08df804efb68951491e5e14",
-        "416c44398bcb15bf045ef62aa062880c",
+        "e1d59364704eef000dcd4ddfa9094aad",
+        "dd7df2f1130811bd65e3c2abbb62e2d6",
         "921ee7ebed8931ad5ba72f41d7ea63e5",
-        "b5fc9d8838b156fb48577ac1e84f49bc",
-        "2ed8b926cc59a561886270f86b1535bb",
-        "606f1b76645be16e72316366d09a13b0",
-        "a65959da5235d4366e09104650f9515e"
+        "04b9b1d14e7668dd9fee0ff23342f4e1",
+        "2ed8b926cc59a561886270f86b1535bb"
       ]
     },
     {
@@ -1962,18 +1964,18 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 9.93,
+      "latency_ms": 16.181,
       "returned": 10,
       "top_chunk_ids": [
         "397856ff79fe760b4d882086bd1e4348",
         "d9f7221f6f2f975bfa9740e56f28dc49",
         "6057185852a8c62a8f1a432a498fadd6",
-        "2dbadca47ba09fbac558cf90e8ecb210",
         "4c6603ff48863873867e12bdf08279dd",
         "2c615da681e0939ca719228bacf3af0d",
         "cea12e8cae52f639fec6f23cd0e8ddff",
+        "5606193a64655d6db6d5a2b7aa82b024",
+        "b25c5070de75f0522ae186deea4b3c75",
         "8ba5ea819df69917d9118fd35d882576",
-        "8bdafd78640646634f49d66b93f0b5d0",
         "85a6ecbc123a331c4a54650fca155dc5"
       ]
     },
@@ -1984,7 +1986,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 11.385,
+      "latency_ms": 12.589,
       "returned": 10,
       "top_chunk_ids": [
         "b093fea4484877a0e99b157a2072418b",
@@ -1992,11 +1994,11 @@
         "3b7bef6236c66e00a03bd53a0263a0cb",
         "b19136b9ca370064b99eab229b3965db",
         "3d1b067c5cf88a1632b995f44663216a",
-        "d86bd449a82884f93a8a38766d695592",
         "9551ee80fc209e39735aa6fedc1854d5",
+        "d86bd449a82884f93a8a38766d695592",
         "5e807db84bfdae67751fdfb44873ab68",
         "b89aa764194c32ebfeb0238d85f89b36",
-        "66d6c5888657251702de75a79d701c79"
+        "fc49dfd5e345882ada1c86d19ae23b4f"
       ]
     },
     {
@@ -2005,18 +2007,18 @@
       "query": "combine values from every MPI process and return the reduction result to every rank",
       "answer_authority": "guidance",
       "passed": true,
-      "rank": 4,
-      "latency_ms": 11.772,
+      "rank": 2,
+      "latency_ms": 11.72,
       "returned": 10,
       "top_chunk_ids": [
-        "64409fcd4bd65b895afbe37d2ce3fa2d",
         "b43c95f3b1b5da5e7e6c188f6e63cb06",
-        "bcc568c1acbfff04114182b2fe48498d",
         "4b2749a949f9bd11e9337c46ff5f94f6",
         "db16c407a33fe188d7e7fe400fd9a361",
+        "bcc568c1acbfff04114182b2fe48498d",
+        "e7971f50c7246e3b0a22f5a3dab08e30",
         "8b1640cca91142a2fc6c958fe984af8f",
         "d25b32edecd449fa9a5900b68af533ea",
-        "2dbadca47ba09fbac558cf90e8ecb210",
+        "34840a42442a3e5df5d406e2d065b613",
         "d9c2281a5821e5e187efd5026e26a682",
         "3a6d12dad5d5737bd93259f881308e60"
       ]
@@ -2028,19 +2030,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 9.137,
+      "latency_ms": 10.876,
       "returned": 10,
       "top_chunk_ids": [
         "6bb8e5144a5d9c88a0ab4ec62387485c",
+        "3c8dbd3fcc668761a147c0b0c8640b72",
+        "31abd82efe5f8ffa8150b9240e42b78f",
+        "871be5725db81de72c73b61a5197047b",
         "cfe20b4cf5a3517512336c04a98cdfea",
-        "99eb1d065ff26716fe7fbfe8cf4011db",
-        "b223e056e13a1b5595be55298c870af4",
-        "6c841fecf6d7f96670c5f626a8435833",
-        "33702010f587e9de5cc17d256599dc21",
-        "3960df9732b8ba30acab3f72bd22bc6e",
-        "024611e4060f5107b687cb6807a265a6",
-        "982990bda7299379ff56f16a40da7ce8",
-        "84f2a5cac708e06edead802073716a5e"
+        "3e4f28905b6075696090ecfc09a99eaf",
+        "6981bdeca3c527d6a2c5813cb3138b63",
+        "e19e0fe168f60b1a70476cc5c4f72cd6",
+        "6ad9295a8278853c12a4cb2adcfdeb07",
+        "5bdec8fbfb461ee9504eda4cfa708c38"
       ]
     },
     {
@@ -2050,19 +2052,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 8.884,
+      "latency_ms": 11.919,
       "returned": 10,
       "top_chunk_ids": [
-        "567d5b736bd5d3d5fa1e259db28d439d",
+        "c11f821b4701550bad73ecd6207db068",
         "442d144d3b2715ba39e9a2978e3fbc0d",
         "85accb49aa7d592c98dcea3022fdce70",
+        "e4902b1a37f3942feefd53799f605cdb",
         "0d12202dc9c697d040f4a1c3b16c7c68",
         "99195851d73bc0bf3b2fd004485efbc1",
+        "6981bdeca3c527d6a2c5813cb3138b63",
         "48ec6e700aadbad883db345158f8c819",
-        "3960df9732b8ba30acab3f72bd22bc6e",
         "47afd2ddd63832a70d88143e0ae8d61a",
-        "aee7b14414d970a39f248ad8bc002991",
-        "9506776d254853e87990bba5f1660e50"
+        "aee7b14414d970a39f248ad8bc002991"
       ]
     },
     {
@@ -2072,19 +2074,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 9.28,
+      "latency_ms": 18.871,
       "returned": 10,
       "top_chunk_ids": [
         "1d8423da5fbda48b09e142fb70188c4d",
         "2c2992182f8487dc223460197546d5db",
         "56414c334bb1fb986fe576ee001e16ae",
         "d234763325566ae792b12f189b009c11",
+        "1a6a8ba1fdcca49231fcdac6007ea8f9",
         "f70c81896e13407aefe0b4b89ddd028f",
         "b8b7fd039bef577cb4f91f7aa9b69cc7",
+        "8f60be51ace0f1a2bd33659fe5cbc015",
         "0707ccebc507130f815d8bbe29a9f7cd",
-        "7b4a86d641d2e416bf053be2993761e1",
-        "de7d46554ff13d7a061acca54899cd6a",
-        "6ec1dce99f2949e5b0fdc90491f832fb"
+        "7b4a86d641d2e416bf053be2993761e1"
       ]
     },
     {
@@ -2094,19 +2096,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 11.494,
+      "latency_ms": 10.27,
       "returned": 10,
       "top_chunk_ids": [
         "9cb22801a3464334b9e3256bbfd4d8ac",
         "0f8e3832e4f9fa6f6cc6608c0c7b8fbd",
+        "98a1f75021435b676c7b1f0b677fe08c",
         "41fa546988efe11c9d4ace9483387e9b",
-        "990fd1efe60ff2f696e9fb69bc626a45",
-        "a7ee300c6a574fd7a27d008c3030de67",
         "e3d113fdd029fa6fe80e791280ddfcd1",
         "bcbf88e3accec0f7e7bcc8db3737cf5c",
-        "2628f3a9e29d93ca4a027e88a1f503de",
-        "be0bea6db53ee3caa55fc4a9a5451dcc",
-        "37bfd96118e9dd10cb547b7163ea4123"
+        "5c30ea813821d6904acec9a48d5b1729",
+        "7ba377b5c881299e6d21cccd0f20fcf3",
+        "9e3ff3300f53ce5663b35039bddd4b7e",
+        "02c6ad8acf9f2c34b635344d1c5bcea4"
       ]
     },
     {
@@ -2116,19 +2118,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 6.049,
+      "latency_ms": 8.539,
       "returned": 10,
       "top_chunk_ids": [
         "92b3c2da1cfd155a0dd3e5c071eac39f",
         "54428ee1287eb90f2363ff2ae428838c",
         "585a763efc59341c74dea68c62f3606e",
-        "c2b55fd04935dbf66d864d81725fc68b",
-        "3d1b067c5cf88a1632b995f44663216a",
-        "5993008713e272d1eb7b1fedf6a40026",
-        "e2749b5138b11b10fdf4da66b546a831",
-        "d90ca0850b8e8c12289effb98f10e1fa",
-        "3df36b1ce1922a718e607dfcbe6c65b7",
-        "2c12856d959c236eed0c1c3a29ba76a5"
+        "ec74b93ca31bf0b67a249d96b9eb9243",
+        "e888787628b342d6092c611e3ba5dd2c",
+        "31abd82efe5f8ffa8150b9240e42b78f",
+        "6981bdeca3c527d6a2c5813cb3138b63",
+        "3c8dbd3fcc668761a147c0b0c8640b72",
+        "871be5725db81de72c73b61a5197047b",
+        "3e4f28905b6075696090ecfc09a99eaf"
       ]
     },
     {
@@ -2138,18 +2140,18 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 7.641,
+      "latency_ms": 15.253,
       "returned": 10,
       "top_chunk_ids": [
         "0d7186b3181ddceef3837e4d823e7910",
         "a537ed714a76dfff6dd640f67b495e79",
-        "ecd6e5165e01d507ae33043af7aa660e",
         "f37af87fbda5549c71fe4cffbe6bc7a2",
+        "ecd6e5165e01d507ae33043af7aa660e",
         "0b211c048cc15828219f0a6ede14fa0a",
-        "6057185852a8c62a8f1a432a498fadd6",
         "1fa87d05ed1276f5240bdf1be63aeaa7",
-        "d9f7221f6f2f975bfa9740e56f28dc49",
         "e2bde869dda81d095a4852bbda2d4dcf",
+        "6f8607efe67b832ab840dcebf79260ec",
+        "d06ff2f7e64c11ecdecaa66719fed2df",
         "b5e5b8a24c3323cc1e0fc32f516fa3b4"
       ]
     },
@@ -2160,19 +2162,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 8.246,
+      "latency_ms": 10.903,
       "returned": 10,
       "top_chunk_ids": [
         "a4f5748756733cccf1c2c9696e4a1e03",
-        "4a9cb25cecd0903e863a8a35f528f983",
-        "1197c64409df2e20b02c7b4170301405",
+        "68f5d24c14925b2bc75ad9b4d51d54af",
         "344d0fb1ebe185f89ce81e0287fc3d0a",
-        "e6dd40523451ca94dcf6991bcaa28294",
+        "5a671ed1d819a208c744367f0e0805be",
         "2c50bdd65422785936c03b00cdbe2b4e",
+        "3aa142c553ed0b3f0f8e44905d0fa236",
         "58cb70db10458f1abb9e4632020be613",
-        "2576cc55c36bf9c886dbb96b68744b5b",
+        "e6dd40523451ca94dcf6991bcaa28294",
         "5c3e993a69a0c2cbb29f361abe68a600",
-        "0d2526b02d30024a97e6a9a5eeffe544"
+        "ad16fe5bbb8942c64492ac6786a0438a"
       ]
     },
     {
@@ -2181,20 +2183,20 @@
       "query": "Which Fortitude warning identifies an obsolete Fortran COMMON block?",
       "answer_authority": "guidance",
       "passed": true,
-      "rank": 6,
-      "latency_ms": 6.843,
+      "rank": 8,
+      "latency_ms": 9.203,
       "returned": 10,
       "top_chunk_ids": [
-        "d4bc5389e4588ac3b04ac5d21b5191ca",
+        "8f91c34fb7e5eee35a40e362a2297d0b",
+        "0f3748d7ff452f238031aefedb005727",
         "686b609f0832412e25e5eec1bd2e65a7",
-        "2576cc55c36bf9c886dbb96b68744b5b",
+        "d4bc5389e4588ac3b04ac5d21b5191ca",
         "cb49cf7a3116e582ff54f081f0054802",
-        "9300f9e77fcd607ed6f22d6da16c6265",
-        "5b673c37fa9a687541c1ca568520f210",
-        "dfdf59f15f24bd60720bf9aa670b072c",
+        "2576cc55c36bf9c886dbb96b68744b5b",
+        "fd93acde590367b58718d61af4315409",
         "0a219f73e1e2cd6f9bbc310520823686",
         "3093707e98a8ca79ecce5bfd5c035cfd",
-        "619b822ff12aef02606e3dcf52dac235"
+        "5b673c37fa9a687541c1ca568520f210"
       ]
     },
     {
@@ -2204,13 +2206,13 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 0.581,
+      "latency_ms": 0.916,
       "returned": 4,
       "top_chunk_ids": [
         "19bd9f5edb4e3bb230721d122b75ad99",
         "4aed5eb251a48a706d9827fb1627b8d3",
         "454575045f7c00b62eac67685990600e",
-        "28f4941454c125cb9bf89dec19cefe67"
+        "1c0e60b586dc9bbcdec6966e5b9af370"
       ]
     },
     {
@@ -2220,19 +2222,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 7.475,
+      "latency_ms": 9.297,
       "returned": 10,
       "top_chunk_ids": [
         "0b0218e3cd8c528b904a8f8ce370927b",
         "d9f7221f6f2f975bfa9740e56f28dc49",
         "47afd2ddd63832a70d88143e0ae8d61a",
+        "46776a9e3d9dc48eaf7ae3c409654b71",
         "70b588e3c3a2a9fd6c9711d45781e74f",
         "6634a7d6837c963f2ea08a536c66f3cb",
-        "28f4941454c125cb9bf89dec19cefe67",
         "d2ebe91dcb524d430e12f9e64320c7e8",
-        "d8a7893dd3d21a1ae36fe578cc3bc934",
-        "33a781be19e7bd922159993a34ab8d03",
-        "4a9cb25cecd0903e863a8a35f528f983"
+        "af8291feaee5224da279e10a6239d744",
+        "457800ab53c7f495b68060c66b6120cc",
+        "d8a7893dd3d21a1ae36fe578cc3bc934"
       ]
     },
     {
@@ -2242,7 +2244,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 0.605,
+      "latency_ms": 0.611,
       "returned": 8,
       "top_chunk_ids": [
         "f0c180e50c913ba2c88a90af2bba80af",
@@ -2262,19 +2264,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 3,
-      "latency_ms": 7.824,
+      "latency_ms": 9.489,
       "returned": 10,
       "top_chunk_ids": [
         "42ce54392379e08047be3a4218163616",
-        "a3f7c20b0771729bf87f3bee6eac31c6",
-        "9fbc0df1332a8a4a3996ad1011d37ea5",
         "a59dc590c1c31d9c642f14126591dae7",
+        "9fbc0df1332a8a4a3996ad1011d37ea5",
+        "8f582fafb653480e42161bd3d7def9f6",
         "afca7f3bb61917f7f548fb40239a194f",
-        "f40fefd9b1d4f7fc6b5d767787f70725",
         "12eef02d101292468f0b7bee1d2c879b",
-        "879f5c56b1307575f41613ee4b35aefe",
-        "4a9cb25cecd0903e863a8a35f528f983",
-        "1197c64409df2e20b02c7b4170301405"
+        "e15f5052692b3f6fd8fab03ae7cd0246",
+        "03aef3cac47e6292209a0ec87dd1a9bb",
+        "457800ab53c7f495b68060c66b6120cc",
+        "925a67de954106269121e24beff3e077"
       ]
     },
     {
@@ -2284,19 +2286,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 10.186,
+      "latency_ms": 9.332,
       "returned": 10,
       "top_chunk_ids": [
         "a59dc590c1c31d9c642f14126591dae7",
-        "afca7f3bb61917f7f548fb40239a194f",
         "42ce54392379e08047be3a4218163616",
-        "f40fefd9b1d4f7fc6b5d767787f70725",
+        "afca7f3bb61917f7f548fb40239a194f",
+        "8f582fafb653480e42161bd3d7def9f6",
         "7f57c2b1de1c8b585e9c238c9ef6970f",
         "f2f07120c65f235309ac5eb094a1e906",
-        "580732069f34f0e4d81bb0336aeb5e80",
         "309c965112f88f79156eaa1e493472af",
         "dad1850ef80f762873687212fe0f205e",
-        "f51fb697f99d85c55dac143c5d482654"
+        "f51fb697f99d85c55dac143c5d482654",
+        "5c3ce98318cb29d66642dc9b4e21b70a"
       ]
     },
     {
@@ -2305,20 +2307,20 @@
       "query": "Can Fortitude lint old fixed-form Fortran source files?",
       "answer_authority": "guidance",
       "passed": true,
-      "rank": 6,
-      "latency_ms": 6.986,
+      "rank": 5,
+      "latency_ms": 9.87,
       "returned": 10,
       "top_chunk_ids": [
         "2576cc55c36bf9c886dbb96b68744b5b",
-        "1197c64409df2e20b02c7b4170301405",
+        "5a671ed1d819a208c744367f0e0805be",
         "be628687e7d1560e54aa85cfef1c89cc",
         "1aac517aeb2ddb6337f699e78685c38d",
-        "a3f7c20b0771729bf87f3bee6eac31c6",
         "f684f8ea482d4d8da8056118ab114b52",
         "580732069f34f0e4d81bb0336aeb5e80",
+        "e15f5052692b3f6fd8fab03ae7cd0246",
+        "c896694ed6a7d6b9a7819eb0e599465b",
         "47978f69ec0768b2d6c87deaef00fabe",
-        "cbefea125febba152b2957005f705add",
-        "4c9e8c66a2a26f6adeeb527a8002a5bc"
+        "925a67de954106269121e24beff3e077"
       ]
     },
     {
@@ -2328,7 +2330,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 6.83,
+      "latency_ms": 9.021,
       "returned": 10,
       "top_chunk_ids": [
         "e2f676865201969ff0f2daaddf2348c4",
@@ -2337,10 +2339,10 @@
         "b5e5b8a24c3323cc1e0fc32f516fa3b4",
         "233efcb53d22e649eca50f1349e46a49",
         "5b7e5b3ae48291b952ec2567d7acf0ed",
+        "8b8a61a6e722cd8a03b12645a05cd1cf",
+        "c683d3b512e1e115a67bafb221dce050",
         "30de1a09230ad726a9715871a05c25ab",
-        "cd1679c72fece85db661edeb6dc351ab",
-        "cd4a1e41808321ad06049302e77e0d33",
-        "e830be23d5b94fa06a6a6edaf4810f58"
+        "cd1679c72fece85db661edeb6dc351ab"
       ]
     },
     {
@@ -2350,18 +2352,18 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 5.81,
+      "latency_ms": 10.404,
       "returned": 10,
       "top_chunk_ids": [
         "68cb1551f2b070e3a5ac8c6c0a65a4d6",
         "de966cbccfef1b0cb85a540d44daaa71",
         "b90ce383dd67b158e69afcbf4a5d0f9c",
-        "6bb471f5918bc8b90a4b237e9c7a1ae4",
         "f4b6fedcba88804cc23a3950ddae4c39",
+        "6bb471f5918bc8b90a4b237e9c7a1ae4",
         "736237f736272a85cf4b20e361bc6038",
         "acbe76838738f1b898ab30fafb3a7591",
+        "59819c5c723d61f173ef0a71b850bf63",
         "ed3af5389f7d08df27a0e92498b033a5",
-        "1899ca744d777def2064ec9667d30d98",
         "d6d6fe25e29e6c1934a6e6d8d4f0c59d"
       ]
     },
@@ -2372,19 +2374,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 2,
-      "latency_ms": 9.562,
+      "latency_ms": 7.188,
       "returned": 10,
       "top_chunk_ids": [
-        "ca4ce8f23a18f3a262ef122c99e066e1",
+        "55855b634e324c387679dee65a0d231d",
         "89454ae1d06898ffa307e3ead1fb6a7e",
         "ea57064d9bd5af7e985481d8377ca3c5",
         "39caca0b150f5c44afa28de80cc07e05",
+        "9bf880f00b17953c1e94b2029e5d81ec",
         "d7c5f115964db371ac3e075ed6ea88dd",
-        "1b720fba752d3c70ec242286e56bd0f6",
+        "c6dc6cec6037049c3120cfbbf4d703fd",
         "7b54a78f0a0ba1b4cd40863b5ecc31c3",
         "d325011fd456b7d022dc42e7e3963428",
-        "325aa29d0f439092490cdb5367249689",
-        "9afeff2053751c0d8696a4a9b386f3bd"
+        "325aa29d0f439092490cdb5367249689"
       ]
     },
     {
@@ -2394,19 +2396,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 3.506,
+      "latency_ms": 3.796,
       "returned": 10,
       "top_chunk_ids": [
         "6d8ab183526b17d8704c99444f556c1b",
         "39caca0b150f5c44afa28de80cc07e05",
         "5c5661dacdc1bfd92a2d1a8b0a2bcaad",
         "6f311a119e1b4276816d5977990c0d5f",
+        "af276b6ec33bb6b943a1f70686ec1539",
         "6c29517f6ea5c24ee8ab64bf8ac809a5",
-        "c96469ff42eb94cc81c39234121fd91f",
-        "f001f755f50a84741c9baa34a7691eb3",
-        "ff3c19e72c68a4e4be7caeb883675590",
-        "d325011fd456b7d022dc42e7e3963428",
-        "1b720fba752d3c70ec242286e56bd0f6"
+        "310ddeaad5099302aae79fa171d58cd8",
+        "60eba0ce872e099cd76f4ec109063087",
+        "df0d193ada80b6ec5f14f94aafb212c4",
+        "ff3c19e72c68a4e4be7caeb883675590"
       ]
     },
     {
@@ -2416,19 +2418,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 7.077,
+      "latency_ms": 10.434,
       "returned": 10,
       "top_chunk_ids": [
         "ea57064d9bd5af7e985481d8377ca3c5",
-        "87005af5b1b9f2daaa36473ae340e18a",
-        "d7c5f115964db371ac3e075ed6ea88dd",
+        "3b0394ba498c3f1eee3536d35d9003d2",
         "ff3c19e72c68a4e4be7caeb883675590",
-        "ca4ce8f23a18f3a262ef122c99e066e1",
-        "4ab9c8fa9c322ba0d1740b6d36c1f751",
-        "58584db726d57eafd27eb38bc04f1f72",
-        "0eee338560bad068c1beeaab2218a804",
+        "d7c5f115964db371ac3e075ed6ea88dd",
+        "c9a62e29cd6566fc18b5037374ca5a7f",
         "81277a602e28eb17169b3d3bc8b75c56",
-        "c2b34f659f7abc88d99c9021d5383188"
+        "58584db726d57eafd27eb38bc04f1f72",
+        "55855b634e324c387679dee65a0d231d",
+        "4ab9c8fa9c322ba0d1740b6d36c1f751",
+        "0eee338560bad068c1beeaab2218a804"
       ]
     },
     {
@@ -2438,19 +2440,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 6.501,
+      "latency_ms": 12.369,
       "returned": 10,
       "top_chunk_ids": [
         "032b90a5fb37edd45b0a6fa8dda77141",
-        "78cedbda36d9cf6f96b19679dd70c3c6",
+        "c621361552abc1fea4d637b12e137f2f",
+        "5e6739f9d541845bfaf1830b8f34258b",
         "45711d27195f4d2875c12d377f72cb5d",
-        "7bbc2ca8be6e6a01dbc2569b5ce95572",
-        "900c7acebc50f51fb06d2d5a1a1222ff",
+        "df04c7d9ac6ea994fd2ff50e5021e261",
+        "e8e5623228ba60e42c9d6d6f1a10cdb8",
         "0cb6ec74cea36a9d07aa61d92e1605b7",
         "ee9e2775df693b5fdd5937b87a90919e",
-        "75a567e9a75524ef6f7f65f64fe669ef",
-        "476386f7c4c6db8829daf798520edd27",
-        "633e4a5d9d4baa37bc64e6831ca094a8"
+        "c99c82e4dcc1fe013a67e32f69ab0c48",
+        "b774fb9acb80c5b890b8cd8e20de9ab6"
       ]
     },
     {
@@ -2460,19 +2462,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 9.468,
+      "latency_ms": 11.798,
       "returned": 10,
       "top_chunk_ids": [
-        "9c94c2076e711fc3671a1ea95baa84fd",
-        "462e28e3361b279fe804581cff46fc42",
-        "5528fa49d077933caff56e81ee0db9c2",
+        "1592533505a8cb644e66690a0e0d06be",
+        "0921bf9f0c77d40e935840780489bc48",
         "cbba696e66bcf62375b15995aee992f9",
-        "224cc67242089b979c730983357bbc49",
-        "43e74e4b0dc9426596b25fa5a3a9f0f0",
-        "398a231f2f1217b9f6125f204a61f5b6",
+        "5f9767af2f61fe78b4aef4154adb9d0a",
         "bd95b099eb9f2aaf8317c961c5fe9538",
         "8aeb1625cac34659d289b5305cd2edc2",
-        "80f6fd8fe400224fc7b6e7de4c148cb9"
+        "85394d3780e398359e0c9fa6eacb2037",
+        "140c8da104fd752453633d188ac9bddd",
+        "be93553066abd79da1f393674600f37d",
+        "330b4830eac7189cf1354f877d658ff7"
       ]
     },
     {
@@ -2482,16 +2484,16 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 3.133,
+      "latency_ms": 4.428,
       "returned": 10,
       "top_chunk_ids": [
         "8aeb1625cac34659d289b5305cd2edc2",
         "bd95b099eb9f2aaf8317c961c5fe9538",
         "1a0fe2d5c2e6a3ac8708f8aab12d62ac",
         "15e8cbe0aa55a3494447f28203cf9b94",
+        "7759407facf936ab469ca22ae7c467bc",
         "e1a5c7046c211b2c50bde0f4a7183e8b",
         "d77cc8c3400f1b9a91237999c0820023",
-        "72786226f67691512312ea76b3f9834e",
         "5e51156dbc99ad06bc90941e7b8f2991",
         "66fb2823fc2b6b122bfb1d1884bcfbb9",
         "c758e7b5f6ab271110679c21bfe2d845"
@@ -2504,7 +2506,7 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 6.743,
+      "latency_ms": 12.767,
       "returned": 10,
       "top_chunk_ids": [
         "b8f1315d3e7dfe23273c38c971075690",
@@ -2513,8 +2515,8 @@
         "f89a614141cb53c9ffd9f99888ca9ce0",
         "e64f16f517fedf5ead3d2c58010f4db1",
         "1cdbc04b0844c24f0bc5bcfd5bc0806b",
+        "330b4830eac7189cf1354f877d658ff7",
         "df64ddd6694f0267eba135bf959dcb4d",
-        "462e28e3361b279fe804581cff46fc42",
         "82dadc79a920a9fd19b6452c228484d5",
         "593cdbbd5be22de36f123e9489327249"
       ]
@@ -2526,19 +2528,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 0.881,
+      "latency_ms": 0.914,
       "returned": 10,
       "top_chunk_ids": [
         "b2c0ff81c659e472eb25c8aff0291b4d",
         "a89fe19036086c0146ff67e096c47424",
         "ebb0b1d7cf09ec837ddbed477295f15a",
+        "d80a06e4280e3daf231c2099ad296f6c",
         "57db9dd24c551fcce65bcfd25690e793",
         "8831bba961fcb6093cf0d9a714ade65c",
         "9aa6d9b616af95c2e4c21e892adcfa7f",
         "b2302568e13a76462d679ed43c0eec79",
         "315e15c0fd360d974b6e0422f9d869ac",
-        "5bf2faacc30432670c5c9cd3b62fdad7",
-        "a720ce468e5dfe3c2d6643a9286e6c3c"
+        "2afc04af5484e59b2455656fc6e5d2e9"
       ]
     },
     {
@@ -2548,19 +2550,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 3.426,
+      "latency_ms": 4.425,
       "returned": 10,
       "top_chunk_ids": [
-        "0b7a5e9915ad9540183c85f42335ab2d",
+        "ca4ae9aab0d8952367bd58beed2163df",
+        "5002aa85dd3b78f8eae2ba1e97e8a091",
+        "c2c6ae2d4ca1d35986b97ee798f0fa53",
         "0c1790420a87d20f0587eb58b337a59c",
-        "37375690190493763888238476fc55b2",
-        "6a61e1ef0aab7217866ab7ed617859cf",
-        "bc67172fb8cd4c66596d5ea8a0d424c3",
-        "900c3aae313437218540d8241c83baf1",
-        "3696895992a2d9fb85c808426e8b7854",
-        "7a0889236c7b59bb2607316a5caed3ee",
-        "4e0bad2c7ab5168664ca679222474cdb",
-        "12c2a60ee5b2d526275b657399cafcab"
+        "2bbbef7579f12580cf5133dcb4451cbe",
+        "92032e4bf163861518e38257027d0640",
+        "6e07ffc81f4386203e7b80dda7de5933",
+        "80acf231d1acf0fd36987fb3980fdce8",
+        "f355496ec53a5bb8b5bcf2ec912089a6",
+        "3696895992a2d9fb85c808426e8b7854"
       ]
     },
     {
@@ -2570,19 +2572,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 5.422,
+      "latency_ms": 6.207,
       "returned": 10,
       "top_chunk_ids": [
         "1bbbeecbaeec0a7e7b2cc099fb1fd057",
         "a89fe19036086c0146ff67e096c47424",
-        "bffe40feb9aedfd28c26a849ae23ebb6",
-        "926d747ecaeaa3dc323faeb6c184a393",
-        "6d8669d12a1a9041c1b73328fbafadf9",
+        "302adb68a87f4e217017dcf989eb962b",
         "b2c0ff81c659e472eb25c8aff0291b4d",
-        "c479ff0d07f864f27d987e0f314702bb",
-        "afca7f3bb61917f7f548fb40239a194f",
-        "1efbd0881aa57b406bd7c108845b01c5",
-        "a3f7c20b0771729bf87f3bee6eac31c6"
+        "6d8669d12a1a9041c1b73328fbafadf9",
+        "ca04a4936253beec7d1bc693b33fdc47",
+        "db9f9dcf9eeabf58e29a1fc2e596a2f4",
+        "bf9a21e468323680fef778ac1eca5a56",
+        "ed09a29eed74fffb816c94e65e91e000",
+        "33ec082db7776982dfa3a148b4a0e1ea"
       ]
     },
     {
@@ -2592,19 +2594,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 7.074,
+      "latency_ms": 9.615,
       "returned": 10,
       "top_chunk_ids": [
-        "c479ff0d07f864f27d987e0f314702bb",
+        "de0dace7a3757c0cf41beb8ee4238dbf",
         "785ad7b8abb5f0aabedb597e72aa5082",
         "5a077852931d286c9770c2a857ce3262",
-        "43e74e4b0dc9426596b25fa5a3a9f0f0",
+        "db9f9dcf9eeabf58e29a1fc2e596a2f4",
+        "a7511c6b8a7df790f347d5ca5567be9c",
         "6d8669d12a1a9041c1b73328fbafadf9",
+        "0921bf9f0c77d40e935840780489bc48",
         "e5d8db8579e4e3e14d3843c3fb734838",
-        "2c246b91824067f64a29a1295d4e9040",
-        "1bbbeecbaeec0a7e7b2cc099fb1fd057",
-        "d7098b30907753841668cac5e707d49c",
-        "228592b038e92a762e9a6f3f33842dea"
+        "596a619d3599717c313e005ea18a60f4",
+        "d7098b30907753841668cac5e707d49c"
       ]
     },
     {
@@ -2614,19 +2616,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 7.515,
+      "latency_ms": 9.156,
       "returned": 10,
       "top_chunk_ids": [
-        "926d747ecaeaa3dc323faeb6c184a393",
+        "ca04a4936253beec7d1bc693b33fdc47",
         "e5d8db8579e4e3e14d3843c3fb734838",
+        "525505b74c2bf4a27adb5013833a8b78",
         "b2c0ff81c659e472eb25c8aff0291b4d",
-        "c479ff0d07f864f27d987e0f314702bb",
-        "315e15c0fd360d974b6e0422f9d869ac",
+        "db9f9dcf9eeabf58e29a1fc2e596a2f4",
         "dd5d0af28ccb89132507c6cb3c3aea2d",
-        "9aa6d9b616af95c2e4c21e892adcfa7f",
-        "a89fe19036086c0146ff67e096c47424",
+        "3600f3499cb9ebf145b8c0f75b6932be",
+        "315e15c0fd360d974b6e0422f9d869ac",
         "13a941b491d0b410a52d4b8d0c7ec9ea",
-        "3f4bca2040ee9fe3e3b2ad40f1c5c0e2"
+        "56b1593031f9a20f07aaf7b511e00c6c"
       ]
     },
     {
@@ -2636,19 +2638,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 17.736,
+      "latency_ms": 24.214,
       "returned": 10,
       "top_chunk_ids": [
-        "6e7ad2fefe85ede67c4a24dd935e24a2",
-        "c5d2bfc8802b8c332037b6445883b747",
-        "2da8a7f71efe38770944f13ae143beef",
+        "8c378ccc77362235d18e37849bc53f84",
+        "8fee2bb22d60aadcd841725df4f5d952",
+        "e3822486c25cc847f85fcbf06ec7085f",
+        "e5ee756f0cc71b7d293d8321d9b44c71",
         "2c32002c0cd3d6182eb8c18fa0e642f5",
-        "9bd26f5eb1e3b5d8fd9c095ff4da3d71",
-        "975f181b1dbbad8402d0d54c6bb32692",
+        "bf29aeaad239239f272a799c42128742",
         "a0c7053b108fedb2483aa55860249ec8",
-        "ff460fe42ea68cf5c347ce809f810679",
-        "d0f6d577aed767efca755943ff92d65f",
-        "13a42d4630243c3417d6a973b73b7556"
+        "4faed12ca3c0e7e4181bbd169ef87b49",
+        "fee705cb2795673ac5c64eaf86e036d8",
+        "d5c1eaa415c6131d6645607454043cca"
       ]
     },
     {
@@ -2657,20 +2659,20 @@
       "query": "Which Fortran library parses command-line arguments from a prototype string?",
       "answer_authority": "guidance",
       "passed": true,
-      "rank": 1,
-      "latency_ms": 8.074,
+      "rank": 6,
+      "latency_ms": 9.876,
       "returned": 10,
       "top_chunk_ids": [
-        "9bd26f5eb1e3b5d8fd9c095ff4da3d71",
-        "8d93e2f34a53ee2c2fc0338100e61898",
-        "89435da60bf2c2ca0e2bee9aa4fd225f",
-        "e92e8fe94884e7be9339aa1a2fca1ed5",
+        "d588647280bdb08ec08e7ca0db1730d9",
+        "1beb250b2ba8c47323f87ee58330bf1f",
+        "b67493ae4c782017b617af152202a37b",
         "27aeac81db3026f68ca52f260d12527b",
-        "4257a6446b50b7c265b362140350e97d",
-        "21c3f2cd2b80e1ef6b9785c9c4df0393",
-        "b5fc9d8838b156fb48577ac1e84f49bc",
-        "7aceb93f6db420ac62ea217240007966",
-        "4ab9c8fa9c322ba0d1740b6d36c1f751"
+        "e92e8fe94884e7be9339aa1a2fca1ed5",
+        "1b3f883671612df22901ecdee697088f",
+        "cd408bde805c6bc8181ed8cc7f2ce2d8",
+        "2e9a98346dfd8f7345fcacca05902d64",
+        "279638a19a75b0c9a0844aa7ddc8e045",
+        "c0d5cf9ac485e7ae814c574a805fa9b3"
       ]
     },
     {
@@ -2680,19 +2682,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 2,
-      "latency_ms": 8.207,
+      "latency_ms": 12.203,
       "returned": 10,
       "top_chunk_ids": [
-        "20106f5982105abf3f24751d0ee5816d",
+        "e68276e1e2736288a7917177cd542fc1",
         "3706e790396c8e158a92d416d69ff66e",
-        "e05bcee24b16737e19e9eec1232ccc78",
+        "3a99953b16efce423383a4aae058e8e5",
+        "63615c5cbfc4fba0692d081ed6b76ca6",
+        "e055c415ef8af8d970968d78912ebc34",
+        "9521f870d7c6b33e406fdedd1d9e1a2f",
         "60881d928400f01449dfa63da9f11fc5",
-        "84efadafefd570f95267b02706519059",
-        "69f5f5529745811a9080045378babf1d",
         "ee3a89eb2b6dabc30e0ffd859d93bfdd",
-        "8e8e6e4ba331411234f5f1e7924b757a",
-        "0b473de99bab9a005ce4c809f4e94b93",
-        "28bbc76edc6774754f9c96fd89302ca2"
+        "b227054e4b911c6dd1256d6d8057633d",
+        "8d9c19bc1a939577fc14103176ac8c91"
       ]
     },
     {
@@ -2702,19 +2704,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 9.28,
+      "latency_ms": 13.121,
       "returned": 10,
       "top_chunk_ids": [
         "8d99c7569834af3b785ad42fa431e87a",
         "c6db7a93852d16fd561ff833a225b114",
-        "c14728572db59abaf432751b722553ce",
+        "31b17182ea5fdeda0cb9c31822386a98",
+        "86cd00367daca6bdd507b3d1edc32db5",
         "a22109748524e82fe76b223bef1bbda3",
         "2af0d3030a2b646504dfbeb7831109fa",
-        "90bf74097e39f4de4bb46ddc73e44b52",
         "2dcbcf412bcb0784fd6373effab74273",
-        "272707c5665d4a071a51bd9f94a36507",
-        "39db1a2d0c5df49563e7c14d9d0a9a17",
-        "ce2e81354b5d444deef57c85ed0c5969"
+        "2fb63adc657140cdb71cde74ec7c9543",
+        "4223c1c1b1411561e49baeef50eea6a2",
+        "2912db38a5646948f3f1423f5ba22863"
       ]
     },
     {
@@ -2724,18 +2726,18 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 6.283,
+      "latency_ms": 7.955,
       "returned": 10,
       "top_chunk_ids": [
-        "8e8e6e4ba331411234f5f1e7924b757a",
+        "8d9c19bc1a939577fc14103176ac8c91",
+        "ea117917299fa02a760106d90c006c22",
+        "e055c415ef8af8d970968d78912ebc34",
         "60881d928400f01449dfa63da9f11fc5",
-        "e05bcee24b16737e19e9eec1232ccc78",
-        "20106f5982105abf3f24751d0ee5816d",
-        "84efadafefd570f95267b02706519059",
+        "e643ec2c5c81885b047044145b46e39c",
+        "b227054e4b911c6dd1256d6d8057633d",
         "3706e790396c8e158a92d416d69ff66e",
+        "3a99953b16efce423383a4aae058e8e5",
         "cd366d33cfcf30402bf2e9e51d0c2223",
-        "0d9758dae33a9fbb140f5aead0e940a9",
-        "a908a31168af323fd3512435974358ee",
         "b09f647bdf8f66282e187665e8dc4e57"
       ]
     },
@@ -2745,20 +2747,20 @@
       "query": "Which Fortran package provides SQLite 3 interface bindings?",
       "answer_authority": "guidance",
       "passed": true,
-      "rank": 1,
-      "latency_ms": 7.163,
+      "rank": 2,
+      "latency_ms": 10.217,
       "returned": 10,
       "top_chunk_ids": [
+        "6163ce31cb09940460498f9997a2be09",
         "ee5573921a489184657318c19e9de2d7",
-        "20d5e7ca243b41075d3c62201b410ad1",
+        "9fc07a678227f2ea519abbb73f38c261",
         "f6c5d770d7f2d4475e321df2775513a8",
-        "8ff7ad7b828491930974736cf995eaef",
-        "5bf2faacc30432670c5c9cd3b62fdad7",
+        "adb4884de82f072aec1fe8b4eb6cc2f3",
         "8831bba961fcb6093cf0d9a714ade65c",
-        "52bb182e9c45f2f2c54b73c6f48008b8",
-        "9e4c90270b1c5d63f8b2391e01cffa57",
-        "88230ff3c4b4a68fb599355d818a4d93",
-        "ad5eeb94dd46f45803859dd929d6bd2a"
+        "2afc04af5484e59b2455656fc6e5d2e9",
+        "b821c272dbb56ad4f6548a4011c56df4",
+        "ad5eeb94dd46f45803859dd929d6bd2a",
+        "7467aea831f1a3e6f6cb273bed104653"
       ]
     },
     {
@@ -2768,19 +2770,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 7.615,
+      "latency_ms": 9.607,
       "returned": 10,
       "top_chunk_ids": [
-        "c614dad0ad09474ed6f6877e3b61de08",
+        "82daf82b6c0ae4c3a995899835ae2c42",
         "fc2f7e00e9b32f68947405f9268ab5ce",
-        "52bb182e9c45f2f2c54b73c6f48008b8",
+        "7a13b51f6d6491072aa7b675e7afdcfd",
+        "9a2853d604aeb93b5ace95b2c8db3c22",
+        "f592ecfb1b2c838fb70427d3b33fee3e",
         "60881d928400f01449dfa63da9f11fc5",
-        "4d39428e260a64dd95cc71fcd014019b",
-        "04b53f1fd5493b5889d5be6d43fddb0e",
+        "43da22902965a343460eb6df309106f3",
+        "20d8c0c470e467ec0203344e193df84a",
         "ee3a89eb2b6dabc30e0ffd859d93bfdd",
-        "20d5e7ca243b41075d3c62201b410ad1",
-        "3bc1ed0478a448a8b984afa4f1750be6",
-        "c6db7a93852d16fd561ff833a225b114"
+        "04b53f1fd5493b5889d5be6d43fddb0e"
       ]
     },
     {
@@ -2790,19 +2792,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 7.646,
+      "latency_ms": 15.206,
       "returned": 10,
       "top_chunk_ids": [
-        "7c758c065ca2360982de7919dd3475d5",
-        "4e835c4be8027e4df46bae6a1a3c28ee",
-        "20106f5982105abf3f24751d0ee5816d",
-        "4016584e7887c8e40aa4b29c86f3a4c7",
+        "cea985bf23c9547dcbe281abfc3b9836",
+        "b7e3d11ff3982e3281c7dfeadc855566",
+        "b3eb1b99374a2ecc98c511ec7d84e08c",
+        "db2fe4c48cbf8f9ed27fc36750ceffe0",
+        "a9de1153ebe7c3bb7c250f52f09e0277",
+        "5efbea69547834b9e9145f7a4a3d9ff6",
+        "ea0b751d3a92112420e6cbe646311dae",
         "79bc58295769b5ed425a8a77bfc1edea",
         "3232d73e9185e919c828069c42e5ab85",
-        "7b063ab9dd81281f116e1211a49bbaf8",
-        "0889b1672ca28fc646306f07d334d89c",
-        "614d73c0f03d014c52b2e8d5578e29f5",
-        "649425a3278beb578f4a006215845bc9"
+        "7b063ab9dd81281f116e1211a49bbaf8"
       ]
     },
     {
@@ -2812,19 +2814,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 6.484,
+      "latency_ms": 8.479,
       "returned": 10,
       "top_chunk_ids": [
-        "8d93e2f34a53ee2c2fc0338100e61898",
-        "6e7ad2fefe85ede67c4a24dd935e24a2",
-        "21ef40af08846f2c97857b657d374214",
+        "a6ce332df6911a81dc7a12e02579c575",
+        "8fee2bb22d60aadcd841725df4f5d952",
+        "de939f97f004cb5107fa016a783f697b",
+        "646d27e61ec3eb083ae0198afdb0c7e1",
         "8e626a8360a6ac5335caa55a1a447c12",
         "4257a6446b50b7c265b362140350e97d",
         "82dadc79a920a9fd19b6452c228484d5",
-        "3cd49a7a6f0133522d26e57bcdc1f950",
-        "80b8710f70d87cb71abdc4c53f2dc163",
-        "21c3f2cd2b80e1ef6b9785c9c4df0393",
-        "e92e8fe94884e7be9339aa1a2fca1ed5"
+        "d588647280bdb08ec08e7ca0db1730d9",
+        "53d3c50d8e3e9c1173edd97e9e1665cd",
+        "3cd49a7a6f0133522d26e57bcdc1f950"
       ]
     },
     {
@@ -2834,19 +2836,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 7.288,
+      "latency_ms": 8.998,
       "returned": 10,
       "top_chunk_ids": [
-        "20d5e7ca243b41075d3c62201b410ad1",
-        "8ff7ad7b828491930974736cf995eaef",
+        "edb0514a8b1a094a6c6ede64da0189fd",
+        "6163ce31cb09940460498f9997a2be09",
         "f9f3baa7a21bfc3089f981b6273e43c2",
-        "c614dad0ad09474ed6f6877e3b61de08",
+        "9fc07a678227f2ea519abbb73f38c261",
+        "7a13b51f6d6491072aa7b675e7afdcfd",
+        "7710b6855968e6c254ba365a3d1454e9",
         "ad5eeb94dd46f45803859dd929d6bd2a",
+        "a6ce332df6911a81dc7a12e02579c575",
         "8831bba961fcb6093cf0d9a714ade65c",
-        "41b278e9fed03e061b1bac44372be96d",
-        "04b53f1fd5493b5889d5be6d43fddb0e",
-        "ee5573921a489184657318c19e9de2d7",
-        "0258ec9a639eac143b36aa8312ed5b60"
+        "8c378ccc77362235d18e37849bc53f84"
       ]
     },
     {
@@ -2856,19 +2858,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 9.142,
+      "latency_ms": 17.273,
       "returned": 10,
       "top_chunk_ids": [
-        "c5d2bfc8802b8c332037b6445883b747",
+        "bf29aeaad239239f272a799c42128742",
         "85c530f393e7fd20ad0f97230fe23633",
-        "cbf4c1e9210545511a1ee27e34217766",
-        "2da8a7f71efe38770944f13ae143beef",
+        "cea88d5c9b9e5185622e4f734932d5db",
+        "8c378ccc77362235d18e37849bc53f84",
+        "7361d7a9842cd4f7b2ee09eaf789a80d",
         "f8aa90a830cf3429985ee79223432ca1",
-        "89435da60bf2c2ca0e2bee9aa4fd225f",
+        "06be6015c9c48aa226857fa34395ac5d",
         "b2c0ff81c659e472eb25c8aff0291b4d",
-        "c63f10678937c1b2beaa37fa4db6a70a",
-        "349758e24391536645cbc60affa3283d",
-        "2e9dee3b499f3a179ef0d863a5f271da"
+        "93f43cd77846d41e5cf767d2f1516dce",
+        "042e3d0d3a485cbdf3d8a2d892554af6"
       ]
     },
     {
@@ -2878,19 +2880,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 8.61,
+      "latency_ms": 13.749,
       "returned": 10,
       "top_chunk_ids": [
-        "20106f5982105abf3f24751d0ee5816d",
+        "e68276e1e2736288a7917177cd542fc1",
         "62c7ea10e02b81471a429da5adb44061",
+        "1807fc72160a16aadcfb230ac7274ae2",
+        "ebbf97ef6313ed2a1d3d6fcaafc99b1e",
         "00352541e0b7a82fbdd1188e663671cf",
         "13b08f24a9450170df16608d359f4543",
-        "765e06358edae85c8a650860d5354013",
-        "01c0a50349a7061080c0306f9b91c0df",
         "36fcb23761cdc3fc6004494b83ae8bdc",
-        "4016584e7887c8e40aa4b29c86f3a4c7",
         "8831bba961fcb6093cf0d9a714ade65c",
-        "e5d8db8579e4e3e14d3843c3fb734838"
+        "c896694ed6a7d6b9a7819eb0e599465b",
+        "03de996a31537441b81e28fa73edfbc9"
       ]
     },
     {
@@ -2900,19 +2902,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 6.941,
+      "latency_ms": 11.464,
       "returned": 10,
       "top_chunk_ids": [
-        "c5d2bfc8802b8c332037b6445883b747",
-        "6e7ad2fefe85ede67c4a24dd935e24a2",
+        "e5ee756f0cc71b7d293d8321d9b44c71",
+        "8c378ccc77362235d18e37849bc53f84",
         "79f366b1f8a0363984d9fab280968c57",
-        "8ff7ad7b828491930974736cf995eaef",
-        "f9f3baa7a21bfc3089f981b6273e43c2",
+        "6163ce31cb09940460498f9997a2be09",
+        "b821c272dbb56ad4f6548a4011c56df4",
         "005ebcff0c528c505594a75f5916ab79",
-        "20d5e7ca243b41075d3c62201b410ad1",
-        "a25083ec893a995c359348e54aa3fe8a",
-        "d6139dac330c6db8a6b548addb62647c",
-        "20106f5982105abf3f24751d0ee5816d"
+        "f9f3baa7a21bfc3089f981b6273e43c2",
+        "9fc07a678227f2ea519abbb73f38c261",
+        "bf29aeaad239239f272a799c42128742",
+        "a25083ec893a995c359348e54aa3fe8a"
       ]
     },
     {
@@ -2922,19 +2924,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 9.025,
+      "latency_ms": 20.996,
       "returned": 10,
       "top_chunk_ids": [
-        "20106f5982105abf3f24751d0ee5816d",
+        "e68276e1e2736288a7917177cd542fc1",
         "3706e790396c8e158a92d416d69ff66e",
-        "84efadafefd570f95267b02706519059",
-        "e05bcee24b16737e19e9eec1232ccc78",
-        "2a481d1fd106b10c21c910fd66dffbc3",
-        "b5fc9d8838b156fb48577ac1e84f49bc",
-        "ee7ced7a56d0c1d80293bd4863d7bbbf",
-        "064c389ebe61231023a855af59ff3c56",
-        "8e8e6e4ba331411234f5f1e7924b757a",
-        "d9b1e9578da55144b4663d3cb6fb6df3"
+        "3a99953b16efce423383a4aae058e8e5",
+        "f678fcb0f67534f4ef14f94e7ccaf708",
+        "e055c415ef8af8d970968d78912ebc34",
+        "9521c8834608d92280e506bec547ee51",
+        "52a5b9050a46ffea721e022c7383298b",
+        "e643ec2c5c81885b047044145b46e39c",
+        "8d9c19bc1a939577fc14103176ac8c91",
+        "7a3598633b304cda8f1d8eccdec908f3"
       ]
     },
     {
@@ -2944,19 +2946,19 @@
       "answer_authority": "guidance",
       "passed": true,
       "rank": 1,
-      "latency_ms": 6.586,
+      "latency_ms": 11.197,
       "returned": 10,
       "top_chunk_ids": [
         "60881d928400f01449dfa63da9f11fc5",
         "35489b27a7a414bb0a48ad8cddd87465",
         "19bed1094eba071eaebe8581c9f62e57",
         "c9fb3a51dba23ab57effcfec3005579a",
+        "d3eafacbf351f3e74c574d91c4377815",
+        "ac540a336425d7f80ca1233233a8d512",
         "9a619735fb89bd426ebdbcb9930add7f",
-        "89435da60bf2c2ca0e2bee9aa4fd225f",
-        "d1f4fd6736602e9e9d7738493e47a54b",
-        "21ef40af08846f2c97857b657d374214",
-        "500cf922af75b4c56ad446c3e3b088e2",
-        "9b77d45ebe07a9a864dce4a0e9f18d5d"
+        "d17229cb3506c04e53592ab1d70377b3",
+        "06be6015c9c48aa226857fa34395ac5d",
+        "d1f4fd6736602e9e9d7738493e47a54b"
       ]
     }
   ]

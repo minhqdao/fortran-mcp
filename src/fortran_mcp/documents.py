@@ -16,7 +16,7 @@ from fortran_mcp.config import data_directory
 from fortran_mcp.ingest import IngestionError
 from fortran_mcp.sources import IngestionRecord, StrictModel, load_registry
 
-MAX_CHUNK_CHARS = 4_000
+MAX_CHUNK_CHARS = 1_600
 HEADING = re.compile(r"^(#{1,6})\s+(.+?)(?:\s+#+)?$")
 LITERAL_INCLUDE = re.compile(r"^```\{literalinclude\}\s+(.+?)\s*$")
 HTML_COMMENT = re.compile(r"<!--.*?-->", re.DOTALL)
@@ -112,13 +112,26 @@ def _sections(lines: list[str]) -> Iterator[tuple[tuple[str, ...], int, int]]:
         yield section_headings, section_start, len(lines) - 1
 
 
-def _bounded_ranges(lines: list[str], start: int, end: int) -> Iterator[tuple[int, int]]:
+def _fence_safe_blanks(lines: list[str]) -> list[bool]:
+    """Flag blank lines that sit outside every code fence, so splits keep fences whole."""
+    depth = 0
+    safe: list[bool] = []
+    for line in lines:
+        if line.lstrip().startswith(("```", "~~~")):
+            depth += 1
+        safe.append(not line.strip() and depth % 2 == 0)
+    return safe
+
+
+def _bounded_ranges(
+    lines: list[str], start: int, end: int, sizes: Sequence[int], safe_blank: Sequence[bool]
+) -> Iterator[tuple[int, int]]:
     chunk_start = start
     size = 0
     last_blank: int | None = None
     index = start
     while index <= end:
-        line_size = len(lines[index]) + 1
+        line_size = sizes[index]
         if size and size + line_size > MAX_CHUNK_CHARS:
             chunk_end = (
                 last_blank if last_blank is not None and last_blank > chunk_start + 1 else index - 1
@@ -132,7 +145,7 @@ def _bounded_ranges(lines: list[str], start: int, end: int) -> Iterator[tuple[in
             last_blank = None
             continue
         size += line_size
-        if not lines[index].strip():
+        if safe_blank[index]:
             last_blank = index
         index += 1
     if chunk_start <= end:
@@ -147,6 +160,27 @@ def _matches(path: str, patterns: tuple[str, ...]) -> bool:
         else candidate == Path(pattern)
         for pattern in patterns
     )
+
+
+def _include_target(page_path: str, relative_target: str, documents: dict[str, str]) -> str:
+    target = normpath((Path(page_path).parent / relative_target).as_posix())
+    if target.startswith("../") or target not in documents:
+        raise DocumentBuildError(f"literal include not found: {page_path}: {relative_target}")
+    return target
+
+
+def _line_sizes(lines: list[str], *, page_path: str, documents: dict[str, str]) -> list[int]:
+    """Return rendered byte budgets per line, charging literal includes their expanded size."""
+    sizes: list[int] = []
+    for line in lines:
+        match = LITERAL_INCLUDE.match(line)
+        if match is None:
+            sizes.append(len(line) + 1)
+            continue
+        target = _include_target(page_path, match.group(1), documents)
+        suffix = Path(target).suffix.lstrip(".")
+        sizes.append(len(documents[target].rstrip()) + len(suffix) + 8)
+    return sizes
 
 
 def _render_range(
@@ -168,9 +202,7 @@ def _render_range(
             continue
 
         relative_target = match.group(1)
-        target = normpath((Path(page_path).parent / relative_target).as_posix())
-        if target.startswith("../") or target not in documents:
-            raise DocumentBuildError(f"literal include not found: {page_path}: {relative_target}")
+        target = _include_target(page_path, relative_target, documents)
         suffix = Path(target).suffix.lstrip(".")
         rendered.extend((f"```{suffix}", documents[target].rstrip(), "```"))
         included_paths.append(target)
@@ -191,8 +223,10 @@ def _chunks_for_file(
     documents: dict[str, str],
 ) -> Iterator[DocumentChunk]:
     lines = content.splitlines()
+    sizes = _line_sizes(lines, page_path=path, documents=documents)
+    safe_blank = _fence_safe_blanks(lines)
     for headings, section_start, section_end in _sections(lines):
-        for start, end in _bounded_ranges(lines, section_start, section_end):
+        for start, end in _bounded_ranges(lines, section_start, section_end, sizes, safe_blank):
             text, included_paths = _render_range(
                 lines,
                 start,
