@@ -19,6 +19,7 @@ from fortran_mcp.search import INDEX_FILENAME
 from fortran_mcp.semantic import SEMANTIC_INDEX_FILENAME
 
 AUTO_INSTALL_ENV = "FORTRAN_MCP_AUTO_INSTALL"
+CATALOG_ENV = "FORTRAN_MCP_CATALOG"
 
 _INSTALL_HINT = (
     "Install manually with:\n  fortran-mcp data install core\n  fortran-mcp data install semantic"
@@ -76,10 +77,14 @@ def _install_roles(
     return True
 
 
+def _catalog_location() -> CatalogLocation:
+    return os.environ.get(CATALOG_ENV, "").strip() or DEFAULT_CATALOG_URL
+
+
 def offer_data_install(
     *,
     data_dir: Path | None = None,
-    catalog_location: CatalogLocation = DEFAULT_CATALOG_URL,
+    catalog_location: CatalogLocation | None = None,
     interactive: bool,
     prompt: Callable[[str], str] = input,
     message: Callable[[str], None] = _stderr,
@@ -89,9 +94,11 @@ def offer_data_install(
     Terminal sessions are informed that no data exists and choose between core, core
     plus semantic, and skipping; the network is only touched after a choice. MCP
     clients launch the server without a console, so those sessions download the core
-    bundle automatically unless FORTRAN_MCP_AUTO_INSTALL disables it.
+    bundle automatically unless FORTRAN_MCP_AUTO_INSTALL disables it. The catalog
+    defaults to the project release and can be overridden with FORTRAN_MCP_CATALOG.
     """
     data_dir = data_dir or data_directory()
+    catalog_location = catalog_location or _catalog_location()
     if any_data_present(data_dir):
         return ProvisionResult.DATA_PRESENT
     if not interactive:

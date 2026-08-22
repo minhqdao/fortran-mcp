@@ -29,7 +29,8 @@ data packages were found and offers to install core for lexical search or core p
 semantic and hybrid search; the download only starts after a choice. Skipping, or a failed
 download, prints the manual install commands and exits cleanly. Client-launched servers cannot
 prompt, so they download the core bundle automatically (set `FORTRAN_MCP_AUTO_INSTALL=0` to
-manage data yourself) and exit with the error and manual commands if the download fails. The
+manage data yourself, or `FORTRAN_MCP_CATALOG` to install from a local catalog path or HTTPS URL)
+and exit with the error and manual commands if the download fails. The
 optional semantic bundle and runtime are not needed for the default lexical search.
 
 ## Command reference

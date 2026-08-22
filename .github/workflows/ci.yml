@@ -79,6 +79,6 @@ jobs:
           .package-venv/bin/fortran-mcp --help
           .package-venv/bin/fortran-mcp doctor --json
           .package-venv/bin/fortran-mcp source list --json
-          .package-venv/bin/fortran-mcp data status --json
+          .package-venv/bin/fortran-mcp data verify
           uv pip check --python .package-venv/bin/python
           ! tar -tzf dist/*.tar.gz | grep -q '/todo.md$'

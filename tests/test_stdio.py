@@ -9,14 +9,18 @@ from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 
 from .mcp_fixtures import assert_server_contract, prepare_index
+from .test_provision import _release
 
 
-async def _exercise_server(working_directory: Path) -> None:
+async def _exercise_server(working_directory: Path, *, catalog: Path | None = None) -> None:
+    env = {**os.environ, "FORTRAN_MCP_DATA_DIR": str(working_directory / "data")}
+    if catalog is not None:
+        env["FORTRAN_MCP_CATALOG"] = str(catalog)
     parameters = StdioServerParameters(
         command=sys.executable,
         args=["-m", "fortran_mcp.server"],
         cwd=working_directory,
-        env={**os.environ, "FORTRAN_MCP_DATA_DIR": str(working_directory / "data")},
+        env=env,
     )
     async with (
         stdio_client(parameters) as (read_stream, write_stream),
@@ -38,3 +42,13 @@ def test_stdio_server_round_trip(tmp_path: Path) -> None:
     prepare_index(tmp_path / "data")
 
     asyncio.run(_exercise_server(tmp_path))
+
+
+def test_stdio_server_auto_installs_core_and_serves_search(tmp_path: Path) -> None:
+    catalog = _release(tmp_path)
+    data_dir = tmp_path / "data"
+
+    asyncio.run(_exercise_server(tmp_path, catalog=catalog))
+
+    assert (data_dir / "manifests" / "core.json").is_file()
+    assert (data_dir / "fortran-mcp.db").is_file()
