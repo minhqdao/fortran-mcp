@@ -237,9 +237,10 @@ uv run fortran-mcp-benchmark --provider hybrid \
 
 The semantic-index command downloads the configured embedding model on its first run. Later builds
 reuse vectors whose model and embedded passage content are unchanged, embed only new or changed
-chunks, and discard removed chunks. Pass `--rebuild` to regenerate every vector. The generated index
-stays in the data directory and records both the model name and the lexical-index checksum, so a
-stale or incompatible index is rejected.
+chunks, and discard removed chunks. Pass `--rebuild` to regenerate every vector. Chunks are embedded
+in length-sorted batches, which roughly halves indexing time on mixed-length corpora without
+changing any embedding. The generated index stays in the data directory and records both the model
+name and the lexical-index checksum, so a stale or incompatible index is rejected.
 
 Lexical search remains the server default. After building the semantic index, select another local
 provider with `FORTRAN_MCP_SEARCH_PROVIDER=semantic` or

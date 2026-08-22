@@ -1,6 +1,8 @@
 """Tests for local semantic indexing and retrieval."""
 
 import json
+import sqlite3
+from array import array
 from collections.abc import Iterable, Sequence
 from pathlib import Path
 
@@ -152,3 +154,50 @@ def test_incremental_build_embeds_changes_and_removes_old_chunks(tmp_path: Path)
     assert result.reused == 0
     assert result.removed == 1
     assert len(model.embedded) == 2
+
+
+def test_build_batches_by_length_and_keeps_vectors_keyed(tmp_path: Path) -> None:
+    class RecordingModel(FakeEmbeddingModel):
+        def __init__(self) -> None:
+            super().__init__()
+            self.batches: list[list[str]] = []
+
+        def embed_passages(self, texts: Sequence[str]) -> Iterable[Sequence[float]]:
+            self.batches.append(list(texts))
+            return super().embed_passages(texts)
+
+    filler = "filler " * 400
+    chunks = (
+        _chunk("1" * 32, "Dependencies", "Use an OpenMP metapackage."),
+        _chunk("2" * 32, "Parallelism", f"OpenMP program examples. {filler}"),
+        _chunk("3" * 32, "Installation", "Install fpm with a package manager."),
+        _chunk("4" * 32, "Packaging", f"Package metadata reference. {filler}"),
+    )
+    chunk_dir = tmp_path / "chunks"
+    chunk_dir.mkdir()
+    (chunk_dir / "fpm.jsonl").write_text(
+        "".join(json.dumps(chunk.model_dump(mode="json")) + "\n" for chunk in chunks),
+        encoding="utf-8",
+    )
+    lexical_index = tmp_path / "lexical.db"
+    semantic_index = tmp_path / "semantic.db"
+    build_index(tmp_path, lexical_index)
+    model = RecordingModel()
+
+    result = build_semantic_index(
+        model,
+        lexical_index=lexical_index,
+        destination=semantic_index,
+        batch_size=2,
+    )
+
+    assert result.total == result.embedded == 4
+    # Chunk-id order interleaves short and long passages; embedding must regroup them.
+    assert [sum("filler" in text for text in batch) for batch in model.batches] == [0, 2]
+    with sqlite3.connect(f"file:{semantic_index}?mode=ro", uri=True) as database:
+        vectors = dict(database.execute("SELECT chunk_id, embedding FROM vectors"))
+    mentions_openmp = {"1" * 32: True, "2" * 32: True, "3" * 32: False, "4" * 32: False}
+    for chunk_id, expected in mentions_openmp.items():
+        vector = array("f")
+        vector.frombytes(vectors[chunk_id])
+        assert (vector[0] > vector[1]) is expected

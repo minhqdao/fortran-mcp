@@ -228,6 +228,7 @@ def build_semantic_index(
                 else:
                     pending.append((chunk_id, source_id, text, content_sha256))
 
+            pending.sort(key=lambda item: len(item[2]))
             for batch in _batches(pending, batch_size):
                 embeddings = list(model.embed_passages([text for _, _, text, _ in batch]))
                 if len(embeddings) != len(batch):
