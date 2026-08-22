@@ -5,7 +5,7 @@ Install the published server and compact core data before connecting a client:
 ```bash
 uv tool install fortran-mcp
 fortran-mcp data install core
-fortran-mcp data status
+fortran-mcp doctor
 ```
 
 The server uses stdio and needs no working-directory setting.

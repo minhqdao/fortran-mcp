@@ -2,6 +2,7 @@
 
 import argparse
 import json
+import sys
 from collections.abc import Sequence
 from functools import cache
 from typing import Literal
@@ -132,6 +133,9 @@ def _parser() -> argparse.ArgumentParser:
 def main(argv: Sequence[str] | None = None) -> None:
     """Run the server using stdio or Streamable HTTP."""
     args = _parser().parse_args(argv)
+    from fortran_mcp.provision import offer_data_install
+
+    offer_data_install(interactive=sys.stdin.isatty())
     transport: Literal["stdio", "streamable-http"] = args.transport
     if transport == "stdio":
         mcp.run()

@@ -20,20 +20,22 @@ Prerequisite: Python 3.11+ and [uv](https://docs.astral.sh/uv/).
 
 ```bash
 uv tool install fortran-mcp
-fortran-mcp data install core
-fortran-mcp doctor
 ```
 
 Configure an MCP client to launch the stdio command `fortran-mcp`; see
 [Connect an MCP client](https://github.com/minhqdao/fortran-mcp/blob/main/docs/clients.md) for
-examples. The optional semantic bundle and runtime are not needed for the default lexical search.
+examples. When `fortran-mcp` starts in a terminal with no data installed, it offers to download
+the core bundle for lexical search or core plus semantic for semantic and hybrid search, showing
+each download size. Client-launched servers never prompt; they print the install hint on stderr,
+and `fortran-mcp data install core` (then optionally `fortran-mcp data install semantic`) works
+everywhere. The optional semantic bundle and runtime are not needed for the default lexical search.
 
 Useful first commands:
 
 ```bash
 fortran-mcp --help
 fortran-mcp --version
-fortran-mcp data status
+fortran-mcp doctor
 ```
 
 After connecting a client, try: “How do I add OpenMP to an fpm project? Use the Fortran
@@ -280,13 +282,13 @@ Normal users use the built-in GitHub Release catalog through the unified command
 
 ```bash
 fortran-mcp data install core
-fortran-mcp data status
 fortran-mcp data verify
 fortran-mcp data remove
 ```
 
 Running `fortran-mcp` without a subcommand still starts the stdio MCP server, so existing client
-configuration remains compatible. `data status --json` provides a machine-readable readiness report.
+configuration remains compatible. `fortran-mcp doctor` lists installed data, including custom
+corpora built with `source sync`; `fortran-mcp doctor --json` is machine-readable.
 `data remove` asks for confirmation, then removes installed bundle files while preserving unrelated
 files in the data directory; pass `--yes` for non-interactive use. It removes documentation data,
 not the Python package itself. If installed with `uv tool`, uninstall that separately with

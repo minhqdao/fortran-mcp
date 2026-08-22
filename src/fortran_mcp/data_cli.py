@@ -3,7 +3,6 @@
 import argparse
 import hashlib
 import importlib.util
-import json
 from collections.abc import Sequence
 from contextlib import suppress
 from pathlib import Path, PurePosixPath
@@ -156,25 +155,6 @@ def remove_data(data_dir: Path | None = None) -> int:
     return len(files)
 
 
-def _print_status(status: DataStatus) -> None:
-    print(f"Data directory: {status.data_directory}")
-    for bundle in status.bundles:
-        if not bundle.installed:
-            print(f"{bundle.role}: not installed")
-        elif not bundle.valid:
-            print(f"{bundle.role}: invalid ({bundle.error})")
-        else:
-            print(
-                f"{bundle.role}: {bundle.bundle_version} "
-                f"({len(bundle.sources)} sources, {bundle.size} bytes)"
-            )
-    print(f"lexical: {'ready' if status.lexical_ready else 'unavailable'}")
-    print(f"semantic: {'ready' if status.semantic_ready else 'unavailable'}")
-    print(f"hybrid: {'ready' if status.hybrid_ready else 'unavailable'}")
-    if not status.lexical_ready:
-        print("next: fortran-mcp data install core")
-
-
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="fortran-mcp data", description="Manage documentation data"
@@ -188,9 +168,6 @@ def _parser() -> argparse.ArgumentParser:
         help="local catalog path or HTTPS URL",
     )
     install.add_argument("--data-dir", type=Path, default=data_directory())
-    status = subparsers.add_parser("status")
-    status.add_argument("--data-dir", type=Path, default=data_directory())
-    status.add_argument("--json", action="store_true")
     verify = subparsers.add_parser("verify")
     verify.add_argument("--data-dir", type=Path, default=data_directory())
     remove = subparsers.add_parser("remove")
@@ -209,12 +186,6 @@ def main(argv: Sequence[str] | None = None) -> None:
             print(f"Installed {manifest.bundle_id} into {args.data_dir}")
             return
         status = data_status(args.data_dir)
-        if args.command == "status":
-            if args.json:
-                print(json.dumps(status.model_dump(mode="json"), indent=2))
-            else:
-                _print_status(status)
-            return
         if args.command == "remove":
             managed = _managed_files(args.data_dir)
             if not managed:
