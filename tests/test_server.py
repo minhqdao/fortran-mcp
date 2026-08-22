@@ -4,9 +4,11 @@ import asyncio
 from collections.abc import Iterable
 from typing import Any, cast
 
+import pytest
 from mcp.types import CallToolResult
 from pydantic import HttpUrl
 
+from fortran_mcp.provision import ProvisionResult
 from fortran_mcp.search import SearchResult
 from fortran_mcp.server import main, mcp
 from fortran_mcp.sources import DocumentType, SourceAuthority
@@ -164,15 +166,43 @@ def test_search_tool_filters_source_applicability(monkeypatch: Any) -> None:
 def test_server_defaults_to_stdio(monkeypatch: Any) -> None:
     calls: list[tuple[tuple[Any, ...], dict[str, Any]]] = []
     monkeypatch.setattr(mcp, "run", lambda *args, **kwargs: calls.append((args, kwargs)))
+    monkeypatch.setenv("FORTRAN_MCP_AUTO_INSTALL", "0")
 
     main([])
 
     assert calls == [((), {})]
 
 
+def test_server_exits_cleanly_when_provisioning_fails(monkeypatch: Any) -> None:
+    monkeypatch.setattr(mcp, "run", lambda *args, **kwargs: pytest.fail("server started"))
+    monkeypatch.setattr(
+        "fortran_mcp.provision.offer_data_install",
+        lambda **_kwargs: ProvisionResult.FAILED,
+    )
+
+    with pytest.raises(SystemExit) as excinfo:
+        main([])
+
+    assert excinfo.value.code == 1
+
+
+def test_server_exits_cleanly_when_provisioning_is_skipped(monkeypatch: Any) -> None:
+    monkeypatch.setattr(mcp, "run", lambda *args, **kwargs: pytest.fail("server started"))
+    monkeypatch.setattr(
+        "fortran_mcp.provision.offer_data_install",
+        lambda **_kwargs: ProvisionResult.SKIPPED,
+    )
+
+    with pytest.raises(SystemExit) as excinfo:
+        main([])
+
+    assert excinfo.value.code == 0
+
+
 def test_server_configures_streamable_http_security(monkeypatch: Any) -> None:
     calls: list[tuple[tuple[Any, ...], dict[str, Any]]] = []
     monkeypatch.setattr(mcp, "run", lambda *args, **kwargs: calls.append((args, kwargs)))
+    monkeypatch.setenv("FORTRAN_MCP_AUTO_INSTALL", "0")
 
     main(
         [

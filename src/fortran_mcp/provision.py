@@ -1,7 +1,9 @@
-"""Offer to install documentation data when the server starts without any."""
+"""Install documentation data automatically when the server starts without any."""
 
+import os
 import sys
 from collections.abc import Callable
+from enum import Enum
 from pathlib import Path
 
 from fortran_mcp.bundle import BundleError
@@ -11,19 +13,28 @@ from fortran_mcp.catalog import (
     CatalogError,
     CatalogLocation,
     install_from_catalog,
-    load_catalog,
 )
 from fortran_mcp.config import data_directory
 from fortran_mcp.search import INDEX_FILENAME
 from fortran_mcp.semantic import SEMANTIC_INDEX_FILENAME
 
-MEBIBYTE = 1024 * 1024
+AUTO_INSTALL_ENV = "FORTRAN_MCP_AUTO_INSTALL"
 
 _INSTALL_HINT = (
-    "No Fortran documentation data is installed. Run 'fortran-mcp data install core' for "
-    "lexical search, then optionally 'fortran-mcp data install semantic' to add semantic "
-    "and hybrid search."
+    "Install manually with:\n"
+    "  fortran-mcp data install core\n"
+    "  fortran-mcp data install semantic"
 )
+
+
+class ProvisionResult(Enum):
+    """Startup provisioning outcome; SKIPPED and FAILED stop the server cleanly."""
+
+    DATA_PRESENT = "data-present"
+    OPTED_OUT = "opted-out"
+    INSTALLED = "installed"
+    SKIPPED = "skipped"
+    FAILED = "failed"
 
 
 def _stderr(text: str) -> None:
@@ -43,6 +54,30 @@ def any_data_present(data_dir: Path) -> bool:
     )
 
 
+def _auto_install_enabled() -> bool:
+    value = os.environ.get(AUTO_INSTALL_ENV, "1").strip().casefold()
+    return value not in {"0", "false", "no"}
+
+
+def _install_roles(
+    roles: tuple[BundleRole, ...],
+    catalog_location: CatalogLocation,
+    data_dir: Path,
+    message: Callable[[str], None],
+) -> bool:
+    try:
+        for role in roles:
+            message(f"Downloading {role} data...")
+            manifest = install_from_catalog(role, catalog_location, data_dir=data_dir)
+            message(f"Installed {manifest.bundle_id}")
+    except (BundleError, CatalogError) as error:
+        text = str(error)
+        message(f"Download failed: {text[:1].upper()}{text[1:]}")
+        message(_INSTALL_HINT)
+        return False
+    return True
+
+
 def offer_data_install(
     *,
     data_dir: Path | None = None,
@@ -50,30 +85,28 @@ def offer_data_install(
     interactive: bool,
     prompt: Callable[[str], str] = input,
     message: Callable[[str], None] = _stderr,
-) -> bool:
-    """Interactively install core data when nothing is installed yet.
+) -> ProvisionResult:
+    """Install core data when nothing is installed yet.
 
-    The prompt only appears for interactive terminal sessions; MCP clients launch the
-    server without a console, so they receive the install hint on stderr instead.
+    Terminal sessions are informed that no data exists and choose between core, core
+    plus semantic, and skipping; the network is only touched after a choice. MCP
+    clients launch the server without a console, so those sessions download the core
+    bundle automatically unless FORTRAN_MCP_AUTO_INSTALL disables it.
     """
     data_dir = data_dir or data_directory()
     if any_data_present(data_dir):
-        return False
+        return ProvisionResult.DATA_PRESENT
     if not interactive:
-        message(_INSTALL_HINT)
-        return False
-    try:
-        catalog = load_catalog(catalog_location)
-    except CatalogError as error:
-        message(f"{error}")
-        return False
-    sizes = {entry.role: entry.size for entry in catalog.bundles}
-    core_mb = sizes.get("core", 0) / MEBIBYTE
-    semantic_mb = sizes.get("semantic", 0) / MEBIBYTE
+        if not _auto_install_enabled():
+            message("Automatic data download is disabled.")
+            message(_INSTALL_HINT)
+            return ProvisionResult.OPTED_OUT
+        installed = _install_roles(("core",), catalog_location, data_dir, message)
+        return ProvisionResult.INSTALLED if installed else ProvisionResult.FAILED
     message(
-        "No Fortran documentation data is installed.\n"
-        f"  1) core: {core_mb:.1f} MB (lexical search)\n"
-        f"  2) core + semantic: {core_mb + semantic_mb:.1f} MB (adds semantic and hybrid search)\n"
+        "No data packages found. Select a package to download:\n"
+        "  1) core (lexical search)\n"
+        "  2) core + semantic (adds semantic and hybrid search)\n"
         "  3) skip\n"
         "Choose [1/2/3]: "
     )
@@ -87,13 +120,8 @@ def offer_data_install(
     elif answer == "2":
         roles = ("core", "semantic")
     else:
+        message("No data will be downloaded.")
         message(_INSTALL_HINT)
-        return False
-    try:
-        for role in roles:
-            manifest = install_from_catalog(role, catalog_location, data_dir=data_dir)
-            message(f"Installed {manifest.bundle_id}")
-    except (BundleError, CatalogError) as error:
-        message(f"{error}")
-        return False
-    return True
+        return ProvisionResult.SKIPPED
+    installed = _install_roles(roles, catalog_location, data_dir, message)
+    return ProvisionResult.INSTALLED if installed else ProvisionResult.FAILED

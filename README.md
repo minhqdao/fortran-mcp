@@ -24,11 +24,13 @@ uv tool install fortran-mcp
 
 Configure an MCP client to launch the stdio command `fortran-mcp`; see
 [Connect an MCP client](https://github.com/minhqdao/fortran-mcp/blob/main/docs/clients.md) for
-examples. When `fortran-mcp` starts in a terminal with no data installed, it offers to download
-the core bundle for lexical search or core plus semantic for semantic and hybrid search, showing
-each download size. Client-launched servers never prompt; they print the install hint on stderr,
-and `fortran-mcp data install core` (then optionally `fortran-mcp data install semantic`) works
-everywhere. The optional semantic bundle and runtime are not needed for the default lexical search.
+examples. When `fortran-mcp` starts in a terminal with no data installed, it reports that no
+data packages were found and offers to install core for lexical search or core plus semantic for
+semantic and hybrid search; the download only starts after a choice. Skipping, or a failed
+download, prints the manual install commands and exits cleanly. Client-launched servers cannot
+prompt, so they download the core bundle automatically (set `FORTRAN_MCP_AUTO_INSTALL=0` to
+manage data yourself) and exit with the error and manual commands if the download fails. The
+optional semantic bundle and runtime are not needed for the default lexical search.
 
 Useful first commands:
 

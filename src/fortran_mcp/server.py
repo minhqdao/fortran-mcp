@@ -133,9 +133,11 @@ def _parser() -> argparse.ArgumentParser:
 def main(argv: Sequence[str] | None = None) -> None:
     """Run the server using stdio or Streamable HTTP."""
     args = _parser().parse_args(argv)
-    from fortran_mcp.provision import offer_data_install
+    from fortran_mcp.provision import ProvisionResult, offer_data_install
 
-    offer_data_install(interactive=sys.stdin.isatty())
+    result = offer_data_install(interactive=sys.stdin.isatty())
+    if result in {ProvisionResult.SKIPPED, ProvisionResult.FAILED}:
+        raise SystemExit(1 if result is ProvisionResult.FAILED else 0)
     transport: Literal["stdio", "streamable-http"] = args.transport
     if transport == "stdio":
         mcp.run()
