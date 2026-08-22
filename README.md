@@ -23,8 +23,8 @@ uv tool install fortran-mcp
 ```
 
 Configure an MCP client to launch the stdio command `fortran-mcp`; see
-[Connect an MCP client](https://github.com/minhqdao/fortran-mcp/blob/main/docs/clients.md) for
-examples. When `fortran-mcp` starts in a terminal with no data installed, it reports that no
+[Connect an MCP client](docs/clients.md) for examples. When `fortran-mcp` starts
+in a terminal with no data installed, it reports that no
 data packages were found and offers to install core for lexical search or core plus semantic for
 semantic and hybrid search; the download only starts after a choice. Skipping, or a failed
 download, prints the manual install commands and exits cleanly. Client-launched servers cannot
@@ -32,13 +32,21 @@ prompt, so they download the core bundle automatically (set `FORTRAN_MCP_AUTO_IN
 manage data yourself) and exit with the error and manual commands if the download fails. The
 optional semantic bundle and runtime are not needed for the default lexical search.
 
-Useful first commands:
+## Command reference
 
-```bash
-fortran-mcp --help
-fortran-mcp --version
-fortran-mcp doctor
-```
+| Command | Arguments | Description |
+|---|---|---|
+| `fortran-mcp` | none | Start the stdio MCP server |
+| `fortran-mcp --transport streamable-http` | optional flags | Start the HTTP server (`--host`, `--port`, `--path`, `--allowed-host`) |
+| `fortran-mcp doctor` | none | Show configuration and installed data (`--json` for machine-readable output) |
+| `fortran-mcp data install <package>` | `core` or `semantic` | Download and install one data package from the release catalog |
+| `fortran-mcp data verify` | none | Verify every installed data package |
+| `fortran-mcp data remove <package>` | `core` or `semantic` | Remove one installed data package; asks to confirm, `--yes` skips |
+| `fortran-mcp source list` | none | List reviewed sources with versions and provenance (`--json`) |
+| `fortran-mcp source sync <source>` | a source ID | Download one reviewed source and rebuild its chunks and the lexical index |
+
+`data remove` requires a package, refuses to remove `core` while `semantic` is installed, and only
+deletes files the remaining packages no longer need.
 
 After connecting a client, try: “How do I add OpenMP to an fpm project? Use the Fortran
 documentation server and cite the source.”
@@ -285,16 +293,15 @@ Normal users use the built-in GitHub Release catalog through the unified command
 ```bash
 fortran-mcp data install core
 fortran-mcp data verify
-fortran-mcp data remove
+fortran-mcp data remove core
 ```
 
 Running `fortran-mcp` without a subcommand still starts the stdio MCP server, so existing client
 configuration remains compatible. `fortran-mcp doctor` lists installed data, including custom
-corpora built with `source sync`; `fortran-mcp doctor --json` is machine-readable.
-`data remove` asks for confirmation, then removes installed bundle files while preserving unrelated
-files in the data directory; pass `--yes` for non-interactive use. It removes documentation data,
-not the Python package itself. If installed with `uv tool`, uninstall that separately with
-`uv tool uninstall fortran-mcp`.
+corpora built with `source sync`; `fortran-mcp doctor --json` is machine-readable. `data remove`
+removes exactly one named data package after confirmation, keeps unrelated files in the data
+directory, and removes documentation data only — not the Python package itself. If installed with
+`uv tool`, uninstall that separately with `uv tool uninstall fortran-mcp`.
 
 Bundles use a versioned manifest, deterministic ZIP metadata, stable file ordering, and SHA-256
 checksums for every payload. The default catalog is loaded over HTTPS from the latest GitHub Release;

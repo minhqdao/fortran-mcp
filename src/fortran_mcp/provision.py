@@ -21,9 +21,7 @@ from fortran_mcp.semantic import SEMANTIC_INDEX_FILENAME
 AUTO_INSTALL_ENV = "FORTRAN_MCP_AUTO_INSTALL"
 
 _INSTALL_HINT = (
-    "Install manually with:\n"
-    "  fortran-mcp data install core\n"
-    "  fortran-mcp data install semantic"
+    "Install manually with:\n  fortran-mcp data install core\n  fortran-mcp data install semantic"
 )
 
 

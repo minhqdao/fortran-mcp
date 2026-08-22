@@ -117,36 +117,47 @@ def data_status(data_dir: Path | None = None) -> DataStatus:
     )
 
 
+def _role_files(data_dir: Path, role: Role) -> tuple[Path, ...]:
+    """Return files tracked by one role's installed manifest, including the manifest."""
+    manifest_path = data_dir / "manifests" / f"{role}.json"
+    if not manifest_path.is_file():
+        return ()
+    try:
+        manifest = BundleManifest.model_validate_json(manifest_path.read_bytes())
+    except (OSError, ValueError) as error:
+        raise BundleError(f"installed {role} manifest is invalid") from error
+    if manifest.role != role:
+        raise BundleError(f"installed {role} manifest has the wrong role")
+    files: set[Path] = {manifest_path}
+    for record in manifest.files:
+        relative = PurePosixPath(record.path)
+        if (
+            relative.is_absolute()
+            or ".." in relative.parts
+            or len(relative.parts) < 2
+            or relative.parts[0] not in {"indexes", "licenses"}
+        ):
+            raise BundleError(f"installed manifest contains an unsafe path: {record.path}")
+        files.add(_installed_path(data_dir, record.path))
+    return tuple(files)
+
+
 def _managed_files(data_dir: Path) -> tuple[Path, ...]:
     files: set[Path] = set()
     for role in ("core", "semantic"):
-        manifest_path = data_dir / "manifests" / f"{role}.json"
-        if not manifest_path.is_file():
-            continue
-        try:
-            manifest = BundleManifest.model_validate_json(manifest_path.read_bytes())
-        except (OSError, ValueError) as error:
-            raise BundleError(f"installed {role} manifest is invalid") from error
-        if manifest.role != role:
-            raise BundleError(f"installed {role} manifest has the wrong role")
-        for record in manifest.files:
-            relative = PurePosixPath(record.path)
-            if (
-                relative.is_absolute()
-                or ".." in relative.parts
-                or len(relative.parts) < 2
-                or relative.parts[0] not in {"indexes", "licenses"}
-            ):
-                raise BundleError(f"installed manifest contains an unsafe path: {record.path}")
-            files.add(_installed_path(data_dir, record.path))
-        files.add(manifest_path)
+        files.update(_role_files(data_dir, role))
     return tuple(sorted(files))
 
 
-def remove_data(data_dir: Path | None = None) -> int:
-    """Remove files tracked by installed bundle manifests and preserve unrelated files."""
+def remove_data(package: Role, data_dir: Path | None = None) -> int:
+    """Remove one installed data package, keeping files other packages still need."""
     data_dir = data_dir or data_directory()
-    files = _managed_files(data_dir)
+    targets = set(_role_files(data_dir, package))
+    keep: set[Path] = set()
+    for other in ("core", "semantic"):
+        if other != package:
+            keep.update(_role_files(data_dir, other))
+    files = sorted(targets - keep)
     for path in files:
         path.unlink(missing_ok=True)
     for directory in (data_dir / "licenses", data_dir / "manifests", data_dir):
@@ -171,6 +182,7 @@ def _parser() -> argparse.ArgumentParser:
     verify = subparsers.add_parser("verify")
     verify.add_argument("--data-dir", type=Path, default=data_directory())
     remove = subparsers.add_parser("remove")
+    remove.add_argument("package", choices=("core", "semantic"))
     remove.add_argument("--data-dir", type=Path, default=data_directory())
     remove.add_argument("--yes", action="store_true", help="remove without confirmation")
     return parser
@@ -187,30 +199,33 @@ def main(argv: Sequence[str] | None = None) -> None:
             return
         status = data_status(args.data_dir)
         if args.command == "remove":
-            managed = _managed_files(args.data_dir)
-            if not managed:
-                print("No installed data bundles found")
-                return
+            target = next(bundle for bundle in status.bundles if bundle.role == args.package)
+            if not target.installed:
+                parser.error(f"the {args.package} data package is not installed")
+            if args.package == "core" and status.bundles[1].installed:
+                parser.error("remove the semantic data package first")
             if not args.yes:
                 try:
-                    prompt = f"Remove installed Fortran MCP data from {args.data_dir}? [y/N] "
-                    answer = input(prompt)
+                    answer = input(
+                        f"Remove the {args.package} data package from {args.data_dir}? [y/N] "
+                    )
                 except EOFError:
                     answer = ""
                 if answer.casefold() not in {"y", "yes"}:
                     print("Removal cancelled")
                     return
-            removed = remove_data(args.data_dir)
-            print(f"Removed {removed} managed files from {args.data_dir}")
+            removed = remove_data(args.package, args.data_dir)
+            print(f"Removed the {args.package} data package ({removed} files)")
+            return
+        if not any(bundle.installed for bundle in status.bundles):
+            print("No data packages are installed")
             return
         invalid = [
             bundle.role for bundle in status.bundles if bundle.installed and not bundle.valid
         ]
         if invalid:
-            parser.error(f"installed bundle verification failed: {', '.join(invalid)}")
-        if not any(bundle.installed for bundle in status.bundles):
-            parser.error("no data bundles are installed")
-        print("Installed data bundles verified")
+            parser.error(f"installed data package verification failed: {', '.join(invalid)}")
+        print("Installed data packages verified")
     except (BundleError, CatalogError) as error:
         parser.error(str(error))
 

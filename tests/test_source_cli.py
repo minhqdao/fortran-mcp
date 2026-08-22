@@ -77,8 +77,11 @@ def test_source_list_is_available_to_people_and_agents(capsys: CaptureFixture[st
     human = capsys.readouterr().out
     assert "fpm-0.13.0-docs" in human
     assert "MIT" in human
+    assert "https://" in human
+    assert "approved" not in human
 
     main(["list", "--json"])
     machine = capsys.readouterr().out
     assert '"schema_version": 1' in machine
     assert '"source_url"' in machine
+    assert '"approved"' in machine

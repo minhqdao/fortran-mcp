@@ -14,6 +14,8 @@ from fortran_mcp.data_cli import data_status, inspect_role, main, remove_data
 from fortran_mcp.documents import DocumentChunk
 from fortran_mcp.search import SQLiteSearchProvider, build_index
 
+from .test_provision import _release
+
 
 def _installed_core(tmp_path: Path) -> Path:
     source = tmp_path / "source"
@@ -75,19 +77,19 @@ def test_remove_deletes_managed_bundle_data_and_preserves_other_files(
     unrelated = installed / "notes.txt"
     unrelated.write_text("keep me")
 
-    main(["remove", "--data-dir", str(installed), "--yes"])
+    main(["remove", "core", "--data-dir", str(installed), "--yes"])
 
     assert unrelated.read_text() == "keep me"
     assert data_status(installed).bundles[0].installed is False
     assert not (installed / "fortran-mcp.db").exists()
-    assert "Removed 3 managed files" in capsys.readouterr().out
+    assert "Removed the core data package (3 files)" in capsys.readouterr().out
 
 
 def test_remove_requires_confirmation(tmp_path: Path, monkeypatch: MonkeyPatch) -> None:
     installed = _installed_core(tmp_path)
     monkeypatch.setattr("builtins.input", lambda _prompt: "no")
 
-    main(["remove", "--data-dir", str(installed)])
+    main(["remove", "core", "--data-dir", str(installed)])
 
     assert (installed / "fortran-mcp.db").is_file()
 
@@ -96,9 +98,57 @@ def test_remove_with_confirmation_yes(tmp_path: Path, monkeypatch: MonkeyPatch) 
     installed = _installed_core(tmp_path)
     monkeypatch.setattr("builtins.input", lambda _prompt: "yes")
 
-    main(["remove", "--data-dir", str(installed)])
+    main(["remove", "core", "--data-dir", str(installed)])
 
     assert not (installed / "fortran-mcp.db").exists()
+
+
+def test_remove_requires_a_package_argument(tmp_path: Path) -> None:
+    installed = _installed_core(tmp_path)
+
+    with pytest.raises(SystemExit):
+        main(["remove", "--data-dir", str(installed)])
+    assert (installed / "fortran-mcp.db").is_file()
+
+
+def test_remove_rejects_uninstalled_package(tmp_path: Path, capsys: CaptureFixture[str]) -> None:
+    installed = tmp_path / "empty"
+    installed.mkdir()
+
+    with pytest.raises(SystemExit):
+        main(["remove", "core", "--data-dir", str(installed), "--yes"])
+    assert "is not installed" in capsys.readouterr().err
+
+
+def test_remove_core_is_blocked_while_semantic_is_installed(
+    tmp_path: Path, capsys: CaptureFixture[str]
+) -> None:
+    installed = _installed_core(tmp_path)
+    manifests = installed / "manifests"
+    manifests.mkdir(exist_ok=True)
+    (manifests / "semantic.json").write_text("{}\n")
+
+    with pytest.raises(SystemExit):
+        main(["remove", "core", "--data-dir", str(installed), "--yes"])
+    assert "remove the semantic data package first" in capsys.readouterr().err
+
+
+def test_remove_semantic_keeps_files_core_still_needs(tmp_path: Path) -> None:
+    catalog = _release(tmp_path)
+    installed = tmp_path / "installed"
+    for package in ("core", "semantic"):
+        main(["install", package, "--catalog", str(catalog), "--data-dir", str(installed)])
+
+    main(["remove", "semantic", "--data-dir", str(installed), "--yes"])
+
+    status = data_status(installed)
+    assert status.bundles[0].valid is True
+    assert status.bundles[1].installed is False
+    assert (installed / "fortran-mcp.db").is_file()
+    assert (installed / "manifests" / "core.json").is_file()
+    assert not (installed / "fortran-mcp-semantic.db").exists()
+    assert not (installed / "manifests" / "semantic.json").exists()
+    assert (installed / "licenses" / "fpm-0.13.0-docs.txt").is_file()
 
 
 def test_data_verify_cli_reports_ok_for_valid_install(
@@ -108,7 +158,7 @@ def test_data_verify_cli_reports_ok_for_valid_install(
 
     main(["verify", "--data-dir", str(installed)])
 
-    assert "Installed data bundles verified" in capsys.readouterr().out
+    assert "Installed data packages verified" in capsys.readouterr().out
 
 
 def test_data_verify_cli_rejects_corrupted_install(
@@ -122,15 +172,15 @@ def test_data_verify_cli_rejects_corrupted_install(
     assert "verification failed" in capsys.readouterr().err
 
 
-def test_data_verify_cli_rejects_empty_data_dir(
+def test_data_verify_reports_when_nothing_is_installed(
     tmp_path: Path, capsys: CaptureFixture[str]
 ) -> None:
     installed = tmp_path / "empty"
     installed.mkdir()
 
-    with pytest.raises(SystemExit):
-        main(["verify", "--data-dir", str(installed)])
-    assert "no data bundles" in capsys.readouterr().err
+    main(["verify", "--data-dir", str(installed)])
+
+    assert "No data packages are installed" in capsys.readouterr().out
 
 
 def test_remove_rejects_unsafe_manifest_path(tmp_path: Path) -> None:
@@ -141,7 +191,7 @@ def test_remove_rejects_unsafe_manifest_path(tmp_path: Path) -> None:
     manifest_path.write_text(json.dumps(manifest))
 
     try:
-        remove_data(installed)
+        remove_data("core", installed)
     except BundleError as error:
         assert "manifest is invalid" in str(error)
     else:

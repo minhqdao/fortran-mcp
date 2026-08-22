@@ -97,11 +97,13 @@ def main(argv: Sequence[str] | None = None) -> None:
         if args.json:
             print(json.dumps(registry.model_dump(mode="json"), indent=2))
         else:
+            blocks = []
             for source in registry.sources:
-                print(
-                    f"{source.id}\t{source.status}\t{source.document_type}\t"
-                    f"{source.license}\t{source.title}"
-                )
+                details = f"  {source.license} · {source.document_type}"
+                if source.status is not SourceStatus.APPROVED:
+                    details += f" · status: {source.status.value}"
+                blocks.append(f"{source.id}\n  {source.title}\n{details}\n  {source.source_url}")
+            print("\n\n".join(blocks))
         return
 
     if args.all == bool(args.source_ids):
