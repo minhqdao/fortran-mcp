@@ -289,6 +289,45 @@ uv run fortran-mcp-catalog build --data-version 2026.08.1 \
 uv run fortran-mcp-catalog install core --catalog dist/catalog.json
 ```
 
+### Publishing a data release
+
+1. Rebuild both bundles deterministically from a current data directory and regenerate the catalog
+   (commands above). Bundle versions default to the package version; pick a new `YYYY.MM.N`
+   `data_version` for each data release.
+2. Verify every artifact on its own and through the catalog:
+   ```bash
+   uv run fortran-mcp-bundle verify dist/fortran-mcp-core.zip
+   uv run fortran-mcp-bundle verify dist/fortran-mcp-semantic.zip
+   uv run fortran-mcp-catalog verify dist/catalog.json
+   ```
+3. Smoke-test the exact artifacts before upload:
+   ```bash
+   rm -rf /tmp/release-check
+   FORTRAN_MCP_DATA_DIR=/tmp/release-check uv run fortran-mcp data install core \
+     --catalog dist/catalog.json
+   FORTRAN_MCP_DATA_DIR=/tmp/release-check uv run fortran-mcp data install semantic \
+     --catalog dist/catalog.json
+   FORTRAN_MCP_DATA_DIR=/tmp/release-check uv run fortran-mcp data verify
+   ```
+4. Upload all assets together to a draft release so the catalog never points at missing files:
+   ```bash
+   gh release create v<version> --draft --title "Fortran MCP <version> data release" \
+     dist/catalog.json dist/fortran-mcp-core.zip dist/fortran-mcp-semantic.zip
+   ```
+5. Inspect the draft (`gh release view v<version>`): exactly three assets, correct sizes, no stray
+   uploads. Publishing is the activation step because `releases/latest/download/catalog.json`
+   resolves to this release immediately.
+6. Publish only after every asset is present:
+   ```bash
+   gh release edit v<version> --draft=false
+   ```
+7. Post-publish, exercise the real user path without `--catalog`:
+   `fortran-mcp data install core && fortran-mcp data verify`. Release assets are only downloadable
+   anonymously from a public repository, so this final check requires the repository to be public.
+
+There is no automated rollback: fix the artifacts and cut a new data release instead. Old installs
+remain valid because verification is checksum-pinned.
+
 Normal users use the built-in GitHub Release catalog through the unified command:
 
 ```bash
