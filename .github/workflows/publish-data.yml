@@ -1,0 +1,166 @@
+name: Publish data
+
+# Publishes the documentation data as exactly three assets on a GitHub Release:
+# catalog.json, fortran-mcp-core.zip, and fortran-mcp-semantic.zip. This is the
+# automated form of the manual procedure in README.md.
+#
+# Kept separate from publish-pypi.yml because data and code change independently.
+# The catalog, both bundles, and data_version move together as one unit, so there
+# is no partial release and no update to core or semantic alone.
+#
+# The corpus is rebuilt from the reviewed registry in docs/sources.toml rather
+# than from a maintainer's local data directory, so a release is reproducible
+# from the commit alone.
+#
+# Data tags use the data- prefix so pushing them never triggers publish-pypi.yml,
+# which publishes on v*.
+
+on:
+  workflow_dispatch:
+    inputs:
+      data_version:
+        description: "Catalog data_version as YYYY.MM.N, for example 2026.10.1"
+        required: true
+        type: string
+      bundle_version:
+        description: "Bundle version recorded in the manifests (defaults to the package version)"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: data-release
+  cancel-in-progress: false
+
+env:
+  PYTHON_VERSION: "3.14"
+
+jobs:
+  release:
+    name: Build and publish data release
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Refuse already-published data version
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if gh release view "data-${{ inputs.data_version }}" --json tagName >/dev/null 2>&1; then
+            echo "::error::data release data-${{ inputs.data_version }} already exists"
+            exit 1
+          fi
+
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Install uv and Python
+        uses: astral-sh/setup-uv@v10.0.0
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --locked --all-extras --all-groups
+
+      - name: Validate inputs
+        id: inputs
+        run: |
+          set -euo pipefail
+          data_version="${{ inputs.data_version }}"
+          if ! printf '%s' "$data_version" | grep -Eq '^[0-9]{4}\.[0-9]{2}\.[0-9]+$'; then
+            echo "::error::data_version must look like YYYY.MM.N, got '${data_version}'"
+            exit 1
+          fi
+          bundle_version="${{ inputs.bundle_version }}"
+          if [ -z "$bundle_version" ]; then
+            bundle_version="$(uv run python -c \
+              "import pathlib, tomllib; print(tomllib.loads(pathlib.Path('pyproject.toml').read_text())['project']['version'])")"
+          fi
+          echo "data_version=${data_version}" >> "$GITHUB_OUTPUT"
+          echo "bundle_version=${bundle_version}" >> "$GITHUB_OUTPUT"
+
+      - name: Restore ingested corpus
+        uses: actions/cache@v4
+        with:
+          path: data
+          key: corpus-${{ runner.os }}-${{ hashFiles('docs/sources.toml', 'uv.lock') }}
+
+      - name: Ingest approved sources
+        run: uv run fortran-mcp source sync --all --data-dir data
+
+      - name: Build indexes
+        run: |
+          uv run fortran-mcp-index --data-dir data
+          uv run fortran-mcp-semantic-index --data-dir data
+
+      - name: Build bundles
+        run: |
+          uv run fortran-mcp-bundle build core \
+            --output dist/fortran-mcp-core.zip \
+            --data-dir data \
+            --license-dir docs/licenses \
+            --bundle-version "${{ steps.inputs.outputs.bundle_version }}"
+          uv run fortran-mcp-bundle build semantic \
+            --output dist/fortran-mcp-semantic.zip \
+            --data-dir data \
+            --license-dir docs/licenses \
+            --bundle-version "${{ steps.inputs.outputs.bundle_version }}"
+
+      - name: Build catalog
+        run: |
+          uv run fortran-mcp-catalog build \
+            --data-version "${{ steps.inputs.outputs.data_version }}" \
+            --output dist/catalog.json \
+            dist/fortran-mcp-core.zip \
+            dist/fortran-mcp-semantic.zip
+
+      - name: Verify bundles and catalog
+        run: |
+          uv run fortran-mcp-bundle verify dist/fortran-mcp-core.zip
+          uv run fortran-mcp-bundle verify dist/fortran-mcp-semantic.zip
+          uv run fortran-mcp-catalog verify dist/catalog.json
+
+      - name: Smoke test installation
+        run: |
+          rm -rf "$RUNNER_TEMP/release-check"
+          uv run fortran-mcp data install core \
+            --catalog dist/catalog.json --data-dir "$RUNNER_TEMP/release-check"
+          uv run fortran-mcp data install semantic \
+            --catalog dist/catalog.json --data-dir "$RUNNER_TEMP/release-check"
+          uv run fortran-mcp data verify --data-dir "$RUNNER_TEMP/release-check"
+
+      - name: Create draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh release create "data-${{ steps.inputs.outputs.data_version }}" \
+            --draft \
+            --title "Fortran MCP ${{ steps.inputs.outputs.data_version }} data release" \
+            --notes "Data release ${{ steps.inputs.outputs.data_version }}, bundles ${{ steps.inputs.outputs.bundle_version }}." \
+            dist/catalog.json \
+            dist/fortran-mcp-core.zip \
+            dist/fortran-mcp-semantic.zip
+
+      - name: Confirm three assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          actual="$(gh release view "data-${{ steps.inputs.outputs.data_version }}" --json assets \
+            --jq '.assets[].name' | sort)"
+          expected="$(printf '%s\n' catalog.json fortran-mcp-core.zip fortran-mcp-semantic.zip | sort)"
+          if [ "$actual" != "$expected" ]; then
+            echo "::error::release assets do not match expectation"
+            echo "expected:"; printf '%s\n' "$expected"
+            echo "actual:"; printf '%s\n' "$actual"
+            exit 1
+          fi
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release edit "data-${{ steps.inputs.outputs.data_version }}" --draft=false

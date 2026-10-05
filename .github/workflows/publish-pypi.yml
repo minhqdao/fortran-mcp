@@ -1,0 +1,100 @@
+name: Publish PyPI package
+
+# Publishes the Python package to PyPI and nothing else. Documentation data is a
+# separate release (see publish-data.yml) because the two change on different
+# schedules: a code fix must not force a 23-source corpus rebuild and a new
+# data_version, and new documentation must not require a PyPI release.
+#
+# Tag push is not covered by ci.yml, which only watches main and pull requests,
+# so the quality gates run again here.
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  PYTHON_VERSION: "3.14"
+
+jobs:
+  publish:
+    name: Build and publish distributions
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Install uv and Python
+        uses: astral-sh/setup-uv@v10.0.0
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --locked --all-extras --all-groups
+
+      - name: Check version matches tag
+        run: |
+          set -euo pipefail
+          declared="$(uv run python -c \
+            "import pathlib, tomllib; print(tomllib.loads(pathlib.Path('pyproject.toml').read_text())['project']['version'])")"
+          if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
+            tag="${GITHUB_REF_NAME#v}"
+            if [ "$tag" != "$declared" ]; then
+              echo "::error::tag v${tag} does not match pyproject version ${declared}"
+              exit 1
+            fi
+          elif [ "${GITHUB_REF_NAME}" != "main" ]; then
+            echo "::error::manual publishes must run from main, got ${GITHUB_REF_NAME}"
+            exit 1
+          fi
+
+      - name: Check formatting
+        run: uv run ruff format --check .
+
+      - name: Lint
+        run: uv run ruff check .
+
+      - name: Type check
+        run: uv run mypy
+
+      - name: Test
+        run: uv run pytest
+
+      - name: Build distributions
+        run: uv build
+
+      - name: Verify packaged distributions
+        run: |
+          unzip -l dist/*.whl | grep -q 'fortran_mcp/data/sources.toml'
+          ! tar -tzf dist/*.tar.gz | grep -q '/todo.md$'
+
+      - name: Install wheel in an isolated environment
+        run: |
+          uv venv --python "${{ env.PYTHON_VERSION }}" .package-venv
+          uv pip install --python .package-venv/bin/python dist/*.whl
+          .package-venv/bin/python -c \
+            "from fortran_mcp.sources import load_registry; assert load_registry().sources"
+          .package-venv/bin/fortran-mcp --version
+          .package-venv/bin/fortran-mcp --help
+          .package-venv/bin/fortran-mcp doctor --json
+          .package-venv/bin/fortran-mcp source list --json
+          .package-venv/bin/fortran-mcp data verify
+          uv pip check --python .package-venv/bin/python
+
+      - name: Publish distributions
+        run: |
+          uv publish \
+            --trusted-publishing always \
+            --publish-url https://upload.pypi.org/legacy/ \
+            --check-url https://pypi.org/simple \
+            dist/*
