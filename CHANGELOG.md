@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased
+## 0.1.0
+
+First public release.
 
 - Added the compact 23-source cited Fortran corpus and measured retrieval benchmark.
 - Added lexical, optional semantic, and hybrid search providers.
@@ -11,7 +13,3 @@
   index, reducing chunk count by 28% while preserving the original benchmark passes.
 - Expanded the retrieval suite with compiler-neutral modern-language cases and authority labels,
   and added reproducible leave-one-source-out contribution analysis.
-
-## 0.1.0
-
-First public release; not yet published.
