@@ -2,7 +2,6 @@
 
 [![CI](https://github.com/minhqdao/fortran-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/minhqdao/fortran-mcp/actions/workflows/ci.yml)
 [![PyPI](https://img.shields.io/pypi/v/fortran-mcp.svg)](https://pypi.org/project/fortran-mcp/)
-[![Python](https://img.shields.io/pypi/pyversions/fortran-mcp.svg)](https://pypi.org/project/fortran-mcp/)
 [![MCP](https://img.shields.io/badge/MCP-2.0-2F4F8G?labelColor=1a1a2e&color=0f4c81)](https://spec.modelcontextprotocol.io/)
 [![RAG](https://img.shields.io/badge/RAG-cited%20retrieval-0e7c7b)](https://github.com/minhqdao/fortran-mcp)
 [![Search](https://img.shields.io/badge/search-lexical%20+%20semantic%20+%20hybrid-0f4c81)](https://github.com/minhqdao/fortran-mcp/blob/main/benchmarks/results/)
