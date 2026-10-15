@@ -82,6 +82,17 @@ jobs:
           echo "data_version=${data_version}" >> "$GITHUB_OUTPUT"
           echo "bundle_version=${bundle_version}" >> "$GITHUB_OUTPUT"
 
+      - name: Install GNU Texinfo 7.3
+        run: |
+          set -euo pipefail
+          wget -q https://ftp.gnu.org/gnu/texinfo/texinfo-7.3.tar.xz
+          tar -xf texinfo-7.3.tar.xz
+          cd texinfo-7.3
+          ./configure --prefix=/usr/local
+          make -j"$(nproc)"
+          sudo make install
+          makeinfo --version | head -n 1
+
       - name: Restore ingested corpus
         uses: actions/cache@v4
         with:
