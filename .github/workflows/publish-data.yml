@@ -104,8 +104,8 @@ jobs:
 
       - name: Build indexes
         run: |
-          uv run fortran-mcp-index --data-dir data
-          uv run fortran-mcp-semantic-index --data-dir data
+          FORTRAN_MCP_DATA_DIR=data uv run fortran-mcp-index --data-dir data
+          FORTRAN_MCP_DATA_DIR=data uv run fortran-mcp-semantic-index
 
       - name: Build bundles
         run: |
