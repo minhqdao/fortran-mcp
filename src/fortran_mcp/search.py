@@ -1,9 +1,11 @@
 """Build and query the local SQLite full-text search index."""
 
 import argparse
+import gc
 import re
 import sqlite3
 import tempfile
+import time
 from collections.abc import Sequence
 from pathlib import Path, PurePosixPath
 from typing import Any, Protocol
@@ -166,6 +168,33 @@ def _read_chunks(path: Path) -> list[DocumentChunk]:
     return chunks
 
 
+def _atomic_replace_temporary(temporary_path: Path, destination: Path) -> None:
+    """Replace destination on platforms where immediate atomic rename may be delayed."""
+    last_error: PermissionError | None = None
+    gc.collect()
+    for _ in range(20):
+        try:
+            temporary_path.replace(destination)
+            return
+        except PermissionError as error:
+            last_error = error
+            gc.collect()
+            time.sleep(0.05)
+    if last_error is not None:
+        raise last_error
+
+
+def _unlink_temporary(temporary_path: Path) -> None:
+    gc.collect()
+    for _ in range(20):
+        try:
+            temporary_path.unlink(missing_ok=True)
+            return
+        except PermissionError:
+            gc.collect()
+            time.sleep(0.05)
+
+
 def build_index(data_dir: Path | None = None, index_path: Path | None = None) -> int:
     """Build a fresh, atomic FTS5 index from every generated chunk file."""
     data_dir = data_dir or data_directory()
@@ -243,10 +272,10 @@ def build_index(data_dir: Path | None = None, index_path: Path | None = None) ->
                     )
                     count += 1
             database.execute("INSERT INTO chunks(chunks) VALUES ('optimize')")
-        temporary_path.replace(destination)
-    except BaseException:
-        temporary_path.unlink(missing_ok=True)
-        raise
+        _atomic_replace_temporary(temporary_path, destination)
+    except BaseException as error:
+        _unlink_temporary(temporary_path)
+        raise error from None
     return count
 
 

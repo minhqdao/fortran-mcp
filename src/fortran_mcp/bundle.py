@@ -1,11 +1,13 @@
 """Build and verify reproducible documentation data bundles."""
 
 import argparse
+import gc
 import hashlib
 import json
 import shutil
 import sqlite3
 import tempfile
+import time
 import zipfile
 from collections.abc import Sequence
 from importlib.metadata import version as package_version
@@ -218,6 +220,18 @@ def build_bundle(
     return manifest
 
 
+def _atomic_replace_temporary(temporary_path: Path, destination: Path) -> None:
+    gc.collect()
+    for _ in range(20):
+        try:
+            temporary_path.replace(destination)
+            return
+        except PermissionError:
+            gc.collect()
+            time.sleep(0.05)
+    raise PermissionError(f"could not replace temporary file: {temporary_path}")
+
+
 def _read_required(path: Path) -> bytes:
     try:
         return path.read_bytes()
@@ -312,7 +326,11 @@ def install_bundle(source: str | Path, *, data_dir: Path | None = None) -> Bundl
     with tempfile.TemporaryDirectory(prefix=".fortran-mcp-install-", dir=data_dir.parent) as temp:
         temporary = Path(temp)
         source_text = str(source)
-        if urlparse(source_text).scheme:
+        windows_path = (
+            len(source_text) >= 3 and source_text[1] == ":" and source_text[2] in {"/", "\\"}
+        )
+        parsed = urlparse(source_text)
+        if parsed.scheme and not windows_path:
             archive_path = temporary / "download.zip"
             _download_bundle(source_text, archive_path)
         else:
@@ -354,12 +372,12 @@ def install_bundle(source: str | Path, *, data_dir: Path | None = None) -> Bundl
 
         for staged_path, installed_path in staged:
             installed_path.parent.mkdir(parents=True, exist_ok=True)
-            staged_path.replace(installed_path)
+            _atomic_replace_temporary(staged_path, installed_path)
         manifest_path = data_dir / "manifests" / f"{manifest.role}.json"
         manifest_path.parent.mkdir(parents=True, exist_ok=True)
         temporary_manifest = temporary / f"{manifest.role}.json"
         temporary_manifest.write_text(manifest.model_dump_json(indent=2) + "\n")
-        temporary_manifest.replace(manifest_path)
+        _atomic_replace_temporary(temporary_manifest, manifest_path)
         return manifest
 
 

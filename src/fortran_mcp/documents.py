@@ -1,10 +1,12 @@
 """Normalize ingested documents into deterministic, citation-ready chunks."""
 
 import argparse
+import gc
 import hashlib
 import json
 import re
 import tempfile
+import time
 from collections.abc import Iterator, Sequence
 from pathlib import Path
 from posixpath import normpath
@@ -252,6 +254,18 @@ def _chunks_for_file(
             )
 
 
+def _atomic_replace_temporary(temporary_path: Path, destination: Path) -> None:
+    gc.collect()
+    for _ in range(20):
+        try:
+            temporary_path.replace(destination)
+            return
+        except PermissionError:
+            gc.collect()
+            time.sleep(0.05)
+    raise PermissionError(f"could not replace temporary file: {temporary_path}")
+
+
 def build_documents(source_id: str, data_dir: Path | None = None) -> tuple[DocumentChunk, ...]:
     """Verify raw files and build deterministic chunks for one source."""
     data_dir = data_dir or data_directory()
@@ -314,7 +328,7 @@ def build_documents(source_id: str, data_dir: Path | None = None) -> tuple[Docum
         temporary_path = Path(stream.name)
         for chunk in chunks:
             stream.write(json.dumps(chunk.model_dump(mode="json"), ensure_ascii=False) + "\n")
-    temporary_path.replace(output_path)
+    _atomic_replace_temporary(temporary_path, output_path)
     return tuple(chunks)
 
 

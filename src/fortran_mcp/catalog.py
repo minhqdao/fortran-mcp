@@ -139,7 +139,8 @@ def _validate_catalog(content: bytes, location: CatalogLocation) -> BundleCatalo
 
 
 def _download_catalog(url: str) -> bytes:
-    if urlparse(url).scheme != "https":
+    windows_path = len(url) >= 3 and url[1] == ":" and url[2] in {"/", "\\"}
+    if not windows_path and urlparse(url).scheme != "https":
         raise CatalogError("remote catalog URL must use HTTPS")
     request = Request(url, headers={"User-Agent": "fortran-mcp/0.1"})
     try:
@@ -196,7 +197,8 @@ def _catalog_artifact(catalog_path: Path, entry: CatalogBundle) -> Path:
 
 
 def _download_catalog_artifact(url: str, entry: CatalogBundle, destination: Path) -> None:
-    if urlparse(url).scheme != "https":
+    windows_path = len(url) >= 3 and url[1] == ":" and url[2] in {"/", "\\"}
+    if not windows_path and urlparse(url).scheme != "https":
         raise CatalogError("remote bundle URL must use HTTPS")
     if entry.size > DOWNLOAD_LIMIT:
         raise CatalogError(f"catalog bundle exceeds the size limit: {entry.path}")

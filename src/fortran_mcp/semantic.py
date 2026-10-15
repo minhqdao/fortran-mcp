@@ -3,12 +3,14 @@
 from __future__ import annotations
 
 import argparse
+import gc
 import hashlib
 import heapq
 import importlib
 import math
 import sqlite3
 import tempfile
+import time
 from array import array
 from collections.abc import Callable, Iterable, Iterator, Sequence
 from dataclasses import dataclass
@@ -147,6 +149,29 @@ def _reusable_vectors(
         return {}, None
 
 
+def _atomic_replace_temporary(temporary_path: Path, destination: Path) -> None:
+    gc.collect()
+    for _ in range(20):
+        try:
+            temporary_path.replace(destination)
+            return
+        except PermissionError:
+            gc.collect()
+            time.sleep(0.05)
+    raise PermissionError(f"could not replace stale temporary file: {temporary_path}")
+
+
+def _unlink_temporary(temporary_path: Path) -> None:
+    gc.collect()
+    for _ in range(20):
+        try:
+            temporary_path.unlink(missing_ok=True)
+            return
+        except PermissionError:
+            gc.collect()
+            time.sleep(0.05)
+
+
 def build_semantic_index(
     model: EmbeddingModel,
     *,
@@ -255,10 +280,10 @@ def build_semantic_index(
                 "lexical_index_sha256": lexical_index_sha256,
             }
             database.executemany("INSERT INTO metadata VALUES (?, ?)", metadata.items())
-        temporary_path.replace(destination)
-    except BaseException:
-        temporary_path.unlink(missing_ok=True)
-        raise
+        _atomic_replace_temporary(temporary_path, destination)
+    except BaseException as error:
+        _unlink_temporary(temporary_path)
+        raise error from None
     return SemanticBuildResult(
         total=len(rows),
         embedded=embedded,
