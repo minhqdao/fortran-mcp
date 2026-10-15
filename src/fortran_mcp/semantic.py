@@ -280,6 +280,8 @@ def build_semantic_index(
                 "lexical_index_sha256": lexical_index_sha256,
             }
             database.executemany("INSERT INTO metadata VALUES (?, ?)", metadata.items())
+        del database
+        gc.collect()
         _atomic_replace_temporary(temporary_path, destination)
     except BaseException as error:
         _unlink_temporary(temporary_path)

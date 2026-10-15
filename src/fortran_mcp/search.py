@@ -272,6 +272,8 @@ def build_index(data_dir: Path | None = None, index_path: Path | None = None) ->
                     )
                     count += 1
             database.execute("INSERT INTO chunks(chunks) VALUES ('optimize')")
+        del database
+        gc.collect()
         _atomic_replace_temporary(temporary_path, destination)
     except BaseException as error:
         _unlink_temporary(temporary_path)
