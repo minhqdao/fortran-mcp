@@ -113,12 +113,12 @@ jobs:
             --output dist/fortran-mcp-core.zip \
             --data-dir data \
             --license-dir docs/licenses \
-            --bundle-version "${{ steps.inputs.outputs.bundle_version }}"
+            --bundle-version "${{ steps.inputs.outputs.data_version }}"
           uv run fortran-mcp-bundle build semantic \
             --output dist/fortran-mcp-semantic.zip \
             --data-dir data \
             --license-dir docs/licenses \
-            --bundle-version "${{ steps.inputs.outputs.bundle_version }}"
+            --bundle-version "${{ steps.inputs.outputs.data_version }}"
 
       - name: Build catalog
         run: |
