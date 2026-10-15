@@ -12,10 +12,17 @@ Use Fortran MCP to improve AI-assisted Fortran development with cited documentat
 
 ## Install
 
-Prerequisite: Python 3.11+ and [uv](https://docs.astral.sh/uv/).
+Requires Python 3.11+ and [uv](https://docs.astral.sh/uv/).
 
 ```bash
 uv tool install fortran-mcp
+```
+
+The `core` data bundle is installed automatically on first run, or can be installed beforehand to avoid the initial delay. To enable hybrid search, install the optional `semantic` bundle:
+
+```bash
+fortran-mcp data install core
+fortran-mcp data install semantic
 ```
 
 Configure an MCP client to launch the stdio command `fortran-mcp`; see
@@ -31,16 +38,16 @@ optional semantic bundle and runtime are not needed for the default lexical sear
 
 ## Command reference
 
-| Command | Arguments | Description |
-|---|---|---|
-| `fortran-mcp` | none | Start the stdio MCP server |
-| `fortran-mcp --transport streamable-http` | optional flags | Start the HTTP server (`--host`, `--port`, `--path`, `--allowed-host`) |
-| `fortran-mcp doctor` | none | Show configuration and installed data (`--json` for machine-readable output) |
-| `fortran-mcp data install <package>` | `core` or `semantic` | Download and install one data package from the release catalog |
-| `fortran-mcp data verify` | none | Verify every installed data package |
-| `fortran-mcp data remove <package>` | `core` or `semantic` | Remove one installed data package; asks to confirm, `--yes` skips |
-| `fortran-mcp source list` | none | List reviewed sources with versions and provenance (`--json`) |
-| `fortran-mcp source sync <source>` | a source ID | Download one reviewed source and rebuild its chunks and the lexical index |
+| Command                                   | Arguments            | Description                                                                  |
+| ----------------------------------------- | -------------------- | ---------------------------------------------------------------------------- |
+| `fortran-mcp`                             | none                 | Start the stdio MCP server                                                   |
+| `fortran-mcp --transport streamable-http` | optional flags       | Start the HTTP server (`--host`, `--port`, `--path`, `--allowed-host`)       |
+| `fortran-mcp doctor`                      | none                 | Show configuration and installed data (`--json` for machine-readable output) |
+| `fortran-mcp data install <package>`      | `core` or `semantic` | Download and install one data package from the release catalog               |
+| `fortran-mcp data verify`                 | none                 | Verify every installed data package                                          |
+| `fortran-mcp data remove <package>`       | `core` or `semantic` | Remove one installed data package; asks to confirm, `--yes` skips            |
+| `fortran-mcp source list`                 | none                 | List reviewed sources with versions and provenance (`--json`)                |
+| `fortran-mcp source sync <source>`        | a source ID          | Download one reviewed source and rebuild its chunks and the lexical index    |
 
 `data remove` requires a package, refuses to remove `core` while `semantic` is installed, and only
 deletes files the remaining packages no longer need.
@@ -144,7 +151,7 @@ links to the pinned revision, and adds the Apache-required modification notice. 
 catalog is excluded because it substantially overlaps existing sources or did not justify its
 retrieval weight. This is community guidance, not normative material or a product endorsement.
 
-The legacy-migration material has two complementary roles. *Old programming idioms explained*
+The legacy-migration material has two complementary roles. _Old programming idioms explained_
 converts nine MIT-licensed chapters about the meaning, hazards, and modern alternatives of old
 Fortran constructs. Its bibliography supplies external citation links but is not itself indexed;
 the unfinished outline, separate examples, PDF, and a redundant BLOCK DATA section that ranked
