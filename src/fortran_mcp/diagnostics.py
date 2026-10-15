@@ -87,7 +87,7 @@ def _print_report(report: DiagnosticReport) -> None:
     if labels:
         print("Data:")
         for label in labels:
-            print(f"  {label}")
+            print(f"  - {label}")
     else:
         print("Data: none")
 
