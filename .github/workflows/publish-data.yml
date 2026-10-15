@@ -94,7 +94,7 @@ jobs:
           makeinfo --version | head -n 1
 
       - name: Restore ingested corpus
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: data
           key: corpus-${{ runner.os }}-${{ hashFiles('docs/sources.toml', 'uv.lock') }}
