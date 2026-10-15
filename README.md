@@ -8,10 +8,7 @@
 [![Sources](https://img.shields.io/badge/sources-23-c88603?logo=gitbook&logoColor=white)](https://github.com/minhqdao/fortran-mcp/blob/main/docs/sources.toml)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/minhqdao/fortran-mcp/blob/main/LICENSE)
 
-Fortran MCP gives AI tools a compact, cited reference for modern and legacy Fortran development.
-Its local corpus covers language and compiler behavior, builds, preprocessing, interoperability,
-parallel programming, correctness, modernization, and ecosystem discovery without requiring a
-hosted search service.
+Use Fortran MCP to improve AI-assisted Fortran development with cited documentation on language features, compiler behavior, build systems, and the wider ecosystem.
 
 ## Install
 
