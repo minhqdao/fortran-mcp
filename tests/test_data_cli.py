@@ -314,7 +314,10 @@ def test_data_verify_cli_rejects_corrupted_install(
 
     with pytest.raises(SystemExit):
         main(["verify", "--data-dir", str(installed)])
-    assert "verification failed" in capsys.readouterr().err
+    error = capsys.readouterr().err
+    assert "verification failed" in error
+    assert "core: " in error
+    assert "failed verification" in error
 
 
 def test_data_verify_reports_when_nothing_is_installed(

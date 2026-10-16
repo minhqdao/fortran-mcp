@@ -76,6 +76,21 @@ def test_doctor_shows_unreleased_data_version_verbatim(
     assert "core local (1 sources)" in output
 
 
+def test_doctor_summarizes_invalid_bundle_without_error_blob(
+    tmp_path: Path, monkeypatch: MonkeyPatch, capsys: CaptureFixture[str]
+) -> None:
+    installed = _installed_core(tmp_path)
+    (installed / "fortran-mcp-core.db").write_bytes(b"changed")
+    monkeypatch.setenv("FORTRAN_MCP_DATA_DIR", str(installed))
+
+    main([])
+
+    output = capsys.readouterr().out
+    assert "  - core invalid\n" in output
+    assert "failed verification" not in output
+    assert "Run 'fortran-mcp data verify' for details" in output
+
+
 def test_doctor_lists_custom_data_without_prescribing_actions(
     tmp_path: Path, monkeypatch: MonkeyPatch, capsys: CaptureFixture[str]
 ) -> None:

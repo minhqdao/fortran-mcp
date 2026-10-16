@@ -65,7 +65,7 @@ def _data_labels(data_dir: Path, status: DataStatus) -> tuple[str, ...]:
             version = f" {bundle.data_version}" if bundle.data_version else ""
             labels.append(f"{bundle.role}{version} ({len(bundle.sources)} sources)")
         else:
-            labels.append(f"{bundle.role} invalid ({bundle.error})")
+            labels.append(f"{bundle.role} invalid")
     if not labels:
         if (data_dir / INDEX_FILENAME).is_file():
             count = _chunk_count(data_dir / INDEX_FILENAME)
@@ -89,6 +89,8 @@ def _print_report(report: DiagnosticReport) -> None:
         print("Data:")
         for label in labels:
             print(f"  - {label}")
+        if any(bundle.installed and not bundle.valid for bundle in report.data.bundles):
+            print("Run 'fortran-mcp data verify' for details")
     else:
         print("Data: none")
 

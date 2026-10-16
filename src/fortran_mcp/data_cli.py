@@ -243,11 +243,10 @@ def main(argv: Sequence[str] | None = None) -> None:
         if not any(bundle.installed for bundle in status.bundles):
             print("No data packages are installed")
             return
-        invalid = [
-            bundle.role for bundle in status.bundles if bundle.installed and not bundle.valid
-        ]
+        invalid = [bundle for bundle in status.bundles if bundle.installed and not bundle.valid]
         if invalid:
-            parser.error(f"installed data package verification failed: {', '.join(invalid)}")
+            details = "; ".join(f"{bundle.role}: {bundle.error}" for bundle in invalid)
+            parser.error(f"installed data package verification failed: {details}")
         print("Installed data packages verified")
     except (BundleError, CatalogError) as error:
         parser.error(str(error))
