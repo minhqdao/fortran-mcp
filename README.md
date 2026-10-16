@@ -285,7 +285,7 @@ FORTRAN_MCP_DATA_DIR=data uv run fortran-mcp-bundle build core \
 FORTRAN_MCP_DATA_DIR=data uv run fortran-mcp-bundle build semantic \
   --output dist/fortran-mcp-semantic.zip --data-version 2026.08.1
 uv run fortran-mcp-bundle verify dist/fortran-mcp-core.zip
-uv run fortran-mcp-bundle install dist/fortran-mcp-core.zip
+uv run fortran-mcp data install core --bundle dist/fortran-mcp-core.zip
 uv run fortran-mcp-catalog build --data-version 2026.08.1 \
   --output dist/catalog.json \
   dist/fortran-mcp-core.zip dist/fortran-mcp-semantic.zip

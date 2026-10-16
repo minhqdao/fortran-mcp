@@ -318,7 +318,12 @@ def _installed_manifest(data_dir: Path, role: str) -> BundleManifest | None:
         raise BundleError(f"installed {role} manifest is invalid") from error
 
 
-def install_bundle(source: str | Path, *, data_dir: Path | None = None) -> BundleManifest:
+def install_bundle(
+    source: str | Path,
+    *,
+    data_dir: Path | None = None,
+    expected_role: Literal["core", "semantic"] | None = None,
+) -> BundleManifest:
     """Verify and install a local or HTTPS bundle into the configured data directory."""
     data_dir = data_dir or data_directory()
     data_dir.parent.mkdir(parents=True, exist_ok=True)
@@ -336,6 +341,10 @@ def install_bundle(source: str | Path, *, data_dir: Path | None = None) -> Bundl
             archive_path = Path(source).expanduser()
         manifest = verify_bundle(archive_path)
         _server_is_compatible(manifest)
+        if expected_role is not None and manifest.role != expected_role:
+            raise BundleError(
+                f"bundle provides the {manifest.role} data package, not {expected_role}"
+            )
 
         if manifest.role == "semantic":
             core = _installed_manifest(data_dir, "core")
@@ -391,9 +400,6 @@ def _parser() -> argparse.ArgumentParser:
     build.add_argument("--data-version", required=True)
     verify = subparsers.add_parser("verify")
     verify.add_argument("path", type=Path)
-    install = subparsers.add_parser("install")
-    install.add_argument("source", help="local bundle path or explicit HTTPS URL")
-    install.add_argument("--data-dir", type=Path, default=data_directory())
     return parser
 
 
@@ -411,12 +417,9 @@ def main(argv: Sequence[str] | None = None) -> None:
                 data_version=args.data_version,
             )
             print(f"Built {manifest.bundle_id}: {args.output}")
-        elif args.command == "verify":
+        else:
             manifest = verify_bundle(args.path)
             print(f"Verified {manifest.bundle_id}: {args.path}")
-        else:
-            manifest = install_bundle(args.source, data_dir=args.data_dir)
-            print(f"Installed {manifest.bundle_id} into {args.data_dir}")
     except BundleError as error:
         parser.error(str(error))
 

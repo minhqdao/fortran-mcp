@@ -151,6 +151,60 @@ def test_remove_semantic_keeps_files_core_still_needs(tmp_path: Path) -> None:
     assert (installed / "licenses" / "fpm-0.13.0-docs.txt").is_file()
 
 
+def test_install_accepts_direct_bundle_path(tmp_path: Path, capsys: CaptureFixture[str]) -> None:
+    source = tmp_path / "source"
+    source.mkdir()
+    with sqlite3.connect(source / "fortran-mcp-core.db") as database:
+        database.execute("CREATE TABLE chunks(source_id TEXT)")
+        database.execute("INSERT INTO chunks VALUES ('fpm-0.13.0-docs')")
+    licenses = tmp_path / "licenses"
+    licenses.mkdir()
+    (licenses / "fpm-0.13.0-docs.txt").write_text("MIT\n")
+    bundle = tmp_path / "core.zip"
+    build_bundle("core", bundle, data_dir=source, license_dir=licenses, data_version="local")
+    installed = tmp_path / "installed"
+
+    main(["install", "core", "--bundle", str(bundle), "--data-dir", str(installed)])
+
+    assert "Installed fortran-mcp-core-" in capsys.readouterr().out
+    assert data_status(installed).bundles[0].valid is True
+
+
+def test_install_rejects_bundle_of_other_role(tmp_path: Path, capsys: CaptureFixture[str]) -> None:
+    source = tmp_path / "source"
+    source.mkdir()
+    with sqlite3.connect(source / "fortran-mcp-core.db") as database:
+        database.execute("CREATE TABLE chunks(source_id TEXT)")
+        database.execute("INSERT INTO chunks VALUES ('fpm-0.13.0-docs')")
+    licenses = tmp_path / "licenses"
+    licenses.mkdir()
+    (licenses / "fpm-0.13.0-docs.txt").write_text("MIT\n")
+    bundle = tmp_path / "core.zip"
+    build_bundle("core", bundle, data_dir=source, license_dir=licenses, data_version="local")
+    installed = tmp_path / "installed"
+
+    with pytest.raises(SystemExit):
+        main(["install", "semantic", "--bundle", str(bundle), "--data-dir", str(installed)])
+    assert "not semantic" in capsys.readouterr().err
+    assert not (installed / "manifests" / "semantic.json").exists()
+
+
+def test_install_rejects_catalog_and_bundle_together(tmp_path: Path) -> None:
+    with pytest.raises(SystemExit):
+        main(
+            [
+                "install",
+                "core",
+                "--catalog",
+                str(tmp_path / "catalog.json"),
+                "--bundle",
+                str(tmp_path / "core.zip"),
+                "--data-dir",
+                str(tmp_path / "installed"),
+            ]
+        )
+
+
 def test_data_verify_cli_reports_ok_for_valid_install(
     tmp_path: Path, capsys: CaptureFixture[str]
 ) -> None:

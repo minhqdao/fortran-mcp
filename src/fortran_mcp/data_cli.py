@@ -10,7 +10,7 @@ from typing import Literal
 
 from pydantic import Field
 
-from fortran_mcp.bundle import BundleError, BundleManifest
+from fortran_mcp.bundle import BundleError, BundleManifest, install_bundle
 from fortran_mcp.catalog import DEFAULT_CATALOG_URL, CatalogError, install_from_catalog
 from fortran_mcp.config import data_directory
 from fortran_mcp.search import INDEX_FILENAME
@@ -173,10 +173,16 @@ def _parser() -> argparse.ArgumentParser:
     subparsers = parser.add_subparsers(dest="command", required=True)
     install = subparsers.add_parser("install")
     install.add_argument("role", choices=("core", "semantic"))
-    install.add_argument(
+    origin = install.add_mutually_exclusive_group()
+    origin.add_argument(
         "--catalog",
         default=DEFAULT_CATALOG_URL,
         help="local catalog path or HTTPS URL",
+    )
+    origin.add_argument(
+        "--bundle",
+        default=None,
+        help="local bundle path or explicit HTTPS URL (instead of a catalog)",
     )
     install.add_argument("--data-dir", type=Path, default=data_directory())
     verify = subparsers.add_parser("verify")
@@ -194,7 +200,12 @@ def main(argv: Sequence[str] | None = None) -> None:
     args = parser.parse_args(argv)
     try:
         if args.command == "install":
-            manifest = install_from_catalog(args.role, args.catalog, data_dir=args.data_dir)
+            if args.bundle is not None:
+                manifest = install_bundle(
+                    args.bundle, data_dir=args.data_dir, expected_role=args.role
+                )
+            else:
+                manifest = install_from_catalog(args.role, args.catalog, data_dir=args.data_dir)
             print(f"Installed {manifest.bundle_id} into {args.data_dir}")
             return
         status = data_status(args.data_dir)

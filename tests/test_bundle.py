@@ -141,6 +141,19 @@ def test_install_core_then_compatible_semantic_bundle(tmp_path: Path) -> None:
     assert (installed / "manifests/semantic.json").is_file()
 
 
+def test_install_bundle_rejects_unexpected_role(tmp_path: Path) -> None:
+    data_dir, license_dir = _bundle_inputs(tmp_path)
+    core = tmp_path / "core.zip"
+    build_bundle("core", core, data_dir=data_dir, license_dir=license_dir, data_version="2026.08.1")
+    installed = tmp_path / "installed"
+
+    with pytest.raises(BundleError, match="not semantic"):
+        install_bundle(core, data_dir=installed, expected_role="semantic")
+
+    assert not (installed / "fortran-mcp-core.db").exists()
+    assert not (installed / "manifests" / "core.json").exists()
+
+
 def test_semantic_install_requires_core_bundle(tmp_path: Path) -> None:
     data_dir, _ = _bundle_inputs(tmp_path)
     with sqlite3.connect(data_dir / "fortran-mcp-semantic.db") as database:
