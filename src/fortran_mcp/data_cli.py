@@ -70,6 +70,14 @@ def _summarize_error(error: OSError | ValueError) -> str:
     return "; ".join(clauses)
 
 
+def bundle_label(bundle: InstalledBundle) -> str:
+    """Return one human-readable line describing an installed data package."""
+    if not bundle.valid:
+        return f"{bundle.role} invalid"
+    version = f" {bundle.data_version}" if bundle.data_version else ""
+    return f"{bundle.role}{version} ({len(bundle.sources)} sources)"
+
+
 def inspect_role(role: Role, data_dir: Path) -> InstalledBundle:
     """Inspect one installed role and verify every recorded payload."""
     manifest_path = data_dir / "manifests" / f"{role}.json"
@@ -248,7 +256,10 @@ def main(argv: Sequence[str] | None = None) -> None:
         if invalid:
             details = "; ".join(f"{bundle.role}: {bundle.error}" for bundle in invalid)
             parser.error(f"installed data package verification failed: {details}")
-        print("Installed data packages verified")
+        print("Installed data packages verified:")
+        for bundle in status.bundles:
+            if bundle.installed:
+                print(f"  - {bundle_label(bundle)}")
     except (BundleError, CatalogError) as error:
         parser.error(str(error))
 

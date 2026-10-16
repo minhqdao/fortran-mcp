@@ -307,7 +307,8 @@ def test_data_verify_cli_reports_ok_for_valid_install(
 
     main(["verify", "--data-dir", str(installed)])
 
-    assert "Installed data packages verified" in capsys.readouterr().out
+    output = capsys.readouterr().out
+    assert "Installed data packages verified:\n  - core 2026.08.1 (1 sources)" in output
 
 
 def test_data_verify_cli_rejects_corrupted_install(
