@@ -146,12 +146,14 @@ def test_install_bundle_rejects_unexpected_role(tmp_path: Path) -> None:
     core = tmp_path / "core.zip"
     build_bundle("core", core, data_dir=data_dir, license_dir=license_dir, data_version="2026.08.1")
     installed = tmp_path / "installed"
+    install_bundle(core, data_dir=installed, expected_role="core")
 
     with pytest.raises(BundleError, match="not semantic"):
         install_bundle(core, data_dir=installed, expected_role="semantic")
 
-    assert not (installed / "fortran-mcp-core.db").exists()
-    assert not (installed / "manifests" / "core.json").exists()
+    assert (installed / "fortran-mcp-core.db").is_file()
+    assert (installed / "manifests" / "core.json").is_file()
+    assert not (installed / "manifests" / "semantic.json").exists()
 
 
 def test_semantic_install_requires_core_bundle(tmp_path: Path) -> None:

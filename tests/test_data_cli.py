@@ -182,6 +182,8 @@ def test_install_rejects_bundle_of_other_role(tmp_path: Path, capsys: CaptureFix
     bundle = tmp_path / "core.zip"
     build_bundle("core", bundle, data_dir=source, license_dir=licenses, data_version="local")
     installed = tmp_path / "installed"
+    main(["install", "core", "--bundle", str(bundle), "--data-dir", str(installed)])
+    capsys.readouterr()
 
     with pytest.raises(SystemExit):
         main(["install", "semantic", "--bundle", str(bundle), "--data-dir", str(installed)])
@@ -270,6 +272,28 @@ def test_install_semantic_is_quiet_with_runtime(
     )
 
     assert "fastembed" not in capsys.readouterr().out
+
+
+def test_install_bundle_url_fails_before_downloading_without_core(
+    tmp_path: Path, monkeypatch: MonkeyPatch, capsys: CaptureFixture[str]
+) -> None:
+    def explode(*_args: object, **_kwargs: object) -> None:
+        raise AssertionError("network must not be used")
+
+    monkeypatch.setattr("fortran_mcp.bundle.urlopen", explode)
+
+    with pytest.raises(SystemExit):
+        main(
+            [
+                "install",
+                "semantic",
+                "--bundle",
+                "https://example.com/fortran-mcp-semantic.zip",
+                "--data-dir",
+                str(tmp_path / "installed"),
+            ]
+        )
+    assert "compatible core" in capsys.readouterr().err
 
 
 def test_data_verify_cli_reports_ok_for_valid_install(

@@ -237,12 +237,15 @@ def install_from_catalog(
     entry = next((bundle for bundle in catalog.bundles if bundle.role == role), None)
     if entry is None:
         raise CatalogError(f"catalog does not contain the {role} bundle")
+    resolved = data_dir or data_directory()
+    if role == "semantic" and not (resolved / "manifests" / "core.json").is_file():
+        raise BundleError("install a compatible core bundle before the semantic bundle")
     if isinstance(base, Path):
         artifact = _catalog_artifact(base, entry)
         manifest = verify_bundle(artifact)
         if manifest.bundle_id != entry.bundle_id or manifest.data_version != catalog.data_version:
             raise CatalogError("catalog metadata does not match the bundle manifest")
-        return install_bundle(artifact, data_dir=data_dir)
+        return install_bundle(artifact, data_dir=data_dir, expected_role=role)
 
     with tempfile.TemporaryDirectory(prefix=".fortran-mcp-catalog-") as temporary:
         artifact = Path(temporary) / "bundle.zip"
@@ -250,7 +253,7 @@ def install_from_catalog(
         manifest = verify_bundle(artifact)
         if manifest.bundle_id != entry.bundle_id or manifest.data_version != catalog.data_version:
             raise CatalogError("catalog metadata does not match the bundle manifest")
-        return install_bundle(artifact, data_dir=data_dir)
+        return install_bundle(artifact, data_dir=data_dir, expected_role=role)
 
 
 def _parser() -> argparse.ArgumentParser:

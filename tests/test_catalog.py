@@ -7,7 +7,7 @@ from urllib.request import Request
 
 import pytest
 
-from fortran_mcp.bundle import build_bundle
+from fortran_mcp.bundle import BundleError, build_bundle
 from fortran_mcp.catalog import (
     DEFAULT_CATALOG_URL,
     CatalogBundle,
@@ -19,6 +19,8 @@ from fortran_mcp.catalog import (
 from fortran_mcp.catalog import (
     main as catalog_main,
 )
+
+from .test_provision import _release
 
 
 def _core_bundle(tmp_path: Path) -> Path:
@@ -150,6 +152,45 @@ def test_remote_catalog_resolves_and_verifies_relative_bundle_url(
         "https://github.com/minhqdao/fortran-mcp/releases/latest/download/fortran-mcp-core.zip",
     ]
     assert (destination / "fortran-mcp-core.db").is_file()
+
+
+def test_remote_semantic_install_fails_before_downloading_bundle(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    catalog_path = _release(tmp_path)
+    resolved_catalog = (
+        "https://github.com/minhqdao/fortran-mcp/releases/download/v0.1.0/catalog.json"
+    )
+    requested: list[str] = []
+
+    class Response:
+        def __init__(self, content: bytes, url: str) -> None:
+            self.stream = BytesIO(content)
+            self.headers = {"Content-Length": str(len(content))}
+            self.url = url
+
+        def __enter__(self) -> "Response":
+            return self
+
+        def __exit__(self, *_args: object) -> None:
+            return None
+
+        def read(self, size: int = -1) -> bytes:
+            return self.stream.read(size)
+
+        def geturl(self) -> str:
+            return self.url
+
+    def fake_urlopen(request: Request, *, timeout: int) -> Response:
+        requested.append(request.full_url)
+        return Response(catalog_path.read_bytes(), resolved_catalog)
+
+    monkeypatch.setattr("fortran_mcp.catalog.urlopen", fake_urlopen)
+
+    with pytest.raises(BundleError, match="compatible core"):
+        install_from_catalog("semantic", DEFAULT_CATALOG_URL, data_dir=tmp_path / "installed")
+
+    assert requested == [DEFAULT_CATALOG_URL]
 
 
 def test_remote_catalog_failure_suggests_local_override(

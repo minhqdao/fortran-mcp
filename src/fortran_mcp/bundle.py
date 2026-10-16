@@ -326,6 +326,8 @@ def install_bundle(
 ) -> BundleManifest:
     """Verify and install a local or HTTPS bundle into the configured data directory."""
     data_dir = data_dir or data_directory()
+    if expected_role == "semantic" and not (data_dir / "manifests" / "core.json").is_file():
+        raise BundleError("install a compatible core bundle before the semantic bundle")
     data_dir.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix=".fortran-mcp-install-", dir=data_dir.parent) as temp:
         temporary = Path(temp)
