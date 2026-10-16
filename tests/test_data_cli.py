@@ -205,6 +205,73 @@ def test_install_rejects_catalog_and_bundle_together(tmp_path: Path) -> None:
         )
 
 
+def test_install_semantic_warns_without_runtime(
+    tmp_path: Path, monkeypatch: MonkeyPatch, capsys: CaptureFixture[str]
+) -> None:
+    catalog = _release(tmp_path)
+    release = catalog.parent
+    monkeypatch.setattr("importlib.util.find_spec", lambda _name: None)
+    installed = tmp_path / "installed"
+
+    main(
+        [
+            "install",
+            "core",
+            "--bundle",
+            str(release / "fortran-mcp-core.zip"),
+            "--data-dir",
+            str(installed),
+        ]
+    )
+    capsys.readouterr()
+    main(
+        [
+            "install",
+            "semantic",
+            "--bundle",
+            str(release / "fortran-mcp-semantic.zip"),
+            "--data-dir",
+            str(installed),
+        ]
+    )
+
+    output = capsys.readouterr().out
+    assert "Installed fortran-mcp-semantic-" in output
+    assert 'uv tool install "fortran-mcp[semantic]"' in output
+
+
+def test_install_semantic_is_quiet_with_runtime(
+    tmp_path: Path, capsys: CaptureFixture[str]
+) -> None:
+    catalog = _release(tmp_path)
+    release = catalog.parent
+    installed = tmp_path / "installed"
+
+    main(
+        [
+            "install",
+            "core",
+            "--bundle",
+            str(release / "fortran-mcp-core.zip"),
+            "--data-dir",
+            str(installed),
+        ]
+    )
+    capsys.readouterr()
+    main(
+        [
+            "install",
+            "semantic",
+            "--bundle",
+            str(release / "fortran-mcp-semantic.zip"),
+            "--data-dir",
+            str(installed),
+        ]
+    )
+
+    assert "fastembed" not in capsys.readouterr().out
+
+
 def test_data_verify_cli_reports_ok_for_valid_install(
     tmp_path: Path, capsys: CaptureFixture[str]
 ) -> None:
@@ -259,7 +326,7 @@ def test_install_uses_default_release_catalog(
 
     def install(role: str, catalog: str, *, data_dir: Path) -> SimpleNamespace:
         called.append((role, catalog, data_dir))
-        return SimpleNamespace(bundle_id="fortran-mcp-core-test")
+        return SimpleNamespace(bundle_id="fortran-mcp-core-test", role="core")
 
     monkeypatch.setattr("fortran_mcp.data_cli.install_from_catalog", install)
 

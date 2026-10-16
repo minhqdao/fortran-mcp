@@ -18,7 +18,7 @@ Requires Python 3.11+ and [uv](https://docs.astral.sh/uv/).
 uv tool install fortran-mcp
 ```
 
-Required data bundles are installed automatically on first run. To avoid the initial delay, you can install them beforehand. Semantic and hybrid search require the optional `semantic` bundle.
+Required data bundles are installed automatically on first run. To avoid the initial delay, you can install them beforehand. Semantic and hybrid search require the `semantic` bundle.
 
 ```bash
 fortran-mcp data install core

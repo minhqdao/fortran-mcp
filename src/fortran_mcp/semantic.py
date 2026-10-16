@@ -29,6 +29,10 @@ from fortran_mcp.search import (
 SEMANTIC_INDEX_FILENAME = "fortran-mcp-semantic.db"
 DEFAULT_MODEL = "BAAI/bge-small-en-v1.5"
 SEMANTIC_SCHEMA_VERSION = "2"
+RUNTIME_HINT = (
+    "Semantic search needs the fastembed package, which isn't installed. "
+    'To add it, run: uv tool install "fortran-mcp[semantic]"'
+)
 
 
 @dataclass(frozen=True)

@@ -8,7 +8,7 @@ import pytest
 from pytest import MonkeyPatch
 
 from fortran_mcp.bundle import build_bundle
-from fortran_mcp.catalog import build_catalog
+from fortran_mcp.catalog import build_catalog, install_from_catalog
 from fortran_mcp.documents import DocumentChunk
 from fortran_mcp.provision import ProvisionResult, any_data_present, offer_data_install
 from fortran_mcp.search import INDEX_FILENAME, build_index
@@ -196,6 +196,208 @@ def test_invalid_provider_fails_before_downloading(
     assert result is ProvisionResult.FAILED
     assert not (tmp_path / "installed").exists()
     assert any("lexical" in text and "semantic" in text for text in messages)
+
+
+def _core_only(tmp_path: Path) -> tuple[Path, Path]:
+    catalog = _release(tmp_path)
+    installed = tmp_path / "installed"
+    install_from_catalog("core", catalog, data_dir=installed)
+    return catalog, installed
+
+
+def test_non_interactive_tops_up_missing_semantic(tmp_path: Path, monkeypatch: MonkeyPatch) -> None:
+    catalog, installed = _core_only(tmp_path)
+    monkeypatch.setenv("FORTRAN_MCP_SEARCH_PROVIDER", "hybrid")
+    messages: list[str] = []
+
+    result = offer_data_install(
+        data_dir=installed,
+        catalog_location=catalog,
+        interactive=False,
+        prompt=lambda _text: "",
+        message=messages.append,
+    )
+
+    assert result is ProvisionResult.INSTALLED
+    assert (installed / "manifests" / "semantic.json").is_file()
+
+
+def test_non_interactive_top_up_respects_opt_out(tmp_path: Path, monkeypatch: MonkeyPatch) -> None:
+    catalog, installed = _core_only(tmp_path)
+    monkeypatch.setenv("FORTRAN_MCP_SEARCH_PROVIDER", "hybrid")
+    monkeypatch.setenv("FORTRAN_MCP_AUTO_INSTALL", "0")
+    messages: list[str] = []
+
+    result = offer_data_install(
+        data_dir=installed,
+        catalog_location=catalog,
+        interactive=False,
+        prompt=lambda _text: "",
+        message=messages.append,
+    )
+
+    assert result is ProvisionResult.OPTED_OUT
+    assert not (installed / "manifests" / "semantic.json").exists()
+
+
+def test_interactive_top_up_accepts_download(tmp_path: Path, monkeypatch: MonkeyPatch) -> None:
+    catalog, installed = _core_only(tmp_path)
+    monkeypatch.setenv("FORTRAN_MCP_SEARCH_PROVIDER", "hybrid")
+    messages: list[str] = []
+
+    result = offer_data_install(
+        data_dir=installed,
+        catalog_location=catalog,
+        interactive=True,
+        prompt=lambda _text: "y",
+        message=messages.append,
+    )
+
+    assert result is ProvisionResult.INSTALLED
+    assert (installed / "manifests" / "semantic.json").is_file()
+
+
+def test_interactive_top_up_decline_skips_server_start(
+    tmp_path: Path, monkeypatch: MonkeyPatch
+) -> None:
+    catalog, installed = _core_only(tmp_path)
+    monkeypatch.setenv("FORTRAN_MCP_SEARCH_PROVIDER", "hybrid")
+    messages: list[str] = []
+
+    result = offer_data_install(
+        data_dir=installed,
+        catalog_location=catalog,
+        interactive=True,
+        prompt=lambda _text: "n",
+        message=messages.append,
+    )
+
+    assert result is ProvisionResult.SKIPPED
+    assert not (installed / "manifests" / "semantic.json").exists()
+
+
+def test_semantic_download_refused_without_runtime(
+    tmp_path: Path, monkeypatch: MonkeyPatch
+) -> None:
+    catalog = _release(tmp_path)
+    monkeypatch.setenv("FORTRAN_MCP_SEARCH_PROVIDER", "hybrid")
+    monkeypatch.setattr("importlib.util.find_spec", lambda _name: None)
+    messages: list[str] = []
+
+    result = offer_data_install(
+        data_dir=tmp_path / "installed",
+        catalog_location=catalog,
+        interactive=False,
+        prompt=lambda _text: "",
+        message=messages.append,
+    )
+
+    assert result is ProvisionResult.FAILED
+    assert not (tmp_path / "installed" / "manifests" / "semantic.json").exists()
+    assert any('uv tool install "fortran-mcp[semantic]"' in text for text in messages)
+
+
+def test_lexical_install_ignores_missing_runtime(tmp_path: Path, monkeypatch: MonkeyPatch) -> None:
+    catalog = _release(tmp_path)
+    monkeypatch.setenv("FORTRAN_MCP_SEARCH_PROVIDER", "lexical")
+    monkeypatch.setattr("importlib.util.find_spec", lambda _name: None)
+    messages: list[str] = []
+
+    result = offer_data_install(
+        data_dir=tmp_path / "installed",
+        catalog_location=catalog,
+        interactive=False,
+        prompt=lambda _text: "",
+        message=messages.append,
+    )
+
+    assert result is ProvisionResult.INSTALLED
+    assert (tmp_path / "installed" / "manifests" / "core.json").is_file()
+
+
+def test_menu_choice_one_tops_up_for_semantic_provider(
+    tmp_path: Path, monkeypatch: MonkeyPatch
+) -> None:
+    catalog = _release(tmp_path)
+    monkeypatch.setenv("FORTRAN_MCP_SEARCH_PROVIDER", "hybrid")
+    answers = iter(["1", "y"])
+    messages: list[str] = []
+
+    result = offer_data_install(
+        data_dir=tmp_path / "installed",
+        catalog_location=catalog,
+        interactive=True,
+        prompt=lambda _text: next(answers),
+        message=messages.append,
+    )
+
+    data_dir = tmp_path / "installed"
+    assert result is ProvisionResult.INSTALLED
+    assert (data_dir / "manifests" / "core.json").is_file()
+    assert (data_dir / "manifests" / "semantic.json").is_file()
+
+
+def test_menu_choice_one_decline_leaves_core_only(tmp_path: Path, monkeypatch: MonkeyPatch) -> None:
+    catalog = _release(tmp_path)
+    monkeypatch.setenv("FORTRAN_MCP_SEARCH_PROVIDER", "hybrid")
+    answers = iter(["1", "n"])
+    messages: list[str] = []
+
+    result = offer_data_install(
+        data_dir=tmp_path / "installed",
+        catalog_location=catalog,
+        interactive=True,
+        prompt=lambda _text: next(answers),
+        message=messages.append,
+    )
+
+    data_dir = tmp_path / "installed"
+    assert result is ProvisionResult.SKIPPED
+    assert (data_dir / "manifests" / "core.json").is_file()
+    assert not (data_dir / "manifests" / "semantic.json").exists()
+
+
+def test_missing_runtime_fails_despite_installed_core(
+    tmp_path: Path, monkeypatch: MonkeyPatch
+) -> None:
+    catalog, installed = _core_only(tmp_path)
+    monkeypatch.setenv("FORTRAN_MCP_SEARCH_PROVIDER", "hybrid")
+    monkeypatch.setattr("importlib.util.find_spec", lambda _name: None)
+    messages: list[str] = []
+
+    result = offer_data_install(
+        data_dir=installed,
+        catalog_location=catalog,
+        interactive=False,
+        prompt=lambda _text: "",
+        message=messages.append,
+    )
+
+    assert result is ProvisionResult.FAILED
+    assert not (installed / "manifests" / "semantic.json").exists()
+    assert any('uv tool install "fortran-mcp[semantic]"' in text for text in messages)
+
+
+def test_menu_semantic_choice_warns_without_runtime(
+    tmp_path: Path, monkeypatch: MonkeyPatch
+) -> None:
+    catalog = _release(tmp_path)
+    monkeypatch.setenv("FORTRAN_MCP_SEARCH_PROVIDER", "lexical")
+    monkeypatch.setattr("importlib.util.find_spec", lambda _name: None)
+    messages: list[str] = []
+
+    result = offer_data_install(
+        data_dir=tmp_path / "installed",
+        catalog_location=catalog,
+        interactive=True,
+        prompt=lambda _text: "2",
+        message=messages.append,
+    )
+
+    data_dir = tmp_path / "installed"
+    assert result is ProvisionResult.INSTALLED
+    assert (data_dir / "manifests" / "semantic.json").is_file()
+    assert any("Note:" in text and "fastembed" in text for text in messages)
 
 
 def test_non_interactive_auto_install_opt_out(tmp_path: Path, monkeypatch: MonkeyPatch) -> None:

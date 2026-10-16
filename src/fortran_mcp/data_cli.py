@@ -14,7 +14,7 @@ from fortran_mcp.bundle import BundleError, BundleManifest, install_bundle
 from fortran_mcp.catalog import DEFAULT_CATALOG_URL, CatalogError, install_from_catalog
 from fortran_mcp.config import data_directory
 from fortran_mcp.search import INDEX_FILENAME
-from fortran_mcp.semantic import SEMANTIC_INDEX_FILENAME
+from fortran_mcp.semantic import RUNTIME_HINT, SEMANTIC_INDEX_FILENAME
 from fortran_mcp.sources import StrictModel
 
 Role = Literal["core", "semantic"]
@@ -207,6 +207,8 @@ def main(argv: Sequence[str] | None = None) -> None:
             else:
                 manifest = install_from_catalog(args.role, args.catalog, data_dir=args.data_dir)
             print(f"Installed {manifest.bundle_id} into {args.data_dir}")
+            if manifest.role == "semantic" and importlib.util.find_spec("fastembed") is None:
+                print(f"Note: {RUNTIME_HINT}")
             return
         status = data_status(args.data_dir)
         if args.command == "remove":

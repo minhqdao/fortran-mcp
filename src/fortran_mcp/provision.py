@@ -1,5 +1,6 @@
 """Install documentation data automatically when the server starts without any."""
 
+import importlib.util
 import os
 import sys
 from collections.abc import Callable
@@ -16,7 +17,7 @@ from fortran_mcp.catalog import (
 )
 from fortran_mcp.config import data_directory, search_provider_name
 from fortran_mcp.search import INDEX_FILENAME
-from fortran_mcp.semantic import SEMANTIC_INDEX_FILENAME
+from fortran_mcp.semantic import RUNTIME_HINT, SEMANTIC_INDEX_FILENAME
 
 AUTO_INSTALL_ENV = "FORTRAN_MCP_AUTO_INSTALL"
 CATALOG_ENV = "FORTRAN_MCP_CATALOG"
@@ -64,6 +65,10 @@ def _install_roles(
     data_dir: Path,
     message: Callable[[str], None],
 ) -> bool:
+    if "semantic" in roles and not _semantic_runtime_available():
+        # Explicit human choices reach here despite a missing runtime (automatic
+        # paths are refused earlier); warn instead of blocking.
+        message(f"Note: {RUNTIME_HINT}")
     try:
         for role in roles:
             message(f"Downloading {role} data...")
@@ -84,6 +89,39 @@ def _required_roles(provider: str) -> tuple[BundleRole, ...]:
     return ("core",)
 
 
+def _semantic_runtime_available() -> bool:
+    """Return whether the optional embedding runtime is importable."""
+    return importlib.util.find_spec("fastembed") is not None
+
+
+def _semantic_manifest_present(data_dir: Path) -> bool:
+    """Return whether a semantic bundle manifest is installed."""
+    return (data_dir / "manifests" / "semantic.json").is_file()
+
+
+def _offer_top_up(
+    provider: str,
+    catalog_location: CatalogLocation,
+    data_dir: Path,
+    message: Callable[[str], None],
+    prompt: Callable[[str], str],
+) -> ProvisionResult:
+    """Ask an interactive user to download the missing semantic package."""
+    message(
+        f"The {provider} search provider needs the semantic data package, which is not installed."
+    )
+    try:
+        answer = prompt("Download it now? [y/N] ").strip().casefold()
+    except EOFError:
+        answer = ""
+    if answer not in {"y", "yes"}:
+        message("No data will be downloaded.")
+        message(_INSTALL_HINT)
+        return ProvisionResult.SKIPPED
+    ok = _install_roles(("semantic",), catalog_location, data_dir, message)
+    return ProvisionResult.INSTALLED if ok else ProvisionResult.FAILED
+
+
 def _catalog_location() -> CatalogLocation:
     return os.environ.get(CATALOG_ENV, "").strip() or DEFAULT_CATALOG_URL
 
@@ -96,7 +134,7 @@ def offer_data_install(
     prompt: Callable[[str], str] = input,
     message: Callable[[str], None] = _stderr,
 ) -> ProvisionResult:
-    """Install the data packages the configured provider needs when none exist.
+    """Install the data packages the configured provider needs when they are missing.
 
     Terminal sessions are informed that no data exists and choose between core, core
     plus semantic, and skipping; the network is only touched after a choice. MCP
@@ -112,34 +150,57 @@ def offer_data_install(
     except ValueError as error:
         message(str(error))
         return ProvisionResult.FAILED
-    if any_data_present(data_dir):
-        return ProvisionResult.DATA_PRESENT
-    if not interactive:
+    if provider in {"semantic", "hybrid"} and not _semantic_runtime_available():
+        message(RUNTIME_HINT)
+        return ProvisionResult.FAILED
+    required = _required_roles(provider)
+    if not any_data_present(data_dir):
+        if not interactive:
+            if not _auto_install_enabled():
+                message("Automatic data download is disabled.")
+                message(_INSTALL_HINT)
+                return ProvisionResult.OPTED_OUT
+            installed = _install_roles(required, catalog_location, data_dir, message)
+            return ProvisionResult.INSTALLED if installed else ProvisionResult.FAILED
+        message(
+            "No data packages found. Select a package to download:\n"
+            "  1) core (lexical search)\n"
+            "  2) core + semantic (adds semantic and hybrid search)\n"
+            "  3) skip\n"
+            "Choose [1/2/3]: "
+        )
+        try:
+            answer = prompt("").strip()
+        except EOFError:
+            answer = ""
+        roles: tuple[BundleRole, ...]
+        if answer == "1":
+            roles = ("core",)
+        elif answer == "2":
+            roles = ("core", "semantic")
+        else:
+            message("No data will be downloaded.")
+            message(_INSTALL_HINT)
+            return ProvisionResult.SKIPPED
+        installed = _install_roles(roles, catalog_location, data_dir, message)
+        if not installed:
+            return ProvisionResult.FAILED
+        if "semantic" in required and not _semantic_manifest_present(data_dir):
+            return _offer_top_up(provider, catalog_location, data_dir, message, prompt)
+        return ProvisionResult.INSTALLED
+    if (
+        "semantic" in required
+        and (data_dir / "manifests" / "core.json").is_file()
+        and not _semantic_manifest_present(data_dir)
+    ):
+        if interactive:
+            return _offer_top_up(provider, catalog_location, data_dir, message, prompt)
         if not _auto_install_enabled():
             message("Automatic data download is disabled.")
             message(_INSTALL_HINT)
             return ProvisionResult.OPTED_OUT
-        installed = _install_roles(_required_roles(provider), catalog_location, data_dir, message)
+        installed = _install_roles(("semantic",), catalog_location, data_dir, message)
         return ProvisionResult.INSTALLED if installed else ProvisionResult.FAILED
-    message(
-        "No data packages found. Select a package to download:\n"
-        "  1) core (lexical search)\n"
-        "  2) core + semantic (adds semantic and hybrid search)\n"
-        "  3) skip\n"
-        "Choose [1/2/3]: "
-    )
-    try:
-        answer = prompt("").strip()
-    except EOFError:
-        answer = ""
-    roles: tuple[BundleRole, ...]
-    if answer == "1":
-        roles = ("core",)
-    elif answer == "2":
-        roles = ("core", "semantic")
-    else:
-        message("No data will be downloaded.")
-        message(_INSTALL_HINT)
-        return ProvisionResult.SKIPPED
-    installed = _install_roles(roles, catalog_location, data_dir, message)
-    return ProvisionResult.INSTALLED if installed else ProvisionResult.FAILED
+    # Satisfied installs, custom indexes without manifests, and exotic partial
+    # states are all left untouched.
+    return ProvisionResult.DATA_PRESENT
