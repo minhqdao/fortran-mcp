@@ -14,7 +14,7 @@ from fortran_mcp.catalog import (
     CatalogLocation,
     install_from_catalog,
 )
-from fortran_mcp.config import data_directory
+from fortran_mcp.config import data_directory, search_provider_name
 from fortran_mcp.search import INDEX_FILENAME
 from fortran_mcp.semantic import SEMANTIC_INDEX_FILENAME
 
@@ -77,6 +77,13 @@ def _install_roles(
     return True
 
 
+def _required_roles(provider: str) -> tuple[BundleRole, ...]:
+    """Return the data packages a search provider needs to run."""
+    if provider in {"semantic", "hybrid"}:
+        return ("core", "semantic")
+    return ("core",)
+
+
 def _catalog_location() -> CatalogLocation:
     return os.environ.get(CATALOG_ENV, "").strip() or DEFAULT_CATALOG_URL
 
@@ -89,16 +96,22 @@ def offer_data_install(
     prompt: Callable[[str], str] = input,
     message: Callable[[str], None] = _stderr,
 ) -> ProvisionResult:
-    """Install core data when nothing is installed yet.
+    """Install the data packages the configured provider needs when none exist.
 
     Terminal sessions are informed that no data exists and choose between core, core
     plus semantic, and skipping; the network is only touched after a choice. MCP
-    clients launch the server without a console, so those sessions download the core
-    bundle automatically unless FORTRAN_MCP_AUTO_INSTALL disables it. The catalog
-    defaults to the project release and can be overridden with FORTRAN_MCP_CATALOG.
+    clients launch the server without a console, so those sessions download every
+    package the configured search provider needs unless FORTRAN_MCP_AUTO_INSTALL
+    disables it. The catalog defaults to the project release and can be overridden
+    with FORTRAN_MCP_CATALOG.
     """
     data_dir = data_dir or data_directory()
     catalog_location = catalog_location or _catalog_location()
+    try:
+        provider = search_provider_name()
+    except ValueError as error:
+        message(str(error))
+        return ProvisionResult.FAILED
     if any_data_present(data_dir):
         return ProvisionResult.DATA_PRESENT
     if not interactive:
@@ -106,7 +119,7 @@ def offer_data_install(
             message("Automatic data download is disabled.")
             message(_INSTALL_HINT)
             return ProvisionResult.OPTED_OUT
-        installed = _install_roles(("core",), catalog_location, data_dir, message)
+        installed = _install_roles(_required_roles(provider), catalog_location, data_dir, message)
         return ProvisionResult.INSTALLED if installed else ProvisionResult.FAILED
     message(
         "No data packages found. Select a package to download:\n"

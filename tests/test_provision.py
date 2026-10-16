@@ -155,6 +155,49 @@ def test_non_interactive_auto_installs_core(tmp_path: Path) -> None:
     assert any("Installed" in text for text in messages)
 
 
+@pytest.mark.parametrize("provider", ["semantic", "hybrid"])
+def test_non_interactive_installs_semantic_for_semantic_providers(
+    tmp_path: Path, monkeypatch: MonkeyPatch, provider: str
+) -> None:
+    catalog = _release(tmp_path)
+    monkeypatch.setenv("FORTRAN_MCP_SEARCH_PROVIDER", provider)
+    messages: list[str] = []
+
+    result = offer_data_install(
+        data_dir=tmp_path / "installed",
+        catalog_location=catalog,
+        interactive=False,
+        prompt=lambda _text: "",
+        message=messages.append,
+    )
+
+    data_dir = tmp_path / "installed"
+    assert result is ProvisionResult.INSTALLED
+    assert (data_dir / "manifests" / "core.json").is_file()
+    assert (data_dir / "manifests" / "semantic.json").is_file()
+    assert any("Installed" in text for text in messages)
+
+
+def test_invalid_provider_fails_before_downloading(
+    tmp_path: Path, monkeypatch: MonkeyPatch
+) -> None:
+    catalog = _release(tmp_path)
+    monkeypatch.setenv("FORTRAN_MCP_SEARCH_PROVIDER", "wrong")
+    messages: list[str] = []
+
+    result = offer_data_install(
+        data_dir=tmp_path / "installed",
+        catalog_location=catalog,
+        interactive=False,
+        prompt=lambda _text: "",
+        message=messages.append,
+    )
+
+    assert result is ProvisionResult.FAILED
+    assert not (tmp_path / "installed").exists()
+    assert any("lexical" in text and "semantic" in text for text in messages)
+
+
 def test_non_interactive_auto_install_opt_out(tmp_path: Path, monkeypatch: MonkeyPatch) -> None:
     monkeypatch.setenv("FORTRAN_MCP_AUTO_INSTALL", "0")
     prompts: list[str] = []
