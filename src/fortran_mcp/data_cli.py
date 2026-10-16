@@ -212,7 +212,6 @@ def _parser() -> argparse.ArgumentParser:
     remove = subparsers.add_parser("remove")
     remove.add_argument("package", choices=("core", "semantic"))
     remove.add_argument("--data-dir", type=Path, default=data_directory())
-    remove.add_argument("--yes", action="store_true", help="remove without confirmation")
     return parser
 
 
@@ -239,16 +238,6 @@ def main(argv: Sequence[str] | None = None) -> None:
                 parser.error(f"the {args.package} data package is not installed")
             if args.package == "core" and status.bundles[1].installed:
                 parser.error("remove the semantic data package first")
-            if not args.yes:
-                try:
-                    answer = input(
-                        f"Remove the {args.package} data package from {args.data_dir}? [y/N] "
-                    )
-                except EOFError:
-                    answer = ""
-                if answer.casefold() not in {"y", "yes"}:
-                    print("Removal cancelled")
-                    return
             removed = remove_data(args.package, args.data_dir)
             print(f"Removed the {args.package} data package ({removed} files)")
             return

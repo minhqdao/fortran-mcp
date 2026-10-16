@@ -77,7 +77,7 @@ optional semantic bundle and runtime are not needed for the default lexical sear
 | `fortran-mcp doctor`                      | none                 | Show configuration and installed data (`--json` for machine-readable output) |
 | `fortran-mcp data install <package>`      | `core` or `semantic` | Download and install one data package from the release catalog               |
 | `fortran-mcp data verify`                 | none                 | Verify every installed data package                                          |
-| `fortran-mcp data remove <package>`       | `core` or `semantic` | Remove one installed data package; asks to confirm, `--yes` skips            |
+| `fortran-mcp data remove <package>`       | `core` or `semantic` | Remove one installed data package                                             |
 | `fortran-mcp source list`                 | none                 | List reviewed sources with versions and provenance (`--json`)                |
 | `fortran-mcp source sync <source>`        | a source ID          | Download one reviewed source and rebuild its chunks and the lexical index    |
 
@@ -374,7 +374,7 @@ fortran-mcp data remove core
 Running `fortran-mcp` without a subcommand still starts the stdio MCP server, so existing client
 configuration remains compatible. `fortran-mcp doctor` lists installed data, including custom
 corpora built with `source sync`; `fortran-mcp doctor --json` is machine-readable. `data remove`
-removes exactly one named data package after confirmation, keeps unrelated files in the data
+removes exactly one named data package, keeps unrelated files in the data
 directory, and removes documentation data only — not the Python package itself. If installed with
 `uv tool`, uninstall that separately with `uv tool uninstall fortran-mcp`.
 

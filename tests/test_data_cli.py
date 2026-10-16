@@ -91,7 +91,7 @@ def test_remove_deletes_managed_bundle_data_and_preserves_other_files(
     unrelated = installed / "notes.txt"
     unrelated.write_text("keep me")
 
-    main(["remove", "core", "--data-dir", str(installed), "--yes"])
+    main(["remove", "core", "--data-dir", str(installed)])
 
     assert unrelated.read_text() == "keep me"
     assert data_status(installed).bundles[0].installed is False
@@ -99,18 +99,8 @@ def test_remove_deletes_managed_bundle_data_and_preserves_other_files(
     assert "Removed the core data package (3 files)" in capsys.readouterr().out
 
 
-def test_remove_requires_confirmation(tmp_path: Path, monkeypatch: MonkeyPatch) -> None:
+def test_remove_needs_no_confirmation(tmp_path: Path) -> None:
     installed = _installed_core(tmp_path)
-    monkeypatch.setattr("builtins.input", lambda _prompt: "no")
-
-    main(["remove", "core", "--data-dir", str(installed)])
-
-    assert (installed / "fortran-mcp-core.db").is_file()
-
-
-def test_remove_with_confirmation_yes(tmp_path: Path, monkeypatch: MonkeyPatch) -> None:
-    installed = _installed_core(tmp_path)
-    monkeypatch.setattr("builtins.input", lambda _prompt: "yes")
 
     main(["remove", "core", "--data-dir", str(installed)])
 
@@ -130,7 +120,7 @@ def test_remove_rejects_uninstalled_package(tmp_path: Path, capsys: CaptureFixtu
     installed.mkdir()
 
     with pytest.raises(SystemExit):
-        main(["remove", "core", "--data-dir", str(installed), "--yes"])
+        main(["remove", "core", "--data-dir", str(installed)])
     assert "is not installed" in capsys.readouterr().err
 
 
@@ -143,7 +133,7 @@ def test_remove_core_is_blocked_while_semantic_is_installed(
     (manifests / "semantic.json").write_text("{}\n")
 
     with pytest.raises(SystemExit):
-        main(["remove", "core", "--data-dir", str(installed), "--yes"])
+        main(["remove", "core", "--data-dir", str(installed)])
     assert "remove the semantic data package first" in capsys.readouterr().err
 
 
@@ -153,7 +143,7 @@ def test_remove_semantic_keeps_files_core_still_needs(tmp_path: Path) -> None:
     for package in ("core", "semantic"):
         main(["install", package, "--catalog", str(catalog), "--data-dir", str(installed)])
 
-    main(["remove", "semantic", "--data-dir", str(installed), "--yes"])
+    main(["remove", "semantic", "--data-dir", str(installed)])
 
     status = data_status(installed)
     assert status.bundles[0].valid is True
