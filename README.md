@@ -10,7 +10,7 @@
 
 Use Fortran MCP to improve AI-assisted Fortran development with cited documentation on language features, compiler behavior, build systems, and the wider ecosystem.
 
-## Install
+## Installation
 
 Requires Python 3.11+ and [uv](https://docs.astral.sh/uv/).
 
@@ -24,6 +24,39 @@ The `core` data bundle is installed automatically on first run, or can be instal
 fortran-mcp data install core
 fortran-mcp data install semantic
 ```
+
+Verify installation with:
+
+```bash
+fortran-mcp doctor
+```
+
+## Client Setup
+
+<details>
+<summary>Connect to OpenCode</summary>
+
+Lexical search (default):
+
+```bash
+opencode mcp add fortran-mcp -- fortran-mcp
+```
+
+Semantic search (requires the `semantic` data bundle):
+
+```bash
+opencode mcp add fortran-mcp --env FORTRAN_MCP_SEARCH_PROVIDER=semantic -- fortran-mcp
+```
+
+Hybrid search (requires the `semantic` data bundle):
+
+```bash
+opencode mcp add fortran-mcp --env FORTRAN_MCP_SEARCH_PROVIDER=hybrid -- fortran-mcp
+```
+
+</details>
+
+</details>
 
 Configure an MCP client to launch the stdio command `fortran-mcp`; see
 [Connect an MCP client](docs/clients.md) for examples. When `fortran-mcp` starts
