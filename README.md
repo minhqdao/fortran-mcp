@@ -14,18 +14,26 @@ Use Fortran MCP to improve AI-assisted Fortran development with cited documentat
 
 Requires Python 3.11+ and [uv](https://docs.astral.sh/uv/).
 
+Install the Fortran MCP server locally:
+
 ```bash
 uv tool install fortran-mcp
 ```
 
-Required data bundles are installed automatically on first run. To avoid the initial delay, you can install them beforehand. Semantic and hybrid search require the `semantic` bundle.
+Then install the required `core` data bundle to enable basic lexical search:
 
 ```bash
 fortran-mcp data install core
+```
+
+To use semantic or hybrid search, install additional dependencies and the `semantic` data bundle:
+
+```bash
+uv tool install "fortran-mcp[semantic]"
 fortran-mcp data install semantic
 ```
 
-Verify installation with:
+Check the installation:
 
 ```bash
 fortran-mcp doctor
@@ -39,19 +47,19 @@ fortran-mcp doctor
 Lexical search (default):
 
 ```bash
-opencode mcp add fortran-mcp -- fortran-mcp
+opencode mcp add fortran-mcp --global -- fortran-mcp
 ```
 
 Semantic search:
 
 ```bash
-opencode mcp add fortran-mcp --env FORTRAN_MCP_SEARCH_PROVIDER=semantic -- fortran-mcp
+opencode mcp add fortran-mcp --global --env FORTRAN_MCP_SEARCH_PROVIDER=semantic -- fortran-mcp
 ```
 
 Hybrid search:
 
 ```bash
-opencode mcp add fortran-mcp --env FORTRAN_MCP_SEARCH_PROVIDER=hybrid -- fortran-mcp
+opencode mcp add fortran-mcp --global --env FORTRAN_MCP_SEARCH_PROVIDER=hybrid -- fortran-mcp
 ```
 
 </details>
