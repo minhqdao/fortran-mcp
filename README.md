@@ -18,7 +18,7 @@ Requires Python 3.11+ and [uv](https://docs.astral.sh/uv/).
 uv tool install fortran-mcp
 ```
 
-The `core` data bundle is installed automatically on first run, or can be installed beforehand to avoid the initial delay. To enable semantic and hybrid search, install the optional `semantic` bundle:
+Required data bundles are installed automatically on first run. To avoid the initial delay, you can install them beforehand. Semantic and hybrid search require the optional `semantic` bundle.
 
 ```bash
 fortran-mcp data install core
@@ -42,19 +42,17 @@ Lexical search (default):
 opencode mcp add fortran-mcp -- fortran-mcp
 ```
 
-Semantic search (requires the `semantic` data bundle):
+Semantic search:
 
 ```bash
 opencode mcp add fortran-mcp --env FORTRAN_MCP_SEARCH_PROVIDER=semantic -- fortran-mcp
 ```
 
-Hybrid search (requires the `semantic` data bundle):
+Hybrid search:
 
 ```bash
 opencode mcp add fortran-mcp --env FORTRAN_MCP_SEARCH_PROVIDER=hybrid -- fortran-mcp
 ```
-
-</details>
 
 </details>
 
@@ -64,7 +62,8 @@ in a terminal with no data installed, it reports that no
 data packages were found and offers to install core for lexical search or core plus semantic for
 semantic and hybrid search; the download only starts after a choice. Skipping, or a failed
 download, prints the manual install commands and exits cleanly. Client-launched servers cannot
-prompt, so they download the core bundle automatically (set `FORTRAN_MCP_AUTO_INSTALL=0` to
+prompt, so they download every data package the configured search provider needs
+automatically (set `FORTRAN_MCP_AUTO_INSTALL=0` to
 manage data yourself, or `FORTRAN_MCP_CATALOG` to install from a local catalog path or HTTPS URL)
 and exit with the error and manual commands if the download fails. The
 optional semantic bundle and runtime are not needed for the default lexical search.
