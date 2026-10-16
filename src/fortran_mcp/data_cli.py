@@ -8,7 +8,7 @@ from contextlib import suppress
 from pathlib import Path, PurePosixPath
 from typing import Literal
 
-from pydantic import Field
+from pydantic import Field, ValidationError
 
 from fortran_mcp.bundle import BundleError, BundleManifest, install_bundle
 from fortran_mcp.catalog import DEFAULT_CATALOG_URL, CatalogError, install_from_catalog
@@ -59,6 +59,17 @@ def _installed_path(data_dir: Path, bundled_path: str) -> Path:
     return data_dir / (path.name if bundled_path.startswith("indexes/") else path)
 
 
+def _summarize_error(error: OSError | ValueError) -> str:
+    """Render one short clause per validation failure, without pydantic's dump."""
+    if not isinstance(error, ValidationError):
+        return str(error)
+    clauses = []
+    for item in error.errors():
+        location = ".".join(str(part) for part in item["loc"]) or "manifest"
+        clauses.append(f"{location}: {item['msg']}")
+    return "; ".join(clauses)
+
+
 def inspect_role(role: Role, data_dir: Path) -> InstalledBundle:
     """Inspect one installed role and verify every recorded payload."""
     manifest_path = data_dir / "manifests" / f"{role}.json"
@@ -93,7 +104,8 @@ def inspect_role(role: Role, data_dir: Path) -> InstalledBundle:
             valid=False,
             size=0,
             error=(
-                f"installed manifest is invalid: {manifest_path} ({error}); "
+                f"installed manifest is invalid: {manifest_path} "
+                f"({_summarize_error(error)}); "
                 f"run 'fortran-mcp data remove {role} --data-dir {data_dir}' and reinstall"
             ),
         )

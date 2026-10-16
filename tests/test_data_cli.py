@@ -70,6 +70,20 @@ def test_installed_bundle_verification_detects_invalid_manifest(tmp_path: Path) 
     assert "does not match" in str(result.error)
 
 
+def test_invalid_manifest_error_stays_readable(tmp_path: Path) -> None:
+    installed = _installed_core(tmp_path)
+    manifest_path = installed / "manifests/core.json"
+    manifest_path.write_text('{"schema_version": 1, "bundle_version": "0.1.0"}\n')
+
+    result = inspect_role("core", installed)
+
+    assert result.valid is False
+    error = str(result.error)
+    assert "schema_version: Input should be 2" in error
+    assert "pydantic.dev" not in error
+    assert "input_value" not in error
+
+
 def test_remove_deletes_managed_bundle_data_and_preserves_other_files(
     tmp_path: Path, capsys: CaptureFixture[str]
 ) -> None:
