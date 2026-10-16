@@ -6,7 +6,7 @@ Fortran MCP data bundles are deterministic ZIP archives rooted at `fortran-mcp-b
 fortran-mcp-bundle/
 ├── manifest.json
 ├── indexes/
-│   └── fortran-mcp.db
+│   └── fortran-mcp-core.db
 └── licenses/
     └── <source-id>.txt
 ```

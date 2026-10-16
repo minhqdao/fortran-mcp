@@ -28,7 +28,7 @@ def test_data_directory_and_provider_follow_environment(
     monkeypatch.setenv(DATA_DIR_ENV, str(tmp_path))
 
     assert data_directory() == tmp_path
-    assert SQLiteSearchProvider().index_path == tmp_path / "fortran-mcp.db"
+    assert SQLiteSearchProvider().index_path == tmp_path / "fortran-mcp-core.db"
 
 
 def test_search_provider_defaults_to_lexical(monkeypatch: MonkeyPatch) -> None:

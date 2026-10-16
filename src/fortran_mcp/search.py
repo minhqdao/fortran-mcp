@@ -17,7 +17,7 @@ from fortran_mcp.config import data_directory
 from fortran_mcp.documents import DocumentChunk
 from fortran_mcp.sources import DocumentType, Source, SourceAuthority, StrictModel, load_registry
 
-INDEX_FILENAME = "fortran-mcp.db"
+INDEX_FILENAME = "fortran-mcp-core.db"
 DEFAULT_INDEX_PATH = Path("data") / INDEX_FILENAME
 QUERY_TOKEN = re.compile(r"[\w.+-]+", re.UNICODE)
 STOP_WORDS = frozenset(

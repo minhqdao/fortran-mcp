@@ -24,7 +24,7 @@ from fortran_mcp.catalog import (
 def _core_bundle(tmp_path: Path) -> Path:
     data_dir = tmp_path / "data"
     data_dir.mkdir()
-    with sqlite3.connect(data_dir / "fortran-mcp.db") as database:
+    with sqlite3.connect(data_dir / "fortran-mcp-core.db") as database:
         database.execute("CREATE TABLE chunks(source_id TEXT)")
         database.execute("INSERT INTO chunks VALUES ('fpm-0.13.0-docs')")
     license_dir = tmp_path / "licenses"
@@ -60,7 +60,7 @@ def test_catalog_installs_verified_local_bundle(tmp_path: Path) -> None:
     manifest = install_from_catalog("core", catalog_path, data_dir=destination)
 
     assert manifest.role == "core"
-    assert (destination / "fortran-mcp.db").is_file()
+    assert (destination / "fortran-mcp-core.db").is_file()
 
 
 def test_catalog_rejects_changed_artifact(tmp_path: Path) -> None:
@@ -149,7 +149,7 @@ def test_remote_catalog_resolves_and_verifies_relative_bundle_url(
         DEFAULT_CATALOG_URL,
         "https://github.com/minhqdao/fortran-mcp/releases/latest/download/fortran-mcp-core.zip",
     ]
-    assert (destination / "fortran-mcp.db").is_file()
+    assert (destination / "fortran-mcp-core.db").is_file()
 
 
 def test_remote_catalog_failure_suggests_local_override(

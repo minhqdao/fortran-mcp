@@ -20,7 +20,7 @@ from .test_provision import _release
 def _installed_core(tmp_path: Path) -> Path:
     source = tmp_path / "source"
     source.mkdir()
-    with sqlite3.connect(source / "fortran-mcp.db") as database:
+    with sqlite3.connect(source / "fortran-mcp-core.db") as database:
         database.execute("CREATE TABLE chunks(source_id TEXT)")
         database.execute("INSERT INTO chunks VALUES ('fpm-0.13.0-docs')")
     licenses = tmp_path / "licenses"
@@ -48,7 +48,7 @@ def test_data_status_reports_valid_core_and_provider_readiness(tmp_path: Path) -
 
 def test_installed_bundle_verification_detects_modified_file(tmp_path: Path) -> None:
     installed = _installed_core(tmp_path)
-    (installed / "fortran-mcp.db").write_bytes(b"changed")
+    (installed / "fortran-mcp-core.db").write_bytes(b"changed")
 
     result = inspect_role("core", installed)
 
@@ -81,7 +81,7 @@ def test_remove_deletes_managed_bundle_data_and_preserves_other_files(
 
     assert unrelated.read_text() == "keep me"
     assert data_status(installed).bundles[0].installed is False
-    assert not (installed / "fortran-mcp.db").exists()
+    assert not (installed / "fortran-mcp-core.db").exists()
     assert "Removed the core data package (3 files)" in capsys.readouterr().out
 
 
@@ -91,7 +91,7 @@ def test_remove_requires_confirmation(tmp_path: Path, monkeypatch: MonkeyPatch) 
 
     main(["remove", "core", "--data-dir", str(installed)])
 
-    assert (installed / "fortran-mcp.db").is_file()
+    assert (installed / "fortran-mcp-core.db").is_file()
 
 
 def test_remove_with_confirmation_yes(tmp_path: Path, monkeypatch: MonkeyPatch) -> None:
@@ -100,7 +100,7 @@ def test_remove_with_confirmation_yes(tmp_path: Path, monkeypatch: MonkeyPatch) 
 
     main(["remove", "core", "--data-dir", str(installed)])
 
-    assert not (installed / "fortran-mcp.db").exists()
+    assert not (installed / "fortran-mcp-core.db").exists()
 
 
 def test_remove_requires_a_package_argument(tmp_path: Path) -> None:
@@ -108,7 +108,7 @@ def test_remove_requires_a_package_argument(tmp_path: Path) -> None:
 
     with pytest.raises(SystemExit):
         main(["remove", "--data-dir", str(installed)])
-    assert (installed / "fortran-mcp.db").is_file()
+    assert (installed / "fortran-mcp-core.db").is_file()
 
 
 def test_remove_rejects_uninstalled_package(tmp_path: Path, capsys: CaptureFixture[str]) -> None:
@@ -144,7 +144,7 @@ def test_remove_semantic_keeps_files_core_still_needs(tmp_path: Path) -> None:
     status = data_status(installed)
     assert status.bundles[0].valid is True
     assert status.bundles[1].installed is False
-    assert (installed / "fortran-mcp.db").is_file()
+    assert (installed / "fortran-mcp-core.db").is_file()
     assert (installed / "manifests" / "core.json").is_file()
     assert not (installed / "fortran-mcp-semantic.db").exists()
     assert not (installed / "manifests" / "semantic.json").exists()
@@ -165,7 +165,7 @@ def test_data_verify_cli_rejects_corrupted_install(
     tmp_path: Path, capsys: CaptureFixture[str]
 ) -> None:
     installed = _installed_core(tmp_path)
-    (installed / "fortran-mcp.db").write_bytes(b"corrupted")
+    (installed / "fortran-mcp-core.db").write_bytes(b"corrupted")
 
     with pytest.raises(SystemExit):
         main(["verify", "--data-dir", str(installed)])
@@ -254,7 +254,7 @@ def test_local_catalog_install_reaches_first_search(tmp_path: Path) -> None:
             str(installed),
         ]
     )
-    results = SQLiteSearchProvider(installed / "fortran-mcp.db").search("OpenMP dependency")
+    results = SQLiteSearchProvider(installed / "fortran-mcp-core.db").search("OpenMP dependency")
 
     assert data_status(installed).lexical_ready is True
     assert results[0].chunk_id == chunk.id

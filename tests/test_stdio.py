@@ -51,4 +51,4 @@ def test_stdio_server_auto_installs_core_and_serves_search(tmp_path: Path) -> No
     asyncio.run(_exercise_server(tmp_path, catalog=catalog))
 
     assert (data_dir / "manifests" / "core.json").is_file()
-    assert (data_dir / "fortran-mcp.db").is_file()
+    assert (data_dir / "fortran-mcp-core.db").is_file()

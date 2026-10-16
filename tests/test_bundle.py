@@ -18,7 +18,7 @@ from fortran_mcp.bundle import (
 def _bundle_inputs(tmp_path: Path) -> tuple[Path, Path]:
     data_dir = tmp_path / "data"
     data_dir.mkdir()
-    with sqlite3.connect(data_dir / "fortran-mcp.db") as database:
+    with sqlite3.connect(data_dir / "fortran-mcp-core.db") as database:
         database.execute("CREATE TABLE chunks(source_id TEXT)")
         database.executemany(
             "INSERT INTO chunks VALUES (?)",
@@ -51,7 +51,7 @@ def test_core_bundle_is_reproducible_and_verifiable(tmp_path: Path) -> None:
         "stdlib-0.8.1-docs",
     ]
     assert {record.path for record in manifest.files} == {
-        "indexes/fortran-mcp.db",
+        "indexes/fortran-mcp-core.db",
         "licenses/fpm-0.13.0-docs.txt",
         "licenses/stdlib-0.8.1-docs.txt",
     }
@@ -135,7 +135,7 @@ def test_install_core_then_compatible_semantic_bundle(tmp_path: Path) -> None:
     install_bundle(core, data_dir=installed)
     install_bundle(semantic, data_dir=installed)
 
-    assert (installed / "fortran-mcp.db").is_file()
+    assert (installed / "fortran-mcp-core.db").is_file()
     assert (installed / "fortran-mcp-semantic.db").is_file()
     assert (installed / "manifests/core.json").is_file()
     assert (installed / "manifests/semantic.json").is_file()
