@@ -19,6 +19,8 @@ from fortran_mcp.sources import StrictModel
 
 Role = Literal["core", "semantic"]
 
+_ROLE_INDEXES: dict[Role, str] = {"core": INDEX_FILENAME, "semantic": SEMANTIC_INDEX_FILENAME}
+
 
 class InstalledBundle(StrictModel):
     """Status of one installed data role."""
@@ -90,7 +92,10 @@ def inspect_role(role: Role, data_dir: Path) -> InstalledBundle:
             installed=True,
             valid=False,
             size=0,
-            error=str(error),
+            error=(
+                f"installed manifest is invalid: {manifest_path} ({error}); "
+                f"run 'fortran-mcp data remove {role} --data-dir {data_dir}' and reinstall"
+            ),
         )
 
 
@@ -118,28 +123,33 @@ def data_status(data_dir: Path | None = None) -> DataStatus:
 
 
 def _role_files(data_dir: Path, role: Role) -> tuple[Path, ...]:
-    """Return files tracked by one role's installed manifest, including the manifest."""
+    """Return files tracked by one role's installed manifest, including the manifest.
+
+    A manifest that cannot be read or trusted still yields the manifest itself
+    plus the role's index file, so removal never gets stuck on stale or foreign
+    formats. The fallback paths are constants we own, never manifest content.
+    """
     manifest_path = data_dir / "manifests" / f"{role}.json"
     if not manifest_path.is_file():
         return ()
     try:
         manifest = BundleManifest.model_validate_json(manifest_path.read_bytes())
-    except (OSError, ValueError) as error:
-        raise BundleError(f"installed {role} manifest is invalid") from error
-    if manifest.role != role:
-        raise BundleError(f"installed {role} manifest has the wrong role")
-    files: set[Path] = {manifest_path}
-    for record in manifest.files:
-        relative = PurePosixPath(record.path)
-        if (
-            relative.is_absolute()
-            or ".." in relative.parts
-            or len(relative.parts) < 2
-            or relative.parts[0] not in {"indexes", "licenses"}
-        ):
-            raise BundleError(f"installed manifest contains an unsafe path: {record.path}")
-        files.add(_installed_path(data_dir, record.path))
-    return tuple(files)
+        if manifest.role != role:
+            raise ValueError("manifest role does not match its installed location")
+        files: set[Path] = {manifest_path}
+        for record in manifest.files:
+            relative = PurePosixPath(record.path)
+            if (
+                relative.is_absolute()
+                or ".." in relative.parts
+                or len(relative.parts) < 2
+                or relative.parts[0] not in {"indexes", "licenses"}
+            ):
+                raise ValueError(f"installed manifest contains an unsafe path: {record.path}")
+            files.add(_installed_path(data_dir, record.path))
+        return tuple(files)
+    except (OSError, ValueError):
+        return (manifest_path, data_dir / _ROLE_INDEXES[role])
 
 
 def _managed_files(data_dir: Path) -> tuple[Path, ...]:

@@ -8,7 +8,7 @@ from types import SimpleNamespace
 import pytest
 from pytest import CaptureFixture, MonkeyPatch
 
-from fortran_mcp.bundle import BundleError, build_bundle, install_bundle
+from fortran_mcp.bundle import build_bundle, install_bundle
 from fortran_mcp.catalog import DEFAULT_CATALOG_URL, build_catalog
 from fortran_mcp.data_cli import data_status, inspect_role, main, remove_data
 from fortran_mcp.documents import DocumentChunk
@@ -304,19 +304,45 @@ def test_data_verify_reports_when_nothing_is_installed(
     assert "No data packages are installed" in capsys.readouterr().out
 
 
-def test_remove_rejects_unsafe_manifest_path(tmp_path: Path) -> None:
+def test_remove_ignores_unsafe_manifest_path(tmp_path: Path) -> None:
     installed = _installed_core(tmp_path)
     manifest_path = installed / "manifests/core.json"
     manifest = json.loads(manifest_path.read_text())
     manifest["files"][0]["path"] = "../../outside.txt"
     manifest_path.write_text(json.dumps(manifest))
 
-    try:
-        remove_data("core", installed)
-    except BundleError as error:
-        assert "manifest is invalid" in str(error)
-    else:
-        raise AssertionError("unsafe manifest path was accepted")
+    removed = remove_data("core", installed)
+
+    assert removed == 2
+    assert not manifest_path.exists()
+    assert not (installed / "fortran-mcp-core.db").exists()
+    assert not (installed / "outside.txt").exists()
+    assert not (tmp_path / "outside.txt").exists()
+
+
+def test_remove_works_with_unreadable_manifest(tmp_path: Path) -> None:
+    installed = _installed_core(tmp_path)
+    semantic_manifest = installed / "manifests" / "semantic.json"
+    semantic_manifest.write_text("not a manifest\n")
+
+    removed = remove_data("semantic", installed)
+
+    assert removed == 2
+    assert not semantic_manifest.exists()
+    assert (installed / "fortran-mcp-core.db").is_file()
+
+
+def test_remove_core_tolerates_broken_semantic_manifest(tmp_path: Path) -> None:
+    installed = _installed_core(tmp_path)
+    semantic_manifest = installed / "manifests" / "semantic.json"
+    semantic_manifest.write_text("not a manifest\n")
+
+    removed = remove_data("core", installed)
+
+    assert removed == 3
+    assert not (installed / "fortran-mcp-core.db").exists()
+    assert not (installed / "manifests" / "core.json").exists()
+    assert semantic_manifest.is_file()
 
 
 def test_install_uses_default_release_catalog(
