@@ -29,6 +29,7 @@ DEFAULT_CATALOG_URL = (
 )
 BundleRole = Literal["core", "semantic"]
 CatalogLocation = str | Path
+DATA_VERSION_PATTERN = r"^[0-9]{4}\.[0-9]{2}\.[0-9]+$"
 
 
 class CatalogError(RuntimeError):
@@ -69,7 +70,7 @@ class BundleCatalog(StrictModel):
     """Versioned discovery document for one compatible bundle set."""
 
     schema_version: Literal[2]
-    data_version: str = Field(pattern=r"^[0-9]{4}\.[0-9]{2}\.[0-9]+$")
+    data_version: str = Field(pattern=DATA_VERSION_PATTERN)
     bundles: tuple[CatalogBundle, ...] = Field(min_length=1)
 
     @model_validator(mode="after")

@@ -1,9 +1,11 @@
 """Tests for installation diagnostics."""
 
+import sqlite3
 from pathlib import Path
 
 from pytest import CaptureFixture, MonkeyPatch
 
+from fortran_mcp.bundle import build_bundle, install_bundle
 from fortran_mcp.diagnostics import diagnose, main
 
 from .mcp_fixtures import prepare_index
@@ -49,6 +51,29 @@ def test_doctor_lists_installed_bundles(
     assert "(1 sources)" in output
     assert "Ready:" not in output
     assert "Next:" not in output
+
+
+def test_doctor_shows_unreleased_data_version_verbatim(
+    tmp_path: Path, monkeypatch: MonkeyPatch, capsys: CaptureFixture[str]
+) -> None:
+    source = tmp_path / "source"
+    source.mkdir()
+    with sqlite3.connect(source / "fortran-mcp-core.db") as database:
+        database.execute("CREATE TABLE chunks(source_id TEXT)")
+        database.execute("INSERT INTO chunks VALUES ('fpm-0.13.0-docs')")
+    licenses = tmp_path / "licenses"
+    licenses.mkdir()
+    (licenses / "fpm-0.13.0-docs.txt").write_text("MIT\n")
+    bundle = tmp_path / "core.zip"
+    build_bundle("core", bundle, data_dir=source, license_dir=licenses, data_version="local")
+    installed = tmp_path / "installed"
+    install_bundle(bundle, data_dir=installed)
+    monkeypatch.setenv("FORTRAN_MCP_DATA_DIR", str(installed))
+
+    main([])
+
+    output = capsys.readouterr().out
+    assert "core local (1 sources)" in output
 
 
 def test_doctor_lists_custom_data_without_prescribing_actions(
