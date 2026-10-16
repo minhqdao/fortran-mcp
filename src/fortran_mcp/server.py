@@ -2,6 +2,8 @@
 
 import argparse
 import json
+import os
+import signal
 import sys
 from collections.abc import Sequence
 from functools import cache
@@ -139,7 +141,12 @@ def main(argv: Sequence[str] | None = None) -> None:
     if result in {ProvisionResult.SKIPPED, ProvisionResult.FAILED}:
         raise SystemExit(1 if result is ProvisionResult.FAILED else 0)
     transport: Literal["stdio", "streamable-http"] = args.transport
+    # anyio installs its own SIGINT handler that funnels into task cancellation,
+    # which stalls on the blocked stdin reader; take over SIGINT so one Ctrl-C
+    # always stops the server at once. (anyio defers when the handler is taken.)
+    signal.signal(signal.SIGINT, lambda _signum, _frame: os._exit(130))
     if transport == "stdio":
+        print("Serving fortran-mcp over stdio...", file=sys.stderr)
         mcp.run()
         return
     if not 1 <= args.port <= 65535:
