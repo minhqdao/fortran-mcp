@@ -62,7 +62,7 @@ def _data_labels(data_dir: Path, status: DataStatus) -> tuple[str, ...]:
         if not bundle.installed:
             continue
         if bundle.valid:
-            labels.append(f"{bundle.role} {bundle.bundle_version} ({len(bundle.sources)} sources)")
+            labels.append(f"{bundle.role} {bundle.data_version} ({len(bundle.sources)} sources)")
         else:
             labels.append(f"{bundle.role} invalid ({bundle.error})")
     if not labels:

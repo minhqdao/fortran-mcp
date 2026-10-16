@@ -281,9 +281,9 @@ Build and verify local artifacts with:
 
 ```bash
 FORTRAN_MCP_DATA_DIR=data uv run fortran-mcp-bundle build core \
-  --output dist/fortran-mcp-core.zip
+  --output dist/fortran-mcp-core.zip --data-version 2026.08.1
 FORTRAN_MCP_DATA_DIR=data uv run fortran-mcp-bundle build semantic \
-  --output dist/fortran-mcp-semantic.zip
+  --output dist/fortran-mcp-semantic.zip --data-version 2026.08.1
 uv run fortran-mcp-bundle verify dist/fortran-mcp-core.zip
 uv run fortran-mcp-bundle install dist/fortran-mcp-core.zip
 uv run fortran-mcp-catalog build --data-version 2026.08.1 \
@@ -295,8 +295,8 @@ uv run fortran-mcp-catalog install core --catalog dist/catalog.json
 ### Publishing a data release
 
 1. Rebuild both bundles deterministically from a current data directory and regenerate the catalog
-   (commands above). Bundle versions default to the package version; pick a new `YYYY.MM.N`
-   `data_version` for each data release.
+   (commands above). Pick a new `YYYY.MM.N` `data_version` for each data release and use it for
+   both bundles and the catalog.
 2. Verify every artifact on its own and through the catalog:
    ```bash
    uv run fortran-mcp-bundle verify dist/fortran-mcp-core.zip

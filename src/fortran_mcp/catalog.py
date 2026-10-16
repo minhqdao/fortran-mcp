@@ -22,7 +22,7 @@ from fortran_mcp.bundle import (
 from fortran_mcp.config import data_directory
 from fortran_mcp.sources import StrictModel
 
-CATALOG_SCHEMA_VERSION: Literal[1] = 1
+CATALOG_SCHEMA_VERSION: Literal[2] = 2
 CATALOG_DOWNLOAD_LIMIT = 1024 * 1024
 DEFAULT_CATALOG_URL = (
     "https://github.com/minhqdao/fortran-mcp/releases/latest/download/catalog.json"
@@ -43,7 +43,6 @@ class CatalogBundle(StrictModel):
     size: int = Field(gt=0)
     sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     bundle_id: str = Field(min_length=1)
-    bundle_version: str = Field(min_length=1)
 
     @model_validator(mode="after")
     def path_is_safe_and_relative(self) -> Self:
@@ -69,7 +68,7 @@ class CatalogBundle(StrictModel):
 class BundleCatalog(StrictModel):
     """Versioned discovery document for one compatible bundle set."""
 
-    schema_version: Literal[1]
+    schema_version: Literal[2]
     data_version: str = Field(pattern=r"^[0-9]{4}\.[0-9]{2}\.[0-9]+$")
     bundles: tuple[CatalogBundle, ...] = Field(min_length=1)
 
@@ -108,6 +107,11 @@ def build_catalog(
     entries: list[CatalogBundle] = []
     for artifact in artifacts:
         manifest = verify_bundle(artifact)
+        if manifest.data_version != data_version:
+            raise CatalogError(
+                f"{manifest.role} bundle records data version {manifest.data_version}, "
+                f"not {data_version}; rebuild the bundles for this release"
+            )
         entries.append(
             CatalogBundle(
                 role=manifest.role,
@@ -115,7 +119,6 @@ def build_catalog(
                 size=artifact.stat().st_size,
                 sha256=_sha256(artifact),
                 bundle_id=manifest.bundle_id,
-                bundle_version=manifest.bundle_version,
             )
         )
     try:
@@ -236,7 +239,7 @@ def install_from_catalog(
     if isinstance(base, Path):
         artifact = _catalog_artifact(base, entry)
         manifest = verify_bundle(artifact)
-        if manifest.bundle_id != entry.bundle_id or manifest.bundle_version != entry.bundle_version:
+        if manifest.bundle_id != entry.bundle_id or manifest.data_version != catalog.data_version:
             raise CatalogError("catalog metadata does not match the bundle manifest")
         return install_bundle(artifact, data_dir=data_dir)
 
@@ -244,7 +247,7 @@ def install_from_catalog(
         artifact = Path(temporary) / "bundle.zip"
         _download_catalog_artifact(urljoin(base, entry.path), entry, artifact)
         manifest = verify_bundle(artifact)
-        if manifest.bundle_id != entry.bundle_id or manifest.bundle_version != entry.bundle_version:
+        if manifest.bundle_id != entry.bundle_id or manifest.data_version != catalog.data_version:
             raise CatalogError("catalog metadata does not match the bundle manifest")
         return install_bundle(artifact, data_dir=data_dir)
 

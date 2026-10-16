@@ -132,7 +132,7 @@ def analyze_contributions(
             baseline_bundle,
             data_dir=baseline_dir,
             license_dir=license_dir,
-            bundle_version="contribution-analysis",
+            data_version="contribution-analysis",
         )
         baseline_index_bytes = baseline_index.stat().st_size
         baseline_core_bytes = baseline_bundle.stat().st_size
@@ -151,7 +151,7 @@ def analyze_contributions(
                 omitted_bundle,
                 data_dir=omitted_dir,
                 license_dir=license_dir,
-                bundle_version="contribution-analysis",
+                data_version="contribution-analysis",
             )
             lost, recovered, regressions, improvements = _compare_reports(baseline, omitted)
             unique = tuple(case_id for case_id in lost if winning_sources.get(case_id) == source_id)

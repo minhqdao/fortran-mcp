@@ -27,7 +27,7 @@ class InstalledBundle(StrictModel):
     installed: bool
     valid: bool
     bundle_id: str | None = None
-    bundle_version: str | None = None
+    data_version: str | None = None
     sources: tuple[str, ...] = ()
     size: int = Field(ge=0)
     error: str | None = None
@@ -80,7 +80,7 @@ def inspect_role(role: Role, data_dir: Path) -> InstalledBundle:
             installed=True,
             valid=True,
             bundle_id=manifest.bundle_id,
-            bundle_version=manifest.bundle_version,
+            data_version=manifest.data_version,
             sources=tuple(source.id for source in manifest.sources),
             size=total,
         )

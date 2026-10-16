@@ -57,8 +57,12 @@ def _release(tmp_path: Path) -> Path:
     release.mkdir()
     core = release / "fortran-mcp-core.zip"
     semantic = release / "fortran-mcp-semantic.zip"
-    build_bundle("core", core, data_dir=release_data, license_dir=licenses)
-    build_bundle("semantic", semantic, data_dir=release_data, license_dir=licenses)
+    build_bundle(
+        "core", core, data_dir=release_data, license_dir=licenses, data_version="2026.08.1"
+    )
+    build_bundle(
+        "semantic", semantic, data_dir=release_data, license_dir=licenses, data_version="2026.08.1"
+    )
     catalog = release / "catalog.json"
     build_catalog("2026.08.1", catalog, [core, semantic])
     return catalog

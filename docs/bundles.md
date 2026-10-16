@@ -16,7 +16,7 @@ licenses because they require a compatible core bundle.
 
 The versioned manifest records:
 
-- bundle identity, role, version, and compatible server versions;
+- bundle identity, role, data version, and compatible server versions;
 - source IDs, revisions, document types, authority, topics, compiler and Fortran-version
   applicability, and licenses;
 - every payload path, byte size, and SHA-256 checksum;
@@ -47,12 +47,11 @@ application-data directory; `FORTRAN_MCP_DATA_DIR` overrides it.
 
 A catalog is a deterministic JSON discovery document for one data release. Its `data_version` uses
 `YYYY.MM.N`, independently of the Python server version. Each role appears at most once and records
-the relative bundle path, compressed byte size, whole-archive SHA-256 checksum, bundle ID, and bundle
-version.
+the relative bundle path, compressed byte size, whole-archive SHA-256 checksum, and bundle ID.
 
 Catalog paths are relative to the catalog file and cannot escape its directory. The normal data
 command loads `catalog.json` from the latest GitHub Release over HTTPS; `--catalog` overrides it with
 another HTTPS URL or a local path. Remote paths resolve against the requested catalog URL; this lets
 GitHub redirect each named release asset independently through its download service.
 Installation verifies the advertised archive size and whole-archive SHA-256, then verifies that the
-bundle ID and version match the internal manifest before invoking normal installation.
+bundle ID matches the internal manifest before invoking normal installation.

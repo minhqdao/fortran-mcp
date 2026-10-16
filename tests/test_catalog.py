@@ -31,7 +31,9 @@ def _core_bundle(tmp_path: Path) -> Path:
     license_dir.mkdir()
     (license_dir / "fpm-0.13.0-docs.txt").write_text("MIT\n")
     bundle = tmp_path / "release" / "fortran-mcp-core.zip"
-    build_bundle("core", bundle, data_dir=data_dir, license_dir=license_dir)
+    build_bundle(
+        "core", bundle, data_dir=data_dir, license_dir=license_dir, data_version="2026.08.1"
+    )
     return bundle
 
 
@@ -96,7 +98,6 @@ def test_catalog_rejects_unsafe_remote_artifact_paths(path: str) -> None:
             size=1,
             sha256="a" * 64,
             bundle_id="core",
-            bundle_version="1",
         )
 
 

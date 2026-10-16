@@ -27,7 +27,7 @@ def _installed_core(tmp_path: Path) -> Path:
     licenses.mkdir()
     (licenses / "fpm-0.13.0-docs.txt").write_text("MIT\n")
     bundle = tmp_path / "core.zip"
-    build_bundle("core", bundle, data_dir=source, license_dir=licenses)
+    build_bundle("core", bundle, data_dir=source, license_dir=licenses, data_version="2026.08.1")
     installed = tmp_path / "installed"
     install_bundle(bundle, data_dir=installed)
     return installed
@@ -237,7 +237,9 @@ def test_local_catalog_install_reaches_first_search(tmp_path: Path) -> None:
     (licenses / "fpm-0.13.0-docs.txt").write_text("MIT\n")
     release = tmp_path / "release"
     bundle = release / "fortran-mcp-core.zip"
-    build_bundle("core", bundle, data_dir=release_data, license_dir=licenses)
+    build_bundle(
+        "core", bundle, data_dir=release_data, license_dir=licenses, data_version="2026.08.1"
+    )
     catalog = release / "catalog.json"
     build_catalog("2026.08.1", catalog, [bundle])
     installed = tmp_path / "installed"

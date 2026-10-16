@@ -22,10 +22,6 @@ on:
         description: "Catalog data_version as YYYY.MM.N, for example 2026.10.1"
         required: true
         type: string
-      bundle_version:
-        description: "Bundle version recorded in the manifests (defaults to the package version)"
-        required: false
-        type: string
 
 permissions:
   contents: write
@@ -74,13 +70,7 @@ jobs:
             echo "::error::data_version must look like YYYY.MM.N, got '${data_version}'"
             exit 1
           fi
-          bundle_version="${{ inputs.bundle_version }}"
-          if [ -z "$bundle_version" ]; then
-            bundle_version="$(uv run python -c \
-              "import pathlib, tomllib; print(tomllib.loads(pathlib.Path('pyproject.toml').read_text())['project']['version'])")"
-          fi
           echo "data_version=${data_version}" >> "$GITHUB_OUTPUT"
-          echo "bundle_version=${bundle_version}" >> "$GITHUB_OUTPUT"
 
       - name: Install GNU Texinfo 7.3
         run: |
@@ -113,12 +103,12 @@ jobs:
             --output dist/fortran-mcp-core.zip \
             --data-dir data \
             --license-dir docs/licenses \
-            --bundle-version "${{ steps.inputs.outputs.data_version }}"
+            --data-version "${{ steps.inputs.outputs.data_version }}"
           uv run fortran-mcp-bundle build semantic \
             --output dist/fortran-mcp-semantic.zip \
             --data-dir data \
             --license-dir docs/licenses \
-            --bundle-version "${{ steps.inputs.outputs.data_version }}"
+            --data-version "${{ steps.inputs.outputs.data_version }}"
 
       - name: Build catalog
         run: |
@@ -151,7 +141,7 @@ jobs:
           gh release create "data-${{ steps.inputs.outputs.data_version }}" \
             --draft \
             --title "Fortran MCP ${{ steps.inputs.outputs.data_version }} data release" \
-            --notes "Data release ${{ steps.inputs.outputs.data_version }}, bundles ${{ steps.inputs.outputs.bundle_version }}." \
+            --notes "Data release ${{ steps.inputs.outputs.data_version }}." \
             dist/catalog.json \
             dist/fortran-mcp-core.zip \
             dist/fortran-mcp-semantic.zip

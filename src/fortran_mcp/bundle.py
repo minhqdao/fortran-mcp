@@ -25,7 +25,7 @@ from fortran_mcp.search import INDEX_FILENAME
 from fortran_mcp.semantic import SEMANTIC_INDEX_FILENAME
 from fortran_mcp.sources import Source, StrictModel, load_registry
 
-BUNDLE_SCHEMA_VERSION: Literal[1] = 1
+BUNDLE_SCHEMA_VERSION: Literal[2] = 2
 BUNDLE_ROOT = "fortran-mcp-bundle"
 ZIP_TIMESTAMP = (1980, 1, 1, 0, 0, 0)
 DOWNLOAD_LIMIT = 2 * 1024 * 1024 * 1024
@@ -82,10 +82,10 @@ class BundleRequirement(StrictModel):
 class BundleManifest(StrictModel):
     """Stable, machine-readable contract for one data bundle."""
 
-    schema_version: Literal[1]
+    schema_version: Literal[2]
     bundle_id: str
     role: Literal["core", "semantic"]
-    bundle_version: str
+    data_version: str
     server_compatibility: str
     sources: tuple[BundleSource, ...]
     embedding_model: str | None = None
@@ -148,12 +148,11 @@ def build_bundle(
     *,
     data_dir: Path | None = None,
     license_dir: Path = Path("docs/licenses"),
-    bundle_version: str | None = None,
+    data_version: str,
 ) -> BundleManifest:
     """Create a deterministic, checksummed ZIP data bundle."""
     data_dir = data_dir or data_directory()
     server_version = package_version("fortran-mcp")
-    bundle_version = bundle_version or server_version
     registry = {source.id: source for source in load_registry().sources}
     payloads: dict[str, bytes] = {}
     requirements: tuple[BundleRequirement, ...] = ()
@@ -202,7 +201,7 @@ def build_bundle(
         schema_version=BUNDLE_SCHEMA_VERSION,
         bundle_id=f"fortran-mcp-{role}-{identity}",
         role=role,
-        bundle_version=bundle_version,
+        data_version=data_version,
         server_compatibility=f">={server_version},<{int(server_version.split('.')[0]) + 1}.0.0",
         sources=sources,
         embedding_model=model,
@@ -389,7 +388,7 @@ def _parser() -> argparse.ArgumentParser:
     build.add_argument("--output", required=True, type=Path)
     build.add_argument("--data-dir", type=Path, default=data_directory())
     build.add_argument("--license-dir", type=Path, default=Path("docs/licenses"))
-    build.add_argument("--bundle-version")
+    build.add_argument("--data-version", required=True)
     verify = subparsers.add_parser("verify")
     verify.add_argument("path", type=Path)
     install = subparsers.add_parser("install")
@@ -409,7 +408,7 @@ def main(argv: Sequence[str] | None = None) -> None:
                 args.output,
                 data_dir=args.data_dir,
                 license_dir=args.license_dir,
-                bundle_version=args.bundle_version,
+                data_version=args.data_version,
             )
             print(f"Built {manifest.bundle_id}: {args.output}")
         elif args.command == "verify":
