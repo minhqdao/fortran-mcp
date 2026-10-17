@@ -12,7 +12,7 @@ from fortran_mcp.catalog import DEFAULT_CATALOG_URL
 from fortran_mcp.config import search_provider_name
 from fortran_mcp.data_cli import DataStatus, bundle_label, data_status
 from fortran_mcp.search import INDEX_FILENAME
-from fortran_mcp.semantic import SEMANTIC_INDEX_FILENAME
+from fortran_mcp.semantic import RUNTIME_HINT, SEMANTIC_INDEX_FILENAME
 from fortran_mcp.sources import StrictModel
 
 
@@ -89,6 +89,14 @@ def _print_report(report: DiagnosticReport) -> None:
             print("Run 'fortran-mcp data verify' for details")
     else:
         print("Data: none")
+    semantic_bundle_installed = any(
+        bundle.role == "semantic" and bundle.installed for bundle in report.data.bundles
+    )
+    if not report.data.semantic_runtime_installed and (
+        semantic_bundle_installed or report.search_provider in {"semantic", "hybrid"}
+    ):
+        prefix = "Warning" if report.search_provider in {"semantic", "hybrid"} else "Note"
+        print(f"{prefix}: {RUNTIME_HINT}")
 
 
 def main(argv: Sequence[str] | None = None) -> None:
