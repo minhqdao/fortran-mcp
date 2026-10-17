@@ -38,7 +38,7 @@ class ProvisionResult(Enum):
 
 
 def _stderr(text: str) -> None:
-    print(text, file=sys.stderr)
+    print(text, file=sys.stderr, flush=True)
 
 
 def any_data_present(data_dir: Path) -> bool:
