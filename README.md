@@ -31,8 +31,8 @@ uv tool install "fortran-mcp[semantic]"
 Data bundles are installed automatically on first run. You can also install them beforehand to avoid an initial delay:
 
 ```bash
-fortran-mcp data install core      # for lexical search
-fortran-mcp data install semantic  # for semantic and hybrid search
+fortran-mcp data install core        # for lexical search
+fortran-mcp data install semantic    # for semantic and hybrid search
 ```
 
 Check the installation:
@@ -366,77 +366,24 @@ uv run fortran-mcp-catalog build --data-version 2026.08.1 \
 uv run fortran-mcp-catalog install core --catalog dist/catalog.json
 ```
 
-### Publishing a data release
+### Publishing
 
-1. Rebuild both bundles deterministically from a current data directory and regenerate the catalog
-   (commands above). Pick a new `YYYY.MM.N` `data_version` for each data release and use it for
-   both bundles and the catalog.
-2. Verify every artifact on its own and through the catalog:
-   ```bash
-   uv run fortran-mcp-bundle verify dist/fortran-mcp-core.zip
-   uv run fortran-mcp-bundle verify dist/fortran-mcp-semantic.zip
-   uv run fortran-mcp-catalog verify dist/catalog.json
-   ```
-3. Smoke-test the exact artifacts before upload:
-   ```bash
-   rm -rf /tmp/release-check
-   FORTRAN_MCP_DATA_DIR=/tmp/release-check uv run fortran-mcp data install core \
-     --catalog dist/catalog.json
-   FORTRAN_MCP_DATA_DIR=/tmp/release-check uv run fortran-mcp data install semantic \
-     --catalog dist/catalog.json
-   FORTRAN_MCP_DATA_DIR=/tmp/release-check uv run fortran-mcp data verify
-   ```
-4. Upload all assets together to a draft release so the catalog never points at missing files:
-   ```bash
-   gh release create v<version> --draft --title "Fortran MCP <version> data release" \
-     dist/catalog.json dist/fortran-mcp-core.zip dist/fortran-mcp-semantic.zip
-   ```
-5. Inspect the draft (`gh release view v<version>`): exactly three assets, correct sizes, no stray
-   uploads. Publishing is the activation step because `releases/latest/download/catalog.json`
-   resolves to this release immediately.
-6. Publish only after every asset is present:
-   ```bash
-   gh release edit v<version> --draft=false
-   ```
-7. Post-publish, exercise the real user path without `--catalog`:
-   `fortran-mcp data install core && fortran-mcp data verify`. Release assets are only downloadable
-   anonymously from a public repository, so this final check requires the repository to be public.
+#### Fortran MCP Releases
 
-There is no automated rollback: fix the artifacts and cut a new data release instead. Old installs
-remain valid because verification is checksum-pinned.
+Before publishing `fortran-mcp` to PyPI, bump the version in `pyproject.toml` and update `CHANGELOG.md`. Commit, push to `main`, and wait for CI to turn green. Then create and push a matching `v<version>` tag to trigger the `Publish PyPI` workflow (`.github/workflows/publish-pypi.yml`) which builds and publishes the `fortran-mcp` package.
 
-Normal users use the built-in GitHub Release catalog through the unified command:
+#### Data Releases
 
-```bash
-fortran-mcp data install core
-fortran-mcp data verify
-fortran-mcp data remove core
-```
-
-Running `fortran-mcp` without a subcommand still starts the stdio MCP server, so existing client
-configuration remains compatible. `fortran-mcp doctor` lists installed data, including custom
-corpora built with `source sync`; `fortran-mcp doctor --json` is machine-readable. `data remove`
-removes exactly one named data package, keeps unrelated files in the data
-directory, and removes documentation data only — not the Python package itself. If installed with
-`uv tool`, uninstall that separately with `uv tool uninstall fortran-mcp`.
-
-Bundles use a versioned manifest, deterministic ZIP metadata, stable file ordering, and SHA-256
-checksums for every payload. The default catalog is loaded over HTTPS from the latest GitHub Release;
-`--catalog` accepts another HTTPS URL or local path. Relative artifact paths are resolved against the
-catalog URL, and the advertised archive size and SHA-256 are checked before the bundle's own
-manifest and payload checks. Installation enforces server compatibility and installs semantic data
-only alongside the exact required core index. See
-[Data bundle format](https://github.com/minhqdao/fortran-mcp/blob/main/docs/bundles.md) for the
-artifact contract.
-
-See [Contributing](https://github.com/minhqdao/fortran-mcp/blob/main/CONTRIBUTING.md) for local
-checks and source-submission expectations. Coding agents should also read
-[AGENTS.md](https://github.com/minhqdao/fortran-mcp/blob/main/AGENTS.md) for the repository map and
-invariants.
+To publish data packages to GitHub Releases, make sure all commits are pushed to `main` and CI is
+green. Then manually trigger the `Publish Data` GitHub Actions workflow
+(`.github/workflows/publish-data.yml`) and enter a `data_version` in the
+`YYYY.MM.N` format, where `N` is a sequential number for releases within the same
+month. The workflow rebuilds the corpus from `docs/sources.toml` and publishes both
+the `core` and `semantic` bundles under the same version.
 
 ## Source policy
 
-The 23-source core is intentionally frozen for the first release. A new source is considered only
+A new source should only be considered
 when realistic benchmark questions demonstrate a gap, the exact material has clear transformation
 and redistribution rights, and a trial shows enough unique retrieval value to justify its bytes and
 ranking interference. Public access alone is not permission to redistribute documentation; this is

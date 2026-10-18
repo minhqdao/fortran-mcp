@@ -1,4 +1,4 @@
-name: Publish data
+name: Publish Data
 
 # Publishes the documentation data as exactly three assets on a GitHub Release:
 # catalog.json, fortran-mcp-core.zip, and fortran-mcp-semantic.zip. This is the
