@@ -56,8 +56,7 @@ For transport testing, start the same server over HTTP:
 
 ```bash
 FORTRAN_MCP_DATA_DIR=/absolute/path/to/fortran-mcp/data \
-  uv --directory /absolute/path/to/fortran-mcp run fortran-mcp \
-  --transport streamable-http
+  uv --directory /absolute/path/to/fortran-mcp run fortran-mcp serve
 ```
 
 Connect an HTTP-capable MCP client to `http://127.0.0.1:1957/mcp`. Use `--host`, `--port`, and

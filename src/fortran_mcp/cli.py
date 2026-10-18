@@ -19,7 +19,7 @@ def _help_parser() -> argparse.ArgumentParser:
         prog="fortran-mcp",
         description="Serve and manage compact, cited Fortran documentation",
         epilog=(
-            "With no command, starts the stdio MCP server for backward compatibility.\n"
+            "With no command, starts the stdio MCP server.\n"
             "Run 'fortran-mcp COMMAND --help' for command-specific options."
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -54,7 +54,9 @@ def main(argv: Sequence[str] | None = None) -> None:
         return
     if arguments and arguments[0] == "serve":
         arguments = arguments[1:]
-    elif arguments and not arguments[0].startswith("-"):
+        if "--transport" not in arguments:
+            arguments = ["--transport", "streamable-http", *arguments]
+    elif arguments:
         _help_parser().error(f"unknown command: {arguments[0]}")
     server_main(arguments)
 

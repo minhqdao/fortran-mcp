@@ -10,27 +10,29 @@
 
 Use Fortran MCP to improve AI-assisted Fortran development with cited documentation on language features, compiler behavior, build systems, and the wider ecosystem.
 
+It supports lexical, semantic, and hybrid search, returning relevant passages with source attribution, version information, and links to the original documentation.
+
 ## Installation
 
 Requires Python 3.11+ and [uv](https://docs.astral.sh/uv/).
 
-Install the Fortran MCP server locally:
+First, install the Fortran MCP server:
 
 ```bash
 uv tool install fortran-mcp
 ```
 
-Then install the required `core` data bundle to enable basic lexical search:
-
-```bash
-fortran-mcp data install core
-```
-
-To use semantic or hybrid search, install additional dependencies and the `semantic` data bundle:
+Install additional dependencies to enable semantic and hybrid search:
 
 ```bash
 uv tool install "fortran-mcp[semantic]"
-fortran-mcp data install semantic
+```
+
+The data bundles are installed automatically on first run. You can also install them beforehand to avoid an initial delay:
+
+```bash
+fortran-mcp data install core # for lexical search
+fortran-mcp data install semantic # for semantic and hybrid search
 ```
 
 Check the installation:
@@ -39,24 +41,78 @@ Check the installation:
 fortran-mcp doctor
 ```
 
+Set `FORTRAN_MCP_AUTO_INSTALL=0` to disable automatic installation, or set `FORTRAN_MCP_CATALOG` to specify a local catalog path or HTTPS URL.
+
 ## Client Setup
 
 <details>
-<summary>Connect to OpenCode</summary>
+<summary>Claude Code</summary>
 
-Lexical search (default):
+Use lexical search (default):
+
+```bash
+claude mcp add --scope user fortran-mcp -- fortran-mcp
+```
+
+Use semantic search:
+
+```bash
+claude mcp add --scope user fortran-mcp --env FORTRAN_MCP_SEARCH_PROVIDER=semantic -- fortran-mcp
+```
+
+Use hybrid search:
+
+```bash
+claude mcp add --scope user fortran-mcp --env FORTRAN_MCP_SEARCH_PROVIDER=hybrid -- fortran-mcp
+```
+
+To change the search mode, remove the existing entry first:
+
+```bash
+claude mcp remove --scope user fortran-mcp
+```
+
+</details>
+
+<details>
+<summary>Codex</summary>
+
+Use lexical search (default):
+
+```bash
+codex mcp add fortran-mcp -- fortran-mcp
+```
+
+Use semantic search:
+
+```bash
+codex mcp add fortran-mcp --env FORTRAN_MCP_SEARCH_PROVIDER=semantic -- fortran-mcp
+```
+
+Use hybrid search:
+
+```bash
+codex mcp add fortran-mcp --env FORTRAN_MCP_SEARCH_PROVIDER=hybrid -- fortran-mcp
+```
+
+</details>
+
+<details>
+<summary>OpenCode</summary>
+
+Use lexical search (default):
 
 ```bash
 opencode mcp add fortran-mcp --global -- fortran-mcp
 ```
 
-Semantic search:
+Use semantic search:
 
 ```bash
 opencode mcp add fortran-mcp --global --env FORTRAN_MCP_SEARCH_PROVIDER=semantic -- fortran-mcp
 ```
 
-Hybrid search:
+Use hybrid search:
 
 ```bash
 opencode mcp add fortran-mcp --global --env FORTRAN_MCP_SEARCH_PROVIDER=hybrid -- fortran-mcp
@@ -64,36 +120,18 @@ opencode mcp add fortran-mcp --global --env FORTRAN_MCP_SEARCH_PROVIDER=hybrid -
 
 </details>
 
-Configure an MCP client to launch the stdio command `fortran-mcp`; see
-[Connect an MCP client](docs/clients.md) for examples. When `fortran-mcp` starts
-in a terminal with no data installed, it reports that no
-data packages were found and offers to install core for lexical search or core plus semantic for
-semantic and hybrid search; the download only starts after a choice. Skipping, or a failed
-download, prints the manual install commands and exits cleanly. Client-launched servers cannot
-prompt, so they download every data package the configured search provider needs
-automatically (set `FORTRAN_MCP_AUTO_INSTALL=0` to
-manage data yourself, or `FORTRAN_MCP_CATALOG` to install from a local catalog path or HTTPS URL)
-and exit with the error and manual commands if the download fails. The
-optional semantic bundle and runtime are not needed for the default lexical search.
-
 ## Command reference
 
 | Command                                   | Arguments            | Description                                                                  |
 | ----------------------------------------- | -------------------- | ---------------------------------------------------------------------------- |
 | `fortran-mcp`                             | none                 | Start the stdio MCP server                                                   |
-| `fortran-mcp --transport streamable-http` | optional flags       | Start the HTTP server (`--host`, `--port`, `--path`, `--allowed-host`)       |
+| `fortran-mcp serve`                       | optional flags       | Start the HTTP server (`--host`, `--port`, `--path`, `--allowed-host`) |
 | `fortran-mcp doctor`                      | none                 | Show configuration and installed data (`--json` for machine-readable output) |
-| `fortran-mcp data install <package>`      | `core` or `semantic` | Download and install one data package from the release catalog               |
-| `fortran-mcp data verify`                 | none                 | Verify every installed data package                                          |
-| `fortran-mcp data remove <package>`       | `core` or `semantic` | Remove one installed data package                                             |
+| `fortran-mcp data install <package>`      | `core` or `semantic` | Download and install one data package from the release catalog or a local bundle (`--catalog`, `--bundle`, `--data-dir`) |
+| `fortran-mcp data remove <package>`       | `core` or `semantic` | Remove one installed data package (`--data-dir`)                             |
+| `fortran-mcp data verify`                 | none                 | Verify installed data packages (`--data-dir`)                           |
 | `fortran-mcp source list`                 | none                 | List reviewed sources with versions and provenance (`--json`)                |
-| `fortran-mcp source sync <source>`        | a source ID          | Download one reviewed source and rebuild its chunks and the lexical index    |
-
-`data remove` requires a package, refuses to remove `core` while `semantic` is installed, and only
-deletes files the remaining packages no longer need.
-
-After connecting a client, try: “How do I add OpenMP to an fpm project? Use the Fortran
-documentation server and cite the source.”
+| `fortran-mcp source sync <source>...`     | one or more source IDs, or `--all` | Download reviewed sources and rebuild their chunks and the lexical index (`--data-dir`) |
 
 ## Development
 
@@ -110,13 +148,13 @@ uv run fortran-mcp
 server uses the standard input/output transport by default. For local HTTP testing, run:
 
 ```bash
-uv run fortran-mcp --transport streamable-http
+uv run fortran-mcp serve
 ```
 
 The Streamable HTTP endpoint is then available at `http://127.0.0.1:1957/mcp`. Stdio remains the
-recommended local-client transport. HTTP hosting, TLS, authentication, and proxy configuration are
-deployment concerns and are intentionally not prescribed by this project yet. Run quality checks
-with:
+recommended local-client transport.
+
+Run quality checks with:
 
 ```bash
 uv run ruff check .
@@ -419,5 +457,5 @@ is described in
 ## License
 
 The server software is available under the
-[MIT License](https://github.com/minhqdao/fortran-mcp/blob/main/LICENSE). Ingested documentation
+[MIT License](LICENSE). Ingested documentation
 retains its original copyright and license.
