@@ -18,7 +18,7 @@ async def _exercise_server(working_directory: Path, *, catalog: Path | None = No
         env["FORTRAN_MCP_CATALOG"] = str(catalog)
     parameters = StdioServerParameters(
         command=sys.executable,
-        args=["-m", "fortran_mcp.server"],
+        args=["-m", "fortran_mcp"],
         cwd=working_directory,
         env=env,
     )

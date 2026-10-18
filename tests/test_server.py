@@ -10,7 +10,7 @@ from pydantic import HttpUrl
 
 from fortran_mcp.provision import ProvisionResult
 from fortran_mcp.search import SearchResult
-from fortran_mcp.server import main, mcp
+from fortran_mcp.server import mcp, serve_http, serve_stdio
 from fortran_mcp.sources import DocumentType, SourceAuthority
 
 
@@ -163,12 +163,13 @@ def test_search_tool_filters_source_applicability(monkeypatch: Any) -> None:
     assert tool_result.structured_content == {"result": [ecosystem.model_dump(mode="json")]}
 
 
-def test_server_defaults_to_stdio(monkeypatch: Any) -> None:
+def test_serve_stdio_runs_without_transport_arguments(monkeypatch: Any) -> None:
     calls: list[tuple[tuple[Any, ...], dict[str, Any]]] = []
     monkeypatch.setattr(mcp, "run", lambda *args, **kwargs: calls.append((args, kwargs)))
+    monkeypatch.setattr("fortran_mcp.server.signal.signal", lambda *_args: None)
     monkeypatch.setenv("FORTRAN_MCP_AUTO_INSTALL", "0")
 
-    main([])
+    serve_stdio()
 
     assert calls == [((), {})]
 
@@ -181,7 +182,7 @@ def test_server_exits_cleanly_when_provisioning_fails(monkeypatch: Any) -> None:
     )
 
     with pytest.raises(SystemExit) as excinfo:
-        main([])
+        serve_stdio()
 
     assert excinfo.value.code == 1
 
@@ -194,29 +195,21 @@ def test_server_exits_cleanly_when_provisioning_is_skipped(monkeypatch: Any) -> 
     )
 
     with pytest.raises(SystemExit) as excinfo:
-        main([])
+        serve_stdio()
 
     assert excinfo.value.code == 0
 
 
-def test_server_configures_streamable_http_security(monkeypatch: Any) -> None:
+def test_serve_http_configures_streamable_http_security(monkeypatch: Any) -> None:
     calls: list[tuple[tuple[Any, ...], dict[str, Any]]] = []
     monkeypatch.setattr(mcp, "run", lambda *args, **kwargs: calls.append((args, kwargs)))
     monkeypatch.setenv("FORTRAN_MCP_AUTO_INSTALL", "0")
 
-    main(
-        [
-            "--transport",
-            "streamable-http",
-            "--host",
-            "0.0.0.0",
-            "--port",
-            "9000",
-            "--path",
-            "/fortran",
-            "--allowed-host",
-            "docs.example.com",
-        ]
+    serve_http(
+        host="0.0.0.0",
+        port=9000,
+        path="/fortran",
+        allowed_hosts=["docs.example.com"],
     )
 
     args, kwargs = calls[0]

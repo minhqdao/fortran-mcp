@@ -75,9 +75,8 @@ def test_streamable_http_server_round_trip(tmp_path: Path) -> None:
         [
             sys.executable,
             "-m",
-            "fortran_mcp.server",
-            "--transport",
-            "streamable-http",
+            "fortran_mcp",
+            "serve",
             "--host",
             "127.0.0.1",
             "--port",
