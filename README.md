@@ -433,9 +433,6 @@ only alongside the exact required core index. See
 [Data bundle format](https://github.com/minhqdao/fortran-mcp/blob/main/docs/bundles.md) for the
 artifact contract.
 
-See [Connect an MCP client](https://github.com/minhqdao/fortran-mcp/blob/main/docs/clients.md) for
-Codex, Claude Desktop, and generic stdio configuration examples.
-
 See [Contributing](https://github.com/minhqdao/fortran-mcp/blob/main/CONTRIBUTING.md) for local
 checks and source-submission expectations. Coding agents should also read
 [AGENTS.md](https://github.com/minhqdao/fortran-mcp/blob/main/AGENTS.md) for the repository map and
