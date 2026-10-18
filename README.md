@@ -16,13 +16,13 @@ It supports lexical, semantic, and hybrid search, returning relevant passages wi
 
 Requires Python 3.11+ and [uv](https://docs.astral.sh/uv/).
 
-First, install the Fortran MCP server:
+Install the Fortran MCP server:
 
 ```bash
 uv tool install fortran-mcp
 ```
 
-Install additional dependencies to enable semantic and hybrid search:
+Semantic and hybrid search require additional dependencies:
 
 ```bash
 uv tool install "fortran-mcp[semantic]"
@@ -31,8 +31,8 @@ uv tool install "fortran-mcp[semantic]"
 The data bundles are installed automatically on first run. You can also install them beforehand to avoid an initial delay:
 
 ```bash
-fortran-mcp data install core # for lexical search
-fortran-mcp data install semantic # for semantic and hybrid search
+fortran-mcp data install core      # for lexical search
+fortran-mcp data install semantic  # for semantic and hybrid search
 ```
 
 Check the installation:
@@ -122,16 +122,16 @@ opencode mcp add fortran-mcp --global --env FORTRAN_MCP_SEARCH_PROVIDER=hybrid -
 
 ## Command reference
 
-| Command                                   | Arguments            | Description                                                                  |
-| ----------------------------------------- | -------------------- | ---------------------------------------------------------------------------- |
-| `fortran-mcp`                             | none                 | Start the stdio MCP server                                                   |
-| `fortran-mcp serve`                       | optional flags       | Start the HTTP server (`--host`, `--port`, `--path`, `--allowed-host`) |
-| `fortran-mcp doctor`                      | none                 | Show configuration and installed data (`--json` for machine-readable output) |
-| `fortran-mcp data install <package>`      | `core` or `semantic` | Download and install one data package from the release catalog or a local bundle (`--catalog`, `--bundle`, `--data-dir`) |
-| `fortran-mcp data remove <package>`       | `core` or `semantic` | Remove one installed data package (`--data-dir`)                             |
-| `fortran-mcp data verify`                 | none                 | Verify installed data packages (`--data-dir`)                           |
-| `fortran-mcp source list`                 | none                 | List reviewed sources with versions and provenance (`--json`)                |
-| `fortran-mcp source sync <source>...`     | one or more source IDs, or `--all` | Download reviewed sources and rebuild their chunks and the lexical index (`--data-dir`) |
+| Command                               | Description                                                                                                                     |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `fortran-mcp`                         | Start the stdio MCP server.                                                                                                     |
+| `fortran-mcp serve`                   | Start the HTTP server (`--host`, `--port`, `--path`, `--allowed-host`).                                                         |
+| `fortran-mcp doctor`                  | Show configuration and installed data. Use `--json` for machine-readable output.                                                |
+| `fortran-mcp data install <package>`  | Download and install `core` or `semantic` from the release catalog or a local bundle (`--catalog`, `--bundle`, `--data-dir`).   |
+| `fortran-mcp data remove <package>`   | Remove an installed `core` or `semantic` package (`--data-dir`).                                                                |
+| `fortran-mcp data verify`             | Verify installed data packages (`--data-dir`).                                                                                  |
+| `fortran-mcp source list`             | List reviewed sources with versions and provenance. Use `--json` for machine-readable output.                                   |
+| `fortran-mcp source sync <source>...` | Download reviewed sources and rebuild their chunks and lexical index. Accepts one or more source IDs or `--all` (`--data-dir`). |
 
 ## Development
 
