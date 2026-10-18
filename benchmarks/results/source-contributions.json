@@ -2,7 +2,7 @@
   "cases": 134,
   "chunks": 5877,
   "installed_index_bytes": 12464128,
-  "compressed_core_bytes": 3700642,
+  "compressed_core_bytes": 3700654,
   "baseline": {
     "passed": 116,
     "hit_at_1": 0.7016129032258065,
@@ -11,7 +11,7 @@
     "hit_at_10": 0.9354838709677419,
     "mean_reciprocal_rank": 0.7764208909370199,
     "negative_accuracy": 0.0,
-    "mean_latency_ms": 7.302873134328358
+    "mean_latency_ms": 10.120149253731343
   },
   "sources": [
     {
@@ -20,7 +20,7 @@
       "semantic_vectors": 90,
       "chunk_bytes": 128156,
       "installed_index_bytes": 278528,
-      "compressed_core_bytes": 105650,
+      "compressed_core_bytes": 105652,
       "unique_passes": [
         "ecosystem-automatic-differentiation",
         "ecosystem-command-line-parser",
@@ -46,7 +46,7 @@
       ],
       "rank_regressions_without_source": 4,
       "rank_improvements_without_source": 0,
-      "mean_latency_ms_without_source": 7.072037313432836
+      "mean_latency_ms_without_source": 13.502305970149253
     },
     {
       "source_id": "cmake-4.4.0-fortran-docs",
@@ -54,7 +54,7 @@
       "semantic_vectors": 117,
       "chunk_bytes": 124548,
       "installed_index_bytes": 245760,
-      "compressed_core_bytes": 77629,
+      "compressed_core_bytes": 77628,
       "unique_passes": [
         "cmake-check-fortran-source",
         "cmake-fortran-c-interface",
@@ -72,7 +72,7 @@
       "recovered_passes_without_source": [],
       "rank_regressions_without_source": 0,
       "rank_improvements_without_source": 1,
-      "mean_latency_ms_without_source": 7.017164179104477
+      "mean_latency_ms_without_source": 11.174589552238805
     },
     {
       "source_id": "codee-open-catalog-fortran-subset",
@@ -80,7 +80,7 @@
       "semantic_vectors": 43,
       "chunk_bytes": 45814,
       "installed_index_bytes": 98304,
-      "compressed_core_bytes": 29457,
+      "compressed_core_bytes": 29460,
       "unique_passes": [
         "codee-array-bounds",
         "codee-conditional-initialization",
@@ -98,7 +98,7 @@
       "recovered_passes_without_source": [],
       "rank_regressions_without_source": 0,
       "rank_improvements_without_source": 1,
-      "mean_latency_ms_without_source": 6.903305970149254
+      "mean_latency_ms_without_source": 10.29655223880597
     },
     {
       "source_id": "fortitude-0.9.2-reference",
@@ -106,7 +106,7 @@
       "semantic_vectors": 488,
       "chunk_bytes": 375884,
       "installed_index_bytes": 647168,
-      "compressed_core_bytes": 186128,
+      "compressed_core_bytes": 186132,
       "unique_passes": [
         "fortitude-common-block",
         "fortitude-config-discovery",
@@ -130,7 +130,7 @@
       "recovered_passes_without_source": [],
       "rank_regressions_without_source": 1,
       "rank_improvements_without_source": 5,
-      "mean_latency_ms_without_source": 6.761776119402985
+      "mean_latency_ms_without_source": 9.148611940298508
     },
     {
       "source_id": "fortran-lang-best-practices",
@@ -150,7 +150,7 @@
       ],
       "rank_regressions_without_source": 0,
       "rank_improvements_without_source": 0,
-      "mean_latency_ms_without_source": 6.946186567164179
+      "mean_latency_ms_without_source": 10.087194029850746
     },
     {
       "source_id": "fortran-lang-build-and-link-guide",
@@ -158,7 +158,7 @@
       "semantic_vectors": 59,
       "chunk_bytes": 100304,
       "installed_index_bytes": 208896,
-      "compressed_core_bytes": 76693,
+      "compressed_core_bytes": 76694,
       "unique_passes": [
         "fortran-lang-link-objects"
       ],
@@ -170,7 +170,7 @@
       ],
       "rank_regressions_without_source": 2,
       "rank_improvements_without_source": 1,
-      "mean_latency_ms_without_source": 6.942320895522387
+      "mean_latency_ms_without_source": 9.360276119402986
     },
     {
       "source_id": "fortran-lang-floating-point-guide",
@@ -178,7 +178,7 @@
       "semantic_vectors": 6,
       "chunk_bytes": 4996,
       "installed_index_bytes": 8192,
-      "compressed_core_bytes": 2291,
+      "compressed_core_bytes": 2289,
       "unique_passes": [
         "fortran-lang-floating-tolerance"
       ],
@@ -188,7 +188,7 @@
       "recovered_passes_without_source": [],
       "rank_regressions_without_source": 0,
       "rank_improvements_without_source": 0,
-      "mean_latency_ms_without_source": 7.0691044776119405
+      "mean_latency_ms_without_source": 7.7301716417910455
     },
     {
       "source_id": "fortran-lang-fortran-95-reference",
@@ -196,7 +196,7 @@
       "semantic_vectors": 87,
       "chunk_bytes": 106480,
       "installed_index_bytes": 217088,
-      "compressed_core_bytes": 76870,
+      "compressed_core_bytes": 76872,
       "unique_passes": [
         "fortran-lang-assumed-shape"
       ],
@@ -206,7 +206,7 @@
       "recovered_passes_without_source": [],
       "rank_regressions_without_source": 1,
       "rank_improvements_without_source": 0,
-      "mean_latency_ms_without_source": 7.603507462686567
+      "mean_latency_ms_without_source": 9.974268656716417
     },
     {
       "source_id": "fortran-lang-intrinsics-reference",
@@ -214,7 +214,7 @@
       "semantic_vectors": 533,
       "chunk_bytes": 829264,
       "installed_index_bytes": 1556480,
-      "compressed_core_bytes": 475914,
+      "compressed_core_bytes": 475916,
       "unique_passes": [
         "fortran-lang-intrinsic-c-pointer",
         "fortran-lang-intrinsics-source-filter",
@@ -230,7 +230,7 @@
       ],
       "rank_regressions_without_source": 4,
       "rank_improvements_without_source": 4,
-      "mean_latency_ms_without_source": 6.356940298507463
+      "mean_latency_ms_without_source": 7.886164179104479
     },
     {
       "source_id": "fortran-lang-object-oriented-programming",
@@ -238,7 +238,7 @@
       "semantic_vectors": 63,
       "chunk_bytes": 104114,
       "installed_index_bytes": 208896,
-      "compressed_core_bytes": 72843,
+      "compressed_core_bytes": 72845,
       "unique_passes": [
         "fortran-lang-type-extension"
       ],
@@ -248,7 +248,7 @@
       "recovered_passes_without_source": [],
       "rank_regressions_without_source": 2,
       "rank_improvements_without_source": 0,
-      "mean_latency_ms_without_source": 6.898149253731343
+      "mean_latency_ms_without_source": 11.187171641791045
     },
     {
       "source_id": "fortran-lang-package-index-additions",
@@ -256,7 +256,7 @@
       "semantic_vectors": 34,
       "chunk_bytes": 54456,
       "installed_index_bytes": 114688,
-      "compressed_core_bytes": 42319,
+      "compressed_core_bytes": 42320,
       "unique_passes": [
         "ecosystem-automatic-differentiation-tool",
         "ecosystem-design-patterns",
@@ -280,7 +280,7 @@
       ],
       "rank_regressions_without_source": 3,
       "rank_improvements_without_source": 4,
-      "mean_latency_ms_without_source": 6.969231343283582
+      "mean_latency_ms_without_source": 9.589559701492536
     },
     {
       "source_id": "fortran-lang-python-rosetta-stone",
@@ -288,7 +288,7 @@
       "semantic_vectors": 29,
       "chunk_bytes": 44945,
       "installed_index_bytes": 81920,
-      "compressed_core_bytes": 28885,
+      "compressed_core_bytes": 28888,
       "unique_passes": [
         "fortran-lang-python-array-indexing"
       ],
@@ -300,7 +300,7 @@
       ],
       "rank_regressions_without_source": 0,
       "rank_improvements_without_source": 0,
-      "mean_latency_ms_without_source": 7.011320895522388
+      "mean_latency_ms_without_source": 10.65152985074627
     },
     {
       "source_id": "fortran-lang-quickstart",
@@ -308,7 +308,7 @@
       "semantic_vectors": 51,
       "chunk_bytes": 69433,
       "installed_index_bytes": 139264,
-      "compressed_core_bytes": 50894,
+      "compressed_core_bytes": 50893,
       "unique_passes": [
         "fortran-lang-do-concurrent"
       ],
@@ -320,7 +320,7 @@
       ],
       "rank_regressions_without_source": 2,
       "rank_improvements_without_source": 1,
-      "mean_latency_ms_without_source": 6.968201492537314
+      "mean_latency_ms_without_source": 10.808007462686566
     },
     {
       "source_id": "fpm-0.13.0-docs",
@@ -328,7 +328,7 @@
       "semantic_vectors": 252,
       "chunk_bytes": 246316,
       "installed_index_bytes": 454656,
-      "compressed_core_bytes": 152322,
+      "compressed_core_bytes": 152323,
       "unique_passes": [
         "fpm-clean-output",
         "fpm-compile-commands",
@@ -354,7 +354,7 @@
       ],
       "rank_regressions_without_source": 2,
       "rank_improvements_without_source": 1,
-      "mean_latency_ms_without_source": 6.856328358208955
+      "mean_latency_ms_without_source": 10.640171641791044
     },
     {
       "source_id": "fypp-3.2-manual",
@@ -362,7 +362,7 @@
       "semantic_vectors": 75,
       "chunk_bytes": 92236,
       "installed_index_bytes": 184320,
-      "compressed_core_bytes": 62006,
+      "compressed_core_bytes": 62007,
       "unique_passes": [
         "fypp-command-line",
         "fypp-include-path",
@@ -382,7 +382,7 @@
       ],
       "rank_regressions_without_source": 0,
       "rank_improvements_without_source": 1,
-      "mean_latency_ms_without_source": 6.93429104477612
+      "mean_latency_ms_without_source": 9.519888059701492
     },
     {
       "source_id": "gfortran-16.2.0-manual",
@@ -390,7 +390,7 @@
       "semantic_vectors": 817,
       "chunk_bytes": 1168064,
       "installed_index_bytes": 2252800,
-      "compressed_core_bytes": 687315,
+      "compressed_core_bytes": 687314,
       "unique_passes": [
         "gfortran-argument-mismatch",
         "gfortran-c-pointer",
@@ -417,7 +417,7 @@
       ],
       "rank_regressions_without_source": 6,
       "rank_improvements_without_source": 5,
-      "mean_latency_ms_without_source": 6.000858208955224
+      "mean_latency_ms_without_source": 6.913649253731343
     },
     {
       "source_id": "gnu-make-4.4.1-build-reference",
@@ -443,7 +443,7 @@
       "recovered_passes_without_source": [],
       "rank_regressions_without_source": 2,
       "rank_improvements_without_source": 0,
-      "mean_latency_ms_without_source": 6.951171641791045
+      "mean_latency_ms_without_source": 9.285455223880597
     },
     {
       "source_id": "numpy-2.5.2-f2py-docs",
@@ -451,7 +451,7 @@
       "semantic_vectors": 149,
       "chunk_bytes": 200544,
       "installed_index_bytes": 405504,
-      "compressed_core_bytes": 144653,
+      "compressed_core_bytes": 144654,
       "unique_passes": [
         "f2py-array-copy",
         "f2py-callback",
@@ -471,7 +471,7 @@
       ],
       "rank_regressions_without_source": 1,
       "rank_improvements_without_source": 1,
-      "mean_latency_ms_without_source": 6.730305970149254
+      "mean_latency_ms_without_source": 8.655134328358209
     },
     {
       "source_id": "old-fortran-programming-idioms",
@@ -493,7 +493,7 @@
       ],
       "rank_regressions_without_source": 1,
       "rank_improvements_without_source": 5,
-      "mean_latency_ms_without_source": 6.931111940298507
+      "mean_latency_ms_without_source": 8.101798507462687
     },
     {
       "source_id": "openmp-6.0.1-fortran-examples",
@@ -501,7 +501,7 @@
       "semantic_vectors": 571,
       "chunk_bytes": 886281,
       "installed_index_bytes": 1691648,
-      "compressed_core_bytes": 532383,
+      "compressed_core_bytes": 532387,
       "unique_passes": [
         "openmp-atomic-capture-fortran",
         "openmp-collapse-fortran",
@@ -521,7 +521,7 @@
       ],
       "rank_regressions_without_source": 3,
       "rank_improvements_without_source": 7,
-      "mean_latency_ms_without_source": 6.443089552238806
+      "mean_latency_ms_without_source": 7.0495820895522385
     },
     {
       "source_id": "openmpi-5.0.10-fortran-reference",
@@ -529,7 +529,7 @@
       "semantic_vectors": 362,
       "chunk_bytes": 350854,
       "installed_index_bytes": 712704,
-      "compressed_core_bytes": 178568,
+      "compressed_core_bytes": 178572,
       "unique_passes": [
         "openmpi-allreduce",
         "openmpi-cartesian-shift",
@@ -559,7 +559,7 @@
       ],
       "rank_regressions_without_source": 1,
       "rank_improvements_without_source": 1,
-      "mean_latency_ms_without_source": 6.618223880597014
+      "mean_latency_ms_without_source": 7.856156716417909
     },
     {
       "source_id": "prima-modernization-case-study",
@@ -567,7 +567,7 @@
       "semantic_vectors": 3,
       "chunk_bytes": 3897,
       "installed_index_bytes": 8192,
-      "compressed_core_bytes": 4802,
+      "compressed_core_bytes": 4804,
       "unique_passes": [
         "legacy-differential-testing",
         "legacy-incremental-migration"
@@ -579,7 +579,7 @@
       "recovered_passes_without_source": [],
       "rank_regressions_without_source": 0,
       "rank_improvements_without_source": 0,
-      "mean_latency_ms_without_source": 7.047074626865672
+      "mean_latency_ms_without_source": 7.735126865671642
     },
     {
       "source_id": "stdlib-0.8.1-docs",
@@ -587,7 +587,7 @@
       "semantic_vectors": 1854,
       "chunk_bytes": 1354473,
       "installed_index_bytes": 2342912,
-      "compressed_core_bytes": 566077,
+      "compressed_core_bytes": 566078,
       "unique_passes": [
         "stdlib-dynamic-text",
         "stdlib-hashmap",
@@ -613,7 +613,7 @@
       ],
       "rank_regressions_without_source": 6,
       "rank_improvements_without_source": 6,
-      "mean_latency_ms_without_source": 5.632925373134328
+      "mean_latency_ms_without_source": 6.242679104477612
     }
   ]
 }
