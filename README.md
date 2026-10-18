@@ -28,7 +28,7 @@ Semantic and hybrid search require additional dependencies:
 uv tool install "fortran-mcp[semantic]"
 ```
 
-The data bundles are installed automatically on first run. You can also install them beforehand to avoid an initial delay:
+Data bundles are installed automatically on first run. You can also install them beforehand to avoid an initial delay:
 
 ```bash
 fortran-mcp data install core      # for lexical search
@@ -41,7 +41,7 @@ Check the installation:
 fortran-mcp doctor
 ```
 
-Set `FORTRAN_MCP_AUTO_INSTALL=0` to disable automatic installation, or set `FORTRAN_MCP_CATALOG` to specify a local catalog path or HTTPS URL.
+Use `FORTRAN_MCP_AUTO_INSTALL=0` to disable automatic installation, or set `FORTRAN_MCP_CATALOG` to point to a local catalog path or HTTPS URL.
 
 ## Client Setup
 
@@ -135,8 +135,6 @@ opencode mcp add fortran-mcp --global --env FORTRAN_MCP_SEARCH_PROVIDER=hybrid -
 
 ## Development
 
-Prerequisites: Git and [uv](https://docs.astral.sh/uv/).
-
 ```bash
 git clone https://github.com/minhqdao/fortran-mcp.git
 cd fortran-mcp
@@ -144,15 +142,13 @@ uv sync
 uv run fortran-mcp
 ```
 
-`uv sync` creates `.venv` and installs the locked runtime and development dependencies. The
-server uses the standard input/output transport by default. For local HTTP testing, run:
+The server uses stdio by default. To test the Streamable HTTP transport, run:
 
 ```bash
 uv run fortran-mcp serve
 ```
 
-The Streamable HTTP endpoint is then available at `http://127.0.0.1:1957/mcp`. Stdio remains the
-recommended local-client transport.
+The endpoint is available at `http://127.0.0.1:1957/mcp`.
 
 Run quality checks with:
 
@@ -454,5 +450,5 @@ is described in
 ## License
 
 The server software is available under the
-[MIT License](LICENSE). Ingested documentation
-retains its original copyright and license.
+[MIT License](LICENSE). [Sources](docs/sources.toml) retain their
+original copyrights and [licenses](docs/licenses/).
