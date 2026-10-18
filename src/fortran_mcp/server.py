@@ -115,23 +115,9 @@ def documentation_chunk(chunk_id: str) -> str:
 
 
 def _prepare() -> None:
-    """Validate the configured provider and install any missing data packages."""
-    from fortran_mcp.provision import (
-        ProvisionResult,
-        _semantic_runtime_available,
-        offer_data_install,
-    )
-    from fortran_mcp.semantic import RUNTIME_HINT
+    """Install any missing data packages before serving."""
+    from fortran_mcp.provision import ProvisionResult, offer_data_install
 
-    try:
-        provider = search_provider_name()
-    except ValueError as error:
-        print(str(error), file=sys.stderr, flush=True)
-        raise SystemExit(2) from error
-
-    if provider in {"semantic", "hybrid"} and not _semantic_runtime_available():
-        print(RUNTIME_HINT, file=sys.stderr, flush=True)
-        raise SystemExit(1)
     result = offer_data_install(interactive=sys.stdin.isatty())
     if result in {ProvisionResult.SKIPPED, ProvisionResult.FAILED}:
         raise SystemExit(1 if result is ProvisionResult.FAILED else 0)
