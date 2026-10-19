@@ -157,9 +157,42 @@ uv run pytest
 
 ## Sources
 
-The documentation collection is curated, not exhaustive. New sources should address gaps in existing coverage or improve retrieval quality on realistic benchmark questions, while justifying their storage costs and impact on search results. All material must be legally redistributable.
+Fortran MCP uses a curated collection of Fortran documentation, references,
+examples, and tools. Each source is pinned to a specific revision and included
+under its applicable license.
 
-Public availability does not imply permission to redistribute documentation, particularly standards, books, and vendor manuals.
+| Source | License |
+| --- | --- |
+| [Fortran Package Manager documentation website](https://github.com/fortran-lang/fpm-docs/tree/5097350c24ea7b5ceec233714f5a2604f79d0c02/pages) | MIT |
+| [Fortran Standard Library specifications and guides](https://github.com/fortran-lang/stdlib/tree/v0.8.1/doc) | MIT |
+| [GNU Fortran Compiler manual](https://gcc.gnu.org/git/?p=gcc.git;a=tree;f=gcc/fortran;hb=releases/gcc-16.2.0) | GFDL-1.3-or-later |
+| [CMake documentation for Fortran projects](https://github.com/Kitware/CMake/tree/v4.4.0/Help) | BSD-3-Clause |
+| [Fortran-lang intrinsic procedures reference](https://github.com/fortran-lang/webpage/tree/36d35714a4bc4e7d77183ecdfe09ed7107f3fff2/source/learn/intrinsics) | MIT AND GFDL-1.2-or-later |
+| [Fortran-lang quickstart tutorial](https://github.com/fortran-lang/webpage/tree/36d35714a4bc4e7d77183ecdfe09ed7107f3fff2/source/learn/quickstart) | MIT |
+| [Fortran-lang best practices](https://github.com/fortran-lang/webpage/tree/36d35714a4bc4e7d77183ecdfe09ed7107f3fff2/source/learn/best_practices) | MIT |
+| [Fortran-lang object-oriented programming guide](https://github.com/fortran-lang/webpage/tree/36d35714a4bc4e7d77183ecdfe09ed7107f3fff2/source/learn/oop_features_in_fortran) | MIT |
+| [Fortran-lang Fortran 95 language reference](https://github.com/fortran-lang/webpage/tree/36d35714a4bc4e7d77183ecdfe09ed7107f3fff2/source/learn/f95_features) | CC-BY-SA-4.0 |
+| [Fortran-lang build, link, and distribution guide](https://github.com/fortran-lang/webpage/tree/36d35714a4bc4e7d77183ecdfe09ed7107f3fff2/source/learn/building_programs) | MIT |
+| [Fortran-lang Python–Fortran Rosetta Stone](https://github.com/fortran-lang/webpage/blob/36d35714a4bc4e7d77183ecdfe09ed7107f3fff2/source/learn/rosetta_stone.md) | MIT |
+| [Fortran-lang floating-point comparison guide](https://github.com/fortran-lang/webpage/blob/36d35714a4bc4e7d77183ecdfe09ed7107f3fff2/source/learn/Floating_Point_Numbers_comparison.md) | MIT |
+| [OpenMP 6.0.1 Fortran examples](https://github.com/OpenMP/Examples/tree/v6.0.1) | OpenMP-Examples |
+| [Fortran-focused GNU Make 4.4.1 manual extracts](https://git.savannah.gnu.org/cgit/make.git/tree/doc/make.texi?h=4.4.1) | GFDL-1.3-or-later |
+| [NumPy 2.5.2 F2PY user guide and reference](https://github.com/numpy/numpy/tree/v2.5.2/doc/source/f2py) | BSD-3-Clause |
+| [Fypp 3.2 documentation](https://github.com/aradi/fypp/tree/b8dd58b946a0165a95f5630bfa8b45b1509d0dac/docs) | BSD-2-Clause |
+| [Open MPI 5.0.10 Fortran routine reference](https://github.com/open-mpi/ompi/tree/v5.0.10/docs/man-openmpi/man3) | BSD-3-Clause-Open-MPI |
+| [Fortitude 0.9.2 linter rules and usage reference](https://github.com/PlasmaFAIR/fortitude/tree/eb0f0c464859c6a6c4f91e4f97e36d26ddcb6947/docs) | MIT |
+| [Selected Codee Open Catalog Fortran safety and performance guidelines](https://github.com/codee-com/open-catalog/tree/12c507e3f4136093139c8b004233b6001ed6963e/Checks) | Apache-2.0 |
+| [Old programming idioms explained](https://github.com/arjenmarkus/old-programming-idioms/tree/bcb10375153bcdd104f247d23eb1f32ee6c1424d/src) | MIT |
+| [PRIMA behavior-preserving Fortran modernization case study](https://github.com/libprima/prima/blob/1d76fb88aeffb427cd17ed1e9d0d3b34f414913f/README.md) | BSD-3-Clause |
+| [Beliavsky list of fpm-compatible Fortran projects](https://github.com/Beliavsky/Fortran-packages-list/tree/13f715138fd1640b44d4d13ef4818f7d8b9340e0) | MIT |
+| [Fortran-lang package index additions](https://github.com/fortran-lang/webpage/blob/36d35714a4bc4e7d77183ecdfe09ed7107f3fff2/data/package_index.yml) | MIT |
+
+New sources should address gaps in coverage or improve retrieval quality on
+realistic benchmark questions. They must be legally redistributable and justify
+their storage costs and impact on search results.
+
+Public availability alone does not grant redistribution rights, particularly
+for standards, books, and vendor manuals.
 
 The source inventory is maintained in [`docs/sources.toml`](docs/sources.toml).
 
