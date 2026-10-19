@@ -37,11 +37,43 @@ delivery from the project's GitHub Release location. Catalog and bundle assets m
 draft release and the release published only after every asset is present. Signing can be added later
 without changing the bundle's internal integrity checks.
 
-Installation accepts local files and explicit HTTPS URLs. It verifies an archive before extraction,
-checks the manifest's server-version constraint, writes payloads through temporary files, and records
-the installed manifest last. Semantic installation additionally checks its required lexical-index
-checksum against the installed core manifest. The default destination is the platform's per-user
-application-data directory; `FORTRAN_MCP_DATA_DIR` overrides it.
+Installation accepts local files and explicit HTTPS URLs. It verifies archives before extraction, checks server-version compatibility, writes payloads through temporary files, and records the installed manifest last. Semantic installation also checks compatibility with the installed core index.
+
+Data is stored in the platform's per-user application-data directory by default. Set `FORTRAN_MCP_DATA_DIR` to override it, `FORTRAN_MCP_AUTO_INSTALL=0` to disable automatic installation, or `FORTRAN_MCP_CATALOG` to use a different catalog location (local path or HTTPS URL).
+
+## Build and verify bundles
+
+Build the core and semantic bundles, verify the core bundle, and generate a catalog for the release:
+
+```bash
+FORTRAN_MCP_DATA_DIR=data uv run fortran-mcp-bundle build core \
+  --output dist/fortran-mcp-core.zip --data-version 2026.08.1 \
+  --license-dir docs/licenses
+FORTRAN_MCP_DATA_DIR=data uv run fortran-mcp-bundle build semantic \
+  --output dist/fortran-mcp-semantic.zip --data-version 2026.08.1 \
+  --license-dir docs/licenses
+uv run fortran-mcp-bundle verify dist/fortran-mcp-core.zip
+uv run fortran-mcp data install core --bundle dist/fortran-mcp-core.zip
+uv run fortran-mcp-catalog build --data-version 2026.08.1 \
+  --output dist/catalog.json \
+  dist/fortran-mcp-core.zip dist/fortran-mcp-semantic.zip
+uv run fortran-mcp-catalog install core --catalog dist/catalog.json
+```
+
+### Smoke-test the release
+
+Test installation from the generated catalog in a clean data directory:
+
+```bash
+rm -rf /tmp/release-check
+FORTRAN_MCP_DATA_DIR=/tmp/release-check uv run fortran-mcp data install core \
+  --catalog dist/catalog.json
+FORTRAN_MCP_DATA_DIR=/tmp/release-check uv run fortran-mcp data install semantic \
+  --catalog dist/catalog.json
+FORTRAN_MCP_DATA_DIR=/tmp/release-check uv run fortran-mcp data verify
+```
+
+Fix any issues and build a new data release rather than relying on an automated rollback. Existing installations remain valid because their data is checksum-pinned.
 
 ## Catalog format
 
