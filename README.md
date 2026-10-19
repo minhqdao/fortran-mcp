@@ -138,22 +138,7 @@ uv sync
 uv run fortran-mcp
 ```
 
-The server uses stdio by default. To test the Streamable HTTP transport, run:
-
-```bash
-uv run fortran-mcp serve
-```
-
-The endpoint is available at `http://127.0.0.1:1957/mcp`.
-
-Run quality checks with:
-
-```bash
-uv run ruff check .
-uv run ruff format --check .
-uv run mypy
-uv run pytest
-```
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development and testing instructions.
 
 ## Sources
 
@@ -194,27 +179,9 @@ their storage costs and impact on search results.
 Public availability alone does not grant redistribution rights, particularly
 for standards, books, and vendor manuals.
 
-The source inventory is maintained in [`docs/sources.toml`](docs/sources.toml).
-
-## Publishing
-
-### Fortran MCP Releases
-
-Before publishing `fortran-mcp` to PyPI, bump the version in `pyproject.toml` and update `CHANGELOG.md`. Commit, push to `main`, and wait for CI to turn green. Then create and push a matching `v<version>` tag to trigger the `Publish PyPI` workflow (`.github/workflows/publish-pypi.yml`) which builds and publishes the `fortran-mcp` package.
-
-### Data Bundle Releases
-
-To publish data packages to GitHub Releases, make sure all commits are pushed to `main` and CI is
-green. Then manually trigger the `Publish Data` GitHub Actions workflow
-(`.github/workflows/publish-data.yml`) and enter a `data_version` in the
-`YYYY.MM.N` format, where `N` is a sequential number for releases within the same
-month. The workflow rebuilds the corpus from `docs/sources.toml` and publishes both
-the `core` and `semantic` bundles under the same version.
-
 ## License
 
-The server software is available under the
-[MIT License](LICENSE).
+The server software is licensed under the [MIT License](LICENSE).
 
-[Sources](docs/sources.toml) retain their
-original copyrights and [licenses](docs/licenses/).
+Documentation sources retain their original copyrights and licenses; see
+[`docs/licenses/`](docs/licenses/).
