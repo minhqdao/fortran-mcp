@@ -39,6 +39,13 @@ Check installation:
 fortran-mcp doctor
 ```
 
+To run the server in a container with hybrid search and bundled data, see [docs/docker.md](docs/docker.md):
+
+```bash
+docker build -t fortran-mcp .
+docker run -d -p 127.0.0.1:1957:1957 fortran-mcp   # http://localhost:1957/mcp
+```
+
 ## Client Setup
 
 <details>
