@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Added a Dockerfile for an Ubuntu 26.04 image that serves hybrid search offline, with
+  bundled data and embedding model. A from-source build mode compiles the required GNU Texinfo
+  7.3. Opt-in end-to-end tests live in `tests/test_docker.py`.
+
 ## 0.2.0
 
 - Breaking: `--transport` is gone. `fortran-mcp` serves stdio and `fortran-mcp serve` serves

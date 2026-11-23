@@ -1,0 +1,11 @@
+# Allowlist: send only what the image build needs. Generated data/, dist/, .venv/,
+# .git/, and the local todo.md never enter the build context.
+*
+!LICENSE
+!README.md
+!docs/
+!pyproject.toml
+!src/
+!uv.lock
+**/__pycache__/
+**/*.py[cod]
