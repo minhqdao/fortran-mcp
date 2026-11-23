@@ -11,6 +11,9 @@ runtime. It runs as an unprivileged user.
 docker build -t fortran-mcp .
 ```
 
+The Dockerfile works with BuildKit and with the legacy builder, which Docker before 23.0 uses by
+default, so it builds on Docker 20.10 and newer.
+
 By default the build installs the published core and semantic bundles from the latest data
 release, verifying their checksums. Pin a specific release with
 `--build-arg FORTRAN_MCP_CATALOG=https://github.com/minhqdao/fortran-mcp/releases/download/<tag>/catalog.json`.
